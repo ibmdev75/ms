@@ -1,0 +1,17 @@
+<%--
+  @Summary: Group search panel
+  @Deprecated: False
+  @Customizable: False
+  @Requestable: False
+  @Category: Search / Query
+  @Since: jcms-4.0
+--%>
+    <% Member dsgMember = (Member)request.getAttribute("dsgMember"); %>
+     <jalios:field  name="mids" label="ui.work.search.grp.sel-mbr" value='<%= dsgMember %>' resource="field-vertical">
+       <jalios:control settings="<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>" />
+     </jalios:field>
+     
+    <% Set dsgGroupSet = (Set)request.getAttribute("dsgGroupSet"); %>
+     <jalios:field  name="gids" label="ui.work.search.grp.sel-grp" value='<%= dsgGroupSet %>' mv='<%= 1 %>' resource="field-vertical">
+       <jalios:control type="<%= ControlType.GROUP %>" />
+     </jalios:field>

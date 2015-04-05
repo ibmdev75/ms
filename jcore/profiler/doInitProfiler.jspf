@@ -1,0 +1,23 @@
+<%-- 
+  @Summary: doInitProfiler.jsp: statically included by doInitPage.jsp,
+            initialize the profiler if needed.
+  @Category: Internal
+  @Deprecated: False
+  @Customizable: False
+  @Requestable: True
+  @Since: jcms-5.5.0
+--%><%
+// Profiler
+final com.jalios.jcms.tools.Profiler.RequestProfiler  rProfiler;
+final boolean profilerEnabled;
+final boolean profilerShowGUI;
+{
+  final com.jalios.jcms.tools.Profiler profiler = com.jalios.jcms.tools.Profiler.getProfiler(getUntrustedStringParameter("profilerName", null), false);
+  rProfiler       = (profiler != null) ? profiler.getRequestProfiler(request) : null;
+  profilerEnabled = rProfiler != null;
+  profilerShowGUI = profilerEnabled && getBooleanParameter("profilerShowGUI", false);
+  if (!initDone && profilerEnabled) {
+    rProfiler.startMeasures();
+  }
+}
+%>

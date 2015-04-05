@@ -1,0 +1,114 @@
+<% if (!StatManager.canAnalyze()) { %>
+ <%= isAdmin ? glp("ui.statreport.bo.analysis-disabled.admin") : glp("ui.statreport.bo.analysis-disabled.non-admin") %>
+ <div style="padding: 10px; text-align: center;"><hr width="75%"/></div>
+<% } %>
+<jalios:if predicate='<%=  (!Util.toBoolean((String)request.getSession().getAttribute("generating"),false)) 
+                           && (box.getWorkspace().isAdmin(loggedMember) || checkAccess("admin/reporting/stat-report") || checkAccess("admin-ws/reporting/stat-report")) 
+                           && StatManager.canAnalyze() %>'>
+  <%
+    StatReport  sreport   = (StatReport) box;
+    StatHandler handler   = (StatHandler) request.getSession().getAttribute("StatHandler");
+    boolean     opAnalyse = Util.toBoolean(PortalManager.receiveAction(request , box, "opAnalyse"),false);
+    boolean     opRender  = Util.toBoolean(PortalManager.receiveAction(request , box, "opRender"),false);
+
+    Date startingDate = getDateTimeParameter("startingDate", userLang, sreport.getStartingDate());
+    Date endingDate   = getDateTimeParameter("endingDate", userLang, sreport.getEndingDate());
+    
+    // If we have not receive any date as a parameter,
+    // update starting and ending dates of the report, both at the same time,
+    // in order to move them before now and display usable dates in the gform
+    if (!hasParameter("startingDate") && !hasParameter("endingDate")) {
+      Date[] tmpDate = JcmsUtil.getScheduleDate(endingDate, new Date(), new Date[] {startingDate, endingDate}, sreport.getSchedule()*1000,true);
+      startingDate = JcmsUtil.getScheduleDate(tmpDate[0], sreport.getSchedule()*1000, false);
+      endingDate   = JcmsUtil.getScheduleDate(tmpDate[1], sreport.getSchedule()*1000, false);
+    }
+    
+    StatAnalyser tmpAnalyser = StatManager.getStatAnalyser(sreport,true);
+    if ((tmpAnalyser != null) && (!tmpAnalyser.isWorking())){
+    	handler = tmpAnalyser.getStatHandler();
+    	request.getSession().setAttribute("StatHandler",handler);
+    }
+    
+  	if (opAnalyse){
+  		PortalManager.removeAction(request , box, "opAnalyse"); 
+  		StatManager.analyse(sreport,loggedMember,false,startingDate.getTime(),endingDate.getTime());
+  	}
+  	if (opRender && handler != null){
+  		PortalManager.removeAction(request , box, "opRender");
+  		StatManager.render(handler , sreport, loggedMember);
+  		setInfoMsg(glp("ui.statreport.bo.report-saved"), request);
+  	}
+  %>
+  <%@ include file='/jcore/doMessageBox.jspf' %>
+  
+ <table class='layout'>
+  <tr>
+    <td>
+      <form action='<%= ServletUtil.getResourcePath(request) %>' method='get' name='editForm'>
+    	<table class="peer">
+    	  <tr>
+    	    <td align='right'><label class='formLabel'><%= glp("ui.statreport.lbl.startdate") %>:</label></td>
+    	    <td nowrap='nowrap'>
+              <jalios:field  name='<%= "startingDate" %>' value='<%= startingDate  %>'>
+                <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+              </jalios:field>
+    	    </td>
+    	  </tr>
+    	  <tr>
+    	    <td align='right'><label class='formLabel'><%= glp("ui.statreport.lbl.enddate") %>:</label></td>
+    	    <td nowrap='nowrap'>
+              <jalios:field  name='<%= "endingDate" %>' value='<%= endingDate  %>'>
+                <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+              </jalios:field>
+    	    </td>
+    	  </tr>
+    	  <tr>
+    	  <td></td>
+          <td>
+            <input type='hidden' name='id'     value='<%= box.getId() %>' />
+            <input type='hidden' name='action' value='true' />
+            <%-- Generate new report button --%>
+            <button class='btn <%=  handler == null ?"btn-primary" : "" %>' type='button' onclick='simpleSubmitForm(window, editForm , "<%= PortalManager.getActionParam(box,"opAnalyse") %>");'>
+              <%= glp("ui.statreport.lbl.gen-report") %>
+            </button>
+            &nbsp;
+            <%-- Save report button --%>
+            <button class='btn <%=  handler != null ?"btn-primary" : "" %>' type='button' onclick='simpleSubmitForm(window, editForm , "<%= PortalManager.getActionParam(box,"opRender") %>");' <% if (handler == null) { %>disabled="disabled"<%}%> >
+              <%= glp("ui.statreport.lbl.save-report") %>
+              <% if (handler != null) { %>(<jalios:date date="<%= handler.getAnalyseDate() %>" format='<%="short"%>'/> <jalios:time date="<%= handler.getAnalyseDate() %>" format='<%="short"%>'/>)<% } %>
+            </button>
+          </td>
+        </tr>
+      </table>
+      </form>
+    </td>
+    <td class='vMiddle'>
+      <% if (opAnalyse || tmpAnalyser != null && tmpAnalyser.getStatus() < 100) { %>
+       <iframe src="types/AbstractPortletStatReport/doStatus.jsp?id=<%= box.getId() %>" width='700' height='40' frameborder='0' scrolling='no'></iframe>
+      <% } %>
+    </td>
+  </tr>
+ </table>
+
+  <% 
+  Date nextSchedule = JcmsUtil.getScheduleDate(sreport.getScheduleDate(), new Date(), sreport.getSchedule()*1000,true);
+  Date[] dates  = JcmsUtil.getScheduleDate(sreport.getScheduleDate(),nextSchedule, new Date[]{sreport.getStartingDate(), sreport.getEndingDate()}, sreport.getSchedule()*1000,true); 
+  DateFormat formatter = DateFormat.getDateInstance(DateFormat.LONG, userLocale);
+  %>  
+  <p><%= glp("ui.statreport.lbl.nextschedule", formatter.format(nextSchedule),formatter.format(dates[0]),formatter.format(dates[1])) %></p>
+ 
+ 
+ <div style="padding: 10px; text-align: center;"><hr width="75%"/></div>
+
+ <jalios:if predicate='<%= (isAdmin || checkAccess("admin/reporting/stat-report")) && StatManager.isGlobalReport(sreport) %>'>
+   <% 
+     boolean allws = getBooleanParameter("allws",false);
+     String  url   = ServletUtil.getUrlWithRemovedParams(request, new String[]{"allws", "opRender", "opAnalyse"}, true)+"&amp;allws="+!allws;
+     String  label = glp("ui.statreport.op.allworkspace", allws ? workspace.getTitle(userLang) : glp("ui.statreport.lbl.allworkspace"));
+   %>
+   <p><a href='<%= url %>' class='btn btn-default' title="<%= label %>"><%= label %></a></p>
+ </jalios:if>
+</jalios:if>
+
+
+

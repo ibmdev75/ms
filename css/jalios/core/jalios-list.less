@@ -1,0 +1,120 @@
+/* ----------------------------------------------- */
+/*  ITEM-LIST                                      */
+/* ----------------------------------------------- */
+
+
+UL.list-inline.list-inline-fixed{
+	LI {
+		.text-overflow();
+		margin:0;
+		padding:0 10px 0 0;
+		display: block;
+		
+		LABEL {
+			max-width: 90%;
+			margin-bottom:-3px;
+			.text-overflow();
+		}
+	}
+}
+
+UL.list-inline-gallery {
+	IMG {.img-responsive(block);}
+}
+
+.list-group.list-group-collapsible {
+  .list-group-item {
+    cursor:pointer;
+    overflow:auto;
+    word-wrap:break-word;
+  }
+  .list-group-item-collapsed {
+  	white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+  }
+}
+
+.list-group-item.clickable {
+  A {
+    color: @list-group-link-color;
+    text-decoration: none;
+  }
+  .btn-primary {
+    color: @btn-primary-color;
+  }
+  
+  // Hover state
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    background-color: @list-group-hover-bg;
+  }
+
+}
+
+LI.list-group-item.clickable.active {
+  background-color: @list-group-active-bg;
+  A {color:white;}
+}
+
+LI.list-group-item-extended.active > A {
+  background-color: @list-group-active-bg;
+  color:white;
+  
+  SPAN.jalios-icon {
+    color: white;
+  }
+}
+
+LI.list-group-item.clickable > A {
+  display: block;
+  margin: -10px -15px;
+  padding: 10px 15px;
+}
+
+.list-group-item-extended {
+	padding: 0;
+	display: table;
+	width: 100%;
+	
+	A {
+	  color: @list-group-link-color;
+	}
+	
+  > A,> DIV {
+  	display: table-cell;
+	  // Hover state
+	  
+	  &:first-child {
+		  padding: 10px 15px;
+	  }
+	  
+	  &:hover,
+	  &:focus {
+	    text-decoration: none;
+	    background-color: @list-group-hover-bg;
+	  }  	
+  }
+  
+	.list-group-item-action {
+		width: 40px;
+		border-left: 1px solid #CCC;	
+		text-align:center;
+	}  
+}
+
+
+
+
+// Vertical bullet list
+.list-item, .item-list { // .list-unstyled();
+  padding-left: 0;
+  list-style: none;
+  line-height: 1.66;
+  
+  LI A {
+    color: @gray-dark;
+    &.btn { color: #FFF; } 
+  }
+}

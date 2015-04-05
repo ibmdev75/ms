@@ -1,0 +1,49 @@
+<%
+	PortletNavigate box = (PortletNavigate) portlet;
+	Category rootCategory = SITEMAP_ROOT;
+	
+	if (Util.notEmpty(box.getRootCategory(loggedMember))){
+	  rootCategory = (Category)box.getFirstRootCategory(loggedMember);
+	}
+	
+	if ("Portal".equals(box.getRefineCategory()) && rootCategory.containsDescendant(portalCategory)){
+	  rootCategory = portalCategory;
+	}
+	else if ("Current".equals(box.getRefineCategory()) && rootCategory.containsDescendant(currentCategory)){
+	  rootCategory = currentCategory;
+	} 
+	else if ( "WorkspaceCategories".equals(box.getRefineCategory()) && 
+	         workspace != null && workspace.getCatSet() != null ) {
+    boolean catFound = false;
+    // First we check if the rootCategory is under a cat of the workspace
+    for (Iterator iterator=workspace.getCatSet().iterator(); iterator.hasNext() && !catFound; ) {
+      Category itCurrentWSCategory = (Category)iterator.next();
+      if (itCurrentWSCategory.containsDescendant(rootCategory) || 
+          itCurrentWSCategory.equals(rootCategory)) {
+        // don't modify rootCategory, just stop the search
+        catFound = true;
+      }
+    }
+    // If not, we try to find a cat of the workspace under the rootCategory
+    // We try to find a cat with minimal distance with rootCat
+    if (!catFound) {
+      Collection visitedCollection = new TreeSet(Category.getOrderComparator(userLang));
+	    visitedCollection.addAll(rootCategory.getChildrenSet());
+	    while (!catFound && Util.notEmpty(visitedCollection)) {
+	      Collection newVisitedCollection = new ArrayList();
+			  for (Iterator iterator=visitedCollection.iterator(); iterator.hasNext() && !catFound; ) {
+			    Category itCurrentWSCategory = (Category)iterator.next();
+			    if (workspace.getCatSet().contains(itCurrentWSCategory)) {
+			     rootCategory = itCurrentWSCategory;
+			     catFound = true;
+			    } else {
+			     SortedSet children = new TreeSet(Category.getOrderComparator(userLang));
+			     children.addAll(itCurrentWSCategory.getChildrenSet());
+			     newVisitedCollection.addAll(children);
+			    }
+			  }
+			  visitedCollection = newVisitedCollection;
+		  }
+		}
+	} 
+%>

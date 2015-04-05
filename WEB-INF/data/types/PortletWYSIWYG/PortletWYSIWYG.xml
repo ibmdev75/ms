@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletWYSIWYG" reviewable="false" debatable="false" categoryTab="false" categoryRequired="false" visible="true" superclass="generated.AbstractPortletSkinable" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="wysiwyg" editor="wysiwyg" required="true" compactDisplay="false" type="String" searchable="false" rows="8" cols="80" ml="true" toolbars="basic,format,style,font,table" descriptionType="tooltip" html="false" checkHtml="false" />
+    <field type="super" />
+  </fields>
+</type>
+

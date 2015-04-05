@@ -1,0 +1,1 @@
+var I18N={lang:"en",glp:function(c){var b=I18N[c];if(!b){return c}for(var a=1;a<arguments.length;a++){b=b.replace("{"+(a-1)+"}",arguments[a])}return b},"error.unknown":"An unknown error occured, please contact an administrator.",loaded:true,mock:true};

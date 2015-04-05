@@ -1,0 +1,247 @@
+<%@page import="com.jalios.jcms.JcmsUtil"%>
+<%@page import="com.jalios.jcms.Channel"%>
+<%@page import="com.jalios.jcms.workspace.Workspace"%>
+<%@page import="com.jalios.jcms.accesscontrol.AccessControlManager"%>
+<%@ page import="java.util.HashMap" %><%
+%><%@ page import="com.jalios.util.ServletUtil" %><%
+%><%@ page import="com.jalios.jcms.context.JcmsContext" %><%
+%><%@ page import="com.jalios.jcms.stat.ExportParameters" %><%
+%><%@ page import="com.jalios.util.Util" %><%
+
+%><jsp:useBean id='formHandler' scope='page' class='com.jalios.jcms.handler.ExportRawStatDataHandler'><%
+ %><jsp:setProperty name='formHandler' property='request' value='<%= request %>' /><%
+ %><jsp:setProperty name='formHandler' property='response' value='<%= response %>' /><%
+ %><jsp:setProperty name='formHandler' property='*' /><%
+%></jsp:useBean><%
+
+  Map<String, RawDataExportHandler> typeMap = formHandler.getExportType();
+
+  if ((typeMap != null && typeMap.size() == 1) || formHandler.getAvailableExportHandler() == null) {
+    formHandler.setExportHandlerKey(Util.getFirst(typeMap.keySet()));
+  }
+
+  RawDataExportHandler currentHandler = formHandler.getAvailableExportHandler();
+
+  TreeSet workspaceSet = new TreeSet();
+  if (showWorkspace) {
+    for(Workspace itWS : Channel.getChannel().getDataSet(Workspace.class)){
+      if (itWS != null) {
+        Map<String,Object> context = new HashMap<String,Object>();
+        context.put( AccessControlManager.CTXT_WORKSPACE, itWS);
+        if(loggedMember != null && (loggedMember.checkAccess("admin-ws/reporting/stat-report", context) || loggedMember.checkAccess("admin/reporting/stat-report", context))){
+          workspaceSet.add(itWS);          
+        }
+      }
+    }
+  } else {
+    Map<String,Object> context = new HashMap<String,Object>();
+    context.put( AccessControlManager.CTXT_WORKSPACE, workspace);
+    if(loggedMember != null && (loggedMember.checkAccess("admin-ws/reporting/stat-report", context) || loggedMember.checkAccess("admin/reporting/stat-report", context))){
+	    workspaceSet.add(workspace);
+    }
+  }
+  Workspace selectedWorkspace = getWorkspaceParameter("statWS");
+  if (selectedWorkspace == null && !showWorkspace) {
+    selectedWorkspace = workspace;
+  }
+
+  if (getBooleanParameter("submitFlag",false) && formHandler.validate()) {
+    formHandler.processExport();
+    String[] params = {"submitFlag"};
+    sendRedirect(ServletUtil.getAbsUrlWithRemovedParams(request, params));
+  }
+  
+  boolean canExportAllWorkspaces = loggedMember != null && (loggedMember.isAdmin() || loggedMember.checkAccess("admin/reporting/stat-report", null));
+  boolean isExportButtonEnabled=  true;
+  boolean isWorkspaceFilterEnabled = canExportAllWorkspaces || Util.notEmpty(workspaceSet);
+  if((showWorkspace &&  !isWorkspaceFilterEnabled) && (!showWorkspace && Util.isEmpty(workspaceSet))){
+    jcmsContext.addMsg(new JcmsMessage(JcmsMessage.Level.WARN, glp("ui.statreport.exportRawData.no-rights-to-export-data")));
+    isExportButtonEnabled = false;
+  }
+%>
+<style type="text/css">
+<!--
+.progressBar {
+	display: inline;
+}
+
+.ProgressBarContainer {
+	height: 15px;
+	width: 200px;
+	border: thin solid black;
+	display: block;
+	padding: 1px;
+}
+
+.ProgressBarExecuted {
+	background: url("images/jalios/progressBar.gif") repeat scroll 0 0
+		transparent;
+	height: 100%;
+}
+
+.ProgressBarRemained {
+	background-color: grey;
+	height: 100%;
+}
+.exportButton{
+  padding:5px;
+  clear:both;
+}
+-->
+</style>
+<%@ include file='/jcore/doMessageBox.jspf'%>
+<p><a href='<%=contextPath%><%=isAdmin?"/admin/stat/adminReportList.jsp":"/admin/stat/workspaceReportList.jsp"%>'><%=glp("ui.statreport.exportRawData.back-to-report-button")%></a>
+</p>
+
+<div class="page-header"><h1><%=glp("ui.statreport.exportRawData.title")%></h1></div>
+<form action='<%=ServletUtil.getResourcePath(request)%>' method="post" name='exportForm' style="display: inline;">
+	<% request.setAttribute(StatExporter.TOKEN, formHandler.getToken());
+	   if(!(showWorkspace && isWorkspaceFilterEnabled)){
+	     request.setAttribute("StatExporter_CURRENT_WORKSPACE",workspace);
+	   }
+	%>
+  <jalios:include jsp="/admin/stat/doAsyncExport.jsp" />
+<h2 class='boTitle'><%=glp("ui.statreport.exportRawData.newExport.title")%></h2>
+<div class='formBox'>
+<div class='inputArea'>
+<table class='layout'>
+	<tr style="vertical-align: top;">
+		<td>
+		<fieldset><legend class='formLabel'><%=glp("ui.statreport.exportRawData.parameters")%></legend>
+		<table class='layout peer'>
+			<tr class='workspace'>
+				<td class="text-overflow formLabel"><%= glp("ui.statreport.exportRawData.filtered-on") %> : </td>
+				<td><div class="widget">
+				<%
+				  if (showWorkspace && isWorkspaceFilterEnabled) {
+				%> <select class='formSelect' name='statWS'
+					onchange='exportForm.submitFlag.value=false;exportForm.submit()'>
+					<%
+						if(canExportAllWorkspaces){
+					%>
+					<option value='<%=StatListener.ALL_WORKSPACE%>'><%=glp("ui.statreport.lbl.allworkspace")%></option>
+					<%} %>
+					<jalios:foreach collection='<%= workspaceSet %>' name='itWS'
+						type='Workspace'>
+						<option value='<%=itWS.getId()%>'
+							<%=itWS == selectedWorkspace ? "selected" : ""%>><%=itWS.getTitle(userLang)%></option>
+					</jalios:foreach>
+				</select> <%
+			   } else {
+			 %> <%=workspace.getTitle(userLang)%> <%
+			     %><input type="hidden" name="statWS" value="<%= workspace.getId() %>" /><%
+			   }
+			 %>
+				</div></td>
+			</tr>
+
+			<tr class='startingDate'>
+              <td class="text-overflow formLabel"><%=glp("ui.statreport.exportRawData.beginDate")%> :
+              </td>
+              <td>
+                <jalios:field  name='<%= "beginDate" %>' value='<%= formHandler.getAvailableBeginDate() %>'>
+                  <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+                </jalios:field>
+              </td>
+			</tr>
+
+			<tr class='endDate'>
+              <td class="text-overflow formLabel"><%=glp("ui.statreport.exportRawData.endDate")%> :
+              </td>
+              <td>
+                <jalios:field  name='<%= "endDate" %>' value='<%= formHandler.getAvailableEndDate() %>'>
+                  <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+                </jalios:field>
+              </td>
+			</tr>
+		</table>
+		</fieldset>
+		<table class='layout'>
+			<tr>
+				<td><input type="checkbox" name="mailNotification" <%=formHandler.getAvailableMailNotification() ? "checked" : ""%> /></td>
+				<td><%=glp("ui.statreport.exportRawData.mailNotification")%></td>
+			</tr>
+		</table>
+		</td>
+		<td>
+		<fieldset><legend class='formLabel'><%=glp("ui.statreport.exportRawData.handler")%></legend>
+		<table class='layout'>
+			<tr class='exportType'>
+				<td nowrap="nowrap">
+				<table class='layout peer'>
+					<tr>
+						<td class="text-overflow formLabel"><%=glp("ui.statreport.exportRawData.useCompressStream")%></td>
+						<td><div class="widget"><input type="checkbox"
+							name="exportHandlerUseCompressedStream"
+							<%=formHandler.getAvailableExportHandlerUseCompressedStream() ? "checked" : ""%> /></div></td>
+					</tr>
+					<tr>
+						<td class="text-overflow formLabel"><%=glp("ui.statreport.exportRawData.exportType")%></td>
+						<td>
+                          <jalios:field  name='<%= "exportHandlerKey" %>' required='<%= true %>' value='<%= formHandler.getAvailableExportHandlerKey() %>'>
+                            <jalios:control settings='<%= new EnumerateSettings().select().enumValues(formHandler.getExportTypeValues()).enumLabels(formHandler.getExportTypeLabels()) %>' />
+                          </jalios:field>
+                          <jalios:javascript>
+                            'JCMS.admin.doExportRawData'._namespace({
+                               init: function(){
+                                 $$('FORM TR.exportType SELECT').each(function(elm,idx){
+                                  Event.observe(elm, 'change', JCMS.admin.doExportRawData.onchange.bindAsEventListener(elm));
+                                 });
+                               },
+                               onchange: function(e){
+                                 var form = Event.element(e).fastUp('FORM');
+                                 form.submitFlag.value=false;
+                                 form.submit();
+                               }
+                            });
+                            JCMS.admin.doExportRawData.init();
+                          </jalios:javascript>
+                        </td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<tr class="configurationPanel">
+				<td style="padding: 10px; padding-left: 20px;"><jalios:if
+					predicate="<%= (currentHandler != null && !Util.isEmpty(currentHandler.getConfigurationFragmentPath())) %>">
+
+					<fieldset><legend class='formLabel'><%=glp("ui.statreport.exportRawData.handlerParameters")%></legend>
+
+					<%
+					  ServletUtil.backupAttribute(pageContext, "exportRawData.currentHandler");
+					    jcmsContext.setAjaxRequestAttribute("exportRawData.currentHandler", currentHandler);
+					%> <jalios:include
+						jsp="<%= currentHandler.getConfigurationFragmentPath() %>" /> <%
+   ServletUtil.restoreAttribute(pageContext, "exportRawData.currentHandler");
+ %>
+					</fieldset>
+				</jalios:if></td>
+			</tr>
+		</table>
+		</fieldset>
+		</td>
+	</tr>
+</table>
+</div>
+</div>
+<div class='exportButton'>
+<%
+if(isExportButtonEnabled){
+  out.print(generateActionElement(!isExportButtonEnabled));
+}
+  %>
+</div>
+</form>
+
+<%!String generateActionElement(boolean disabled) {
+    StringBuilder builder = new StringBuilder("<input class='btn btn-default ");
+    builder.append(disabled ? "disabledButton" :"btn-primary").append("' type='button' id='opSubmit' name='opSubmit'  value=\"");
+    builder.append(glp("ui.statreport.exportRawData.exportButton"));
+    builder.append("\" onclick='simpleSubmitForm(window, document.exportForm, \"exportClean\")' ");
+    if (disabled) {
+      builder.append(" disabled='disabled' ");
+    }
+    builder.append("/><input type=\"hidden\" id=\"submitFlag\" name=\"submitFlag\" value=\"true\" />");
+    return builder.toString();
+  }%>
+

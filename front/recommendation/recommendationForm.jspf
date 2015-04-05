@@ -1,0 +1,34 @@
+<%@ page import='com.jalios.jcms.alert.*' %><%
+
+boolean isReaderTrackingForm = Util.toBoolean(request.getAttribute("jcms.readertracking.recommendation"),false);
+boolean hasAlreadyRecommended = Util.notEmpty(formHandler.getExistingRecommendationList());
+%>
+<%@ include file='/jcore/doMessageBox.jspf' %>
+<jalios:message msg="<%= recoMgr.getModalText(recommendedData, userLang) %>" title="" dismissable="false" />
+<%
+jcmsContext.setAjaxRequestAttribute("ACContact", false);
+jcmsContext.setAjaxRequestAttribute("ACContactSet", null);
+%>
+<jalios:field label="ui.recommendation.modal.lbl.alert-level">
+  <% String alertLevelKey = formHandler.getAvailableAlertLevelKey(); %>
+  <% for (Alert.Level itLevel: Alert.Level.values()) { %>
+    <span class="badge alert-level alert-level-<%= itLevel.getKey() %>"><input type="radio" name="alertLevelKey" value="<%= itLevel.getKey() %>" id="alert-level-<%= itLevel.getKey() %>" <%= itLevel.getKey().equals(alertLevelKey) ? "checked='checked'" : ""  %>> <label for="alert-level-<%= itLevel.getKey() %>"><%= itLevel.getLabel(userLang) %></label></span>&nbsp;
+  <% } %>
+</jalios:field>
+<jalios:field name="members" value='<%= formHandler.getAvailableMemberSet() %>' label="ui.com.lbl.members" keyword="true">
+  <jalios:control settings="<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>" />
+</jalios:field>
+<jalios:field name="groups" value='<%= formHandler.getAvailableGroupSet() %>' label="ui.com.lbl.groups" keyword="true">
+	<jalios:control type="<%= ControlType.GROUP %>" />
+</jalios:field>
+<jalios:field name="message" value='<%= formHandler.getAvailableMessage() %>' label="ui.recommendation.modal.lbl.message">
+	<jalios:control settings='<%= new WikiAreaSettings().rows(2) %>' />
+</jalios:field>
+<jalios:field name="sendCopy" value='<%= formHandler.getAvailableSendCopy() %>' label="ui.recommendation.modal.lbl.send-copy">
+	<jalios:control type="<%= ControlType.BOOLEAN %>" />
+</jalios:field>
+<% if (!JcmsUtil.isSameId(recommendedData.getAuthor(),loggedMember)) { %>
+  <jalios:field name="sendToAuthor" value='<%= formHandler.getAvailableSendToAuthor() %>' label="ui.recommendation.modal.lbl.send-to-author">
+  	<jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+<% } %>

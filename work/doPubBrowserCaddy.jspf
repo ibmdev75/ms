@@ -1,0 +1,45 @@
+<%
+  boolean caddyOn = caddyFilter;
+  boolean caddyNotEmpty = (0 != Caddy.getCaddy(request).getPublicationListSize());
+  String toggleCaddyRefineImg = caddyOn ? "caddyRefineOn.gif" : "caddyRefineOff.gif";
+  String toggleCaddyURL = ServletUtil.getAbsUrlWithUpdatedParams(request, 
+  new String[] {"caddyFilter", "pubBrowserCaddyFilter", "pubBrowserCaddyQueryString" },
+  new String[] { "" + !caddyOn, null, null });
+  String toggleCaddyTooltip = caddyOn ? glp("ui.work.pub.btn.nocaddy") : glp("ui.work.pub.btn.caddy");
+%>
+  <%-- Test to make sure we will have an icon in the menu --%>
+  <% if (caddyNotEmpty || (caddyQueryString != null && caddyNotEmpty) || (caddyQueryString != null && !caddyOn) ) { %>
+    <% String prefix = String.valueOf(System.currentTimeMillis()); %>
+   <a href="#" class="btn btn-default ctxmenu ctxCaddyMenu<%= prefix %>"><jalios:icon src="caddy"/> <jalios:icon src="caret"  /></a>
+    <ul class="ctxMenu click" id="ctxCaddyMenu<%= prefix %>" style="display: none; width: 280px;">
+      <%-- caddy refine URL --%>
+      <% if (caddyNotEmpty) { %>
+       <li class="icon">
+          <a href="work/caddy/"><jalios:icon src="caddy"  /> <%= glp("ui.com.alt.manage-caddy") %></a>
+       </li>
+       <li class="icon"><a href="<%= toggleCaddyURL %>">
+         <jalios:icon src='<%= "images/jalios/icons/" + toggleCaddyRefineImg %>' alt='<%= toggleCaddyTooltip %>' title='<%= toggleCaddyTooltip %>'  />
+         <%= toggleCaddyTooltip %>
+       </a></li>
+       <li class="icon"><a href="work/caddy/caddyPopin.jsp?cadAction=clear" class='caddyUpdate' data-jalios-action="popin">
+         <% String clearCaddyTxt = glp("ui.com.alt.clear-caddy"); %>
+         <jalios:icon src="caddy-out" alt='<%= clearCaddyTxt %>' title='<%= clearCaddyTxt %>'  />
+         <%= clearCaddyTxt %>
+       </a></li>
+      <% } %>
+      <% if (caddyQueryString != null) { %>
+       <%-- remove from caddy --%>
+       <% if (caddyNotEmpty) { %>
+         <li class="icon"><jalios:caddy action='remove' queryString='<%= caddyQueryString %>' checkPstatus='<%= false %>' displayLinkText='<%= true %>' css='<%= "" %>'/></li>
+       <% } %>
+       <%-- add to caddy --%>
+       <% if (!caddyOn) { %>
+        <li class="icon"><jalios:caddy action='add' queryString='<%= caddyQueryString %>' checkPstatus='<%= false %>' displayLinkText='<%= true %>' css='<%= "" %>'/></li>
+        <% } %>
+       <%-- replace caddy --%>
+       <% if (!caddyOn && caddyNotEmpty) { %>
+        <li class="icon"><jalios:caddy action='replace' queryString='<%= caddyQueryString %>' checkPstatus='<%= false %>' displayLinkText='<%= true %>' css='<%= "" %>'/></li>
+       <% } %>
+      <% } %>
+    </ul>
+  <% } %>

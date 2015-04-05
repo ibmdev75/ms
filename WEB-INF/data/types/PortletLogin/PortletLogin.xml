@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletLogin" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" superclass="generated.AbstractPortletSkinable" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="introduction" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="80" ml="true" descriptionType="tooltip" />
+    <field name="loginText" editor="textfield" required="false" compactDisplay="true" type="String" searchable="false" size="80" ml="true" abstract="true" />
+    <field name="passwordText" editor="textfield" required="false" compactDisplay="true" type="String" searchable="false" size="80" ml="true" />
+    <field name="buttonText" editor="textfield" required="false" compactDisplay="true" type="String" searchable="false" size="80" ml="true" />
+    <field name="displayPortal" editor="link" required="false" compactDisplay="false" type="generated.PortletPortal" parent="false" ml="false" descriptionType="tooltip" searchable="false" />
+    <field type="super" />
+  </fields>
+</type>
+

@@ -1,0 +1,32 @@
+<%@page import="com.jalios.io.IOUtil"%><%--
+--%><%@ page import="com.jalios.jcms.webdav.cat.CatWebdavUtil" %><% 
+
+
+File pdfFile = doc.getAssociatedPDF();
+String pdfFilename = pdfFile == null?(doc.getFilename()+".pdf"):IOUtil.getRelativePath(new File(channel.getWebappPath()), pdfFile);
+boolean showPubLink = isVisible && doc.getFilename() != null && channel.getBooleanProperty("channel.public-link.enabled", true);
+boolean showPDFLink = doc.getFilename() != null && !doc.getFilename().endsWith(".pdf") && pdfFile != null && pdfFile.exists();
+boolean showWebdav = canWorkOn && CatWebdavUtil.isWebdavEditable(doc, loggedMember) && com.jalios.jcms.taglib.FileWebdavTag.Webdav.canUseWebdavFileIcon() && doc.checkStrongLockMember(loggedMember);
+
+String docChooserRedirect = ServletUtil.encodeURL(ServletUtil.getBaseUrl(request) + doc.getDisplayUrl(userLocale) + "?details=true");
+%>
+    <%-- Public Link --%>
+    <% if (showPubLink) { %>
+      <a class="pub-action-optional pub-action-download-link list-group-item modal" target="_blank" href="front/publicLink.jsp?docId=<%= doc.getId() %>" ><jalios:icon src="world-link" /> <span class="publication-action-label"><%= glp("ui.fo.ui.public-link") %></span></a>
+    <% } %>
+    
+    <%-- Download PDF --%>
+    <% if (showPDFLink) { %>
+      <a class="pub-action-optional pub-action-download-pdf list-group-item" target="_blank" href="<%= pdfFilename %>" ><jalios:icon src="pdf" /> <span class="publication-action-label"><%= glp("ui.com.btn.download.pdf") %></span></a>
+    <% } %>
+    
+    <%-- Webdav --%>
+    <% if (showWebdav) {
+       com.jalios.jcms.taglib.FileWebdavTag.Webdav webdav = new com.jalios.jcms.taglib.FileWebdavTag.Webdav(glp("ui.com.btn.webdav-edit"), userLang, ServletUtil.getBaseUrl(request), loggedMember);
+       StringBuffer webdavLinkSB = new StringBuffer();
+       webdav.printWebdavFileIcon(webdavLinkSB, doc, false); 
+    %>
+    <%= webdavLinkSB %>
+    <% } %>
+
+    <jalios:include target="PUBLICATION_ACTIONS_DOCUMENT" />         

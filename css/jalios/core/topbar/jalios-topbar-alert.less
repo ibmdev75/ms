@@ -1,0 +1,42 @@
+/* ----------------------------------------------- */
+/*  TOPBAR Alert                                   */
+/* ----------------------------------------------- */
+
+.topbar .topbar-alert {
+  position: relative;
+  height: @tb-height;
+  
+  margin: 0;
+  
+  line-height: @tb-height;
+  color: @tb-alert-text-color;
+  font-weight: bold;
+  text-align: center;
+    
+  .jalios-icon-topbar-alert {
+    position: relative;
+  }
+     
+  .alert-badge {
+    right: 5px;
+    top: 5px;
+    position: absolute;
+
+    padding: 2px 4px;
+
+    font-size: 12px;
+    line-height: 12px;
+    color: white;
+    font-family: @tb-alert-font-family;
+
+    border-radius: 3px;
+
+    &.two-digits {
+      right: 3px;
+    }
+    
+    &.three-digits {
+      right:2px;  
+    }
+  }
+}

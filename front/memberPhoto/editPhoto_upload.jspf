@@ -1,0 +1,16 @@
+<%@page import="com.jalios.jcms.upload.UploadManager"%>
+<% if (step == EditMemberPhotoHandler.UPLOAD_STEP) { %>
+  <jalios:message title="">
+    <p><%= glp("ui.member-editor.change-photo.modal.step1.help") %></p>
+    <% if (formHandler.getMember() != null && formHandler.getMember().hasPhoto()) { %>
+      <p>
+        <%= glp("ui.member-editor.change-photo.modal.step1.help1.prefix") %>
+        <button type="submit" name="opExisting" value="true" class="ajax-refresh btn btn-default"><%= glp("ui.member-editor.change-photo.modal.step1.help1") %></button>
+      </p>
+    <% } %>
+  </jalios:message>
+  
+  <jalios:field name="documents" resource="field-vertical">
+    <jalios:control settings='<%= new FileSettings().filter(FileSettings.FileFilter.IMAGE) %>' />
+  </jalios:field>
+<% } %>

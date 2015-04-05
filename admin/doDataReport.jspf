@@ -1,0 +1,693 @@
+<%@page import="com.jalios.jcms.taglib.settings.impl.TextFieldSettings"%>
+<%!
+String getCountLink(int count, String url) {
+  if (count == 0) {
+    return "";
+  }
+  return "<a href='" + url + "'>" + count + "</a>";
+}
+%>
+<% boolean isAudienceEnabled = AudienceRights.getInstance().isEnabled(); %>
+
+<div class="page-header"><h1><%= request.getAttribute("title") %></h1></div>
+
+<% int openTab = getIntParameter("openTab", 0); %>
+
+<div class='dataReport' id='dataReport'>
+<jalios:pager name='pagerHandler' declare='true' action='init' size='<%= wsSet.size() %>'/>
+<jalios:pager name='pagerHandler' />
+<jalios:foreach collection='<%= wsSet %>' 
+				name='itWorkspace' 
+				type='Workspace' 
+				counter='itWorkspaceCounter'
+				max='<%= pagerHandler.getPageSize() %>'
+                skip='<%= pagerHandler.getStart() %>' >
+<% int[] contentDetails = JcmsUtil.getPublicationDetails(Content.class, loggedMember, itWorkspace); %>
+<% String wsParam = "ws=" + itWorkspace.getId(); %>
+<% if (wsSet.size() > 1) { %>
+
+<h2 class="boTitle"><jalios:icon src='work'  /> <%= itWorkspace.getTitle(userLang) %> <jalios:edit data='<%= itWorkspace %>' /></h2>
+<% } %>
+
+<%
+int ugcCount = channel.getPublicationSet(UserContent.class, loggedMember, false, itWorkspace).size();
+ugcCount += HibernateUtil.queryCount(UserContent.class, "workspaceId", itWorkspace.getId());
+int tabPane = -1;
+%>
+
+<div class="tab-pane group" id="dataReportTab<%= itWorkspace.getId() %>">
+<a id='div<%= itWorkspace.getId() %>'></a>
+
+  <%-- *** GENERAL TAB *********************************************** --%>
+  <div class="tab-page"><% tabPane++; %>
+    <h2 class="tab"><%= glp("ui.com.tab.general") %></h2>
+    
+    <table class='table-data auto'>
+      <%-- Admins ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.wrkspc-edit.lbl.admin") %>
+        </td>
+        <td>
+          <ul>
+          <jalios:foreach collection='<%= itWorkspace.getAdministrators() %>' name='itAdmin' type='Member' counter='itAdminCounter'>
+            <li><%= itAdmin.getHtmlIcon(userLang) %>  <%= itAdmin.getFullName() %></li>
+          </jalios:foreach>
+          </ul>
+         </td>
+      </tr>
+      <%-- #CATS ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.categories") %>
+        </td>
+        <td>
+          <ul>
+          <jalios:foreach collection='<%= itWorkspace.getCatSet() %>' name='itCat' type='Category' counter='itCatCounter'>
+            <li><jalios:icon src='folder'  /> <%= itCat.getName(userLang) %></li>
+          </jalios:foreach>
+          </ul>
+        </td>
+      </tr> 
+       <%-- #MEMBERS ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.members") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(itWorkspace.getMemberSet().size(), "work/workspace/workspaceMemberList.jsp?" + wsParam) %>
+        </td>
+      </tr>
+      <%-- #GROUPS ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.groups") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(itWorkspace.getGroupSet().size(), "work/workspace/workspaceGroupList.jsp?" + wsParam) %>
+        </td>
+      </tr>
+      <%-- #CONTENTS / ALL ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.contents") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(contentDetails[0], "work/pubBrowser.jsp?mode=all&amp;" + wsParam) %>
+        </td>
+      </tr>
+      <%-- #UGC ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.ugcs") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(ugcCount, "work/pubBrowser.jsp?mode=all&amp;super=UserContent&amp;" + wsParam) %>
+        </td>
+      </tr>
+     <%-- #ARCHIVES ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.archives") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(ArchiveManager.countArchive(itWorkspace), "work/archiveBrowser.jsp?" + wsParam) %>
+        </td>
+      </tr>
+      <%-- #PORTLET ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.portalelements") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(channel.getPublicationSet(PortalElement.class, loggedMember, false, itWorkspace).size(), "work/pubBrowser.jsp?mode=all&amp;super=PortalElement&amp;" + wsParam) %>
+        </td>
+      </tr>
+      <%-- #FORMS ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.forms") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(channel.getPublicationSet(Form.class, loggedMember, false, itWorkspace).size(), "work/pubBrowser.jsp?mode=all&amp;super=Form&amp;" + wsParam) %>
+        </td>
+      </tr>
+      <%-- CDATE ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.cdate-long") %>
+        </td>
+        <td class='date-time'>
+          <jalios:date date='<%= itWorkspace.getCdate() %>' format="timeDateOrTime"/>
+        </td>
+      </tr>
+    </table>
+    <% if (wsSet.size() > 1) { %>
+    <div class='link'>
+      <a href='work/workspace/adminWorkspace.jsp?<%= wsParam %>'><%= glp("ui.work.mn.admin") %></a>
+    </div>
+    <% } %>
+  </div>
+  
+  <%-- *** CATEGORY TAB *********************************************** --%>
+  <div class="tab-page"><% tabPane++; %>
+    <h2 class="tab"><%= glp("ui.com.lbl.categories") %></h2>
+    <h3><jalios:icon src='sitemap'  /> <%= glp("ui.adm.data-report.roots") %></h3>
+      <ul>
+        <jalios:foreach collection='<%= itWorkspace.getCatSet() %>' name='itCat' type='Category' counter='itCatCounter'>
+          <li><jalios:icon src='folder'  /> <%= itCat.getName(userLang) %></li>
+        </jalios:foreach>
+      </ul>
+
+    <h3><jalios:icon src='key'  /> <%= glp("ui.adm.data-report.restricted-cat") %></h3>
+    <table class='table-data auto'>
+      <tr> 
+        <th></tdh>
+        <th><%= glp("ui.com.lbl.category") %></th>
+        <th><jalios:icon src='key-white' title='<%= glp("ui.com.lbl.rights") %>' /></th>
+      </tr>    
+    <% int counter = 1; %>
+    <jalios:foreach collection='<%= itWorkspace.getCatSet() %>' name='itRoot' type='Category' counter='itRootCounter'>
+    <jalios:categories root="<%= itRoot.getId()  %>" visiteroot="true" visite="children-first">
+      <% if (itCategory.hasAnyReadRights()) { %>
+      <tr>
+        <td class='numeric'>
+          <%= counter++ %>. <jalios:edit data='<%= itCategory %>' />
+        </td>
+        <td>
+          <%= itCategory.getName(userLang) %>
+        </td>
+        <td>
+          <ul>
+          <jalios:foreach collection='<%= itCategory.getAuthorizedMemberSet() %>' name='itMember' type='Member' counter='itMemberCounter'>
+            <li><%= itMember.getHtmlIcon(userLang) %> <%= itMember %></li>
+          </jalios:foreach>
+          <jalios:foreach collection='<%= itCategory.getAuthorizedGroupSet() %>' name='itGroup' type='Group' counter='itGroupCounter'>
+            <li><jalios:icon src='group'  /> <%= itGroup.getName(userLang) %></li>
+          </jalios:foreach>
+          </ul>
+        </td>
+      </tr>
+      <% } %>
+    </jalios:categories>
+    </jalios:foreach>
+    </table>   
+  </div>
+  
+  <%-- *** CONTENT TAB *********************************************** --%>
+  <div class="tab-page"><% tabPane++; %>
+    <h2 class="tab"><%= glp("ui.com.lbl.contents") %></h2>
+    <% String urlPrefix = "work/pubBrowser.jsp?mode=all&amp;ws=" + itWorkspace.getId() + "&amp;"; %>
+    
+    <%-- SYNTHETISIS --%>
+    <table class='table-data auto'>
+      <%-- #CONTENTS / INPROGRESS ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.adm.data-report.inprogress") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(contentDetails[1], urlPrefix + "sort=pstatus&amp;reverse=true") %>
+        </td>
+      </tr>
+      <%-- #CONTENTS / SCHEDULED ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.scheduled") %>
+          <a href='work/pubCalendar.jsp?type=pdate'><jalios:icon src='calendar'  /></a>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(contentDetails[2], urlPrefix + "pstatus=" + WorkflowManager.SCHEDULED_PSTATUS) %>
+        </td>
+      </tr>
+      <%-- #CONTENTS / VISIBLE ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.published") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(contentDetails[3], urlPrefix + "pstatus=" + WorkflowManager.PUBLISHED_PSTATUS) %>
+        </td>
+      </tr>
+      <%-- #CONTENTS / EXPIRED ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.com.lbl.expired") %>
+          <a href='work/pubCalendar.jsp?type=edate'><jalios:icon src='calendar'  /></a>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(contentDetails[4], urlPrefix + "pstatus=" + WorkflowManager.EXPIRED_PSTATUS) %>
+        </td>
+      </tr>
+      <%-- #CONTENTS / RESTRICTED ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.adm.data-report.restricted-pub") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(contentDetails[5], urlPrefix + "sort=right") %>
+        </td>
+      </tr>
+      <%-- #CONTENTS / AUDIENCED ------------------------------------------------------------ --%> 
+      <% if (isAudienceEnabled) { %>
+      <tr> 
+        <td>
+          <%= glp("ui.adm.prop.mbr.pub-read-r.title") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(contentDetails[6], urlPrefix + "sort=audienceRight") %>
+        </td>
+      </tr>
+      <% } %>
+      <%-- #CONTENTS / HIDDEN ------------------------------------------------------------ --%> 
+      <tr> 
+        <td>
+          <%= glp("ui.adm.data-report.doc.hidden") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(contentDetails[7], urlPrefix + "classname=com.jalios.jcms.FileDocument&amp;pstatus=" + FileDocument.HIDDEN_PSTATUS) %>
+        </td>
+      </tr>
+     </table>    
+    
+    <%-- DETAILLED --%>
+    <% if (contentDetails[0] > 0) { %>
+    <br />
+    <table class='table-data auto'>
+      <tr> 
+        <th></th>
+        <th><%= glp("ui.com.lbl.workflow") %></th>
+        <th><%= glp("ui.adm.data-report.inprogress") %></th>
+        <th><%= glp("ui.com.lbl.scheduled") %></th>
+        <th><%= glp("ui.com.lbl.published") %></th>
+        <th><%= glp("ui.com.lbl.expired") %></th>
+        <th><jalios:icon src='key-white' title='<%= glp("ui.com.lbl.rights") %>' /></th>
+        <% if (isAudienceEnabled) { %>
+        <th><jalios:icon src='target-white' title='<%= glp("ui.adm.prop.mbr.pub-read-r.title") %>'   /></th>
+        <% } %>
+      </tr>
+      <jalios:foreach collection='<%= channel.getSubTypeList(Content.class, userLang) %>' name='itClass' type='Class' counter='itClassCounter'>
+      <% int[] pubDetails = JcmsUtil.getPublicationDetails(itClass, loggedMember, itWorkspace); %>
+      <% if (pubDetails[0] > 0) { %>
+      <% 
+      urlPrefix = "work/pubBrowser.jsp?mode=all&amp;ws=" + itWorkspace.getId() + "&amp;classname=" + itClass.getName() + "&amp;";
+      Workflow wf = itWorkspace.getWorkflow(itClass); 
+      String workflowLabel = wf == WorkflowManager.DEFAULT_WORKFLOW ? "" : wf.getLabel(userLang);
+      %>
+      <tr> 
+        <td>
+          <jalios:dataicon class="<%= itClass %>" /> <%= channel.getTypeLabel(itClass, userLang) %>
+        </td>
+        <td class='numeric'>
+          <%= workflowLabel %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(pubDetails[1], urlPrefix + "sort=pstatus&amp;reverse=true") %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(pubDetails[2], urlPrefix + "pstatus=" + WorkflowManager.SCHEDULED_PSTATUS) %>
+        </td>
+        <td class='numeric'>
+           <%= getCountLink(pubDetails[3], urlPrefix + "pstatus=" + WorkflowManager.PUBLISHED_PSTATUS) %>
+        </td>
+        <td class='numeric'>
+           <%= getCountLink(pubDetails[4], urlPrefix + "pstatus=" + WorkflowManager.EXPIRED_PSTATUS) %>
+        </td>
+        <td class='numeric'>
+           <%= getCountLink(pubDetails[5], urlPrefix + "sort=right") %>
+        </td>
+        <% if (isAudienceEnabled) { %>
+        <td class='numeric'>
+           <%= getCountLink(pubDetails[6], urlPrefix + "sort=audienceRight") %>
+        </td>
+        <% } %>
+      </tr>
+      <% } %>
+      </jalios:foreach>
+    </table>
+    
+    <%-- LOCKED PUBLICATIONS --%>
+    <%
+    Set<Content> lockSet = StrongLockManager.getInstance().getLockedDataSet(Content.class);
+    DataSelector selector = new AndDataSelector(Publication.getWorkspaceSelector(itWorkspace), Publication.getAuthorizedSelector(loggedMember));
+    lockSet = JcmsUtil.select(lockSet, selector, Publication.getMdateComparator());
+    %>
+    <% if (Util.notEmpty(lockSet)) { %>
+    <br />
+    
+    <h3><jalios:icon src='lock-strong' /> <%= glp("ui.adm.data-report.doc.locked") %></h3>
+    
+    <table class='table-data auto'>
+      <tr> 
+        <th></th>
+        <th><%= glp("ui.com.core-type.lbl.Content") %></th>
+        <th><%= glp("ui.com.lbl.type") %></th>
+        <th><%= glp("ui.com.lbl.member") %></th>
+        <th><%= glp("ui.com.lbl.duration") %></th>
+        <th><%= glp("ui.com.lbl.date") %></th>
+      </tr>
+      <jalios:foreach collection='<%= lockSet %>' name='itPub' type='Publication' counter='itLockCounter'>
+      <%  
+      Date now = new Date();
+      %>
+      <tr>
+        <td class='numeric'>
+          <%= itLockCounter %>.
+          <jalios:edit pub='<%= itPub %>' />
+        </td>
+        <td>
+          <jalios:dataicon data='<%= itPub %>' />
+          <jalios:link data="<%= itPub %>" />
+        </td>
+        <td>
+          <%= itPub.getTypeLabel(userLang) %>
+        </td>    
+        <td>
+        <% Member strongLockMbr = itPub.getStrongLockMember(); %>
+          <%= strongLockMbr == null ? "" :strongLockMbr.getHtmlIcon(userLang) %>
+          <jalios:link data="<%= strongLockMbr %>" />
+        </td>
+        <td class="date-time">
+          <jalios:duration begin='<%= itPub.getStrongLockDate()%>' end='<%= now %>' round="true" />
+        </td>
+        <td class="date-time">
+          <jalios:date date='<%= itPub.getStrongLockDate() %>' format='timeDateOrTime' />
+        </td>
+      </tr>
+      </jalios:foreach>
+      </table>
+    <% } %>
+ 
+    
+    
+    <div class='link'>
+      <a href='work/workspace/editWorkspaceType.jsp?<%= wsParam %>&amp;rootClass=com.jalios.jcms.Content'><%= glp("ui.adm.data-report.content-mgr") %></a>
+    </div>    
+    
+    <% } %>
+  </div>
+
+  <%-- *** Documents *********************************************** --%>
+  <div class="tab-page"><% tabPane++; %>
+    <h2 class="tab"><%= glp("ui.com.lbl.documents") %></h2>
+    
+    <%-- Disk quota --%>
+    <%
+    QuotaManager mgr = QuotaManager.getInstance();
+    if(mgr.isQuotaEnabled() && itWorkspace.getFileAnalyzer(false)!= null){ 
+    %>
+          <%
+          Map<Workspace, QuotaElement> elements = mgr.getElements();
+          QuotaElement element = elements.get(itWorkspace);
+          if(element != null){
+            boolean isAlert = element.isAlert();
+            boolean isOver = element.isOver();
+            long quotaValue = element.getQuota();
+            long quotaMaxValue = element.getQuotaMaxValue();
+            int alertThreshold = element.getAlertThreshold();
+            int percentValue  = Math.round((100 * quotaValue)/quotaMaxValue); 
+            String progressBarStyle = isOver ? "progress-bar-danger" : (isAlert ? "progress-bar-warning" : "progress-bar-success");
+          %>
+      
+    <h3><%=glp("ui.adm.mn.files.quota-for-the-workspace") %></h3>
+    <div style="max-width: 500px;">
+      <div class="pull-right" style="margin-left: 10px;">
+        <jalios:filesize size="<%= quotaValue %>" /> / <jalios:filesize size="<%= quotaMaxValue %>" />
+      </div>
+      <div class="progress">
+        <div class="progress-bar <%= progressBarStyle %>" style="width:<%=percentValue%>%;"><%=percentValue%>%</div>
+      </div>
+    </div>
+
+          
+
+    <% } %>
+    <% } %>
+    
+  <%-- Documents Size --%>
+	<h3><%= glp("ui.adm.data-report.doc.size") %></h3>
+    <% 
+    boolean opRefreshFileSizeMap = getBooleanParameter("opRefreshFileSizeMap", false);
+    String workspaceId = getDataIdParameter("workspace");
+    WorkspaceFileAnalyzer fileAnalyzer = itWorkspace.getFileAnalyzer((itWorkspace.getId().equals(workspaceId)) ? opRefreshFileSizeMap:false);
+    if( fileAnalyzer != null){      
+	    ObjectLongTreeMap fileSizeMap = fileAnalyzer.getFileSizeMap();
+	    ObjectLongTreeMap fileSizeMapWithSatellite = fileAnalyzer.getFileSizeMapWithSatellite();
+	    String fileSizeMapRefreshUrl = ServletUtil.getUrlWithUpdatedParams(request, new String[] {"opRefreshFileSizeMap", "openTab", "workspace"}, new String[] {"true", String.valueOf(tabPane), itWorkspace.getId()});
+	    String fileSizeMapLinkPrefix = "work/queryWork.jsp?types=com.jalios.jcms.FileDocument&amp;types=com.jalios.jcms.DBFileDocument&amp;mode=advanced&amp;wrkspc=" + itWorkspace.getId() + "&amp;text=";
+	    %>
+	    <%@ include file="/admin/doFileSizeMap.jspf" %>
+    <%}else{
+    	int completeness = itWorkspace.getCurrentAnalyzerThread() == null?0: itWorkspace.getCurrentAnalyzerThread().getCompleteness();
+    %><jalios:message msg='<%= glp("ui.adm.data-report.file-analyze-in-progress", completeness) %>' title="" dismissable="false" /><%
+        %><%
+        %><jalios:javascript>
+        var url = window.location.href;
+        url = url.replace(/opRefreshFileSizeMap=true/g, "opRefreshFileSizeMap=false");
+        setTimeout('window.location.href="'+url+'";', 3000);
+      </jalios:javascript><%
+%><%}%>
+   
+    
+  </div>  
+  
+
+  
+  <%-- *** UGC TAB *********************************************** --%>
+  <div class="tab-page"><% tabPane++; %>
+    <h2 class="tab"><%= glp("ui.com.lbl.ugcs") %></h2>
+    
+    <table class='table-data auto'>
+      <tr> 
+        <th></th>
+        <th><%= glp("ui.com.lbl.ugc-cnt") %></th>
+      </tr>
+      <jalios:foreach collection='<%= channel.getSubTypeList(UserContent.class, userLang) %>' name='itClass' type='Class' counter='itClassCounter'>
+      <% int[] pubDetails = JcmsUtil.getPublicationDetails(itClass, loggedMember, itWorkspace); %>
+      <% urlPrefix = "work/pubBrowser.jsp?super=com.jalios.jcms.UserContent&amp;mode=all&amp;ws=" + itWorkspace.getId() + "&amp;classname=" + itClass.getName() + "&amp;"; %>
+      <% if (pubDetails[0] > 0) { %>
+      <tr> 
+        <td>
+          <jalios:dataicon class="<%= itClass %>" /> <%= channel.getTypeLabel(itClass, userLang) %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(pubDetails[0], urlPrefix) %>
+        </td>
+      </tr>
+      <% } %>
+      </jalios:foreach>
+    </table>
+    <div class='link'>
+      <a href='work/workspace/editWorkspaceType.jsp?<%= wsParam %>&amp;rootClass=com.jalios.jcms.UserContent'><%= glp("ui.adm.data-report.ugc-mgr") %></a>
+    </div>
+  </div>
+  
+  <%-- *** PORTLET TAB *********************************************** --%>
+  <div class="tab-page"><% tabPane++; %>
+    <h2 class="tab"><%= glp("ui.com.lbl.portalelements") %></h2>
+    
+    <table class='table-data auto'>
+      <tr> 
+        <th></th>
+        <th><%= glp("ui.com.lbl.portlet-cnt") %></th>
+        <th><jalios:icon src='key-white' title='<%= glp("ui.com.lbl.rights") %>'   /></th>
+        <% if (isAudienceEnabled) { %>
+        <th><jalios:icon src='target-white' title='<%= glp("ui.adm.prop.mbr.pub-read-r.title") %>'   /></th>
+        <% } %>
+      </tr>
+      <jalios:foreach collection='<%= channel.getSubTypeList(PortalElement.class, userLang) %>' name='itClass' type='Class' counter='itClassCounter'>
+      <% int[] pubDetails = JcmsUtil.getPublicationDetails(itClass, loggedMember, itWorkspace); %>
+      <% urlPrefix = "work/pubBrowser.jsp?super=com.jalios.jcms.portlet.PortalElement&amp;mode=all&amp;ws=" + itWorkspace.getId() + "&amp;classname=" + itClass.getName() + "&amp;"; %>
+      <% if (pubDetails[0] > 0) { %>
+      <tr> 
+        <td>
+          <jalios:dataicon class="<%= itClass %>" /> <%= channel.getTypeLabel(itClass, userLang) %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(pubDetails[0], urlPrefix) %>
+        </td>
+        <td class='numeric'>
+           <%= getCountLink(pubDetails[5], urlPrefix + "sort=right") %>
+        </td>
+        <% if (isAudienceEnabled) { %>
+        <td class='numeric'>
+           <%= getCountLink(pubDetails[6], urlPrefix + "sort=audienceRight") %>
+        </td>
+        <% } %>
+      </tr>
+      <% } %>
+      </jalios:foreach>
+    </table>
+    <div class='link'>
+      <a href='work/workspace/editWorkspaceType.jsp?<%= wsParam %>&amp;rootClass=com.jalios.jcms.portlet.PortalElement'><%= glp("ui.adm.data-report.portlet-mgr") %></a>
+    </div>
+  </div>
+  
+  <%-- *** FORM TAB *********************************************** --%>
+  <div class="tab-page"><% tabPane++; %>
+    <h2 class="tab"><%= glp("ui.com.lbl.forms") %></h2>
+    
+    <table class='table-data auto'>
+      <tr> 
+        <th></th>
+        <th><%= glp("ui.com.lbl.form-cnt") %></th>
+      </tr>
+      <jalios:foreach collection='<%= channel.getSubTypeList(Form.class, userLang) %>' name='itClass' type='Class' counter='itClassCounter'>
+      <% int[] pubDetails = JcmsUtil.getPublicationDetails(itClass, loggedMember, itWorkspace); %>
+      <% urlPrefix = "work/pubBrowser.jsp?super=com.jalios.jcms.Form&amp;mode=all&amp;ws=" + itWorkspace.getId() + "&amp;classname=" + itClass.getName() + "&amp;"; %>
+      <% if (pubDetails[0] > 0) { %>
+      <tr> 
+        <td>
+          <jalios:dataicon class="<%= itClass %>" /> <%= channel.getTypeLabel(itClass, userLang) %>
+        </td>
+        <td class='numeric'>
+          <%= getCountLink(pubDetails[0], urlPrefix) %>
+        </td>
+      </tr>
+      <% } %>
+      </jalios:foreach>
+    </table>
+    <div class='link'>
+      <a href='work/workspace/editWorkspaceType.jsp?<%= wsParam %>&amp;rootClass=com.jalios.jcms.Form'><%= glp("ui.adm.data-report.form-mgr") %></a>
+    </div>
+  </div>
+  
+  
+  <%-- *** EXTERNAL LINK *********************************************** --%>
+  <div class="tab-page"><% tabPane++; %>
+    <h2 class="tab"><%= glp("ui.adm.data-report.external-links") %></h2>
+    <% 
+    Map urlMap = WeakLinkManager.getInstance().getUrlMap(itWorkspace, loggedMember);
+    %>
+    
+    <% if (Util.isEmpty(urlMap)) { %>
+    <p><b><%= glp("ui.adm.data-report.external-links-cnt", 0) %></b></p>
+    <% } else { %>
+    <%
+    int urlCounter = 0;
+    String searchParam = "text_" + itWorkspace.getId(); 
+    String searchText = getUntrustedStringParameter(searchParam, ""); // ENCODE !
+    boolean isSearched = Util.notEmpty(searchText);
+
+		for(Iterator it = urlMap.entrySet().iterator(); it.hasNext();) {
+			Map.Entry itEntry = (Map.Entry)it.next();
+			String url = (String)itEntry.getKey();
+			if (isSearched && url.indexOf(searchText) < 0) {
+			  it.remove();
+			}
+			Set cleanPubSet = Util.interSet((Set)itEntry.getValue(), channel.getPublicationSet(Publication.class, loggedMember, false, itWorkspace));
+			itEntry.setValue(cleanPubSet);
+		}
+		
+    %>
+    <p><b><%= glp("ui.adm.data-report.external-links-cnt", urlMap.size()) %></b></p>
+    <div class="navbar navbar-default navbar-table-header">
+	    <div class="container-fluid">
+	    <% if (isSearched) { %>
+	    <a href='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[] {"openTab", searchParam}, new String[] {String.valueOf(tabPane), null}) + "#div" + itWorkspace.getId() %>' class="btn btn-default navbar-btn">
+		    <%= glp("ui.com.lbl.show-all") %>
+	    </a>
+	    <% } %>			
+			
+			<form class="navbar-form navbar-right" role="search" action='<%= ServletUtil.getResourcePath(request) + "#div" + itWorkspace.getId() %>' method='get'>
+      <input type='hidden' name='openTab' value='<%= String.valueOf(tabPane) %>' />
+			<jalios:field name='<%= searchParam %>' value="<%= searchText %>" resource="field-light">
+	      <jalios:control  type='<%= ControlType.TEXTFIELD %>' settings='<%= new TextFieldSettings().placeholder("ui.com.placeholder.search") %>' />
+				<span class="input-group-btn">
+	        <button class="btn btn-default" name="opSearch" type="submit"><jalios:icon src="search"/></button>
+	      </span>	   
+	    </jalios:field>
+		  </form>	  
+		  </div>
+    </div> 
+
+
+    <table class='layout'>
+    <tr>
+    <td>
+    <table class="table-data">
+      <tr> 
+        <th></th>
+        <th><%= glp("ui.com.lbl.status") %></th>
+        <th><%= glp("ui.com.lbl.url") %></th>
+        <th><%= glp("ui.com.lbl.publications") %></th>
+      </tr>
+      <%
+        Map linkPagerParameterMap = new HashMap();
+        linkPagerParameterMap.put("openTab", String.valueOf(tabPane));
+      %>
+      <jalios:pager name='linkPagerHandler' declare='true' action='init'
+              paramPrefix="<%= itWorkspace.getId() %>" 
+              pageSize="<%= 10 %>"
+              size='<%= urlMap.size()%>'
+              parameterMap='<%= linkPagerParameterMap %>' />
+      <jalios:foreach counter='itEntryCounter'
+                      collection='<%= urlMap.entrySet() %>' 
+                      name='itEntry' 
+                      type='Map.Entry'
+                      max='<%= linkPagerHandler.getPageSize() %>' 
+                      skip='<%= linkPagerHandler.getStart() %>'>
+      <% 
+      String url = (String)itEntry.getKey();
+      Set pubSet = (Set)itEntry.getValue();
+      pubSet = Util.interSet(pubSet, channel.getPublicationSet(Publication.class, loggedMember, false, itWorkspace));
+      urlCounter++;
+      String status = "<span class='work-state'>" + glp("ui.com.lbl.not-published") + "</span>";
+      for(Iterator it = pubSet.iterator(); it.hasNext();) {
+        Publication itPub = (Publication)it.next();
+        if (itPub.isInVisibleState()) {
+          status = "<span class='pub-state'>" + itPub.getWFStateLabel(userLang) + "</span>";
+          break;
+        }
+      }
+      %>
+      <tr> 
+        <td class='vTop text-right'>
+          <%= linkPagerHandler.getStart() + urlCounter %>.
+        </td>
+         <td class='vTop text-center'>
+          <%= status %>
+        </td>
+        <td class='vTop'>
+          <jalios:icon src='world-link'  /> <a href='<%= url %>' target='_blank'><jalios:truncate length='60' suffix='...'><%= url %></jalios:truncate></a>
+        </td>
+        <td class='vTop'>
+          <ol>
+            <jalios:foreach counter='itPubCounter'
+                            collection='<%= pubSet %>' 
+                            name='itPub' 
+                            type='Publication'>
+            <li><jalios:edit pub='<%= itPub %>' /> <jalios:link data='<%= itPub %>'><jalios:truncate length='60' suffix='...'><%= itPub.getTitle(userLang) %></jalios:truncate></jalios:link></li>
+            </jalios:foreach>
+          </ol>
+        </td>
+      </tr>
+      </jalios:foreach>
+    </table>
+    </td>
+    </tr>
+    <tr>
+    <td align='center'>
+    <jalios:pager name='linkPagerHandler'/>
+    </td>
+    </tr>
+    </table>
+    <% } /* Util.notEmpty(urlMap) */ %>
+  </div>
+  
+  <%-- *** PLUGINS *********************************************** --%>
+  <% request.setAttribute("data-report.workspace", itWorkspace); %>
+  <jalios:include target="DATA_REPORT" targetContext="tab-page"/>
+  
+</div>
+</jalios:foreach>
+<jalios:pager name='pagerHandler' />
+</div>
+<jalios:javascript>
+var divs = $('dataReport').getElementsByTagName("div");
+for(var i = 0; i < divs.length; i++) { 
+  if (divs[i].id.indexOf("dataReportTab") > -1) { 
+    setSelectedTab(divs[i].id, <%= openTab %>);
+  }
+}
+</jalios:javascript>

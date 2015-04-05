@@ -1,0 +1,71 @@
+/* ----------------------------------------------- */
+/*  PANELS for Bootstrap3                          */
+/* ----------------------------------------------- */
+
+.panel {
+  
+  .panel-title {
+    display: inline-block;
+  }
+  &.panel-sticky .panel-body{
+    padding:0;
+  }  
+  
+  .panel-heading .panel-actions {
+    float:right;
+    
+    &.collapse-action {
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+  }
+  
+  .panel-msg {
+    line-height: @line-height-large; // 1.33
+    font-size:   @font-size-small;   // ~12px
+    padding: 10px 15px;
+    margin :     -@panel-body-padding -@panel-body-padding 0 -@panel-body-padding;
+    background-color: @panel-default-heading-bg;
+  }
+  
+  @list-group-panel-reset: -@panel-body-padding - 1;
+  
+  .panel-body {
+    .list-group {
+      &.sticky {
+        margin-top:@list-group-panel-reset;
+        margin-bottom:@list-group-panel-reset;
+        margin-left:@list-group-panel-reset;
+        margin-right:@list-group-panel-reset;
+      }
+      &.sticky-sides {
+      	margin-left:@list-group-panel-reset;
+        margin-right:@list-group-panel-reset;
+      }
+      &.sticky-top {margin-top:@list-group-panel-reset;}
+      &.sticky-bottom {margin-bottom:@list-group-panel-reset;}
+      &.sticky-left {margin-left:@list-group-panel-reset;}
+      &.sticky-right {margin-right:@list-group-panel-reset;}
+    }
+  }
+}
+
+// Badge in panel
+// --------------
+.panel-default,
+.panel-primary,
+.panel-success,
+.panel-info,
+.panel-warning,
+.panel-danger {
+  & > .panel-heading {
+    .badge {
+      // FIX for Bootstrap v3.2 badge in a Panel heading: restore compliance with badges colors (info, sucess, danger,...)
+      &.badge-primary   { background-color: @badge-primary-bg; }
+      &.badge-success   { background-color: @badge-success-bg; }
+      &.badge-info      { background-color: @badge-info-bg;    }
+      &.badge-warning   { background-color: @badge-warning-bg; }
+      &.badge-danger    { background-color: @badge-danger-bg;  }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+DIV.tabinfo{
+  background-color: #FFFFCC;
+  padding: 1em;
+  margin:  0 1px 0.5em 1px;
+  border: 1px solid #666666;
+}
+DIV.tabinfo A{
+  color: #333333;
+  text-decoration: none;
+}
+DIV.tabinfo A:hover{
+  text-decoration: underline;
+}
+
+DIV.pre {
+  font: normal 9pt "Courier New", Courier, monospace;
+  background-color: #FFFFFF; 
+  border: 1px solid #666666; 
+  overflow: scroll; 
+  white-space: pre; 
+  width:  99%; 
+  height: 30em; 
+  padding-left: 0.5em;
+}
+
+IMG.thumb{
+  float: left; 
+  border: 1px solid #666666; 
+  padding: 4px; 
+  margin-right: 1em;
+}
+
+.doc-iframe {
+  border: 1px solid #666666; 
+  width:  99%;
+  height: 30em; 
+  min-width: 900px;
+}
+
+#pluginMenu {
+  font-size: 10pt;
+}
+#pluginMenu UL {
+  list-style-type: none;
+  margin: 2px 0 0 4px;
+  padding: 0;
+}
+#pluginMenu LI {
+  padding:2px 0px;
+}
+#pluginMenu A {
+  text-decoration: none;
+  color: #444444;
+}
+#pluginMenu A:hover {
+  text-decoration: underline;
+}
+#pluginMenu A.mainButton         { color: #5577AA;  background: transparent; border: none; }
+#pluginMenu A.mainButton:hover   { border: none; }
+#pluginMenu A.seriousButton      { color: #CC6666;  background: transparent; border: none; }
+#pluginMenu A.seriousButton:hover{ border: none; }
+
+
+#pluginMenu img.icon {
+  margin-right: 5px;
+}
+TR.warn TD { background-color: #EEBB33 !important; }
+TR.miss TD { background-color: #FCF0CE !important; }
+

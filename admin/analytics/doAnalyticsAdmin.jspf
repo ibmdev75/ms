@@ -1,0 +1,118 @@
+<%@page import="com.jalios.jcms.workspace.Workspace"%>
+<%@page import="com.jalios.jcms.analytics.*"%><%
+%><%@page import="java.util.*"%><%
+%><%@page import="com.jalios.util.*"%><%
+%><%@page import="com.jalios.jcms.*"%><%
+%><jsp:useBean id='formHandler' scope='page' class='com.jalios.jcms.analytics.ui.AdminHandler'><%
+ %><jsp:setProperty name='formHandler' property='request' value='<%= request %>' /><%
+ %><jsp:setProperty name='formHandler' property='response' value='<%= response %>' /><%
+ %><jsp:setProperty name='formHandler' property='*' /><%
+%></jsp:useBean><%
+
+Set<Workspace> workspaceSet = AnalyticsManager.getCompatibleWorkspaceSet();
+Workspace selectedWorkspace = getDataParameter( "analyticsWS",Workspace.class);
+
+if(formHandler.validate()){
+  String[] params = {"opSubmit", "opReportDelete"};
+  sendRedirect(ServletUtil.getAbsUrlWithUpdatedParams(request, params, new String[2], (String[])null, false));
+}
+%><%@ include file='/jcore/doMessageBox.jspf'%><%
+%> 
+<div class="page-header">
+    <h1><%=glp("ui.analytics.analyze-list.title")%></h1>
+ </div>
+<form action='<%= ServletUtil.getResourcePath(request) %>' name="adminForm" method="post" class="form-inline br"> 
+	<div class="navbar navbar-default">
+	  <div class="container-fluid">         
+	    <div class="navbar-form row">
+	      <div class="col-md-3">
+	        <label><%=glp("ui.analytics.admin.filtered-on")%></label>
+	        <div class="form-group">
+		        <jalios:field name="analyticsWS" value="<%= formHandler.getAvailableBeginDate() %>" resource="field-light">
+		          <select class='form-control' name='analyticsWS'
+			          onchange='adminForm.submitFlag.value=false;adminForm.submit()'>
+			          <option value='<%=StatListener.ALL_WORKSPACE%>'><%=glp("ui.statreport.lbl.allworkspace")%></option>
+			          <jalios:foreach collection='<%= workspaceSet %>' name='itWS' type='Workspace'>
+			            <option value='<%=itWS.getId()%>'<%=itWS == selectedWorkspace ? "selected" : ""%>><%=encodeForHTML(itWS.getTitle(userLang))%></option>
+			          </jalios:foreach>
+			        </select> 
+		        </jalios:field>
+		      </div>
+        </div>     
+        <div class="col-md-3">
+          <label><%=glp("ui.analytics.admin.beginDate")%></label>
+          <div class="form-group">
+		        <jalios:field name="beginDate" value="<%= formHandler.getAvailableBeginDate() %>" resource="field-light">
+		          <jalios:control type="<%= ControlType.DATE %>" />
+		        </jalios:field>
+          </div>
+	      </div>     
+        <div class="col-md-3">
+          <label><%=glp("ui.analytics.admin.endDate")%></label>
+          <div class="form-group">
+		        <jalios:field name="endDate" value="<%= formHandler.getAvailableEndDate() %>" resource="field-light">
+		          <jalios:control type="<%= ControlType.DATE %>" />
+		        </jalios:field> 	        
+          </div>
+	      </div>
+        <button class='btn btn-primary col-md-1' type='Submit' value='true' name='opSubmit'><%= glp("ui.analytics.admin.compute") %></button>      
+      </div>
+	  </div>
+	</div>    
+</form> 
+<%
+AnalyticsManager instance = AnalyticsManager.getInstance();
+List<AnalyzeListener> listenerList = instance.getCurrentAnalyzeListener();
+if(Util.notEmpty(listenerList)){
+	DateFormat dateTimeFormatter= DateFormat.getDateTimeInstance(DateFormat.FULL,DateFormat.SHORT, userLocale);
+	DateFormat dateFormatter= DateFormat.getDateInstance(DateFormat.FULL, userLocale);
+	%>
+
+	<table class="table-data listener table-condensed"><%
+		%><thead><%
+			%><tr><%
+				%><td>&nbsp;</td><%
+				%><td><%=glp("ui.analytics.analyze-list.report")%></td><%
+				%><td><%=glp("ui.analytics.analyze-list.workspace")%></td><%
+				%><td><%=glp("ui.analytics.analyze-list.state")%></td><%
+				%><td><a href='<%= ServletUtil.getUrlWithUpdatedParams(request,new String[]{"opReportDelete", HttpUtil.CSRF_TOKEN_PARAMETER_NAME }, new String[]{"all", getCSRFToken()}, new String[0],  true) %>'><jalios:icon src='trash-empty'  /></a></td><%
+			%></tr><%
+		%></thead><%
+		%><tbody><%
+		int counter = 1;
+		for(AnalyzeListener listener : listenerList){
+			%><tr class="analyze"><td class="fit text-overflow"><%=counter%>.</td><%
+			    Date startDate =listener.getContext().getStartDate();
+				Date endDate = listener.getContext().getEndDate();
+				%><td class="text-overflow spacer"><%
+				    %><%=glp("ui.analytics.analyze-list.day-analyze", dateFormatter.format(startDate))%> <%
+	    		%></td><%
+	    		%><td class="text-overflow"><%
+	    			Set<Workspace> wkSet = listener.getContext().getAllAnalyzedWorkspaceSet();
+	    			if(Util.isEmpty(wkSet)){
+						%><%=glp("ui.analytics.analyze-list.all-workspace")%><%
+	    			}
+	    			else{
+	    			  for(Iterator<Workspace> itWk = wkSet.iterator(); itWk.hasNext();){
+	    			    Workspace wk = itWk.next();
+	    				%><%=wk.getTitle(userLang)%><%=itWk.hasNext()?",":""%><%
+	    			  }
+	    			}
+	 				%><%
+				%></td><%
+	    		%><td class="text-overflow"><%
+	    			ServletUtil.backupAttribute(pageContext, "listenerObject");
+	    			request.setAttribute("listenerObject", listener);
+					%><jalios:include jsp='admin/analytics/displayCurrentAnalyze.jsp' /><%
+					ServletUtil.restoreAttribute(pageContext, "listenerObject");
+				%></td><%
+				%><td><%
+					%><a href='<%= ServletUtil.getUrlWithUpdatedParams(request,new String[]{"opReportDelete", HttpUtil.CSRF_TOKEN_PARAMETER_NAME }, new String[]{listener.getId(), getCSRFToken()}, new String[0],  true) %>'><jalios:icon src='trash-empty'  /></a><%
+				%></td><%
+			%></tr><%  
+			counter ++;
+		}
+		%></tbody><%
+	%></table><%		
+}
+%>

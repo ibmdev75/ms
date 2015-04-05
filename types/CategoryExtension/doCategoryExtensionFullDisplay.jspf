@@ -1,0 +1,16 @@
+<%@ page contentType="text/html; charset=UTF-8" %><%
+%><%-- This file has been automatically generated. --%><%
+%><%--
+  @Summary: CategoryExtension display page
+  @Category: Generated
+  @Author: JCMS Type Processor
+  @Customizable: True
+  @Requestable: True
+--%><%
+%><%
+ CategoryExtension extension = (CategoryExtension) obj.getExtension();
+ if (extension == null) {
+   extension = new CategoryExtension();
+ }
+%><%-- **********4A616C696F73204A434D53 *** SIGNATURE BOUNDARY * DO NOT EDIT ANYTHING BELOW THIS LINE *** --%><%
+%><%-- eBo/6fH+DPyu5APMr2YnNg== --%>

@@ -1,0 +1,7 @@
+<% Category[] categories = pub.getCategories(loggedMember); %>
+<% if (Util.notEmpty(categories)) { %>
+  <div class="meta-categories">
+  <%@ include file="/custom/jcms/doCategoryList.jspf"  %>
+  <jalios:include target="PUBLICATION_META_CATEGORIES_BOTTOM" />
+  </div>
+<% } %>

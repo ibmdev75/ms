@@ -1,0 +1,17 @@
+<%@page import="com.jalios.jcms.JcmsUtil"%>
+<%@page import="com.jalios.jcms.HttpUtil"%>
+<%
+String modalJsp = HttpUtil.getUntrustedStringParameter(request, "modal", null); // Validated below
+if(JcmsUtil.isLegalFile(modalJsp)) {
+  String params = HttpUtil.getJsonParameterFromRequest(request);
+  %><jalios:javascript>
+    var jsp = '<%=modalJsp%>';
+    var params = <%=params%>;
+    if (typeof params == "object") {
+      jsp += '?'  + jQuery.param(params);
+    }
+    jQuery.jalios.ui.Modal.openFromUrl(jsp);
+    // JCMS.window.Modal.showJSP('<%=modalJsp%>', null, <%=params%>);
+  </jalios:javascript><%
+}
+%>

@@ -1,0 +1,13 @@
+<div class="filedocument-meta meta-text"><%--
+  --%><jalios:include target="PUBLICATION_META_FILEDOCUMENT_TOP" />
+    <div class="filedocument-file">
+    <jalios:fileicon doc='<%= (FileDocument) pub %>' /> <%= ((FileDocument) pub).getTypeInfo(userLang) %> 
+    (<%--
+     --%><jalios:filesize doc='<%= (FileDocument) pub %>'/><%--
+     --%><% if (((FileDocument) pub).isImage()) { %> &middot; <%= ((FileDocument) pub).getDimensions() %><% } %><%--
+     --%><% if (((FileDocument) pub).isAudio()) { %> &middot; <jalios:duration time='<%= ((FileDocument) pub).getDuration() %>'/><% } %><%--
+     --%>)
+    </div><%--
+--%>
+<jalios:include target="PUBLICATION_META_FILEDOCUMENT_BOTTOM" />
+</div><%-- EOF. filedocument-meta --%>

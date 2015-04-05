@@ -1,0 +1,66 @@
+/* ----------------------------------------------- */
+/*  WIKI INLINE                                    */
+/* ----------------------------------------------- */
+
+.wiki-edit {
+  position: relative;
+  border: 1px solid transparent;
+  
+  &:hover { 
+    .wiki-action.wiki-edit-section { display: block; }
+  }
+  
+  .wiki-section {
+    position: relative;
+    .wiki-action{
+      top: auto;
+      bottom: 2px; 
+    }
+  }
+  
+  .wiki-action {
+    position: absolute;
+    right: -1px;
+    top:  -24px; // can't use var
+    
+    &.wiki-edit-section {
+      display: none;
+    }
+    &.wiki-save-section   { 
+      display: none;
+      right: @font-size-base*4 + @baseline/2;
+    }
+    &.wiki-cancel-section { 
+      display: none;
+    }
+  }
+  
+   .wiki-editing,
+  &.wiki-editing {
+    .wiki-edit-section   { display: none;  }
+    .wiki-cancel-section { display: block; }
+    .wiki-save-section   { display: block; }
+    &:hover > .wiki-edit-section  { display: none;} // hide sub section 
+  }
+}
+
+// ------------------------------------------
+//  Wiki Edit
+// ------------------------------------------
+
+.edit-widget {
+  position: absolute;
+  top:  0;  left: 0;
+  background: #FFFFFF;
+  z-index: 2;
+  
+  .liveForm, 
+  .liveForm .widget,
+  .liveForm .widget TEXTAREA {
+    display: block; width:  100%; height: 100%; margin: 0; padding: 0;
+    font-family: monospace;
+  }
+  
+  // Hide textarea when working with Wikiwyg (prevent flicker on TinyMCE editor init)
+  TEXTAREA.formWikiwyg { display: none; }
+}

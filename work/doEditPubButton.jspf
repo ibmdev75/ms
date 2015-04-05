@@ -1,0 +1,124 @@
+<% { %>
+<% 
+boolean spb = Util.toBoolean(request.getAttribute("smallPubButton"),false);
+boolean showMajorUpdate = !DBData.class.isAssignableFrom(formHandler.getPublicationClass()) || HistorizedDBData.class.isAssignableFrom(formHandler.getPublicationClass());
+%>
+<%-- BUTTONS --------------------------------------------------------------- --%> 
+<div class="edit-pub-button"> 
+  <% String warn = encodeForJavaScript(glp("ui.work.form.txt.wait")); %>
+  
+  
+  <%-- Create --%>
+  <% if (pub == null) { %> 
+		<button type="submit" class="btn btn-primary" name="opCreate" value="true"><%= glp("ui.com.btn.save") %></button>
+		<button type="submit" class="btn btn-default" name="opCancel" value="true"><%= glp("ui.com.btn.cancel") %></button>
+  <%   if (!partialEdition && !spb) { %>
+		<button type="submit" class="btn btn-default" name="opRefresh" value="true"><jalios:icon src="refresh" alt='<%= glp("ui.com.btn.refresh") %>' /></button>
+  <%   } %>
+  
+  <%-- Update  --%>
+  <% } else { %>
+  <div class="btn-group">
+  	<button type="submit" class="btn btn-primary" name="opUpdate" value="true"><%= glp("ui.com.btn.save") %></button>
+    </div>
+  <%-- Major update  --%>
+  <% if (showMajorUpdate) { %>
+  	<button type="submit" class="btn btn-default" name="opUpdateMajor" value="true"><%= glp("ui.com.btn.save-major") %></button>
+  <% } %>
+  
+
+	<button type="submit" class="btn btn-default" name="opCancel" value="true"><%= glp("ui.com.btn.cancel") %></button>
+  <% } %>
+  
+
+
+	<ul class="ctxMenu click aligned" id="actionBtnCtxMenu" style="display: none;">
+    <jalios:buffer name="actionBtnCtxMenuBuffer">
+		<% if (pub != null && !partialEdition && !spb) { %>
+	  <li><a href="#" onclick="simpleSubmitForm(window, window.document.editForm,'opRefresh','<%= HttpUtil.encodeForJavaScript(JcmsUtil.glp(userLang, "ui.work.form.txt.wait")) %>'); return false;" ><jalios:icon src="refresh" /> <%= glp("ui.com.btn.refresh") %></a></li>
+	  <% } %>
+	  
+	  <%-- Delete publication --%>
+	  <%-- --%>
+	  <% if (pub != null && loggedMember.canDeleteOther(pub) && !partialEdition && !spb) { %>
+	  <jalios:javascript>
+	    document.submitOpDelete = function(elm){
+	      var force = jQuery('INPUT[name=forceDelete]');
+	      if (force.exists() && !force.is(':checked')){ return false; }
+	      
+	      var msg = jQuery(elm).attr('title');
+	      jQuery.jalios.ui.Modal.confirm(msg , function(cfrm){
+	        if (!cfrm){ return false; }
+	        simpleSubmitForm(window, window.document.editForm, ['opDelete', 'forceDelete'], '<%= HttpUtil.encodeForJavaScript(JcmsUtil.glp(userLang, "ui.work.form.txt.wait")) %>');
+	      });
+	      return false;
+	    }
+	  </jalios:javascript>
+	  <li>
+		  <% if (pub instanceof TreeNode && ((TreeNode)pub).isTreeNode()) { %>
+		  <% String confirmDeepDelete = encodeForHTMLAttribute(glp("msg.js.confirm-deep-delete", pub, Util.join(Util.getTreeDescendantSet((TreeNode)pub), ", ", 3, "..."))); %>
+		  <a href="#" name='opDelete' title="<%= confirmDeepDelete %>" onclick="return document.submitOpDelete(this);"><jalios:icon src="delete" /> <%= glp("ui.com.btn.deep-delete") %></a>
+		  <% } else { %>
+		  <% String confirmDelete = encodeForHTMLAttribute(glp("msg.js.confirm")); %>
+		  <a href="#" name='opDelete' title="<%= confirmDelete %>" onclick="return document.submitOpDelete(this);"><jalios:icon src="delete" /> <%= glp("ui.com.btn.delete") %></a>
+		  <% } %>
+
+		</li>
+		
+	  <% if (formHandler.showForceDelete()) { %>
+	  <li style="padding-left: 10px;"><input type='checkbox' name='forceDelete' value='true'/> <span><%= glp("ui.com.lbl.force-del") %></span></li>
+	  <% } %>
+	  
+	  <% } %>
+	
+	  <%-- Edit full / Edit in backoffice --%>
+    <% 
+      // Fix JCMS-3383 : Kludge test to disable the back-office edition in complex interface in which there
+      // would not be any appropriate to handle the backoffice edition window
+      boolean isBOEditionPossible = formHandler.getRedirect() == null || formHandler.getRedirect().indexOf("doMediaBrowserPreview.jsp") == -1;
+    %>
+	  <% if (popupEdition && !spb) { %>
+	  <%   if (partialEdition) { %>
+	  <li><a href="#" onclick='openFull(); return false;'><jalios:icon src="edit" /><%= glp("ui.com.btn.edit-full") %></a></li>
+    <%   } else if (isBOEditionPossible) { %>
+    <li><a href="#" onclick='openBackOffice(); return false;'><jalios:icon src="work" /> <%= glp("ui.com.btn.edit-back") %></a></li>
+    <%   } %>
+    <%   if (contentTabOnly) { %>
+    <li><a href="#" onclick='openAllTabs(); return false;'><jalios:icon src="edit" /> <%= glp("ui.com.btn.edit-full") %></a></li>
+    <%   } %>
+    <% } %>
+  
+	  <%-- Show hidden tabs --%>
+	  <% if (!partialEdition && !spb) { %>
+		  <%   if (formHandler.containsHiddenParts()) { %>
+		  <li><a href="#" onclick='window.document.editForm.showAllTabs.value="true";  submitForm("opRefresh"); return false;'><jalios:icon src="hidden-field" /> <%= glp("ui.com.btn.show-tabs") %></a></li>
+		  <%   } else if (formHandler.getShowAllTabs()) { %>
+		  <li><a href="#" onclick='window.document.editForm.showAllTabs.value="false"; submitForm("opRefresh"); return false;'><jalios:icon src="hidden-field" /> <%= glp("ui.com.btn.hide-tabs") %></a></li>
+		  <%   } %>
+	  <% } %>
+    </jalios:buffer>
+    <%= actionBtnCtxMenuBuffer %>
+	</ul>
+	
+  <div class="btn-group">
+  <% if (Util.notEmpty(actionBtnCtxMenuBuffer)) { %>
+  <button class='btn btn-default actionBtnCtxMenu ctxmenu' type='button' onClick="return false;">
+    <%= glp("ui.com.btn.edit-options") %>  <jalios:icon src="caret" />
+  </button>
+  <% } %>
+  <% if (formHandler.showLanguageChooser()){ %>
+    <a href="#" class="ctxLangForm ctxmenu langStatus btn btn-default icon"><jalios:lang lang="<%= formHandler.getAvailableMainLanguage() %>" /></a>
+    <%-- <jalios:icon src="dropdown" /> --%>
+  <% } %>
+  </div>
+  
+  <%-- *** PLUGINS ****************** --%>
+  <jalios:include target="EDIT_PUB_BUTTON" />
+</div>
+
+<jalios:javascript>
+  function submitForm(action, anchor){
+  	simpleSubmitForm(window, window.document.editForm, action, '<%= warn %>', anchor);
+  }
+</jalios:javascript>
+<% } %>

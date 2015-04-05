@@ -1,0 +1,18 @@
+<%--
+  @Summary: Fragment used by media templates.
+            Provides the mediaPath variables and such
+--%><%
+%><%@ page import="com.jalios.jcms.taglib.MediaTag" %><%
+%><%@ page import="com.jalios.jcms.FileDocument" %><%
+
+  String mediaPath  = (String) request.getAttribute(MediaTag.MEDIA_PATH);
+  int maxWidth = Util.toInt(request.getAttribute(MediaTag.MEDIA_MAX_WIDTH), 320);
+  int maxHeight = Util.toInt(request.getAttribute(MediaTag.MEDIA_MAX_HEIGHT), 240);
+  Data data = (Data) request.getAttribute(MediaTag.MEDIA_DATA);
+  String mediaDescription = (String) request.getAttribute(MediaTag.MEDIA_DESCRIPTION);
+  FileDocument fileDoc = FileDocument.getFileDocumentFromFilename(mediaPath);
+  if (mediaDescription == null) {
+    mediaDescription = data != null ? data.getDataName(userLang) : mediaPath;
+  }
+  
+%>

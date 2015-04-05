@@ -1,0 +1,106 @@
+/* ----------------------------------------------- */
+/*  WIKITOOLBAR                                    */
+/* ----------------------------------------------- */
+
+// Hide resize in modal, does not work properly due to window position, scroll & such
+.modal-dialog DIV.wikitoolbar {	
+  background: @wiki-tb-bg-color;
+}
+
+DIV.wikitoolbar {
+
+  clear: left;
+  display: none;
+  padding: 2px 0px 1px 0px;
+  margin-left: 0;
+  
+  background: @wiki-tb-bg-color url('../../../images/jalios/icons/resize-r.gif');
+  background-repeat: no-repeat;
+  background-position: bottom right;
+
+  border: 1px solid @input-border;
+  border-radius: 0 0 @input-border-radius @input-border-radius;
+
+  .btn {
+    padding: 3px 3px; 
+    border-left: 0; 
+    margin-bottom: 2px; 
+    box-shadow: none;
+    background-color: @wiki-tb-icon-bg-color;
+    &:hover {
+      background-color: @wiki-tb-icon-bg-color-hover;
+    } 
+  }
+  
+  button { display: none; }
+  button.wiki-short-item { display: inline-block; }  
+  &.full-toolbar {
+		button,
+		button.wiki-short-item {
+		  display: inline-block;
+		}
+		button.wiki-expand-toolbar {
+		  display: none;
+		}
+  }
+  &.preview-enabled {
+    button.wiki-preview {
+      background-color: @wiki-tb-icon-bg-color-active;
+    }	
+  }
+}
+
+IMG.wikitoolbar_sprite {
+  width: 18px; 
+  height: 18px;
+  background: transparent url(../../../images/jalios/icons/wikitoolbar-sprite-t.png) no-repeat top left; 
+  border: 0;
+}
+IMG.wikitoolbar_sprite.wiki-bold         { background-position: 0 0; } 
+IMG.wikitoolbar_sprite.wiki-boldfixed    { background-position: -22px 0; } 
+IMG.wikitoolbar_sprite.wiki-bolditalic   { background-position: -44px 0; } 
+IMG.wikitoolbar_sprite.wiki-br           { background-position: -66px 0; } 
+IMG.wikitoolbar_sprite.wiki-fixed        { background-position: -88px 0; } 
+IMG.wikitoolbar_sprite.wiki-h1           { background-position: -110px 0; } 
+IMG.wikitoolbar_sprite.wiki-h2           { background-position: -132px 0; } 
+IMG.wikitoolbar_sprite.wiki-h3           { background-position: -154px 0; } 
+IMG.wikitoolbar_sprite.wiki-help         { background-position: -176px 0; } 
+IMG.wikitoolbar_sprite.wiki-hr           { background-position: -198px 0; } 
+IMG.wikitoolbar_sprite.wiki-indent       { background-position: -220px 0; } 
+IMG.wikitoolbar_sprite.wiki-italic       { background-position: -242px 0; } 
+IMG.wikitoolbar_sprite.wiki-link         { background-position: -264px 0; } 
+IMG.wikitoolbar_sprite.wiki-list_bullets { background-position: -286px 0; } 
+IMG.wikitoolbar_sprite.wiki-list_numbers { background-position: -308px 0; } 
+IMG.wikitoolbar_sprite.wiki-outdent      { background-position: -330px 0; } 
+IMG.wikitoolbar_sprite.wiki-preview      { background-position: -352px 0; } 
+IMG.wikitoolbar_sprite.wiki-pubimg       { background-position: -374px 0; } 
+IMG.wikitoolbar_sprite.wiki-publink      { background-position: -396px 0; } 
+IMG.wikitoolbar_sprite.wiki-search       { background-position: -418px 0; } 
+IMG.wikitoolbar_sprite.wiki-spell        { background-position: -440px 0; } 
+IMG.wikitoolbar_sprite.wiki-query        { background-position: -458px 0; }
+
+
+DIV#wikicomplete {
+  position: absolute;
+  background: #FFFFFF;
+  border: 1px solid #AAAAAA;
+}
+
+/* Preview */
+
+DIV.wikipreview {
+  position:   absolute;
+  z-index: 3;
+  overflow:   auto;
+  
+  // Same values as .form-control
+  padding: @padding-base-vertical @padding-base-horizontal;
+  font-size: @font-size-base;
+  line-height: @line-height-base;
+  color: @input-color;
+  background-color: @input-bg;
+  background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+  
+  .wiki { font-size: @font-size-base; }
+}
+

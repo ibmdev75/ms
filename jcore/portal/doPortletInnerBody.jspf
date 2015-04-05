@@ -1,0 +1,44 @@
+<% 
+	Portlet          geometry         = portlet instanceof Portlet         ? (Portlet)portlet         : null;
+	PortletSkinable  skin             = portlet instanceof PortletSkinable ? (PortletSkinable)portlet : null;
+	String           borderColor      = ((geometry != null) && Util.notEmpty(geometry.getBorderColor())) ? geometry.getBorderColor() : "#000000";
+	String           backColor        = ((geometry != null) && Util.notEmpty(geometry.getBackColor())) ? "bgcolor='"+geometry.getBackColor()+"'" : "";
+	String           backImage        = ((geometry != null) && Util.notEmpty(geometry.getBackImage())) ? "style='background-image:url("+geometry.getBackImage()+")'" : "";
+%>
+
+<table class='layout'>
+	<% if ((geometry != null) && (geometry.getBorder() > 0)) { %>
+	<tr>
+		<td <%= doSpan(geometry.getCellPadding() > 0 ? 5 : 3,false)  %> bgcolor='<%= borderColor %>'><img src='s.gif' alt='' width="<%= geometry.getBorder() %>" height="<%= geometry.getBorder() %>" /></td>
+		<td <%= doSpan(geometry.getCellPadding() > 0 ? 3 : 1,true)  %>  bgcolor='<%= borderColor %>'><img src='s.gif' alt='' width="1" height="<%= geometry.getBorder() %>" /></td>
+		<td <%= doSpan(geometry.getCellPadding() > 0 ? 5 : 3,false)  %> bgcolor='<%= borderColor %>'><img src='s.gif' alt='' width="<%= geometry.getBorder() %>" height="<%= geometry.getBorder() %>" /></td>
+	</tr>
+	<% } if ((geometry != null) && (geometry.getCellPadding() > 0)) { %>
+	<tr>
+		<td rowspan='3'><img src='s.gif' alt='' width="<%= geometry.getCellPadding() %>" height="<%= geometry.getCellPadding() %>" /></td>
+		<td ><img src='s.gif' alt='' width="1" height="<%= geometry.getCellPadding() %>" /></td>
+		<td rowspan='3'><img src='s.gif' alt='' width="<%= geometry.getCellPadding() %>" height="<%= geometry.getCellPadding() %>" /></td>
+	</tr>
+	<% } %>
+	<tr>
+		<td align='<%= (geometry != null && Util.notEmpty(geometry.getAlignH())) ? geometry.getAlignH() : "left" %>' valign='<%= (geometry != null && Util.notEmpty(geometry.getAlignV())) ? geometry.getAlignV() : "middle"  %>'  <%= backColor %> <%= backImage %> width='100%'>
+<% 
+ String cssName  =  "InnerBody ";
+        cssName +=  portlet instanceof Portlet           ? "Portlet "           : "";
+        cssName +=  portlet instanceof PortletSkinable   ? "PortletSkinable "   : "";
+        cssName +=  portlet instanceof PortletCollection ? "PortletCollection " : "";
+        cssName +=  (geometry != null) && Util.notEmpty(geometry.getDisplayCSS()) ? (Util.getClassShortName(portlet.getClass())+"_"+geometry.getDisplayCSS()+" ") : Util.getClassShortName(portlet.getClass());
+        cssName  =  cssName.trim();
+%>
+<% String displayTemplate = portlet.getTemplatePath(jcmsContext); %>
+<% if (logger.isDebugEnabled()) { %><!-- [Portlet Inner]: <%= portlet.getId() %> / <%= Util.getClassShortName(portlet.getClass()) %> --><% } %>
+<div class='<%= cssName %>'><%@ include file='/jcore/portal/doIncludePortletTemplate.jspf' %></div>
+
+		</td>
+	</tr>
+	<% if ((geometry != null) && (geometry.getCellPadding() > 0)) { %>
+		<tr><td><img src='s.gif' alt='' width="1" height="<%= geometry.getCellPadding() %>" /></td></tr>
+	<% } if ((geometry != null) && (geometry.getBorder() > 0)) { %>
+		<tr><td <%= doSpan(geometry.getCellPadding() > 0 ? 3 : 1,true)  %> bgcolor='<%= borderColor %>'><img src='s.gif' alt='' width="1" height="<%= geometry.getBorder() %>" /></td></tr>
+	<% } %>
+</table>

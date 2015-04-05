@@ -1,0 +1,21 @@
+<h3><% /* %>View of Type<% */ %><%= glp("ui.adm.wf-edit.view", xmlWFLabel) %></h3>
+<p class="text-muted"><%= glp("ui.adm.wf-edit.flash-decription") %></p>
+
+<table class='layout'>
+<tr><td align="left">
+<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"
+	 WIDTH="100%" HEIGHT="500" ALIGN="left"  id="Workflow">
+	 <PARAM NAME="movie"   VALUE="flash/jalios/workflow.swf?xmlFile=<%= xmlFileURL %>&amp;id=<%= xmlWFId %>" />
+	 <PARAM NAME="quality" VALUE="high" />
+	 <PARAM NAME="bgcolor" VALUE="#FFFFFF" />
+	 <EMBED
+	 	src="flash/jalios/workflow.swf?xmlFile=<%= xmlFileURL %>&amp;id=<%= xmlWFId %>"  
+	 	WIDTH="100%" HEIGHT="500" ALIGN="left" 
+	 	quality="high"
+	 	bgcolor="#FFFFFF"
+	 	NAME="Workflow"
+	 	TYPE="application/x-shockwave-flash" 
+	 	PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer">
+	 </EMBED>
+</OBJECT>
+</td></tr></table>

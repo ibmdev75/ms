@@ -1,0 +1,18 @@
+/* ----------------------------------------------- */
+/*  ANCHOR                                         */
+/* ----------------------------------------------- */
+
+/* Fix anchor displayed under the topbar 
+ * Use the .target for custom target declaration
+ * The :target pseudo selector automatically targets anchored id element
+ * */
+:target:before {
+  content: "";
+  display: block;
+  height: @tb-height; 
+  margin: -@tb-height 0 0;
+}
+
+.printView IMG.anchor {
+  display: none;
+}

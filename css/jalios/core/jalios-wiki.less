@@ -1,0 +1,111 @@
+/* ----------------------------------------------- */
+/*  Wiki                                        */
+/* ----------------------------------------------- */
+
+
+DIV.wiki {  position: relative; }
+
+.wiki {
+  /* Galleries */
+  TABLE.gallery { 
+    width: auto;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    DIV { 
+		  border:  1px solid @grayLighter; 
+		  padding: 1px;
+		  margin:  6px;
+		  .box-shadow(2px 3px 3px #AAA);
+		}
+  }
+  
+  TABLE {
+    width: auto;
+    TH { background-color: #EEEEEE; font-size: @font-size-base+1; }
+    TH, TD { padding: @baseline/4 @baseline/2; border: 1px solid @grayLighter; }
+  }
+  
+  PRE {
+    display: block;
+    overflow: auto;
+    padding: @baseline/4;
+    background-color: #FEFBF3;
+    border: 1px solid #CCCCCC;
+    clear: both;
+  }
+  IMG.wiki-component { display: none; }
+  
+  BLOCKQUOTE,
+  BLOCKQUOTE P {
+    font-style:  italic;
+    font-size:   @font-size-base;
+    line-height: @baseline;
+  }
+  BLOCKQUOTE P { margin-bottom: @baseline/2;  }
+  BLOCKQUOTE *:last-child { margin-bottom: 0; }
+}
+
+/* ------------------------------------------- */
+/* Mention                                     */
+/* ------------------------------------------- */
+.wiki .wiki-mention {
+  background-color: @wiki-mention-bg-color;
+  border: @wiki-mention-border;
+  padding: @wiki-mention-padding;
+  text-decoration: none;
+  border-radius: @wiki-mention-border-radius;
+  white-space: nowrap;
+}
+.wiki .wiki-mention:hover {
+  background-color: @wiki-mention-hover-bg-color;
+}
+
+/* ------------------------------------------- */
+/* [note][/note]                               */
+/* ------------------------------------------- */
+
+.wiki .jcms-message {
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%;
+}
+
+.wiki {
+  DIV.note {
+	  font-size: @font-size-base - 1;
+	  line-height: @baseline - 2;
+	  
+	  color: @black;
+	  background: #FFFF99; 
+	  border: 1px solid #F9EE6A; 
+	  padding: @baseline/4;
+	  margin: 0 @baseline;
+	  display: none;
+	  z-index: 1;
+	  
+	  #gradient > .vertical(#FFFAAE, #FFF267);
+	  .border-radius(5px);
+	  .box-shadow(2px 3px 5px #CCCCCC);
+	  
+	  /* Floating */
+	  .opacity(90);
+	  width: 400px;
+	  position: absolute;
+	  
+	  P { 
+	    font-size:   @font-size-base - 1; 
+	    line-height: @baseline - 2;
+	    margin-top: 0;
+	  }
+  }
+  IMG.note { 
+	  display: inline;
+	  width:  16px; height: 16px;
+	  background: url('../../../images/jalios/icons/postit.gif');
+	  position: absolute;
+	  left: -16px;
+	  margin-top: 3px; /* to be aligned on bottom line*/
+	  cursor: pointer;
+	}
+	
+}

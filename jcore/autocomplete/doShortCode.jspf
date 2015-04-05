@@ -1,0 +1,21 @@
+<%
+  request.setAttribute("shortcode-usage",scUsage);
+  
+  Map<String,String> props = new TreeMap(channel.getProperties("wiki.shortcode"));
+  if (Util.notEmpty(props)){
+    boolean first = true;
+    for (Map.Entry<String, String> itProp : props.entrySet()){
+      String value = Util.getString(itProp.getValue(),"");
+      String key   = Util.getString(itProp.getKey(),"");
+      
+      if (!key.endsWith("snippet")){ continue; }
+      value = value.replace("{0}",autocomplete);
+      
+      String shortcode =  key.substring(15,key.length()-8);
+      String usage     = Util.getString(props.get("wiki.shortcode."+shortcode+".usage"),"");
+      if (!usage.equals(scUsage)){ continue; }
+      
+      String icon      = Util.getString(props.get("wiki.shortcode."+shortcode+".icon"), "html-tag");
+
+%><li <%= first ? "class='active'" : "" %> data-value="<%= encodeForHTMLAttribute(value) %>"><a href='#'><jalios:icon src='<%= icon %>'  alt='<%= glp("wiki.shortcode."+shortcode) %>'/> <%= glp("wiki.shortcode."+shortcode) %> <br/><span class='info'><%= glp("wiki.shortcode."+shortcode+".h") %></span></a></li><% first = false; }} %>
+<jalios:include target="WIKI_SCRIPTLET" targetContext="li" />

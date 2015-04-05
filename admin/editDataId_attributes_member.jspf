@@ -1,0 +1,120 @@
+<% if (data instanceof Member) { %>
+<% Member mbr = (Member)data; %>
+
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.usage") %></td>
+   <td><%= mbr.getUsageName(userLang) %></td>           
+ </tr>
+
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.name") %></td>
+   <td><%= mbr.getName() %></td>           
+ </tr>
+
+ <% if (Util.notEmpty(mbr.getFirstName())) { %> 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.f-name") %></td>
+   <td><%= mbr.getFirstName() %></td>           
+ </tr>
+ <% } %>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.mail") %></td>
+   <td><%= mbr.getEmail() %></td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.login") %></td>
+   <td><%= mbr.getLogin() %></td>           
+ </tr>
+ 
+ <% if (Util.notEmpty(mbr.getOrganization())) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.organization") %></td>
+   <td><%= mbr.getOrganization() %></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (Util.notEmpty(mbr.getDepartment())) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.department") %></td>
+   <td><%= mbr.getDepartment() %></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (Util.notEmpty(mbr.getJobTitle())) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.job") %></td>
+   <td><%= mbr.getJobTitle() %></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (Util.notEmpty(mbr.getPhone())) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.phone") %></td>
+   <td><jalios:phone number="<%= mbr.getPhone() %>" region="<%= mbr.getCountry() %>"/></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (Util.notEmpty(mbr.getMobile())) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.mobile") %></td>
+   <td><jalios:phone number="<%= mbr.getMobile() %>" region="<%= mbr.getCountry() %>"/></td>           
+ </tr>
+ <% } %>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.webdav-access") %></td>
+   <td><%= mbr.getWebdavAccess() %></td>           
+ </tr>
+ 
+  <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.admin") %></td>
+   <td><%= mbr.isAdmin() %></td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.language") %></td>
+   <td><%= Channel.getChannel().getProperty(mbr.getLanguage() + ".lang", mbr.getLanguage()) %></td>           
+ </tr>
+ 
+
+ 
+ <% if (mbr.getDeclaredGroups() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.groups") %></td>
+   <td><%= Util.join(mbr.getDeclaredGroups(), ", ") %></td>           
+ </tr>
+ <% } %>
+
+ <% if (mbr.getLastLdapSynchro() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.ldap-sync") %></td>
+   <td><%= mbr.getLastLdapSynchro() %></td>           
+ </tr>
+ <% } %>
+ 
+<% } %>
+
+<%--
+  Not Yet Displayed 
+
+  protected String salutation;
+  protected String address;
+  protected String info = "";
+  protected String photo;
+  
+  // LDAP
+  protected boolean ldapSync = true;
+  
+  protected HashMap<String, DataRight> rightFromClassMap;
+  protected int useCategoryMode = USE_CATEGORY_GROUP_AND_MEMBER;
+  protected String language;
+  protected String country;
+  protected Notification notification;
+  protected TreeSet<Category> useCategorySet;
+  protected TreeSet<Category> readCategorySet;
+  protected TreeSet<Member> delegateMemberSet;
+
+
+ --%>

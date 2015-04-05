@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletStatMetrics" superclass="generated.AbstractPortletStat" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="statListener" editor="enumerate" required="false" compactDisplay="false" type="String" chooser="listbox" valueList="custom.stat.LanguageListener |custom.stat.CountryListener | custom.stat.OSListener | custom.stat.BrowserListener | custom.stat.BotListener | custom.stat.ContentListener | custom.stat.SyndicateListener | custom.stat.DownloadListener | custom.stat.MailFriendListener | custom.stat.PrintViewListener | custom.stat.NavigateListener | custom.stat.PortalListener | custom.stat.PortalVisitorListener | custom.stat.PortalRedirectListener | custom.stat.RefererListener | custom.stat.RefererInternalListener | custom.stat.UrlListener | custom.stat.NameListener | custom.stat.FirstInternalNameListener | custom.stat.AreaListener | custom.stat.SingleAreaListener | custom.stat.VisitorListener | custom.stat.MemberListener | custom.stat.GroupListener | custom.stat.SummaryListener | custom.stat.SearchListener" ml="false" descriptionType="text" searchable="false" html="false" />
+    <field type="super" />
+  </fields>
+</type>
+

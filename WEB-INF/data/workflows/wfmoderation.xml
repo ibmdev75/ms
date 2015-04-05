@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow id="wfmoderation" type="publish" init="-50" version="4">
+  <state pstatus="-80" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="-50" reminder="0" duration="0" targetPstatus="0">
+    <action when="in" type="alertWorkers" repeat="0" />
+    <action when="out" type="alertAuthor" repeat="0" />
+  </state>
+  <state pstatus="-10" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="0" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="10" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="20" reminder="0" duration="0" targetPstatus="0" />
+  <transition source="-50" target="0" roleId="moderators" />
+  <transition source="-50" target="-80" roleId="moderators" />
+  <transition source="-50" target="-10" roleId="moderators" />
+  <transition source="-10" target="0" roleId="moderators" />
+  <transition source="0" target="10" roleId="moderators" />
+  <transition source="0" target="20" roleId="moderators" />
+  <transition source="10" target="0" roleId="moderators" />
+  <transition source="10" target="20" roleId="moderators" />
+  <role roleId="moderators" />
+</workflow>
+

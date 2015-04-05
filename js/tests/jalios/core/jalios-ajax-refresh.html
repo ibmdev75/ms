@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Jalios Plugin Test Suite</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <!-- jquery -->
+  <script src="../../vendor/jquery.js"></script>
+
+  <!-- qunit -->
+  <link   href="../../vendor/qunit.css" rel="stylesheet"  type="text/css" media="screen" />
+  <script  src="../../vendor/qunit.js"></script>
+
+  <!--  lib -->
+  <script src="../../../lib/json2.js"></script>
+  <script src="../../../lib/rsh.js"></script>
+  <script src="../../../lib/jquery.console.js"></script>
+  <script src="../../../lib/jquery.idle-timer.js"></script>
+  
+  <!-- jalios -->
+  <script src="../../../jalios/core/jalios-common.js"></script>
+  <script src="../../../jalios/languages/en.js"></script>
+  <script src="../../../jalios/core/jalios-data-broker.js"></script>
+  
+  <!--  sources -->
+  <script src="../../../jalios/core/jalios-ajax-refresh.js"></script>
+
+  <!-- unit tests -->
+  <script src="unit/jalios-ajax-refresh.js"></script>
+  
+</head>
+<body>
+
+  <div>
+    <h1  id="qunit-header">Jalios Plugin Test Suite</h1>
+    <h2  id="qunit-banner"></h2>
+    <h2  id="qunit-userAgent"></h2>
+    <div style="background: #FFEEEE; color: red; font: bold 13px  Arial;">Requires an acces to the webserver (http://) not FileSystem (C:/)</div>
+    <ol  id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </div>
+
+  <div style='display: none;'>
+    
+    <!-- Fragment: assets/jalios-ajax-refresh-fragment.html  -->
+    <div id="wrapper1" class="ajax-refresh-div" data-jalios-ajax-refresh-url="assets/jalios-ajax-refresh-fragment.html">
+      <div class="ajax-content">Hello HTML</div>
+      <a id="link1" href="helloworld.jsp?param1=value1" class="ajax-refresh">Click to refresh</a>
+    </div>
+    
+    <!-- Fragment: assets/jalios-ajax-refresh-fragment.html  -->
+    <div id="wrapper2" class="ajax-refresh-div">
+      <form action='assets/jalios-ajax-refresh-fragment.html' method='POST'>
+        <input type="text"   name="param1"   value="value1" />
+        <input type="submit" name="opSubmit" value="true"  class="ajax-refresh" id="link2"/>
+      </form>
+    </div>
+    
+    <!-- Fragment: assets/jalios-ajax-refresh-fragment.html  -->
+    <div id="wrapper3" class="ajax-refresh-div">
+      <form action='assets/jalios-ajax-refresh-fragment.html' method='POST'>
+        <input type="text"   name="param1"   value="value1" />
+        <a id="link3" href="helloworld.jsp?param1=value1" data-jalios-action="ajax-refresh" data-jalios-ajax-refresh="nohistory nofocus noscroll noerror isform">Click to refresh</a>
+      </form>
+    </div>
+    
+    <!-- Fragment: assets/jalios-ajax-refresh-fragment.html  -->
+    <div id="wrapper4" class="ajax-refresh-div" data-jalios-ajax-refresh-url="assets/jalios-ajax-refresh-fragment.html">
+      <div class="ajax-content">Hello HTML</div>
+    </div>
+    
+    <!-- Fragment: assets/jalios-ajax-refresh-fragment.html  -->
+    <div id="wrapper5" class="ajax-refresh-div" data-jalios-ajax-refresh-url="assets/jalios-ajax-refresh-fragment.html" data-jalios-ajax-refresh-inner="DIV.ajax-append">
+      <div class="ajax-content">Hello HTML</div>
+      <div class="ajax-append"></div>
+    </div>
+    
+  </div>
+
+</body>
+</html>
+  

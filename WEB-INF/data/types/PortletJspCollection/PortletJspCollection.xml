@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletJspCollection" superclass="generated.AbstractCollection" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="jsp" editor="textfield" required="true" compactDisplay="false" type="String" searchable="false" size="80" ml="false" descriptionType="text" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" />
+    <field type="super" />
+  </fields>
+</type>
+

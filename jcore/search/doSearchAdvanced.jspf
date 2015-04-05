@@ -1,0 +1,7 @@
+<%@page import="com.jalios.jcms.taglib.settings.impl.TextFieldSettings"%>
+<% 
+String dsaSearchAdvanced = (String) request.getAttribute("dsaSearchAdvanced");
+%>
+<jalios:field name="advanced" label="ui.work.search.tab.advanced" value='<%= dsaSearchAdvanced %>' resource="field-vertical">
+  <jalios:control settings='<%= new TextFieldSettings().placeholder("ui.work.search.advanced.placeholder") %>' />
+</jalios:field>

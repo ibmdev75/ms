@@ -1,0 +1,61 @@
+<form name='selectedGroupsForm' style="margin-top:10px;">
+ <input name="selectedGroups" type="hidden" value="<%= JcmsUtil.dataListToString(selectedGroups, ",") %>"/>
+ <input class='btn btn-primary' type='button' value='<% /* %>Select Groups<% */ %><%= glp("ui.adm.grp-list.btn.select") %>'
+       onclick='javascript:insertLink(document.selectedGroupsForm.selectedGroups.value, "<%= glp("ui.work.grp-ch.list") %>")'>
+</form> 
+
+<h2 class="boTitle"><%= glp("ui.adm.grp-list.txt.selected-grp", selectedGroups.size()) %></h2>
+
+<ol style="font-size: smaller; font-family: arial, sans-serif">
+ <jalios:foreach name="itGroup" type="Group" collection="<%= selectedGroups %>"> 
+  <li>
+    <%
+       Set workingSet = new TreeSet(selectedGroups);
+       if (selectedGroups.contains(itGroup)) { workingSet.remove(itGroup); }
+       else { workingSet.add(itGroup); }
+       String newGroupsValue = JcmsUtil.dataListToString(workingSet, ",");
+    %>
+    <input type="checkbox" name="groups" checked="checked"
+               onclick="disableAllCheckbox(); document.location='<%= ServletUtil.getAbsUrlWithUpdatedParam(request, "groups", newGroupsValue)%>'">
+    <% boolean hasMultipleParent = itGroup.hasMultipleParent(); %>
+    <%= itGroup.getIcon(userLang, true) %>
+    
+      <%= hasMultipleParent ? "<i>" : "" %><%= itGroup.getName(userLang) %><%= hasMultipleParent ? "</i>" : "" %>
+    
+    <%= itGroup == channel.getDefaultGroup() ? " (" + glp("ui.adm.prop.mbr.def-grp") + ")" : "" %>
+  </li>
+ </jalios:foreach>
+</ol>
+
+<%
+{ 
+  // Compute whether we are going to selectall, or unselect all
+  Set selectedgroupsOnPage = Util.interSet(new HashSet(groupsOnPage), selectedGroups);
+  boolean selectingAll = selectedgroupsOnPage.size() < groupsOnPage.size();
+  // Compute the URL used by selectAllGroups()
+	String selectAllURL;
+  {
+	  Set workingSet = new TreeSet(selectedGroups);
+	  if (selectingAll) { workingSet.addAll(groupsOnPage); }
+	  else { workingSet.removeAll(groupsOnPage); }
+	  selectAllURL = ServletUtil.getAbsUrlWithUpdatedParams(request,
+	                         new String[]{"groups"}, new String[]{JcmsUtil.dataListToString(workingSet, ",")}, null, false);
+  }
+%>
+<jalios:javascript>
+$('selectAllCheckbox').checked = <%= selectingAll %>;
+$('selectAllCheckbox').title = '<%= glp("ui.adm.grp-list.btn.select-" + (selectingAll ? "all" : "none")) %>';
+</jalios:javascript>
+<script type="text/javascript">
+function selectAllGroupsOnPage() {
+ document.location = '<%= encodeForJavaScript(selectAllURL) %>';
+}
+function disableAllCheckbox() {
+ $$('INPUT[type="checkbox"]').each(function(formEl) {
+   formEl.disabled = "disabled";
+ });
+}
+</script>
+<%
+}
+%>

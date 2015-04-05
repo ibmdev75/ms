@@ -1,0 +1,26 @@
+
+	<jalios:if predicate='<%= plm.getTopTen() > 0 %>'>
+		<% ObjectIntTreeMap objMap = (ObjectIntTreeMap)wsMap.get("Entry");	%>
+		<jalios:if predicate='<%= Util.notEmpty(objMap)%>'>
+			<% 
+			  com.jalios.util.Beautifier            beautifier      = listener.getBeautifier();
+			  com.jalios.jtaglib.ChartTagBeautifier chartBeautifier = (beautifier instanceof com.jalios.jtaglib.ChartTagBeautifier) ? (com.jalios.jtaglib.ChartTagBeautifier)beautifier : new com.jalios.jtaglib.ChartTagBeautifier(beautifier);
+			%>
+			<jalios:chart dataMap='<%= objMap %>' 
+			              display='<%= "hchart" %>' 
+			              isPercent='<%= false %>' 
+			              sort='<%= "greater" %>' 
+			              max='<%= plm.getTopTen() %>'  
+			              fixHLengthWidth='<%= 15 %>' 
+			              colorFirst='<%= 0 %>'
+				            colorRotate='<%= 2 %>'
+				            locale='<%= userLocale %>'
+				            unit='<%= glp("ui.statreport.lbl.hits") %>'
+				            beautifier='<%= chartBeautifier %>'
+				            mixedChart='<%= true %>'
+			              />
+			
+		  <br/><span style="font: bold 11px Arial, Helvetica, Sans-Serif; color: #880000;"><%= glp("ui.statreport.lbl.totalactivity",objMap.getSum()) %></span>
+		</jalios:if>
+		<hr width='100%' size='1' style="margin-top: 1px;" noshade="noshade" style='page-break-after: auto;'/>
+	</jalios:if>

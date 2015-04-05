@@ -1,0 +1,28 @@
+// ------------------------------------------
+//  ZINDEX OVERRIDE 
+// ------------------------------------------ 
+
+@zindex-navbar:            1000;
+@zindex-dropdown:          1060;
+@zindex-popover:           1060;
+@zindex-tooltip:           1070;
+@zindex-navbar-fixed:      1030;
+@zindex-modal-background:  1040;
+@zindex-modal:             1050;
+
+// ------------------------------------------
+//  FLAT DESIGN
+//  Disable mixins: gradient, border-radius, box-shadow, 
+// ------------------------------------------ 
+
+@mixBorderRadius: true;
+@mixGradient:     true;
+@mixBoxShadow:    true;
+@mixTextShadow:   true;
+@mixOutline:      true; // Warning: accessibility rule
+
+
+.border-radius(@radius: 5px) when (@mixBorderRadius){
+  border-radius: @radius;
+}
+.border-radius(@radius: 5px) when not (@mixBorderRadius){ }

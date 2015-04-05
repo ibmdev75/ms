@@ -1,0 +1,11 @@
+<% if (memberFH != null && memberFH.getMember() != null) { %>
+<% 
+  String notificationRedirect = ServletUtil.encodeURL(ServletUtil.getUrlWithUpdatedParams(request, new String[] {"openTab"}, new String[] {"6"}, null, false));
+  NotificationCriteria[] notificationCriteriaArray = memberFH.getMember().getNotification() == null ? null : memberFH.getMember().getNotification().getCriteria();
+  
+  String dataType = "member";
+  String dataId = memberFH.getMember().getId();
+  
+%> 
+  <%@ include file='/jcore/notification/doNotificationList.jspf' %>
+<% } %>

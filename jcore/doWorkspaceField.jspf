@@ -1,0 +1,9 @@
+<%@page import="com.jalios.util.Util"%>
+<%@page import="com.jalios.jcms.taglib.settings.impl.WorkspaceSettings"%>
+<jalios:field  name="ws" label="ui.com.lbl.workspace" required="true" value="<%= formHandler.getAvailableWorkspace() %>">
+  <input type="hidden" class="workspaceChangeEvent" name="workspaceChangeEvent" value="" />
+  <jalios:control  settings='<%=new WorkspaceSettings().css(Util.toBoolean(request.getAttribute("TRIGGER_WS_CHANGE_REFRESH"), false)?"triggerWsChangeRefresh":"") %>' />
+</jalios:field>
+
+
+        

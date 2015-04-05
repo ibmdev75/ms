@@ -1,0 +1,88 @@
+<%@page import="com.jalios.jcms.taglib.ControlTag"%>
+<%@page import="com.jalios.jcms.mashup.ExportManager"%><%--
+  @Summary: Sub-header for query results
+  @Deprecated: False
+  @Customizable: True
+  @Requestable: False
+  @Category: Search / Query
+--%>
+<%
+  Data reqPortal = getDataParameter("portal");
+  if (reqPortal == null) {
+    reqPortal = getDataParameter("id");
+  }
+  String portalParam = reqPortal != null ? ("&amp;id=" + reqPortal.getId()) : "";
+  
+  String refineUrl;
+  String queryString = ServletUtil.getQueryString(request, false);
+  if (queryString != null) {
+    refineUrl = ResourceHelper.getRefine() + "?hist=" + ServletUtil.encodeURL(queryString) + portalParam;
+  } else {
+    refineUrl = ResourceHelper.getSearch() + "?" + portalParam;
+  }
+  String spellSuggestion = (String) queryResultSet.getAttribute(com.jalios.jcms.search.LucenePublicationSearchEngine.SPELLSUGGEST_ATTRIBUTE);
+  
+  boolean queryShowSpellSuggest = Util.toBoolean(request.getAttribute("queryShowSpellSuggest"),true);
+  boolean queryShowResults      = Util.toBoolean(request.getAttribute("queryShowResults")     ,true);
+  boolean queryShowCategories   = Util.toBoolean(request.getAttribute("queryShowCategories")  ,true);
+  boolean queryShowFullText     = Util.toBoolean(request.getAttribute("queryShowFullText")    ,true);
+  boolean queryShowExport       = Util.toBoolean(request.getAttribute("queryShowExport")      ,true);
+  boolean queryShowMemberInfo   = Util.toBoolean(request.getAttribute("queryShowMemberInfo")  ,true);
+  boolean queryShowSortBar      = Util.toBoolean(request.getAttribute("queryShowSortBar")     ,true);
+%> 
+
+<%-- Spell Suggestion --%>
+<jalios:if predicate='<%= queryShowSpellSuggest && Util.notEmpty(spellSuggestion) %>'>
+  <p class='well didyoumean'>
+    <strong><%= glp("ui.work.query.txt.didyoumean") %></strong>
+    <a rel="nofollow" href='<%= ServletUtil.getUrlWithUpdatedParam(request, "text", spellSuggestion) %>'><%= encodeForHTML(spellSuggestion) %></a>
+  </p>
+</jalios:if>
+
+<%-- EMPTY --%>
+<jalios:if predicate='<%= queryShowResults && Util.isEmpty(resultSet) %>'>
+  <h3><% /* %>There are n results<% */ %><%= glp("ui.work.query.txt.result", resultSize) %></h3>
+</jalios:if>
+
+<%-- NOT EMPTY --%>
+<jalios:if predicate='<%= Util.notEmpty(resultSet) %>'>
+
+<%-- INFO --%>
+<jalios:message title="" dismissable="false">
+  <p><%= glp("ui.work.query.txt.result", resultSize) %></p>
+  <p>
+        <%= glp("ui.work.query.txt.search") %>
+        <jalios:foreach name="itHistory" 
+                        type="String"
+                        collection='<%= queryHandler.getHistoryList() %>'>
+        <jalios:if predicate="<%= itCounter.intValue() > 1 %>">
+        &gt;
+        </jalios:if>
+        <strong><%= encodeForHTML(itHistory) %></strong>
+        </jalios:foreach>
+  </p>
+</jalios:message>
+
+
+<%-- NAVBAR --%>
+<div class="navbar navbar-default search-header">
+
+  <div class="navbar-brand"><%= glp("ui.work.query.txt.search") %></div>
+
+
+  <div class="collapse navbar-collapse">
+  
+    <ul class="nav navbar-nav navbar-left">
+      <%@ include file='/front/doQueryNavbar_sort.jspf' %>
+      <%@ include file='/front/doQueryNavbar_actions.jspf' %>
+    </ul>
+
+  </div>
+</div>
+
+
+
+
+</jalios:if> <%-- End notEmpty(resultSet) --%>
+
+

@@ -1,0 +1,11 @@
+#Wed, 28 Jan 2015 19:03:39 +0100
+#JCMS Build Information
+#Wed, 28 Jan 2015 18:43:05 +0100
+
+build.version=9.0.1
+build.date=mercredi 28 janv. 2015
+build.time=19\:03\:39
+build.timestamp=201501281903
+build.svn.revision=79631
+
+build.hudson.tag=jenkins-JCMS_trunk-8661

@@ -1,0 +1,25 @@
+<div class="modal-body">
+	<% 
+	Set<Recommendation> receivedRecommendationList = recoMgr.getReceivedRecommendationSet(recommendedData,loggedMember);
+	Map receivedPagerMap = new HashMap();
+	receivedPagerMap.put("recommendationTab","receivedRecommendationTab");
+	%>
+	<jalios:pager name='receivedRecommendationPagerHandler' action='init' declare='true' 
+	              size='<%= Util.getSize(receivedRecommendationList) %>' pageSize='1' parameterMap='<%= receivedPagerMap %>'/>
+	<jalios:foreach collection="<%= receivedRecommendationList %>" type="Recommendation" name="itRecommendation" 
+	                max="<%= receivedRecommendationPagerHandler.getPageSize() %>"                    
+	                skip="<%= receivedRecommendationPagerHandler.getStart() %>">
+	    <% 
+        boolean isLast = receivedRecommendationPagerHandler.getItemsNbr() == itCounter || receivedRecommendationPagerHandler.getPageSize() + receivedRecommendationPagerHandler.getStart() == itCounter;
+        displayPager = receivedRecommendationPagerHandler.getItemsNbr() > 1;
+        Recommendation recommendation = itRecommendation;
+	    %>
+	    <%@ include file="/front/recommendation/recommendation.jspf" %>
+	</jalios:foreach>
+	<jalios:pager name='receivedRecommendationPagerHandler' />
+</div>
+<div class="modal-footer">
+	<div class="buttons">
+	    <a class="btn btn-primary" data-dismiss="modal"><%=  glp("ui.com.btn.close") %></a>
+	</div> 
+</div>   

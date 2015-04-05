@@ -1,0 +1,39 @@
+<%
+  Workspace workspace;
+
+  if (!initDone) {
+    // The Workspace is Forced
+    Workspace wsParam   = getWorkspaceParameter("ws");
+    workspace = wsParam; 
+    
+    
+    // Read the Workspace from the request/session
+    if (workspace == null) {
+      // JCMS-2179 : for rest request, for stateless principle, don't take the workspace into the session
+      workspace = inFO || RestUtil.isRest(request) 
+                       ? Workspace.getRequestWorkspace(request)
+                       : Workspace.getSessionWorkspace(request.getSession());
+    }
+  
+    // If no workspace then get the favorite member's workspace
+    if ((workspace == null) && isLogged && Util.notEmpty(Workspace.getAllWorkspaceSet(loggedMember))) {
+      workspace = (Workspace)loggedMember.getFavoriteWorkspace(channel.getDefaultWorkspace() , null);
+    }
+    
+    // If no favorite then get the default workspace
+    if (workspace == null) {
+      workspace = channel.getDefaultWorkspace();
+    }
+    
+    // Save the Workspace in session for BackOffice
+    if ((loggedMember != null) && (loggedMember.isAdmin(workspace) || loggedMember.isWorker(workspace)) && (!inFO || wsParam != null)){
+      Workspace.setSessionWorkspace(request.getSession() , workspace);
+    }
+    
+    // Anyway save the Workspace in request to always have a workspace
+    Workspace.setRequestWorkspace(request , workspace);
+  } else {
+    workspace = Workspace.getRequestWorkspace(request);
+  }
+  boolean isWSAdmin = loggedMember != null && loggedMember.isAdmin(workspace);
+%>

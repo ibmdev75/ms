@@ -1,0 +1,60 @@
+<%@page import="java.util.Collection"%><%
+%><%@page import="java.util.Iterator"%><%
+%><%@page import="com.jalios.util.Util"%><%
+%><%@page import="com.jalios.jcms.HttpUtil"%><%
+%><%@page import="com.jalios.jcms.JcmsUtil"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.BasicSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.SelectorSettings"%><%
+%><%
+Object[] optionValues = (Object[]) getOption(SelectorSettings.ENUM_VALUES, null);
+String[] optionLabels = (String[]) getOption(SelectorSettings.ENUM_LABELS, null);
+
+String prepend = getIncludeString("PREPEND", getOption(BasicSettings.PREPEND, ""));
+String append = getIncludeString("APPEND", getOption(BasicSettings.APPEND, ""));
+fieldRequired = getOption(SelectorSettings.REQUIRED, fieldRequired); // Check if required is overrided by the control
+String required = fieldRequired.booleanValue() ? "aria-required=\"true\"" : "";
+String disabled = fieldDisabled.booleanValue() ? "disabled=\"disabled\"" : "";
+boolean isMultiple = getOption(SelectorSettings.MULTIPLE, false);
+String multiple = isMultiple ? "multiple=\"multiple\"" : "";
+String css = getOption(BasicSettings.CSS, "");
+css = "form-control" + (Util.notEmpty(css) ? " " + css : "");
+String htmlAttributes = getOption(BasicSettings.HTML_ATTRIBUTES, "");
+String dataAttributes = formatDataAttributes(getOption(BasicSettings.DATA_ATTRIBUTES, (Map<String, Object>) null));
+String dataEvent = formatAttribute("data-jalios-event='%s'", getOption(BasicSettings.TRIGGER_EVENT, ""));
+String dataAction = formatAttribute("data-jalios-action='%s'", getOption(BasicSettings.TRIGGER_ACTION, ""));
+
+String options  = getIncludeString("SELECT_OPTIONS", null);
+
+if (isMultiple) {
+  // Set isMulti to 'false' to prevent the parent tag to loop multiple times on this tag
+  setIncludeString("isMulti", "false");
+}
+%><%
+%><% if (Util.notEmpty(prepend)) { %><span class="input-group-addon"><%= prepend %></span><% } %>
+<select id="<%= HttpUtil.encodeForHTMLAttribute(fieldId) %>"
+        name="<%= HttpUtil.encodeForHTMLAttribute(fieldName) %>"
+        class="<%= css %>"
+        <%= JcmsUtil.getLangAttributes(cptLang) %>
+        <%= required %>
+        <%= disabled %>
+        <%= multiple %>
+        <%= dataEvent %>
+        <%= dataAction %>
+        <%= dataAttributes %>
+        <%= htmlAttributes %>>
+  <% if (!fieldRequired.booleanValue()) { %><option value=""></option><% } %>
+  <% if(optionValues != null) { %>
+    <%
+    for (int i = 0; i < optionValues.length; i++) {
+      String label = optionLabels != null ? optionLabels[i] : null;
+      String value = resolveValue(optionValues[i]);
+      String selected = (isMultiple ? fieldValues.contains(value) : value.equals(fieldValue)) ? "selected='selected'" : "";
+    %>
+    <option value="<%= value %>" <%= selected %>><%= resolveLabel(optionValues[i], label) %></option>
+    <% } // End for %>
+  <% } else if (options != null) { %>
+    <%= options %>
+  <% } %>
+</select>
+<% if (Util.notEmpty(append)) { %><span class="input-group-addon"><%= append %></span><% } %><%
+%><%= getIncludeString("CONTROL_APPEND", "") %>

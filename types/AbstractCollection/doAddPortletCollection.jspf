@@ -1,0 +1,11 @@
+<%
+{
+  PortalElement  pCollec = (PortalElement)  request.getAttribute(PortalManager.PORTAL_PORTALELEMENT);
+  if (isLogged && loggedMember.canWorkOn(pCollec)) {
+    String label   = glp("ui.portalihm.alt.add");
+    String icon    = "add-item";
+    String onclick = "return  jQuery.jalios.Sortable.Portal.openPubChooser(this)";
+    String href    = "work/pubChooser.jsp?super=com.jalios.jcms.portlet.Portlet&amp;showReadRightsPub=false&amp;jsFunc=jQuery.jalios.Sortable.Portal.insert";
+%>
+<div class="br"><a class="btn btn-default" href="<%= href %>" onClick="<%= onclick  %>"><%= glp("ui.portalihm.alt.add") %></a></div>
+<% }} %>

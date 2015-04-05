@@ -1,0 +1,39 @@
+/* ----------------------------------------------- */
+/*  ACCORDIONS for Bootstrap3                      */
+/*                                                 */
+/* Specific LESS to be able to click on the whole  */
+/* area of the panel heading.                      */
+/*                                                 */
+/* ----------------------------------------------- */
+
+.jalios-accordion-sticky {
+  
+  &.panel-group .panel:first-child {
+    .border-bottom-radius(0);
+  }  
+  
+  &.panel-group .panel:last-child {
+    .border-bottom-radius(@border-radius-base);
+  }
+  
+  &.panel-group .panel + .panel {
+    margin-top: -1px;
+    border-radius: 0;
+  }
+}
+
+.jalios-accordion {
+  .panel-heading {
+    padding: 0;
+    cursor: pointer;
+  	
+  	.panel-title {
+  	  display: block;
+  	  
+  	  A {
+  	    display: block;
+  	    padding: 10px 15px;
+  	  }
+  	}
+  }
+}

@@ -1,0 +1,28 @@
+<input type="hidden" name="repositoryId" value="<%= repository.getId() %>" />
+<input type="hidden" name="mainTab" value="<%= FileProcessorAdminHandler.TABINDEX_FILES_STATUS %>" />
+<% 
+{
+  String sort     = getAlphaNumParameter("sort", null);
+  String reverse  = getAlphaNumParameter("reverse", null);
+  String pageSize = getAlphaNumParameter("pageSize", null);
+  String pagerAll = getAlphaNumParameter("pagerAll", null);
+  String start    = getAlphaNumParameter("start", null);
+  if (Util.notEmpty(sort)) {
+%>
+<input type="hidden" name="sort" value="<%= sort %>" />
+<% }
+   if (Util.notEmpty(reverse)) { %>
+<input type="hidden" name="reverse" value="<%= reverse %>" />
+<% }
+   if (Util.notEmpty(pageSize)) { %>
+<input type="hidden" name="pageSize" value="<%= pageSize %>" />
+<% }
+   if (Util.notEmpty(pagerAll)) { %>
+<input type="hidden" name="pagerAll" value="<%= pagerAll %>" />
+<% }
+   if (Util.notEmpty(start)) { %>
+<input type="hidden" name="start" value="<%= start %>" />
+<%
+   }
+}
+%>

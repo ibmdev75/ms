@@ -1,0 +1,136 @@
+<%
+  PortalElement  portalElement      = (PortalElement) request.getAttribute(PortalManager.PORTAL_PORTALELEMENT);
+  boolean        portalElementMode  =  Util.toBoolean(request.getAttribute("isPortletMode"),false);
+  Category       portalCat          = (Category)      request.getAttribute(PortalManager.PORTAL_PORTALCATEGORY);
+  Category       currentCat         = (Category)      request.getAttribute(PortalManager.PORTAL_CURRENTCATEGORY);
+  Category[]     ctxCat             = (Category[])    request.getAttribute(PortalManager.PORTAL_CTXCATEGORIES);
+  
+  boolean isCacheDisabled = channel.getCacheManager().isDisabled() || portalElementMode || PortalManager.disableCache(request, portalElement, loggedMember);
+  boolean isCacheSession = portalElement.hasCacheSession();
+  boolean refreshCache = PortalManager.refreshCache(request , portalElement , loggedMember);
+  if (portalElement.hasNoCache()) {
+    isCacheDisabled = true;
+  } else if (portalElement.hasCacheVisitorsOnly()) {
+    if (isLogged) {
+      isCacheDisabled = true;
+    }
+  } else if (!isCacheSession) {
+    if (jcmsContext.isEditIcon()) {
+      isCacheDisabled = true;
+    } else if (refreshCache) {
+      isCacheDisabled = true;
+    } else if (hasParameter("preview")) {
+      isCacheDisabled = true;
+    }
+  } else if (Util.isEmpty(portalElement.getInvalidClass()) && (portalElement.getInvalidTime() <= 0)) {
+    isCacheDisabled = true;
+  }
+  
+  String cacheId = null; // cache id parameter computed only if cache enabled
+  
+  if (!isCacheDisabled) {
+    cacheId = portalElement.getId() + "_PE_" + userLang;
+    
+    // Cache Type
+    if (portalElement.hasCacheGroups()) {
+      if (isLogged) {
+        Set groupSet = new TreeSet(Group.getNameComparator());
+        groupSet.addAll(Arrays.asList(loggedMember.getGroups()));
+        cacheId += "_" + JcmsUtil.dataListToString(new ArrayList(groupSet), "_");
+      }
+    } else if (portalElement.hasCacheMembers()) {
+      if (isLogged) {
+        cacheId += "_" + loggedMember.getId();
+      }
+    } else if (portalElement.hasCacheSessionAndVisitors()) {
+      isCacheSession = isLogged;
+    }
+
+    // Cache sensibility (categories)
+    if (portalElement.hasPortalCategoryCacheSensibility() && portalCat != null)
+      cacheId += "_" + portalCat.getId();
+    else if (portalElement.hasCurrentCategoryCacheSensibility() && currentCat != null)
+      cacheId += "_" + currentCat.getId();
+      
+    if (Util.notEmpty(ctxCat))
+      cacheId += "_" + Util.join(JcmsUtil.dataArrayToStringArray(ctxCat),"_");  
+
+  } // end if (!isCacheDisabled)
+%>
+<jalios:cache id='<%= cacheId %>'  
+              disabled='<%= isCacheDisabled %>'
+              session='<%= isCacheSession %>'
+              classesStr='<%= portalElement.getInvalidClass() %>'
+              timeout='<%= portalElement.getInvalidTime()  %>'
+              refresh='<%= refreshCache %>'>
+<%
+  boolean isPreview = PortalManager.isPreview(request , portalElement);
+  Portlet geometry = portalElement instanceof Portlet ? (Portlet)portalElement : null;
+  boolean doInsets = (geometry != null) && ((geometry.getInsetLeft() > 0) || (geometry.getInsetTop() > 0) || (geometry.getInsetBottom() > 0) || (geometry.getInsetRight() > 0));
+  int tableLevels = 1;
+  if (isPreview)           tableLevels += 2;
+  if (portalElementMode)   tableLevels += 2;
+  if (doInsets)            tableLevels += 2;
+  
+  int     cacheInt  = portalElement.getCacheTypeInt();        
+  String  geowidth  = geometry == null ? 100+"%" : geometry.getWidth();
+          geowidth += geowidth.endsWith("%")  || geowidth.endsWith("px") || geowidth.endsWith("em") || geowidth.endsWith("in") || 
+                      geowidth.endsWith("mm") || geowidth.endsWith("cm") || geowidth.endsWith("pt") || geowidth.endsWith("pc") || 
+                      geowidth.endsWith("ex") ? "" : "%";
+%>
+  <table    <%= ((geometry != null) && Util.notEmpty(geometry.getAlignTable()) && !geometry.getAlignTable().equalsIgnoreCase("default")) ? ("align='"+geometry.getAlignTable()+"'") : "" %>>
+  <% if (isPreview) { %>
+    <tr>
+      <td  <%= doSpan(tableLevels,false)  %>  bgcolor='<%= portalPREVIEWCOLOR %>'><img src='s.gif' alt='' width="<%= portalPREVIEW %>" height="<%= portalPREVIEW %>" /></td>
+      <td  <%= doSpan(tableLevels-2,true)  %> bgcolor='<%= portalPREVIEWCOLOR %>'><img src='s.gif' alt='' width="1" height='<%= portalPREVIEW %>' /></td>
+      <td  <%= doSpan(tableLevels,false)  %>  bgcolor='<%= portalPREVIEWCOLOR %>'><img src='s.gif' alt='' width="<%=portalPREVIEW %>" height="<%= portalPREVIEW  %>" /></td>
+    </tr>
+  <%   tableLevels -= 2; 
+     } if (portalElementMode) { %>
+    <tr>
+      <td <%= doSpan(tableLevels,false)  %> class='PortalMode'><img src='s.gif' alt='' width="<%= bordersize %>" height="<%= bordersize %>" /></td>
+      <td <%= doSpan(tableLevels-2,true) %> class='PortalMode'><%@ include file='/jcore/portal/doPortletToolbar.jspf' %></td>
+      <td <%= doSpan(tableLevels,false)  %> class='PortalMode'><img src='s.gif' alt='' width="<%=bordersize %>" height="<%= bordersize  %>" /></td>
+    </tr>
+  <%   tableLevels -= 2; 
+     } if (doInsets) { %>
+    <tr>
+      <td <%= doSpan(tableLevels,false)  %>><img src='s.gif' alt='' width="<%= geometry.getInsetLeft() %>"  height="<%= geometry.getInsetTop() %>" /></td>
+      <td <%= doSpan(tableLevels-2,true)  %>><img src='s.gif' alt='' width="1" height="<%= geometry.getInsetTop() %>" /></td>
+      <td <%= doSpan(tableLevels,false)  %>><img src='s.gif' alt='' width="<%=geometry.getInsetRight() %>" height="<%= geometry.getInsetTop()  %>" /></td>
+    </tr>
+  <% tableLevels -= 2; } %>
+    <tr>
+      <td width='100%'>
+<%
+PortletSkinable pskin= (portalElement instanceof PortletSkinable) ? (PortletSkinable)portalElement : null;
+
+String idName        =  Util.notEmpty(portalElement.getCssId()) ? (portalElement.getCssId()+" ") : "";
+       idName        =  idName.trim();
+String cssSkin       = "OutterBody ";
+       cssSkin      += (pskin != null && Util.notEmpty(pskin.getSkin())) ? "PortletSkinable_"+pskin.getSkinCSS() : "";
+       cssSkin       = cssSkin.trim();
+
+ if (logger.isDebugEnabled()) { %><!-- [Portlet Outter]: <%= portalElement.getId() %> / <%= Util.getClassShortName(portalElement.getClass()) %> --><% } %>
+<div class="<%= cssSkin %>" <%= Util.notEmpty(idName) ? ("id='"+idName+"'") : "" %>>
+<%
+  try { String skinTemplate  = (pskin != null && Util.notEmpty(pskin.getSkin())) ? pskin.getSkinTemplateFile() : "jcore/portal/doPortletSkin.jsp";
+  %><jsp:include page='<%= "/"+skinTemplate %>' flush="true" /><% }
+  catch (Throwable ex) {
+    PortalManager.printPortletException(out, ex, portlet, logger);
+  }
+%>
+</div>
+      </td>
+    </tr>
+  <% if (doInsets) { 
+       tableLevels += 2; 
+  %><tr><td  <%= doSpan(tableLevels-2,true)  %>><img src='s.gif' alt='' width="1" height="<%= geometry.getInsetBottom() %>" /></td></tr>
+  <% } if (portalElementMode) { 
+       tableLevels += 2; 
+  %><tr><td  <%= doSpan(tableLevels-2,true)  %>  class='PortalMode'><img src='s.gif' alt='' width="1" height="<%= bordersize %>" /></td></tr>
+  <% } if (isPreview) { 
+       tableLevels += 2; 
+  %><tr><td  <%= doSpan(tableLevels-2,true)  %>  bgcolor='<%= portalPREVIEWCOLOR %>'><img src='s.gif' alt='' width="1" height="<%= portalPREVIEW %>" /></td></tr>
+  <% } %></table>
+</jalios:cache>

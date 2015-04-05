@@ -1,0 +1,377 @@
+<%--
+ Convenient method to provide Repository and Processing information in the UI 
+--%><%
+%><%@ page import="custom.*,generated.*, com.jalios.jcms.*, com.jalios.jcms.policy.*, com.jalios.jcms.rest.*, com.jalios.jcms.accessibility.*, com.jalios.jcms.db.*, com.jalios.jcms.dbmember.*, com.jalios.jcms.plugin.*, com.jalios.jcms.caddy.*, com.jalios.jcms.widget.*, com.jalios.jcms.context.*, com.jalios.jcms.stat.*, com.jalios.jcms.stat.listener.*, com.jalios.jcms.stat.beautifier.*, com.jalios.jcms.workspace.*, com.jalios.jcms.ajax.*, com.jalios.jcms.archive.*, com.jalios.jcms.portlet.*, com.jalios.util.*, com.jalios.util.diff.*, java.io.*, java.util.*, java.text.*, java.net.*,org.apache.log4j.Logger,org.apache.log4j.Level,org.apache.log4j.NDC,org.jabsorb.*" %><%
+%><%@ page import="org.hibernate.transform.*, org.hibernate.criterion.*, org.hibernate.*"%><%
+%><%@ page import="com.jalios.jcms.fileprocessor.*" %><%
+%><%@ page import="com.jalios.jcms.fileprocessor.processingmanagement.*" %><%
+%><%@ page import="com.jalios.jcms.fileprocessor.repository.*" %><%
+%><%@ page import="com.jalios.jcms.fileprocessor.ui.*" %><%
+%><%@ page import="com.jalios.jcms.handler.*"%><%
+%><%!
+
+  // --------------------------------------------------------------------------------------
+  // internal methods used to retrieve basic Criteria for
+  // specified repository and current replica 
+  // --------------------------------------------------------------------------------------
+
+  private Criteria getLogBaseCriteria(Repository repository) {
+    Criteria crit = HibernateUtil.getSession().createCriteria(FileProcessingLog.class);
+    HashMap<String,String> propertyMap = new HashMap<String,String>();
+    propertyMap.put(FileProcessingLog.Fields.REPOSITORY_COLUMN, repository.getId());
+    propertyMap.put(FileProcessingLog.Fields.URID_COLUMN, channel.getUrid());
+    crit.add(Restrictions.allEq(propertyMap));
+    return crit;  
+  }
+
+  private Criteria getInfoBaseCriteria(Repository repository) {
+    Criteria crit = HibernateUtil.getSession().createCriteria(FileProcessingInfo.class);
+    HashMap<String,String> propertyMap = new HashMap<String,String>();
+    propertyMap.put(FileProcessingInfo.Fields.REPOSITORY_COLUMN, repository.getId());
+    propertyMap.put(FileProcessingInfo.Fields.URID_COLUMN, channel.getUrid());
+    crit.add(Restrictions.allEq(propertyMap));
+    return crit;
+  }
+  
+  // --------------------------------------------------------------------------------------
+  // Counting methods
+  // --------------------------------------------------------------------------------------
+  
+  // ---------------------------
+  // Utility methods
+  
+  // Execute the specified counting Criteria and return the number of items
+  // (valid for rowCount or countDistinct projections)
+  private int getCount(Criteria crit) {
+    crit.setCacheable(true);
+    
+    @SuppressWarnings("unchecked")
+    List<Integer> countList = (List<Integer>) crit.list();
+    int count = Util.notEmpty(countList) ? countList.get(0) : 0;
+    return count; 
+  }
+  
+  // Add the proper countDiscting projection required for FileProcessingLog table
+  private void setLogFilenameDistinctProjection(Criteria crit) {
+    crit.setProjection(
+      Projections.distinct(
+        Projections.countDistinct(FileProcessingLog.Fields.FILENAME_COLUMN)
+      )
+    );
+  }
+  
+  // ---------------------------
+  // Counting methods
+  
+  // Number of files in repository
+  // Working with INFO
+  public int getAllPersistedFilesCount(Repository repository) {
+    Criteria crit = getInfoBaseCriteria(repository);
+    crit.setProjection(Projections.rowCount());
+
+    return getCount(crit); 
+  }
+
+  // Number of files GLOBALLY BLACKLISTED
+  // Working with LOG
+  public int getAllGloballyBlackListedFilesCount(Repository repository) {
+    Criteria crit = getLogBaseCriteria(repository);
+    crit.add(
+        Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode())
+    );
+    setLogFilenameDistinctProjection(crit);
+    return getCount(crit);
+  }
+  
+  // Number of files PARTIALLY BLACKLISTED
+  // Working with LOG
+  public int getAllPartiallyBlackListedFilesCount(Repository repository) {
+    Criteria crit = getLogBaseCriteria(repository);
+    crit.add(
+        Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode())
+    );
+    setLogFilenameDistinctProjection(crit);
+    return getCount(crit);
+  }
+  
+  // Number of files in ERROR (unknown exception)
+  // Working with LOG
+  public int getAllErrorFileCount(Repository repository) {
+    Criteria crit = getLogBaseCriteria(repository);
+    crit.add(
+      Restrictions.or(
+        Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.ERROR.getCode()),
+        Restrictions.or(
+          Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode()),
+          Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode())
+        )
+      )
+    );
+    setLogFilenameDistinctProjection(crit);    
+    return getCount(crit);
+  }
+
+  // --------------------------------------------------------------------------------------
+  // Processor statistics methods
+  // --------------------------------------------------------------------------------------
+  
+  // Number of files processed for specified component
+  // Working with LOG
+  public int getComponentProcessedFileCount(Repository repository, String component) {
+    Criteria crit = getLogBaseCriteria(repository);
+    crit.add(Restrictions.eq(FileProcessingLog.Fields.COMPONENT_COLUMN, component));
+    setLogFilenameDistinctProjection(crit);    
+    return getCount(crit);
+  }
+  
+  // Number of files in error for specified component
+  // Working with LOG
+  public int getComponentErrorFileCount(Repository repository, String component) {
+    Criteria crit = getLogBaseCriteria(repository);
+    crit.add(Restrictions.eq(FileProcessingLog.Fields.COMPONENT_COLUMN, component));
+    crit.add(
+      Restrictions.or(
+        Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.ERROR.getCode()),
+        Restrictions.or(
+          Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode()),
+          Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode())
+        )
+      )
+    );
+    setLogFilenameDistinctProjection(crit);    
+    return getCount(crit);
+  }
+  
+  // Number of files blacklisted for specified component
+  // Working with LOG
+  public int getComponentBlackListedFileCount(Repository repository, String component) {
+    Criteria crit = getLogBaseCriteria(repository);
+    crit.add(Restrictions.eq(FileProcessingLog.Fields.COMPONENT_COLUMN, component));
+    crit.add(
+      Restrictions.or(
+        Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode()),
+        Restrictions.eq(FileProcessingLog.Fields.STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode())
+      )
+    );
+    setLogFilenameDistinctProjection(crit);    
+    return getCount(crit);
+  }
+  
+  // --------------------------------------------------------------------------------------
+  // Extension statistics methods
+  // --------------------------------------------------------------------------------------
+  
+  // Number of files blacklisted for specified extension
+  // Working with INFO
+  public int getExtensionProcessedFileCount(Repository repository, String extension) {
+    Criteria crit = getInfoBaseCriteria(repository);
+    crit.add(Restrictions.eq(FileProcessingInfo.Fields.FILEEXTENSION_COLUMN, extension));
+    crit.setProjection(Projections.rowCount()); 
+    return getCount(crit);
+  }
+
+  // Number of files blacklisted for specified extension
+  // Working with INFO
+  public int getExtensionErrorFileCount(Repository repository, String extension) {
+    Criteria crit = getInfoBaseCriteria(repository);
+    crit.add(Restrictions.eq(FileProcessingInfo.Fields.FILEEXTENSION_COLUMN, extension));
+    crit.add(
+      Restrictions.or(
+        Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.ERROR.getCode()),
+        Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.ERROR.getCode())
+      )
+    );
+    crit.setProjection(Projections.rowCount()); 
+    return getCount(crit);
+  }
+  
+  // Number of files blacklisted for specified extension
+  // Working with INFO
+  public int getExtensionBlackListedFileCount(Repository repository, String extension) {
+    Criteria crit = getInfoBaseCriteria(repository);
+    crit.add(Restrictions.eq(FileProcessingInfo.Fields.FILEEXTENSION_COLUMN, extension));
+    crit.add(
+      Restrictions.or(
+        Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode()),
+        Restrictions.or(
+          Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode()),
+          Restrictions.or(
+            Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode()),
+            Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode())
+          )
+        )
+      )
+    );
+    crit.setProjection(Projections.rowCount()); 
+    return getCount(crit);
+  }
+  
+  
+  // --------------------------------------------------------------------------------------
+  // Data retrieval methods
+  // --------------------------------------------------------------------------------------
+
+  // Retrieve the Last FileProcessingLog that was treated
+  public FileProcessingLog getLastProcessingLog(Repository repository) {
+    Criteria crit = getLogBaseCriteria(repository);
+
+    crit.addOrder(Order.desc(FileProcessingLog.Fields.CDATE_COLUMN));
+    crit.setMaxResults(1);
+    List lastLog = crit.list();
+    FileProcessingLog lastFPL = (FileProcessingLog) (lastLog.size() >= 1 ? lastLog.get(0) : null);
+    return lastFPL;
+  }
+
+  // Retrieve tPaginated resultat of ProcessingInfoList
+  public int getProcessingInfoListCriterionCount(Repository repository, Criterion criterion) {
+    Criteria countCriteria = getInfoBaseCriteria(repository);
+    if (criterion != null) {
+      countCriteria.add(criterion);
+    }
+    countCriteria.setProjection(Projections.rowCount());
+    int count = getCount(countCriteria);
+    return count;    
+  }
+
+  // Retrieve a Paginated resultat of ProcessingInfoList
+  public PageResult<FileProcessingInfo> getProcessingInfoList(Repository repository, int start, int maxResults, String order, boolean orderAsc,
+                                                              Criterion criterion, int count) {
+    Criteria criteria = getInfoBaseCriteria(repository);
+    
+    // Filter
+    if (criterion != null) {
+      criteria.add(criterion);
+    }
+    
+    // Paging
+    criteria.setFirstResult(start);
+    criteria.setMaxResults(maxResults);
+    
+    // Order
+    if (Util.isEmpty(order)) {
+      order = FileProcessingInfo.Fields.CDATE_COLUMN;
+    }
+    criteria.addOrder(orderAsc ? Order.asc(order) : Order.desc(order));
+    
+    // Query
+    @SuppressWarnings("unchecked")
+    List<FileProcessingInfo> list = (List<FileProcessingInfo>) criteria.list();
+    PageResult<FileProcessingInfo> result = new PageResult<FileProcessingInfo>(count, list);
+    return result;
+  }
+  
+  public Criterion getProcessingInfoListCriterion(String component, String statusFilter, String text) {
+    Criterion criterion = null;
+    
+    // Filter
+    // - component
+    if (Util.notEmpty(component)) {
+      Criterion componentCriterion = Restrictions.ilike(FileProcessingInfo.Fields.COMPONENTS_COLUMN, ","+component+",", MatchMode.ANYWHERE);
+      criterion = HibernateUtil.buildAndCriterion(criterion, componentCriterion);
+    }
+    // - status
+    if (Util.notEmpty(statusFilter)) {
+      Criterion statusCriterion = null;
+      if ("indexed".equals(statusFilter)) {
+        statusCriterion = Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.SUCCESSFUL.getCode());
+      } else if ("ok".equals(statusFilter)) {
+        statusCriterion =
+          Restrictions.and(
+            Restrictions.or(
+              Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.SUCCESSFUL.getCode()),
+              Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.IGNORED.getCode())
+            ),
+            Restrictions.or(
+              Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.SUCCESSFUL.getCode()),
+              Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.IGNORED.getCode())
+            )
+          );
+      } else if ("error".equals(statusFilter)) {
+        statusCriterion =
+          Restrictions.or(
+            Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.ERROR.getCode()),
+            Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.ERROR.getCode())
+          );
+      } else if ("blacklisted".equals(statusFilter)) {
+        statusCriterion =
+          Restrictions.or(
+            Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode()),
+            Restrictions.or(
+              Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode()),
+              Restrictions.or(
+                Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode()),
+                Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode())
+              )
+            )
+          );
+      } else if ("globallyblacklisted".equals(statusFilter)) {
+        statusCriterion =
+          Restrictions.or(
+            Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode()),
+            Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.GLOBALLY_BLACKLISTED.getCode())
+          );
+      } else if ("partiallyblacklisted".equals(statusFilter)) {
+        statusCriterion =
+          Restrictions.or(
+            Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode()),
+            Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.PARTIALLY_BLACKLISTED.getCode())
+          );
+      } else if ("ignored".equals(statusFilter)) {
+        statusCriterion =
+          Restrictions.and(
+            Restrictions.eq(FileProcessingInfo.Fields.PROCESSING_STATUS_COLUMN, ProcessingStatus.IGNORED.getCode()),
+            Restrictions.eq(FileProcessingInfo.Fields.INDEXING_STATUS_COLUMN, ProcessingStatus.IGNORED.getCode())
+          );
+      }
+      criterion = HibernateUtil.buildAndCriterion(criterion, statusCriterion);
+    }
+    // - text
+    if (Util.notEmpty(text)) {
+      Criterion textCriterion = Restrictions.ilike(FileProcessingInfo.Fields.FILENAME_COLUMN, text, MatchMode.ANYWHERE);
+      criterion = HibernateUtil.buildAndCriterion(criterion, textCriterion);
+    }
+    
+    return criterion;
+  }
+
+  // --------------------------------------------------------------------------------------
+  // User Interface Methods (Icons and I18N) 
+  // --------------------------------------------------------------------------------------
+
+  // ---------------------------
+  // Status icons methods
+  
+  public String getStatusIconHtml(ProcessingStatus status) {
+    String str = FileProcessorUIUtil.getStatusIconHtml(status, userLangTL.get());
+    return str;
+  }
+  
+  public String getStatusIconHtml(FileProcessingLog log) {
+    String str = FileProcessorUIUtil.getStatusIconHtml(log, userLangTL.get());
+    return str;
+  }
+  
+  // ---------------------------
+  // File type icons methods
+  
+  /**
+   * Method to get file type icon when possible.
+   * @param filename or part of the filename ending with current extension.
+   * @return the complete html sequence to display the icon
+   */
+  public String getFileTypeIcon(String filename) {
+    String str = FileProcessorUIUtil.getFileTypeIcon(filename, userLangTL.get());
+    return str;
+  }
+  
+  /**
+   * Method to get file type icon when possible.
+   * @param extension generic file extension
+   * @return the complete html sequence to display the icon
+   */
+  public String getFileTypeIconFromExtension(String extension) {
+    String str = FileProcessorUIUtil.getFileTypeIconFromExtension(extension, userLangTL.get());
+    return str;
+  }
+
+%>

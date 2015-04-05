@@ -1,0 +1,88 @@
+// Include variables and mixins
+@import "init-mixins.less";
+
+.plupload_scroll .plupload_filelist {
+  height: 120px; // default: 185 
+  .plupload_file_name { width: auto; }
+}
+
+LI.plupload_droptext {
+  line-height: 100px; // default: 165
+}
+
+DIV.plupload-single{
+  DIV.plupload_header          { display: none; }
+  DIV.plupload_filelist_header { display: none; }
+  .plupload_scroll .plupload_filelist { height:  41px; display: none; } // display none to inline things 
+  .plupload_droptext { height:  40px; line-height: 30px; }
+  DIV.plupload_filelist_footer { background: none; padding: 0; float: left; 
+    DIV { width: auto; }
+    DIV.plupload_file_size { padding-right: @baseline/4; }
+  }
+  DIV.plupload_container{ padding: 0; }
+}
+
+.plupload-light {
+  .plupload_header          { display: none; }
+  .plupload_filelist_header { display: none; }
+  .plupload_scroll {
+    .plupload_filelist  {
+      border: 2px dashed #DDD;
+      border-radius: 4px;
+      min-height: 60px;
+      height: inherit; 
+      background-color: #FFF;
+    }
+    .plupload_filelist {
+      overflow-y: inherit;
+      LI {
+        background: #FAFAFA;
+        border-bottom: 1px solid #EEEEEE;
+        padding: 2px 8px;
+        color: #555;
+          
+        &.plupload_droptext { 
+          background-color: #FFF;
+          border: none;
+          height: 30px;
+          line-height: 60px;
+          color: #AAA;
+          font-size: 18px;
+          font-style: italic;
+        }
+      }
+    }  
+  }
+  
+  .plupload_filelist_footer { 
+    background-color: #FFF;
+    margin-top: 4px; 
+  }
+}
+
+DIV.plupload {
+  overflow: hidden;
+  .plupload_header{
+    background: #EEEEEE;
+    #gradient > .vertical(#F2F2F2, #DDDDDD);
+    .plupload_header_content { 
+      color: #333333;
+      background: none;
+      padding-left: @baseline/2; 
+      min-height: 36px;
+    }
+    .plupload_header_text{ display: none; }
+  }
+  .plupload_start { display: none; }
+}
+
+
+DIV.browser-IE7,
+DIV.browser-IE8 {
+  DIV.plupload{ max-width: 90%; }
+}
+
+/* docChooserInline.jsp */
+.inline-footer {
+	padding: @baseline/2;
+}

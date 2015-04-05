@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow id="filedocument" type="publish" init="0" version="4">
+  <state pstatus="-100" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="-10" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="0" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="10" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="20" reminder="0" duration="0" targetPstatus="0" />
+</workflow>
+

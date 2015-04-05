@@ -1,0 +1,60 @@
+<%--
+  @Summary: Vertical Member card
+  @Category: UI Component
+  @Author: Kevin BRANSARD / Sylvain DEVAUX
+  @Copyright: Jalios SA
+  @Customizable: True
+  @Requestable: True
+  @Deprecated: False
+  @Since: jcms-9.1
+--%>
+<%@ include file="/front/card/member/doInitMemberCard.jspf" %>
+
+<div class="card card-member card-member-vertical <%= cardId %><%= Util.notEmpty(customClasses)?" "+customClasses.trim():"" %>">
+  <div class="card-front card-toggler">
+    <div class="card-header card-member-header">
+      <jalios:memberphoto member="<%= itMember %>" size="<%= PhotoSize.SMALL %>" /> 
+      <div class="card-title card-member-title">
+        <%@ include file="/front/card/member/doMemberName.jspf" %>
+      </div>
+    </div>
+    <div class="card-body card-member-body">
+      <%@ include file="/front/card/member/doMemberCardBody.jspf" %>
+    </div>
+  </div>
+
+  <% if (hasBackCard) { %>
+    <jalios:buffer name="backContent">
+    <% if (Util.notEmpty(customBackCard)) { %>
+      <%= customBackCard %>
+    <% } else { %>
+      <jalios:buffer name="defaultBackCard">
+        <%@ include file="/front/card/member/doMemberPhone.jspf" %>
+        <%@ include file="/front/card/member/doMemberMobile.jspf" %>
+        <%@ include file="/front/card/member/doMemberAddress.jspf" %>
+      </jalios:buffer>
+      <% if (Util.notEmpty(defaultBackCard)) { %>
+        <%= defaultBackCard %>
+      <% } %>
+    <% } %>
+    </jalios:buffer>
+    <%
+    // Prevent card turner if back card is empty
+    hasBackCard = Util.notEmpty(backContent);
+    %>
+    <% if (hasBackCard) { %>
+      <div class="card-back card-toggler hide">
+        <div class="card-header card-member-header">
+          <jalios:memberphoto member="<%= itMember %>" size="<%= PhotoSize.TINY %>" />
+          <div class="card-title card-member-title">
+            <%@ include file="/front/card/member/doMemberName.jspf" %>
+          </div>
+        </div>
+        <div class="card-body card-member-body">
+          <%= backContent %>
+        </div>
+      </div>
+      <%@ include file="/front/card/doCardTurner.jspf" %>
+    <% } %>
+  <% } %>
+</div>

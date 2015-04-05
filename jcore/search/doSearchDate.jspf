@@ -1,0 +1,40 @@
+<%--
+  @Summary: Date search panel
+  @Deprecated: False
+  @Customizable: False
+  @Requestable: False
+  @Category: Search / Query
+  @Since: jcms-4.0
+--%><%@page import="com.jalios.jcms.taglib.settings.impl.DateSettings"%>
+<%
+
+String dsdDateType   = Util.getString((String)request.getAttribute("dsdDateType"), "cdate"); 
+long dsdDateSince     = Util.toLong((String)request.getAttribute("dsdDateSince"), 0); 
+Date dsdBeginDate = dsdDateSince > 0 ? null : (Date)(request.getAttribute("dsdBeginDate"));
+Date dsdEndDate = (Date)(request.getAttribute("dsdEndDate"));
+
+Map<String, String> dateTypeSelectMap = new LinkedHashMap<String, String>();
+dateTypeSelectMap.put("cdate", "ui.work.search.date.cdate");
+dateTypeSelectMap.put("udate", "ui.work.search.date.udate");
+dateTypeSelectMap.put("mdate", "ui.work.search.date.mdate");
+dateTypeSelectMap.put("pdate", "ui.work.search.date.pdate");
+dateTypeSelectMap.put("edate", "ui.work.search.date.edate");
+dateTypeSelectMap.put("sdate", "ui.work.search.date.sdate");
+%>
+  <jalios:field name="dateType" label="ui.work.search.date.s-ctnt" value='<%= dsdDateType %>'>
+    <jalios:control settings='<%= new EnumerateSettings().select()
+                                        .enumValues(dateTypeSelectMap.keySet())
+                                        .enumLabels(dateTypeSelectMap.values()) %>' />
+  </jalios:field>
+  
+  <jalios:field name="dateSince"  label="ui.work.search.date.since" value='<%= dsdDateSince %>'>
+    <jalios:control settings='<%= new DurationSettings().resolution(DurationSettings.Resolution.DAY) %>' />
+  </jalios:field>
+  
+  <jalios:field name="beginDateStr" label="ui.work.search.date.begin" value="<%= dsdBeginDate %>">
+   <jalios:control settings='<%= new DateSettings().placeholder("date-format") %>' />
+  </jalios:field> 
+  
+  <jalios:field name="endDateStr" label="ui.work.search.date.end" value="<%= dsdEndDate %>">
+   <jalios:control settings='<%= new DateSettings().placeholder("date-format") %>' />
+  </jalios:field> 

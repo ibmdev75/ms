@@ -1,0 +1,45 @@
+<%-- 
+  @Summary: Sub-header for display page
+  @Deprecated: False
+  @Customizable: True
+  @Requestable: False
+  @Category: Presentation
+--%><%  
+%><%@ page import="com.jalios.jcms.tracking.ReaderTrackerManager" %><%  
+%><%@ page import="com.jalios.jcms.recommendation.RecommendationManager" %><%  
+%><% 
+  boolean printView                = (request.getAttribute("printView") != null) || (hasParameter("printView")); 
+  boolean showDisplayHeaderToolbar = Util.toBoolean(request.getAttribute("showDisplayHeaderToolbar"),true);
+
+  if (!printView && showDisplayHeaderToolbar){ %>
+  <jalios:include target="DISPLAY_HEADER_TOP" />
+  <%-- Preview Box --%>
+  <% if (!publication.isInVisibleState()){ %>
+    <div class='previewWFState'>
+      <h3><%= glp("ui.com.alt.preview") %></h3>
+      <%@ include file="/work/doWFValidateForm.jspf" %>
+    </div>
+  <% } %>
+<% } %>
+
+<%-- Lock Info --%>
+<%
+boolean showLockInfo = isLogged && loggedMember.isWorker(publication.getWorkspace()) && publication.isStrongLocked();
+if (showLockInfo) {
+%>
+<jalios:message>
+  <p><%= pub.getStrongLockInfo(userLocale) %></p>
+  <% if (channel.isDataWriteEnabled() && isLogged) { %>
+    <p>
+      <% if (publication.canRequestUnlock(loggedMember)) { %>
+        <a class='modal btn btn-default' href='work/requestUnlock.jsp?id=<%= publication.getId() %>'><%= glp("ui.work.alt.unlock-request") %></a>
+      <% } %>
+      <% if (loggedMember.canWorkOn(pub) && pub.isStrongLocked()) { %>
+        <a class="btn btn-default modal confirm" title="<%= glp("msg.js.confirm-unlock", HttpUtil.encodeForHTMLAttribute(pub.getTitle(userLang))) %>" href="edit.jsp?opUnlock=true&amp;id=<%= pub.getId() %>&amp;redirect=<%= ServletUtil.encodeURL(ServletUtil.getUrl(request)) %>"><%= glp("ui.com.alt.unlock") %></a>
+      <% } %>
+    </p>
+  <% } %>
+</jalios:message>
+<% }%>
+<%-- *** PLUGINS ***************** --%>
+<jalios:include target="DISPLAY_HEADER" />

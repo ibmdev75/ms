@@ -1,0 +1,30 @@
+<div class="tab-page" id="propertiesPage">
+  <h2 class="tab"><% /* %>Transition<% */ %><%= glp("ui.adm.wf-edit.prop.tab") %></h2>
+  <form method="post" action="admin/wfEditor.jsp" name="editPropertiesForm" class="form-horizontal">
+    <input type='hidden' name='id' value="<%= formHandler.getAvailableId() %>" />
+
+    <jalios:field name="label" label="ui.com.lbl.label" required='true' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getAvailableLabelMap() %>'>
+     <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+    </jalios:field>
+
+
+    <jalios:field name="type" label="ui.adm.wf-list.lbl.type" required='true'>
+      <% String type = formHandler.getAvailableType(); %>    
+      <select class="form-control" name="type">
+        <option value="<%= WorkflowManager.WFTYPE_PUBLISH %>" <%= WorkflowManager.WFTYPE_PUBLISH.equals(type) ? "selected='selected'" : "" %>><%= glp("ui.adm.wf-list.lbl.type.publish") %></option>
+        <option value="<%= WorkflowManager.WFTYPE_PROCESS %>" <%= WorkflowManager.WFTYPE_PROCESS.equals(type)  ? "selected='selected'" : "" %>><%= glp("ui.adm.wf-list.lbl.type.process") %></option>
+      </select>
+    </jalios:field> 
+    
+    <jalios:field name="newId" label="ui.com.lbl.id" value="<%= formHandler.getAvailableNewId() %>">
+      <% if (Util.notEmpty(channel.getWorkspaceSet(wf)) ) { %>
+      <input type='hidden' name='newId' value="<%= formHandler.getAvailableNewId() %>" /><span  class='formInfo'><%= formHandler.getAvailableId() %></span>
+      <% } else { %>
+     <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+      <% } %>
+    </jalios:field>
+    <div class="col-sm-offset-3">
+      <button class='btn btn-default <%= canEdit ?"btn-primary" : "" %>' type="submit" name="opUpdateWorkflow" value='true' <%= !canEdit ? "disabled='disabled'": "" %>><%= glp("ui.com.btn.update") %></button>
+    </div>
+  </form>
+</div>

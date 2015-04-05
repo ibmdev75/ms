@@ -1,0 +1,97 @@
+<jalios:if predicate='<%= (displayPortlet != null) %>'><%
+  
+  request.setAttribute(PortalManager.PORTAL_CONTEXTE_INCLUDE,"true"); // A Context for RightPolicyFilter
+  if (displayPortlet.canBeReadBy(loggedMember)
+      && (Util.toBoolean(request.getAttribute("ShowPortalElement"), true) || Util.toBoolean(request.getAttribute("isPortletMode"),false))
+      && (request.getAttribute("redirect") == null)
+      && (displayPortlet.isInVisibleState() || !jcmsContext.isInFrontOffice() || getBooleanParameter("preview",false))) {
+  
+    request.removeAttribute(PortalManager.PORTAL_CONTEXTE_INCLUDE);
+  
+    // Profiler
+    Data prDipData = null;
+    if (profilerEnabled) {
+      prDipData = displayPortlet;
+      rProfiler.startMeasures(prDipData.getId());
+    }
+
+    ServletUtil.backupAttribute(pageContext , PortalManager.PORTAL_PORTALELEMENT);
+    ServletUtil.backupAttribute(pageContext , PortalManager.PORTAL_TEMPLATEUSAGE);
+    ServletUtil.backupAttribute(pageContext , "ShowPortalElement");
+    ServletUtil.backupAttribute(pageContext , "isPortletMode");
+  
+    // For performance improvement, allow container to ask portlet to return its buffer in an attribute
+    boolean storeBufferForContainer = Util.toBoolean(request.getAttribute("storeBufferForContainer"), false);
+    request.removeAttribute("storeBufferForContainer");
+    
+    request.setAttribute("ShowPortalElement" , Boolean.TRUE);
+    request.setAttribute(PortalManager.PORTAL_PORTALELEMENT , displayPortlet);
+
+    // Compute a unique, but constant accross request, DOM id for the current portlet in the whole portal
+    // This id will be used by in ajax-refresh div and is needed for fully functional back button (in same page and accross request)
+    {
+      ServletUtil.backupAttribute(pageContext, PortalManager.PORTAL_PORTALELEMENT_DOMID);    
+      String curPortletDomId = Util.getString(request.getAttribute(PortalManager.PORTAL_PORTALELEMENT_DOMID), "");
+      if (Util.isEmpty(curPortletDomId) && jcmsContext.isAjaxRequest()) {
+        curPortletDomId = getStringParameter("portletDomId", "", HttpUtil.DATAID_REGEX);
+      } else {
+        String portletChildrenCounterRequestName = curPortletDomId + "-children-counter";
+        int portletChidrenCounter = Util.toInt(request.getAttribute(portletChildrenCounterRequestName), 0); 
+      
+        curPortletDomId = curPortletDomId + (Util.notEmpty(curPortletDomId) ? "_" : "") + displayPortlet.getId() + "_" + portletChidrenCounter; 
+        curPortletDomId = Util.getString(displayPortlet.getCssId(), curPortletDomId);
+        portletChidrenCounter++;
+        request.setAttribute(portletChildrenCounterRequestName, portletChidrenCounter);
+      }
+      
+      request.setAttribute(PortalManager.PORTAL_PORTALELEMENT_DOMID, curPortletDomId);
+    }
+    
+%><jalios:buffer name='portletBuffer'><%
+
+    // Profiler GUI
+    if (profilerShowGUI) {
+      out.write("<div class='profiler' id='profiler_" + prDipData.getId() + "'>");
+       %><%@ include file='/jcore/profiler/doProfilerHeader.jspf' %><%
+    }
+
+%><%@ include file='/jcore/portal/doInitPortlet.jspf' %><% displayPortlet = null; 
+    if (isPortalMode || Util.toBoolean(request.getAttribute("ShowPortalElement"),true)) { 
+%><%@ include file='/jcore/portal/doPortletCache.jspf' %><%
+    }
+  
+    // Profiler GUI
+    if (profilerShowGUI) {
+      out.write("</div>");
+    }
+    
+%></jalios:buffer><%
+
+    request.setAttribute("ShowChildPortalElement" , Boolean.FALSE);
+    if (request.getAttribute("redirect") == null){
+      if (Util.toBoolean(request.getAttribute("isPortletMode"),false) || Util.toBoolean(request.getAttribute("ShowPortalElement"),true)){
+        if (storeBufferForContainer) {
+          request.setAttribute("storeBufferForContainer", portletBuffer);
+        } else {
+          out.print(portletBuffer);
+        }
+        request.setAttribute("ShowChildPortalElement" , Boolean.TRUE);
+      }
+    }
+
+    ServletUtil.restoreAttribute(pageContext , PortalManager.PORTAL_PORTALELEMENT_DOMID);
+    
+    ServletUtil.restoreAttribute(pageContext , PortalManager.PORTAL_PORTALELEMENT);
+    ServletUtil.restoreAttribute(pageContext , PortalManager.PORTAL_TEMPLATEUSAGE);
+    ServletUtil.restoreAttribute(pageContext , "ShowPortalElement"); 
+    ServletUtil.restoreAttribute(pageContext , "isPortletMode");
+    
+    // Profiler
+    if (profilerEnabled) {
+      rProfiler.endMeasures(prDipData.getId(), portletBuffer.length());
+    }
+  } else {
+    request.removeAttribute(PortalManager.PORTAL_CONTEXTE_INCLUDE);
+    request.setAttribute("ShowChildPortalElement" , Boolean.FALSE);
+  }
+%></jalios:if>

@@ -1,0 +1,92 @@
+<%--
+  @Summary: Workspace list
+  @Category: Admin / Data
+  @Author: Sylvain Devaux
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: True
+  @Deprecated: False
+  @Since: jcms-9.0
+--%><%
+String noFilterLabel = glp("ui.adm.wrkspc-list.filter.all");
+String wsFilterLabel = glp("ui.adm.wrkspc-list.filter.type.ws");
+String csFilterLabel = glp("ui.adm.wrkspc-list.filter.type.cs");
+String closedFilterLabel = glp("ui.adm.wrkspc-list.filter.closed");
+String modelFilterLabel = glp("ui.adm.wrkspc-list.filter.model");
+String filterLabel = noFilterLabel;
+if (isFilterTypeWS) {
+  filterLabel = wsFilterLabel;
+} else if (isFilterTypeCS) {
+  filterLabel = csFilterLabel;
+} else if (isFilterClosed) {
+  filterLabel = closedFilterLabel;
+} else if (isFilterModel) {
+  filterLabel = modelFilterLabel;
+}
+
+boolean showFilterWS = isSomeCS && Util.notEmpty(JcmsUtil.select(unsortedWorkspaceSet, wsSelector, null));
+boolean showFilterCS = isSomeCS && Util.notEmpty(JcmsUtil.select(unsortedWorkspaceSet, csSelector, null));
+boolean showFilterType = showFilterWS && showFilterCS;
+boolean showFilterClosed = Util.notEmpty(JcmsUtil.select(unsortedWorkspaceSet, closedSelector, null));
+boolean showFilterModel = Util.notEmpty(JcmsUtil.select(unsortedWorkspaceSet, modelSelector, null));
+
+boolean anyFilter = isFilterTypeCS || isFilterTypeWS || isFilterClosed || isFilterModel;
+boolean showAnyFilter = showFilterType || showFilterClosed || showFilterModel;
+
+String noFilterUrl = ServletUtil.getUrlWithRemovedParams(request, new String[]{"wsFilter"}, true);
+String wsFilterUrl = ServletUtil.getUrlWithUpdatedParam(request, "wsFilter", "ws");
+String csFilterUrl = ServletUtil.getUrlWithUpdatedParam(request, "wsFilter", "cs");
+String closedFilterUrl = ServletUtil.getUrlWithUpdatedParam(request, "wsFilter", "closed");
+String modelFilterUrl = ServletUtil.getUrlWithUpdatedParam(request, "wsFilter", "model");
+%>
+<form action='work/workspace/editWorkspace.jsp'>
+  <div class="navbar navbar-default navbar-table-header">
+    <div class="container-fluid">
+
+      <%-- Create a workspace --%>
+      <div class="navbar-left navbar-form">
+        <div class="form-group">
+          <input class='btn btn-primary' type='submit' value='<%= glp("ui.adm.wrkspc-list.btn.add") %>' />
+        </div>
+      </div>
+
+      <%-- Filters --%>
+      <% if (showAnyFilter) { %>
+      <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+          <%-- current filter --%>
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="ws-list-filter">
+            <jalios:icon src="filter" /> <%= encodeForHTML(filterLabel) %> <jalios:icon src="caret" />
+          </a>
+
+          <%-- Available filters --%>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="ws-list-filter">
+            <% if (anyFilter) { %>
+            <li><a class="ajax-refresh" role="menuitem" href="<%= noFilterUrl %>"><%= encodeForHTML(noFilterLabel) %></a></li>
+            <% } %>
+            <% if (showFilterType) { %>
+              <% if (showFilterCS) { %>
+              <li <% if (isFilterTypeCS) { %> class="active" <%}%>><a class="ajax-refresh" role="menuitem" href="<%= csFilterUrl %>"><%= encodeForHTML(csFilterLabel) %></a></li>
+              <% } %>
+              <% if (showFilterWS) { %>
+              <li <% if (isFilterTypeWS) { %> class="active" <%}%>><a class="ajax-refresh" role="menuitem" href="<%= wsFilterUrl %>"><%= encodeForHTML(wsFilterLabel) %></a></li>
+              <% } %>
+            <% } %>
+            <% if (showFilterClosed) { %>
+            <li <% if (isFilterClosed) { %> class="active" <%}%>><a class="ajax-refresh" role="menuitem" href="<%= closedFilterUrl %>"><%= encodeForHTML(closedFilterLabel) %></a></li>
+            <% } %>
+            <% if (showFilterModel) { %>
+            <li <% if (isFilterModel) { %> class="active" <%}%>><a class="ajax-refresh" role="menuitem" href="<%= modelFilterUrl %>"><%= encodeForHTML(modelFilterLabel) %></a></li>
+            <% } %>
+          </ul>
+        </li>
+      </ul>
+      <% } %>
+    </div>
+
+    <input type='hidden' name='redirect' value='<%= redirect %>' />
+    <% if (getWorkspaceParameter(Workspace.PARENT_WORKSPACE_PARAMNAME) != null) { %>
+      <input type='hidden' name='<%= Workspace.PARENT_WORKSPACE_PARAMNAME %>' value='<%= getWorkspaceParameter(Workspace.PARENT_WORKSPACE_PARAMNAME).getId() %>' />
+    <% } %>
+  </div>
+</form>

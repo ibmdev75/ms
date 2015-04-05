@@ -1,0 +1,1 @@
+<%@ include file='/types/FileDocument/doFileDocumentFullDisplay.jsp' %>

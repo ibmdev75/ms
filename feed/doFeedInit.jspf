@@ -1,0 +1,76 @@
+<%--
+  @Category: Web Service
+  @Author: Oliver Jaquemet
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-4.1
+--%><%!
+  public String renderPubAbstract(Publication pub, Locale userLocale) {
+    String userLang = I18nUtil.getLanguageKey(userLocale);
+    TypeFieldEntry fieldEntry = channel.getTypeAbstractFieldEntry(pub.getClass());
+    if (fieldEntry != null && fieldEntry.isFieldWiki()) {
+      String baseUrl = ServletUtil.getBaseUrl(channel.getCurrentServletRequest());
+      return WikiRenderer.wiki2html(pub.getAbstract(userLang), userLocale, new WikiRenderingHints("wiki feed", false, baseUrl));
+    }
+    if (fieldEntry != null && fieldEntry.isWysiwyg()) {
+      String txt = pub.getAbstract(userLang);
+      return JcmsUtil.convertUri2Url(txt, ServletUtil.getBaseUrl(channel.getCurrentServletRequest()));
+    } 
+    return pub.getAbstract(userLang);
+  }
+%><%
+
+  PortletFeed box = getDataParameter("id", PortletFeed.class);
+	String lang = getAlphaNumParameter("lang", userLang);
+	if (box == null)
+		return;
+ 
+  if (!box.canBeReadBy(loggedMember)) {
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    %><root>Acces Denied</root><%
+    return;
+  }
+
+	// Check portlet allow acces to that kind of feed 
+	boolean accessDenied = true;
+	for (int i = 0; box.getFormats() != null && i < box.getFormats().length; i++) {
+		if (box.getFormats()[i].equals(feedFormat)) {
+			accessDenied = false;
+			break;
+		}
+	}
+	
+	// Refine on current or portal category
+	Category pcat   = getCategoryParameter("pcat");
+	String   pcatId = "";
+	if (pcat != null){
+    request.setAttribute(PortalManager.PORTAL_PORTALCATEGORY , pcat);
+    pcatId = "_"+pcat.getId();
+	}
+	Category ccat = getCategoryParameter("ccat");
+	String   ccatId = "";
+	if (ccat != null){
+	  request.setAttribute(PortalManager.PORTAL_CURRENTCATEGORY , ccat);
+	  ccatId = "_"+ccat.getId();
+	}
+	
+  String  feedCacheId = "PortletFeed_" + feedFormat + "_" + box.getId() + "_" + lang + pcatId + ccatId;
+  boolean feedCacheDisabled = isLogged;
+	
+	if (accessDenied == true) {
+%>
+<root>Acces Denied</root>
+<%	
+		return;
+	}
+  Class[] invalidClassArray = box.getResolvedInvalidClass();
+  if (Util.notEmpty(invalidClassArray)) {
+    invalidClassArray = (Class[]) Util.insertArray(invalidClassArray, invalidClassArray.length, PortletFeed.class);
+  } else {
+    invalidClassArray = new Class[] { PortletFeed.class };
+  }
+%>
+<% request.setAttribute("zone","FeedArea"); %>
+<%@ include file="/admin/stat/doStat.jspf" %>

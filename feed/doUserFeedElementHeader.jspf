@@ -1,0 +1,43 @@
+<%--
+  @Summary: This file will dynamicaly include a jsp to display all elements for a
+            specified jcms Content Type in a given feed format.
+           For example, for type FileDocument, in Rss2, include the jsp file
+           /types/FileDocument/doFileDocumentRss2ElementDisplay.jsp if it exists.
+           If the customized JSP does not exists, execute the code already available in the feed,
+           must be used with doUserFeedElementFooter.jsp.           
+  @Customizable: FALSE
+  @Since: jcms-4.1
+--%>
+<%
+	// key not set ==> jsp check to be done
+	// string value ==> path to jsp
+	// null value ==> no jsp
+	Class pubClass = itPub.getClass();
+	if (jspMap.containsKey(pubClass) == false)
+	{
+		String itPubClassSN = Util.getClassShortName(itPub);
+		String userJspPath = "/types/" + itPubClassSN + "/do" + itPubClassSN + feedFormat + "ElementDisplay.jsp";
+		File userJspFile = new File(channel.getRealPath(userJspPath));
+		if (userJspFile.exists() == true) {
+			jspMap.put(pubClass, userJspPath);
+		}	else {
+			jspMap.put(pubClass, null);
+		}
+	}
+	String userJspPath = (String) jspMap.get(pubClass);
+	if (userJspPath != null)
+	{
+    ServletUtil.backupAttribute(pageContext , "feedLang");
+    ServletUtil.backupAttribute(pageContext , "feedItPub");
+    ServletUtil.backupAttribute(pageContext , "feedItPublicationCounter");
+    request.setAttribute("feedLang", lang);
+    request.setAttribute("feedItPub", itPub);
+    request.setAttribute("feedItPublicationCounter", itPublicationCounter);
+    %><jsp:include page='<%= userJspPath %>' /><%
+    ServletUtil.restoreAttribute(pageContext , "feedLang");
+    ServletUtil.restoreAttribute(pageContext , "feedItPub");
+    ServletUtil.restoreAttribute(pageContext , "feedItPublicationCounter");
+
+	} else {
+
+%>

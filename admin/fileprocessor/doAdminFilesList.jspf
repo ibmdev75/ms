@@ -1,0 +1,301 @@
+<%@ page import="com.jalios.util.*" %><%
+%><%@ page import="com.jalios.io.*" %><%
+%><%@ page import="com.jalios.jcms.*" %><%
+%><%@ page import="com.jalios.jcms.db.*" %><%
+%><%@ page import="com.jalios.jcms.fileprocessor.*" %><%
+%><%@ page import="com.jalios.jcms.fileprocessor.ui.*" %><%
+%><%@ page import="com.jalios.jcms.fileprocessor.repository.*" %><%
+%><%
+
+  Map parameterMap = new HashMap();
+  parameterMap.put("mainTab", String.valueOf(FileProcessorAdminHandler.TABINDEX_FILES_STATUS));
+  
+  // 1. Build refining Criterion
+  Criterion fpiCriterion = getProcessingInfoListCriterion(formHandler.getActionComponent(), formHandler.getStatus(), formHandler.getText());
+  
+  // 2. Count query with restritected criteria
+  int restrictedFileSetNbr = getProcessingInfoListCriterionCount(repository, fpiCriterion);
+%>
+<jalios:pager name='fpPagerHandler' 
+              declare='true' 
+              action='init' 
+              size='<%= restrictedFileSetNbr %>'
+              parameterMap="<%= parameterMap %>"
+          />
+<%
+  // 3. List query
+ PageResult<FileProcessingInfo> fpiList = getProcessingInfoList(repository, 
+    fpPagerHandler.getStart(),
+    fpPagerHandler.getPageSize(),
+    fpPagerHandler.getSort(),
+    fpPagerHandler.isReverse(),
+    fpiCriterion, restrictedFileSetNbr);
+
+  boolean displayFilter = Util.notEmpty(formHandler.getActionComponent()) || 
+                          Util.notEmpty(formHandler.getStatus()) ||
+                          Util.notEmpty(formHandler.getText());
+%>
+
+<div class='tab-page'>
+  <h2 class="tab"><jalios:icon src='<%= FileProcessorUIUtil.ICON_FILE_STATUS %>'  title='<%= encodeForHTMLAttribute(glp("fileprocessor.adm.tab.status")) %>'  /> <%= glp("fileprocessor.adm.tab.status") %></h2>
+  <div class='tabinfo fileslist'>
+  
+<% formName = "filtersOnFiles"; %>
+<form action='<%= action %>' method='post' name='<%= formName %>' id='<%= formName %>'>
+
+  <div class="navbar navbar-default navbar-table-header">
+<%-- Above the list of files : search form etc. --%>
+	<div class="container-fluid">
+        
+      <ul class="nav navbar-nav navbar-left">
+        <%-- title --%>
+        <li>
+          <a class="navbar-brand"> <%= glp("fileprocessor.adm.filestatus.titleprocessedfiles") %> (<%= ( (allPersistedFilesSetNbr != restrictedFileSetNbr) ? restrictedFileSetNbr + "/" : "" ) + allPersistedFilesSetNbr%>)</a>
+        </li>
+        <%-- filter toggle --%>
+        <li class="dropdown">
+          <a href='#' class="dropdown-toggle <%= displayFilter ? "dropup" : "" %>" data-jalios-target=".fp-navbar-filters|this" data-jalios-action="toggle:hide toggle:dropup" onclick="return false;">
+            <jalios:icon src='filter' /> <span class="hidden-xs hidden-sm"><%= glp("ui.com.txt.filters") %></span> <jalios:icon src='caret' />
+          </a>
+        </li>
+      </ul>
+       
+       <%-- Text input filter --%>
+      <div class='navbar-right navbar-form'>
+        <jalios:field name='text'  value='<%= formHandler.getText() %>'  resource="field-inline">
+          <jalios:control type="<%= ControlType.TEXTFIELD %>">
+            <jalios:buffer name="BTN_ACTION"><button type="submit" class="btn btn-default"><jalios:icon src="search" /></button></jalios:buffer>
+          </jalios:control>
+        </jalios:field>
+      </div>
+        
+  </div>
+  
+  <div class="container-fluid fp-navbar-filters <%= displayFilter ? "" : "hide" %>">
+    <div class='navbar-left navbar-form'>
+  
+      <%-- COMPONENT Filter --%>
+       <jalios:field required="true" resource="field-inline">
+        <select id="Id_actionComponent" class='form-control' name="actionComponent" size="1" aria-required="true" onchange='javascript:<%= formName %>.submit()'>
+         <option value=""><%= glp("fileprocessor.adm.fileactioncomponent.fileactioncomponentchoice.all") %></option>
+         <%
+             String actionComponentName;
+             String actionComponentClassName;
+         %>
+         <optgroup label="<%= glp("fileprocessor.adm.fileactioncomponent.fileactioncomponentchoice.processors") %>">
+         <jalios:foreach collection="<%= repository.getFileProcessorClassSet() %>" name="componentClazz" type="Class" counter="itActionComponentCounter">
+           <%
+             FileActionComponent component = repository.getActionComponent(componentClazz);
+             actionComponentName = component.getName();
+             actionComponentClassName = componentClazz.getName();
+           %>
+           <option value="<%= actionComponentClassName %>" <%= (formHandler.getActionComponent().equals(actionComponentClassName)) ? "selected" : "" %>><%= actionComponentName %></option>
+         </jalios:foreach>
+         </optgroup>
+         <optgroup label="<%= glp("fileprocessor.adm.fileactioncomponent.fileactioncomponentchoice.parsers") %>">
+         <jalios:foreach collection="<%= repository.getFileParserClassSet() %>" name="componentClazz" type="Class" counter="itActionComponentCounter">
+           <%
+             FileActionComponent component = repository.getActionComponent(componentClazz);
+             actionComponentName = component.getName();
+             actionComponentClassName = componentClazz.getName();
+           %>
+           <option value="<%= actionComponentClassName %>" <%= (formHandler.getActionComponent().equals(actionComponentClassName)) ? "selected" : "" %>><%= actionComponentName %></option>
+         </jalios:foreach>
+         </optgroup>
+        </select>
+        
+       </jalios:field>
+       
+       <%-- STATUS Filter --%>
+        <%!
+          public static Map<String, String> FILES_STATUS_SELECT_VALUES;
+          
+          static {
+            FILES_STATUS_SELECT_VALUES = new LinkedHashMap<String, String>();
+            FILES_STATUS_SELECT_VALUES.put("", "fileprocessor.adm.filestatus.statuschoice.all");
+            FILES_STATUS_SELECT_VALUES.put("-", "--------------------");
+            FILES_STATUS_SELECT_VALUES.put("indexed", "fileprocessor.adm.filestatus.statuschoice.indexed");
+            FILES_STATUS_SELECT_VALUES.put("ok", "fileprocessor.adm.filestatus.statuschoice.ok");
+            FILES_STATUS_SELECT_VALUES.put("error", "fileprocessor.adm.filestatus.statuschoice.error");
+            FILES_STATUS_SELECT_VALUES.put("blacklisted", "fileprocessor.adm.filestatus.statuschoice.blacklisted");
+            FILES_STATUS_SELECT_VALUES.put("globallyblacklisted", "fileprocessor.adm.filestatus.statuschoice.globallyblacklisted");
+            FILES_STATUS_SELECT_VALUES.put("partiallyblacklisted", "fileprocessor.adm.filestatus.statuschoice.partiallyblacklisted");
+            FILES_STATUS_SELECT_VALUES.put("ignored", "fileprocessor.processing-status.IGNORED");
+          }
+        %>
+        <% String comboHtmlAttributes = "onchange='javascript:" + formName + ".submit()'"; %>
+        <jalios:field name='status' value='<%= formHandler.getStatus() %>' required="true" resource="field-inline">
+          <jalios:control settings='<%= new EnumerateSettings()
+                                                .select()
+                                                .enumValues(FILES_STATUS_SELECT_VALUES.keySet())
+                                                .enumLabels(FILES_STATUS_SELECT_VALUES.values())
+                                                .htmlAttributes(comboHtmlAttributes) %>' />
+        </jalios:field>
+     </div>
+    </div>
+  
+  
+  
+  </div>
+
+ <%@include file="doAdminFilesListHiddenParams.jspf" %>
+</form>
+
+<%-- The list of files --%>
+<div>
+   <% formName = "fpFilesListForm"; %>
+   <form action='<%= action %>' method='post' name='<%= formName %>' id='<%= formName %>' >
+   <input type="hidden" name="status" value="<%= formHandler.getStatus() %>" />
+   <input type="hidden" name="text" value="<%= encodeForHTMLAttribute(formHandler.getText()) %>" />
+   <input type="hidden" name="actionComponent" value="<%= formHandler.getActionComponent() %>" />
+   <%@include file="doAdminFilesListHiddenParams.jspf" %>
+<table class="table-data table-condensed">
+	<thead>
+		<tr>
+      <th class='fit'><input type='checkbox' onclick='javascript:checkAll(document.<%= formName %>, "fileShortName", this)' title="<%= glp("ui.com.alt.check-all") %>" /></th>
+      <th class='fit'>&nbsp;</th>
+		  <th>
+		    <%= glp("fileprocessor.adm.filestatus.status") %>
+		    <%-- TODO <jalios:pager name='fpPagerHandler' action='showSort' sort='status'  />--%>
+		  </th>
+		  <th>
+		    <%= glp("fileprocessor.adm.filestatus.processfileudate") %>
+		    <jalios:pager name='fpPagerHandler' action='showSort' sort='<%= FileProcessingInfo.Fields.CDATE_COLUMN %>'/>
+		  </th>
+      <th>
+        <%= glp("fileprocessor.adm.filestatus.uploadfileudate") %>
+        <%-- TODO <jalios:pager name='fpPagerHandler' action='showSort' sort='uploadudate'/> --%>
+      </th>
+		  <th>
+		    <%= glp("fileprocessor.adm.filestatus.file") %>
+		    <jalios:pager name='fpPagerHandler' action='showSort' sort='<%= FileProcessingInfo.Fields.FILENAME_COLUMN %>'/>
+		  </th>
+		</tr>
+	</thead>
+	<tbody>
+		<jalios:foreach counter='itCounter'
+		                collection="<%= fpiList.getResultList() %>" 
+		                name="itFileInfo" 
+		                type="FileProcessingInfo">
+		<% 
+       int counter = fpPagerHandler.getStart() + itCounter.intValue();
+		   String filename = itFileInfo.getFilename();
+       File file = repository.getFile(filename);
+		%>
+		<tr> 
+      <td class="fit"><input type="checkbox" name="fileShortName" value="<%= filename %>" /></td>
+		  <td class="fit"><%= counter %>.</td>
+		  <td>
+     <%
+       ProcessingStatus processingStatus = itFileInfo.getProcessingStatusEnum();
+       ProcessingStatus indexingStatus = itFileInfo.getIndexingStatusEnum();
+     
+       // Merge both processing & indexing status in one global icon
+       if (processingStatus == ProcessingStatus.GLOBALLY_BLACKLISTED || indexingStatus == ProcessingStatus.GLOBALLY_BLACKLISTED ) {
+         %><%= getStatusIconHtml(ProcessingStatus.GLOBALLY_BLACKLISTED) %><%
+       }
+       else if (processingStatus == ProcessingStatus.PARTIALLY_BLACKLISTED || indexingStatus == ProcessingStatus.PARTIALLY_BLACKLISTED ) {
+         %><%= getStatusIconHtml(ProcessingStatus.PARTIALLY_BLACKLISTED) %><%
+       }
+       else if (processingStatus == ProcessingStatus.ERROR || indexingStatus == ProcessingStatus.ERROR ) {
+         %><%= getStatusIconHtml(ProcessingStatus.ERROR) %><%
+       }
+       else if (processingStatus == ProcessingStatus.IGNORED && indexingStatus == ProcessingStatus.IGNORED) {
+         %><%= getStatusIconHtml(ProcessingStatus.IGNORED) %><%
+       }
+       else if (
+            (processingStatus == ProcessingStatus.SUCCESSFUL && indexingStatus == ProcessingStatus.SUCCESSFUL) ||
+            (processingStatus == ProcessingStatus.IGNORED && indexingStatus == ProcessingStatus.SUCCESSFUL) ||
+            (processingStatus == ProcessingStatus.SUCCESSFUL && indexingStatus == ProcessingStatus.IGNORED)
+           ) {
+         %><%= getStatusIconHtml(ProcessingStatus.SUCCESSFUL) %><%
+       }
+       
+       // Dislay the successful indexing icon
+       if (indexingStatus == ProcessingStatus.SUCCESSFUL) {
+         %><jalios:icon src='<%= FileProcessorUIUtil.ICON_FILE_INDEXED %>'
+                alt='<%= glp("fileprocessor.adm.icontitle.indexed") %>'
+                title='<%= glp("fileprocessor.adm.icontitle.indexed") %>'/><%
+       }
+     %>
+		  </td>
+		  <td>
+        <jalios:date date="<%= itFileInfo.getUdate() %>" format="short" />
+        <jalios:time date="<%= itFileInfo.getUdate() %>" format='<%= "HH:mm:ss" %>' />
+		  </td>
+      <td>
+        <% if (file.exists()) { 
+           Date uploadDate = new Date(file.lastModified()); %>
+        <jalios:date date="<%= uploadDate %>" format="short" />
+        <jalios:time date="<%= uploadDate %>" format='<%= "HH:mm:ss" %>' />
+        <% } else { %>-<% } %>
+      </td>
+		  <td class="showFileDetail<%= Util.arrayContains(formHandler.getAvailableFilesShortName(), filename) ? " open" : "" %>" >
+    <%
+      ServletUtil.backupAttribute(pageContext , "log");
+      ServletUtil.backupAttribute(pageContext , "file");
+      ServletUtil.backupAttribute(pageContext , "fileUnreachable");
+      request.setAttribute("log", itFileInfo);
+      request.setAttribute("file", file);
+    
+      // Display FileDocument edit icon for JCMS_UPLOAD repository
+      if (RepositoryManager.JCMS_UPLOAD_REPOSITORY.equals(repository.getId())) {
+        FileDocument fd = FileDocument.getFileDocumentFromFile(file);
+        %><jalios:edit pub="<%= fd %>" /><% 
+        if (fd == null) {
+          request.setAttribute("fileUnreachable", Boolean.TRUE);
+        }
+      }
+    
+      // Invoke plugin target "FILEPROCESSOR_FILEDETAIL_{RepositoryName}" if a plugins wants to add information 
+      String targetName = "FILEPROCESSOR_FILEDETAIL_" +  repository.getId() ; 
+      %><jalios:include target='<%= targetName %>' /><%
+      
+      // Display details information on each component log
+      boolean fileUnreachable = Util.toBoolean(request.getAttribute("fileUnreachable"), false);
+      %><%@include file="doAdminFileDetail.jspf" %><%
+
+      ServletUtil.restoreAttribute(pageContext , "log");
+      ServletUtil.restoreAttribute(pageContext , "file");
+      ServletUtil.restoreAttribute(pageContext , "fileUnreachable");
+    %>
+		  </td>
+		</tr>
+	</jalios:foreach>
+	</tbody>
+</table>
+<jalios:pager name='fpPagerHandler'/>
+<br />
+   <%
+     boolean showGlobalUnBlacklistForm = Util.getString(formHandler.getStatus(), "").indexOf("blacklisted") != -1;
+   %>
+   <% if (showGlobalUnBlacklistForm) { %>
+     <input  type="submit" 
+             class='btn btn-default confirm' 
+             name='opUnBlacklist' 
+             value="<%= glp("fileprocessor.adm.unblacklist") %>" 
+             title="<%= glp("fileprocessor.adm.unblacklist") %>" />
+   <% } %>
+     <input  type="submit" 
+             class='btn btn-default confirm' 
+             name='opGlobalBlacklist' 
+             value="<%= glp("fileprocessor.adm.globalBlacklist") %>" 
+             title="<%= glp("fileprocessor.adm.globalBlacklist") %>" />
+             
+      <input  type="submit" 
+              class='btn btn-primary confirm' 
+              name='opSubmitAgain' 
+              value="<%= glp("fileprocessor.adm.submitagain") %>" 
+              title="<%= glp("fileprocessor.adm.submitagain") %>" />
+              
+      <input  type="submit" 
+              class='btn btn-danger confirm' 
+              name='opReProcessNonBlackListedFiles' 
+              value="<%= glp("fileprocessor.adm.reprocessnonblacklistedfiles") %>" 
+              title="<%= glp("fileprocessor.adm.reprocessnonblacklistedfiles") %>" />
+   </form>
+</div>
+
+
+  </div> <%-- end of class='tabinfo' --%>
+</div>

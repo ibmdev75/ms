@@ -1,0 +1,40 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+.homepage .homepage-header {
+  background-image: url("../images/jalios/layout/bg/jaliosHeader.png");
+  height: 110px;
+  margin-bottom: 20px;
+  border-bottom: 4px solid #eeeeee;
+}
+.homepage .homepage-news-box {
+  margin-bottom: 40px;
+}
+.homepage .homepage-big-icon {
+  height: 80px;
+  width: 80px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background-color: #777777;
+  border-radius: 50%;
+  color: #FFF;
+  font-size: 40px;
+}
+.homepage .homepage-big-icon.homepage-big-icon-blue {
+  background-color: #5bc0de;
+}
+.homepage .homepage-big-icon.homepage-big-icon-green {
+  background-color: #5cb85c;
+}
+.homepage .homepage-big-icon.homepage-big-icon-orange {
+  background-color: #f0ad4e;
+}
+.homepage .homepage-footer {
+  border-top: 1px solid #eeeeee;
+  padding: 20px;
+  color: #777777;
+  text-align: center;
+}
+.homepage .homepage-footer A {
+  color: #777777;
+}

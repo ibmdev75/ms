@@ -1,0 +1,24 @@
+<%--
+  @Summary: Access Control Manager
+  @Since: jcms-7.0 
+--%>
+
+  <%-- ************************************************************* --%>
+  <%-- *** ACL List ************************************************ --%>
+  <div class="tab-page" id="acl-list">
+  <h2 class="tab"><% /* %>ACL<% */ %><%= glp("accesscontrol.acl-list.title") %></h2>
+
+   <%
+    boolean showEditAcl = manageAcl;
+    boolean showTitle = false;
+    boolean showRadioInsert  = false;
+    boolean showCheckInsert  = false;
+    boolean showWorkspaceAclOnly = aclWorkspaceFilter || !isAdmin;
+    boolean showWorkspaceAclState = !showWorkspaceAclOnly;
+    boolean showGroupCount  = true;
+    boolean showMemberCount = true;
+    boolean showDelete = isAdmin;
+   %>
+   <%@ include file="/admin/doAclList.jspf" %>
+  
+  </div>

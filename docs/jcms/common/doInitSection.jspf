@@ -1,0 +1,8 @@
+<%@ include file="/jcore/doInitPage.jspf" %>
+<%
+// Checks if the logged member has not the rights to access to this page
+if (!checkAccess("admin/dev/")) {
+  sendForbidden(request, response);
+  return;
+}
+%>

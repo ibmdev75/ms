@@ -1,0 +1,6 @@
+# Enter a space-separated list of IP addresses authorized to access admin/statusXml.jsp. 
+# You can enter prefix of IP address to match sub-network (eg 192.168.).
+#
+# Examples: 
+# authorized-ips: 127.0.0.1 192.168.
+authorized-ips: 127.0.0.1

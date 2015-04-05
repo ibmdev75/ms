@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JCMS-SvnTools" default="usage" basedir="./../../../">
+
+  <!--
+  
+   As of current implementation this ant file only provides one
+   task which helps in preparing the webapp before the initial commit
+   inside a SVN repository.
+
+  -->
+
+  <property name="webappDir" value="${basedir}"/>
+  <property name="webinfDir" value="${webappDir}/WEB-INF"/>
+  <property name="dataDir"   value="${webappDir}/WEB-INF/data"/>
+  
+  <!-- =================================================================== -->
+  
+  <!-- Resources to be DELETED before initial commit in SVN -->
+  <resources id="jcms.resources.delete">
+    <fileset refid="jcms.fileset.unmodified-generated-files"/>
+    <fileset dir="${webappDir}"><patternset refid="jcms.pattern.delete"/></fileset>
+    <dirset dir="${webappDir}"><patternset refid="jcms.pattern.delete"/></dirset>
+  </resources>
+
+  <!-- SubFileSet : Resources as returned by JCMS internal selectors -->
+  <fileset dir="${webappDir}/types" id="jcms.fileset.unmodified-generated-files">
+    <custom classname="com.jalios.jcms.tools.ant.GeneratedFileSelector">
+      <param name="extensions" value="jsp" />
+    </custom>
+  </fileset>
+      
+  <!-- SubFileSet : Files & Directories that can be specified from ant -->
+  <patternset id="jcms.pattern.delete">
+    <!-- Generated Classes -->
+    <include name="WEB-INF/classes/generated/**" />
+    <!-- Working files -->
+    <include name="WEB-INF/data/backups/**" />
+    <include name="WEB-INF/data/jsynclog/**" />
+    <include name="WEB-INF/data/logs/**" />
+    <include name="WEB-INF/data/lucene/**" />
+    <include name="WEB-INF/data/stats/**" />
+    <include name="WEB-INF/data/monitor.xml"/>
+    <!-- Temporary files -->
+    <include name="WEB-INF/jcmswork/**" />
+  </patternset>
+  
+  <!-- =================================================================== -->
+  <!-- == TARGET ========================================================= -->
+  
+  
+  <!-- Default task : does nothing, to prevent unwanted invocation of other more risky tasks -->
+  <target name="usage"
+          description="Default taks which simply displays usage of this ant file">
+    <echo message="This ant file provides convenient tasks to prepare/use a JCMS webapp with a SVN repository."></echo>
+    <echo message="See documentation for more information on how to use it."></echo>
+  </target>
+  
+  
+  <target name="print-files-to-delete"
+          description="Print the list of files that can/will be DELETED before initial commit in SVN">
+
+    <echo message="*** Resources to be deleted..."></echo>
+    <pathconvert refid="jcms.resources.delete"  property="resourcesToDelete" pathsep="${line.separator}" />
+    <echo message="${resourcesToDelete}"/>
+  </target>
+  
+
+  <target name="prepare-initial-commit"
+          description="*DANGEROUS* Cleanup the webapp before the initial commit in the SVN repos. Open file ant-svn.xml for more information.">
+    <description>
+      DO NOT INVOKE THIS TASK WITHOUT READING THIS!
+      This task prepare the webapp for the initial commit of the webapp in SVN.
+      1. It *DELETES* all files that should not be included in the repository :
+        - Generated jsp and classes for which signature has not changed and that can be regenerated
+        - Working files and directory not relevant *in a development environment*
+        - Temporary files and directory used by JCMS
+      2. It renames references files (store.xml and custom.prop)
+    </description>
+    
+    <echo message="*** Deleting files..."></echo>
+    <delete verbose="true" includeemptydirs="true"><resources refid="jcms.resources.delete"/></delete>
+    
+    <echo message="*** Renaming reference files..."></echo>
+    <echo message="Renaming store.xml to store.xml.ref"></echo>
+    <move file="${dataDir}/store.xml" tofile="${dataDir}/store.xml.ref" failonerror="false"/>
+    <echo message="Renaming custom.prop to custom.prop.ref"></echo>
+    <move file="${dataDir}/custom.prop" tofile="${dataDir}/custom.prop.ref" failonerror="false"/>
+
+  </target>
+  
+</project>

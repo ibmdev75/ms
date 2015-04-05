@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Jalios Plugin Test Suite</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <!-- jquery -->
+  <script src="../../vendor/jquery.js"></script>
+
+  <!-- qunit -->
+  <link   href="../../vendor/qunit.css" rel="stylesheet"  type="text/css" media="screen" />
+  <script  src="../../vendor/qunit.js"></script>
+
+  <!-- bootstrap -->
+  <!-- <link   href="../../../../css/jalios/core/core.css" rel="stylesheet"  type="text/css" media="all" /> -->
+  
+  <!--  lib -->
+  <script src="../../../lib/json2.js"></script>
+  <script src="../../../lib/rsh.js"></script>
+  <script src="../../../lib/jquery.console.js"></script>
+  <script src="../../../lib/jquery.idle-timer.js"></script>
+  
+  <!-- jalios -->
+  <script src="../../../jalios/core/jalios-common.js"></script>
+  <script src="../../../jalios/languages/en.js"></script>
+  <script src="../../../jalios/core/jalios-data-broker.js"></script>
+  
+  <!--  sources -->
+  <script src="../../../lib/bootstrap20/bootstrap-tab.js"></script>
+  <script src="../../../jalios/core/jalios-tab.js"></script>
+
+  <!-- unit tests -->
+  <script src="unit/jalios-tab.js"></script>
+  
+</head>
+<body>
+
+  <div>
+    <h1  id="qunit-header">Jalios Plugin Test Suite</h1>
+    <h2  id="qunit-banner"></h2>
+    <h2  id="qunit-userAgent"></h2>
+    <ol  id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </div>
+
+<div style="display: none;">
+
+	<div class="tab-pane" id="rootPane">  
+	  <div class="tab-page">
+		  <h2 class="tab">Home</h2>
+		  <p>1. lorem ipsum dolor sit amet</p>
+		</div>
+		
+		<div class="tab-page">
+		  <h2 class="tab">Profile</h2>
+		  <p>2. lorem ipsum dolor sit amet</p>
+		  <div class="tab-pane" id="subTab">
+		    <div class="tab-page">
+	        <h2 class="tab">Sub Profile 1</h2>
+	        <p>1. lorem ipsum dolor sit amet</p>
+	      </div>
+	      <div class="tab-page">
+	        <h2 class="tab">Sub Profile 2</h2>
+	        <p>1. lorem ipsum dolor sit amet</p>
+	      </div>
+	      <div class="tab-page">
+	        <h2 class="tab">Sub Profile 3</h2>
+	        <p>1. lorem ipsum dolor sit amet</p>
+	      </div>
+		  </div>
+		</div>
+		
+		<div class="tab-page">
+		  <h2 class="tab">Messages</h2>
+		  <p>3. lorem ipsum dolor sit amet</p>
+		</div>
+		
+		<div class="tab-page">
+		  <h2 class="tab">Settings</h2>
+		  <p>4. lorem ipsum dolor sit amet</p>
+		</div>
+  </div>
+
+</div>
+
+</body>
+</html>

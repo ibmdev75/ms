@@ -1,0 +1,29 @@
+<ul class="contact-infos">
+  <%-- E-mail --%>
+  <% String email = itMember.getEmail(); %>
+  <% if (Util.notEmpty(email) && (itMember.isEmailVisible() || isAdmin)) { %>
+  <li><jalios:icon src="email" alt="email"  title='<%= glp("ui.adm.mbr-edit.lbl.mail") %>' /> <a href='mailto:<%= email %>'><%= email %></a></li>
+  <% } %>      
+  
+  <%-- Phone --%>
+  <% String phone =  itMember.getPhone(); %>
+  <% if (Util.notEmpty(phone)) { %>
+  <li>
+    <jalios:icon src="telephone" alt="phone"  title='<%= glp("ui.adm.mbr-edit.lbl.phone") %>' />
+    <jalios:phone number="<%= phone %>" region="<%= itMember.getCountry() %>"/>
+  </li>
+  <% } %>
+
+  <%-- Mobile --%>
+  <% String mobile =  itMember.getMobile(); %>
+  <% if (Util.notEmpty(mobile)) { %>
+  <li>
+    <jalios:icon src="phone" alt="mobile"  title='<%= glp("ui.adm.mbr-edit.lbl.mobile") %>' />
+    <jalios:phone number="<%= mobile %>" region="<%= itMember.getCountry() %>"/>
+  </li>
+  <% } %>
+
+  <%-- Hook --%>
+  <jalios:include target="FRONT_MEMBER_EMAIL_PHONE" targetContext="li"/>
+
+</ul>

@@ -1,0 +1,9 @@
+<%@ page import="com.jalios.jcms.analytics.AnalyticsManager" %><%
+  // Add member session tracking info
+  if (trace != null) {
+    trace.put("zone", request.getAttribute("zone"));
+  }
+  
+  // write new analytics data
+  AnalyticsManager.appendPageEvent(request, startPageRequest);
+%>

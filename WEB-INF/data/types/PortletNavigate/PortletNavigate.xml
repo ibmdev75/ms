@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletNavigate" reviewable="false" debatable="false" categoryTab="false" categoryRequired="false" visible="true" superclass="generated.AbstractPortletSkinable" unitFieldEdition="false" audienced="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="rootCategory" tab="general" editor="category" required="false" compactDisplay="false" type="java.util.TreeSet" exclusive="true" root="j_3" ml="false" searchable="false" descriptionType="tooltip" chooser="tree" displayRoot="true" />
+    <field name="refineCategory" tab="general" editor="enumerate" required="false" compactDisplay="false" type="String" valueList="None | Portal | Current | WorkspaceCategories" ml="false" searchable="false" descriptionType="tooltip" chooser="listbox" html="false" checkHtml="true" />
+    <field name="levels" tab="general" editor="int" required="false" compactDisplay="false" type="int" default="1" ml="false" searchable="false" minValue="1" maxValue="1000" unitPos="after" descriptionType="tooltip" html="false" />
+    <field name="hideWhenNoResults" tab="advanced" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="navigatePortlet" tab="advanced" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" ml="false" descriptionType="text" searchable="false" />
+    <field type="super" />
+  </fields>
+  <tabs>
+    <tab id="advanced" />
+    <tab id="general" /> 
+  </tabs> 
+</type>

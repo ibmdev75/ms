@@ -1,0 +1,210 @@
+/* <?xml version="1.0" encoding="UTF-8"?><XMLCSS> */
+
+@import "../jalios/core/init.less";
+
+
+// ------------------------------------------
+//  COMMON CSS
+// ------------------------------------------
+
+.form                  { color: @grayDark; border: 1px solid @grayDark; }
+.Portlet               { }
+.PortletSkinable       { }
+
+/* Member photo thumnail */
+.Member.fullDisplay IMG.thumbnail {
+  margin: 5px 5px 5px 0;
+}
+
+
+// ------------------------------------------
+//  WEBPAGE
+// ------------------------------------------
+
+.WebPage.fullDisplay,
+.WebPage.resultDisplay {
+  A.thumbnail SPAN{
+   display: block;
+   color: #888888;
+   background-color: #EEEEEE;
+   text-align: center;
+  }
+}
+
+
+// ------------------------------------------
+//  PORTLET ROW & COLUMN CSS
+// ------------------------------------------
+
+/* <CSS label="Standard" value="Standard" type="PortletRow" target="SkinItem" description="Style for all PortletRow" /> */
+.PortletRow_Standard,
+.PortletColumn_Standard {
+  .tabMain { background-color: #DDDDDD; }
+  .tabNav  {
+    A                { background-color: #888888; color: #FFFFFF; }
+    A:hover          { background-color: #DDDDDD; color: #333333; }
+    A.active, A:link.active, 
+    A:visited.active { background-color: #DDDDDD; color: #333333; border-bottom-color: #DDDDDD; }
+  }
+}
+
+// ------------------------------------------
+//  QUERY/FOREACH REFINED CSS
+// ------------------------------------------
+
+/* <CSS label="Standard" value="Standard" type="PortletQueryForeachDetail" target="SkinItem" description="Style for all PortletQueryForeach" /> */
+.PortletQueryForeachDetail .title { 
+  background-repeat: no-repeat;
+  background-position: 2px 6px; 
+  padding-left: @baseline;
+}
+
+.PortletQueryForeachDetail_Standard {
+  .result      { margin-bottom: @baseline; }
+  .title       { font-weight: bold; background-repeat: no-repeat; background-position: left 4px; padding-left: @baseline;  }
+  .abstract P  { margin: 0; padding: 0; }
+  .author      { font-weight: bold;  }
+  .date        { font-style: italic; }
+  .PagerLink   { font-weight: bold;  }
+  .addNew      { font-weight: bold;  }
+  .categories  { display: inline; }
+}
+
+/* <CSS label="Title" value="Title" type="PortletQueryForeachDetail" target="SkinItem" description="Style for all PortletQueryForeach" /> */
+.PortletQueryForeachDetail_Title                  {
+  .title       { font-weight: bold; background-repeat: no-repeat; background-position: left 4px; padding-left: @baseline; }
+  .abstract P  { margin: 0; padding: 0; }
+  .PagerLink   { font-weight: bold;  }
+  .addNew      { font-weight: bold;  }
+}
+
+// ------------------------------------------
+//  QUERY/FOREACH CSS
+// ------------------------------------------
+
+/* <CSS label="Standard" value="Standard" type="PortletQueryForeach" target="SkinItem" description="Style for all PortletNavigate" /> */
+.PortletQueryForeach_Standard {
+  TD              { font-size: @font-size-base - 1; }
+  .abstractDetail { font-size: @font-size-base - 1; }
+  .PagerLink      { font-weight: bold;        }
+  .addNew      { font-weight: bold;  }
+}
+
+// ------------------------------------------
+//  NAVIGATE CSS
+// ------------------------------------------
+
+/* <CSS label="White" value="White" type="PortletNavigate" target="SkinItem" description="Style for all PortletNavigate" /> */
+.PortletNavigate_White { 
+  color: #FFF;
+  white-space: nowrap;
+  
+  A {
+  	color: #FFF;
+  	
+  	&:hover {
+  	  color: @black;
+  	}
+  }
+}
+
+/* <CSS label="Black" value="Black" type="PortletNavigate" target="SkinItem" description="Style for all PortletNavigate" /> */
+.PortletNavigate_Black { 
+  color: @black;
+  white-space: nowrap;
+  
+  A {
+  	color: @black;
+  	
+  	&:hover {
+  	  color: #428bca;
+  	}
+  }
+}
+
+/* <CSS label="JSS" value="JSS" type="PortletNavigate" target="SkinItem" description="Style for Jalios Simple Skin PortletNavigate" /> */
+.PortletNavigate_JSS {
+  color: #CC0000; 
+  height: @baseline * 1.5; 
+  vertical-align: top; 
+  white-space: nowrap;
+  A { color: #CC0000; }
+}
+
+
+// ------------------------------------------
+//  MENU CSS
+// ------------------------------------------
+
+/* <CSS label="White" value="White" type="PortletMenu" target="SkinItem" description="Style for all PortletMenu" /> */
+.PortletMenu_White { 
+  color: #FFF; white-space: nowrap;
+  A {  color: #FFF; font-weight: bold; }
+}
+
+/* <CSS label="JSS" value="JSS" type="PortletMenu" target="SkinItem" description="Style for Jalios Simple Skin PortletNavigate" /> */
+.PortletMenu_JSS { 
+  color:#CC0000; white-space: nowrap;
+  height:@baseline * 1.5; 
+  vertical-align: top; 
+  white-space: nowrap;
+  A {  color: #CC0000; }
+}
+
+// ------------------------------------------
+//  LOGIN/LOGOUT CSS
+// ------------------------------------------
+
+/* <CSS label="Standard" value="Standard" type="PortletLogin" target="SkinItem" description="Style for all PortletLogin" /> */
+.PortletLogin_Standard {
+  .Login {}
+  .Password {}
+}
+
+/* <CSS label="Modern" value="Modern" type="PortletLogin" target="SkinItem" description="Style for all PortletLogin" /> */
+.PortletLogin_Modern {
+  INPUT { }
+	TD    { }
+	.Intro            { padding: 3px; border: 1px solid #999; background-color: #DDD; }
+	.Login            { padding-top: 3px;  }
+	.formInfo         { padding: 3px 0px;  }
+	.formInfo INPUT   { margin-right: 3px; }
+}
+
+// ------------------------------------------
+//  SIGNUP CSS
+// ------------------------------------------
+
+/* <CSS label="Standard" value="Standard" type="PortletSignUp" target="SkinItem" description="Style for all PortletSignUp" /> */
+.PortletSignUp_Standard  TD { }
+
+
+// ------------------------------------------
+//  SEARCH CSS
+// ------------------------------------------
+
+/* <CSS label="Standard" value="Standard" type="PortletSearch" target="SkinItem" description="Style for all PortletSearch" /> */
+.PortletSearch_Standard  TD  A  { color: white; text-decoration:none }
+
+// ------------------------------------------
+//  TOPMEMBER CSS
+// ------------------------------------------
+
+/* <CSS label="Standard" value="Standard" type="PortletTopMember" target="SkinItem" description="Style for all PortletTopMember" /> */
+.PortletTopMember_Standard {
+  .Title { color: @black; }
+  .Link  { color: @black; }
+}
+
+// ------------------------------------------
+//  LOCATION CSS
+// ------------------------------------------
+
+/* <CSS label="Standard" value="Standard" type="PortletLocation" target="SkinItem" description="Style for all PortletLocation" /> */
+.PortletLocation_Standard {
+  A, .prefix, .separator { }
+}
+/* </XMLCSS> */
+
+
+

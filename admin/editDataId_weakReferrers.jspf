@@ -1,0 +1,25 @@
+<%
+if (data instanceof Publication) { 
+  Publication pub = (Publication)data;
+  Set<Publication> weakReferrerSet =  JcmsUtil.select(pub.getWeakReferrerSet(), Publication.getAuthorizedSelector(loggedMember), Publication.getTitleComparator(userLang));;
+  
+%>
+<% if (Util.notEmpty(weakReferrerSet)) { %>
+<h4><%= glp("ui.work.form.lbl.weak-ref") %> (<%= Util.getSize(weakReferrerSet) %>)</h4>
+
+<table class="<%= tableCSS %>">
+  <tr>
+    <th>#</th>    
+    <th><%= glp("ui.adm.data-inspector.lbl.class") %></th>    
+    <th><%= glp("ui.adm.data-inspector.lbl.referrer") %></th>
+  </tr>
+  <jalios:foreach name="itReferrer" type="Data" collection="<%= weakReferrerSet %>"> 
+  <tr>
+    <td class="fit numeric"><%= itCounter %></td>
+    <td class="fit norwrap"><span title="<%= itReferrer.getClass().getName() %>"><%= itReferrer.getClass().getSimpleName() %></span></td>
+    <td><jalios:edit data="<%= itReferrer %>" /> <jalios:link data="<%= itReferrer %>"/></td>
+  </tr>
+  </jalios:foreach>
+</table>
+<%   } %>
+<% } %>

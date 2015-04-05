@@ -1,0 +1,48 @@
+/* ----------------------------------------------- */
+/*  KEYWORD                                        */
+/* ----------------------------------------------- */
+
+.keyword {
+  .input-group-addon, .input-group-btn {
+    width: auto;
+  }
+
+  .input-group-list {
+  	border: @keyword-border;
+
+    LI.input-group {
+      float: left;
+      width: auto;
+      margin: 2px 5px 2px 2px;
+    
+      .jalios-input-keyword {
+        display: table;
+      }
+
+      .form-control-autocomplete {
+        background: @autocomplete-bg;
+        padding: 0 0 0 10px;
+      }
+      
+      .btn-remove SPAN.jalios-icon {
+      	color: @keyword-btn-remove-color;
+      }
+    }
+    
+    LI.input-group:last-child .input-group-btn {
+      .btn-remove {
+        display: none;
+      }
+      .btn-chooser {
+        .border-right-radius(@border-radius-base);
+      }
+    }
+  }
+
+
+
+  .add-field {
+  	float: left;
+  	line-height: @input-height-base;
+  }
+}

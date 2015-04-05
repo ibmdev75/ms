@@ -1,0 +1,240 @@
+<%@page import="com.jalios.jcms.taglib.settings.SelectorSettings.SelectorType"%>
+<jalios:panel title="ui.adm.type-edit.fld.lbl.add">
+    <form method="post" action="admin/typeEditor.jsp" name="editForm" class="form-horizontal">
+    
+      <jalios:field  label="ui.com.lbl.label" name='<%= "newFieldLabels" %>' required='<%= true %>' ml='<%= channel.isMultilingual() %>'>
+        <jalios:control settings='<%= new TextFieldSettings().showLanguageChooser() %>' />
+      </jalios:field>
+
+      <%-- TAB ------------------------------------------------------- --%> 
+      <% if (Util.notEmpty(formHandler.getTabMap())) { %>
+      <jalios:field label="ui.adm.type-edit.lbl.tab">
+        <select name="tab" class="form-control">
+         <jalios:foreach collection='<%= formHandler.getTabMap().keySet() %>' name='itTabID' type='String'>
+           <option value='<%= itTabID %>'><%= formHandler.getTabLabel(itTabID) %></option>
+         </jalios:foreach>            
+        </select>
+      </jalios:field>
+      <% } %>
+
+
+      <%-- EDITOR ------------------------------------------------------- --%> 
+      <jalios:field label="ui.adm.type-edit.lbl.editor">
+            <% String fieldEditor = formHandler.getFieldEditor(); %>
+            <select class='form-control' name="editor" onchange='dispEditOptions1(this.options[this.selectedIndex].value);'>
+<% String editor;
+String[] editors = new String[]{"textfield", "textarea", "wysiwyg"};
+for (int i=0; i<editors.length; i++) { editor = editors[i]; 
+  if (formHandler.checkFieldEditorAvailability(editor)) { %>                      
+              <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed." + editor) %></option>
+<% } }
+editor = "document";
+if (formHandler.checkFieldEditorAvailability(editor)) { %>
+              <option value="<%= editor %>"  <%= "link_com.jalios.jcms.FileDocument".equals(fieldEditor) ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.doc") %></option>
+<% } %>
+<% editor = "link_com.jalios.jcms.DBFileDocument";
+if  (formHandler.checkFieldEditorAvailability(editor)) { %>
+              <option value="<%= editor %>"   <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.dbdoc") %></option>
+<% }  editors = new String[]{"image", "media", "url", "email", "password", "enumerate", "color", "query"};
+for (int i=0; i<editors.length; i++) { editor = editors[i];
+  if (formHandler.checkFieldEditorAvailability(editor)) {  %>                      
+              <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed." + editor) %></option>
+<% } } %>               <option value="">-----------------------------------</option><% 
+editors = new String[]{"date", "boolean", "int", "double", "duration"};
+for (int i=0; i<editors.length; i++) { editor = editors[i];
+  if (formHandler.checkFieldEditorAvailability(editor)) { %>                      
+              <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed." + editor) %></option>
+<% } }%>                     <option value="">-----------------------------------</option><% 
+editors = new String[]{"sqlquery", "dbrecord", "sqlresult"};
+for (int i=0; i<editors.length; i++) { editor = editors[i];
+  if (formHandler.checkFieldEditorAvailability(editor)) { %>                      
+              <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed." + editor) %></option>
+<% } }%>                <option value="">-----------------------------------</option><% 
+editors = new String[]{"category", "member", "group"};
+for (int i=0; i<editors.length; i++) { editor = editors[i];
+  if (formHandler.checkFieldEditorAvailability(editor)) { %>                     
+              <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed." + editor) %></option>
+<% } } editor = "link_" + Content.class.getName();
+if  (formHandler.checkFieldEditorAvailability(editor)) { %>
+              <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.link-content") %></option>
+<% } editor = "link_" + UserContent.class.getName();
+if  (formHandler.checkFieldEditorAvailability(editor)) { %>
+              <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.link-user-content") %></option>
+<% } editor = "link_" + PortalElement.class.getName();
+if  (formHandler.checkFieldEditorAvailability(editor)) { %>
+              <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.link-pe") %></option>
+<% } editor = "link_" + Publication.class.getName();
+if  (formHandler.checkFieldEditorAvailability(editor)) { %>
+              <option value="<%= editor %>"   <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.link-pub") %></option>
+<% } %>                 <option value="">-----------------------------------</option>
+              <jalios:foreach collection="<%= formHandler.getContentClassList() %>" name="itClass" type="Class">
+<% editor = "link_" + itClass.getName();
+if  (formHandler.checkFieldEditorAvailability(editor)) { %>
+                <option value="<%= editor %>"   <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.link", channel.getTypeLabel(itClass, userLang)) %></option>
+<% } %>
+              </jalios:foreach>
+              <jalios:if predicate='<%= formHandler.isPortletEditor() %>'>
+              <option value="">-----------------------------------</option>
+              <jalios:foreach collection="<%= formHandler.getPortletClassList() %>" name="itClass" type="Class">
+<% editor = "link_" + itClass.getName();
+if  (formHandler.checkFieldEditorAvailability(editor)) { %>
+                <option value="<%= editor %>" <%= editor.equals(fieldEditor) ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.link", channel.getTypeLabel(itClass, userLang)) %></option>
+<% } %>
+              </jalios:foreach>
+              </jalios:if>
+            </select>
+      </jalios:field>
+      
+      <%-- EDITOR PROPERTIES --%>              
+      <div id="prop2" > 
+         
+        <%-- ENUM CHOOSER ------------------------------------------------------- --%>
+        <div id="enumch" style="display:none;">
+          <jalios:field name="enumChooser" label="ui.adm.type-edit.lbl.enum-ch"  tooltip="ui.adm.type-edit.lbl.enum-ch.h">
+            <select name="enumChooser" class="form-control">
+              <option value='listbox'><%= glp("ui.adm.type-edit.lbl.listbox") %></option>
+              <option value='checkbox'><%= glp("ui.adm.type-edit.lbl.checkbox") %></option>
+              <option value='multilistbox'><%= glp("ui.adm.type-edit.lbl.multilistbox") %></option>            
+            </select>
+          </jalios:field>
+        </div>
+
+        <%-- CATEGORY CHOOSER ------------------------------------------------------- --%> 
+        <div id="catch" style="display:none;"> 
+          <jalios:field label="ui.adm.type-edit.lbl.cat-ch"  tooltip="ui.adm.type-edit.lbl.cat-ch.h">
+            <% if (formHandler.isFormEditor()) { %>
+            <input type="hidden" name="catChooser" value="listbox" />
+            <%= glp("ui.adm.type-edit.lbl.listbox") %>
+            <% } else { %>
+            <select class="form-control" name="catChooser">
+              <option value='tree'><%= glp("ui.adm.type-edit.lbl.tree") %></option>
+              <option value='listbox'><%= glp("ui.adm.type-edit.lbl.listbox") %></option>
+              <option value='keyword'><%= glp("ui.adm.type-edit.lbl.keyword") %></option>
+            </select>
+            <% } %>            
+          </jalios:field>
+        </div>
+
+        <%-- CATEGORY TREE ------------------------------------------------------- --%> 
+        <div id="treecat" style="display:none;"> 
+          <jalios:field name="cid" label="ui.adm.type-edit.lbl.root-cat">
+            <jalios:control settings='<%= new CategorySettings().tree().uncheckSelectable().root(channel.getRootCategory()).filter(CategoryFilter.READ) %>' />
+          </jalios:field>
+        </div>
+        
+        <%-- DATA SOURCE ------------------------------------------------------- --%> 
+        <div id="ds" style="display:none;"> 
+          <jalios:field label="ui.com.lbl.datasource"  tooltip="ui.adm.type-edit.lbl.ds.h">
+            <select name="dataSource" class="form-control" name="dataSource">
+              <option value=''></option>
+              <jalios:foreach collection='<%= DBUtil.getDataSourceMap().keySet() %>' name='itDataSource' type='String'>
+              <option value='<%= itDataSource %>'><%= channel.getDataSourceLabel(itDataSource,userLang) %></option>
+              </jalios:foreach>
+            </select>
+          </jalios:field>
+        </div>
+        
+        <%-- SQLRESULT ------------------------------------------------------- --%> 
+        <div id="sqlr" style="display:none;"> 
+          <%-- QUERY ------------------------------------------------------- --%> 
+          <jalios:field name="sqlrQuery" label="ui.adm.type-edit.lbl.sqlr-q" tooltip="ui.adm.type-edit.lbl.sqlr-q.h" value="<%= formHandler.getFieldSqlrQuery() %>">
+            <jalios:control type="<%= ControlType.TEXTAREA %>" />
+          </jalios:field>
+        
+          <%-- PARAMS ------------------------------------------------------- --%>
+          <jalios:field name="sqlrParams" label="ui.adm.type-edit.lbl.sqlr-p" tooltip="ui.adm.type-edit.lbl.sqlr-p.h" value="<%= formHandler.getFieldSqlrParams() %>">
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>
+        </div>
+        
+        <%-- DBRecord ------------------------------------------------------- --%> 
+        <div id="dbr" style="display:none;"> 
+          <%-- TABLE ------------------------------------------------------- --%> 
+          <jalios:field name="dbrTable" label="ui.adm.type-edit.lbl.dbr-table" tooltip="ui.adm.type-edit.lbl.dbr-table.h" value="<%= formHandler.getFieldDbrTable() %>">
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>
+          
+          <%-- KEY COLUMN ------------------------------------------------------- --%>
+          <jalios:field name="dbrKeyCol" label="ui.adm.type-edit.lbl.dbr-key" tooltip="ui.adm.type-edit.lbl.dbr-key.h" value="<%= formHandler.getFieldDbrKeyCol() %>">
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>           
+
+          
+          <%-- COLUMNS ------------------------------------------------------- --%> 
+          <jalios:field name="dbrColumns" label="ui.adm.type-edit.lbl.dbr-cols" tooltip="ui.adm.type-edit.lbl.dbr-cols.h" value="<%= formHandler.getFieldDbrColumns() %>">
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>           
+ 
+          
+          <%-- LABEL COLUMN ------------------------------------------------------- --%> 
+          <jalios:field name="dbrLabelCol" label="ui.adm.type-edit.lbl.dbr-lblcol" tooltip="ui.adm.type-edit.lbl.dbr-lblcol.h" value="<%= formHandler.getFieldDbrLabelCol() %>">
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>           
+
+          <%-- ORDER BY ------------------------------------------------------- --%> 
+          <jalios:field name="dbrOrderBy" label="ui.adm.type-edit.lbl.dbr-orderby" tooltip="ui.adm.type-edit.lbl.dbr-orderby.h" value="<%= formHandler.getFieldDbrOrderBy() %>">
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>           
+        </div>      
+      </div>
+      
+
+      <%-- FIELD PROPERTIES ------------------------------------------------------- --%> 
+      <fieldset id="prop1" style="display:none;" class="col-xs-12">
+        <legend><%= glp("ui.adm.type-edit.lbl.prop1") %></legend>
+      
+        <%-- MV ------------------------------------------------------- --%> 
+        <div id="qty">
+        <jalios:field name="quantity" label="ui.adm.type-edit.lbl.mv" tooltip="ui.adm.type-edit.lbl.mv.h" value="scalar">
+          <% if (formHandler.isDatabase()) { %>
+          <select name="quantity" class="form-control">   
+            <option value="scalar"><%= glp("ui.adm.type-edit.lbl.mv.no") %></option>
+             <option value="list"><%= glp("ui.adm.type-edit.lbl.mv.list") %></option>
+            <option value="set"><%= glp("ui.adm.type-edit.lbl.mv.set") %></option>
+          </select>
+          <% } else { %>
+          <jalios:control settings='<%= new EnumerateSettings().inline().enumValues("array", "scalar").enumLabels("ui.com.lbl.yes", "ui.com.lbl.no") %>' />
+          <% } %>
+        </jalios:field>
+        </div>
+        
+        <%-- REQUIRED ------------------------------------------------------- --%>
+        <div id="requir">          
+        <jalios:field name="required" label="ui.adm.type-edit.lbl.required" tooltip="ui.adm.type-edit.lbl.required.h" value="false">
+          <jalios:control type="<%= ControlType.BOOLEAN %>" />
+        </jalios:field>
+        </div>
+
+        <%-- ML ------------------------------------------------------- --%> 
+        <% if (channel.isMultilingual() && !formHandler.isFormEditor() && !formHandler.isDatabase()) { %>
+        <div id="mlang"> 
+        <jalios:field name="ml" label="ui.adm.type-edit.lbl.ml" tooltip="ui.adm.type-edit.lbl.ml.h" value="true">
+          <jalios:control type="<%= ControlType.BOOLEAN %>" />
+        </jalios:field>        
+        </div>
+        <% } %>
+        
+        
+        <%-- SEARCHABLE ------------------------------------------------------- --%> 
+        <% if (formHandler.isContentEditor() || formHandler.isUGCEditor()) { %>
+        <div id="search"> 
+        <jalios:field name="searchable" label="ui.adm.type-edit.lbl.searchable" tooltip="ui.adm.type-edit.lbl.searchable.h" value="true">
+          <jalios:control type="<%= ControlType.BOOLEAN %>" />
+        </jalios:field>
+        </div>            
+        <% } %>     
+          
+      </fieldset>         
+
+        
+
+      
+      <%-- BUTTON --%>  
+      <div align='center'>
+        <input type="hidden" name="type" value="<%= formHandler.getTypeName() %>" />
+        <input class='btn btn-primary' type="submit" name="opAdd" value='<%= glp("ui.adm.type-edit.fld.btn.add") %>' />
+      </div>
+   
+      <jalios:javascript>dispEditOptions1(document.editForm.editor.options[document.editForm.editor.selectedIndex].value);</jalios:javascript>
+  </form>
+</jalios:panel>

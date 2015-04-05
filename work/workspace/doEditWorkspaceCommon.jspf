@@ -1,0 +1,226 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="com.jalios.jcms.taglib.settings.impl.BooleanSettings"%>
+<%@page import="com.jalios.jcms.taglib.settings.SelectorSettings.SelectorType"%>
+<%@page import="com.jalios.jcms.taglib.ControlTag"%>
+<%@page import="com.jalios.jcms.mail.MailManager"%><%
+%><%@page import="com.jalios.jcms.QuotaManager"%><%
+%><%@page import="com.jalios.jcms.workspace.Workspace,com.jalios.jcms.workspace.TreeHelper"%>
+
+<div class="row">
+  <div class="col-md-6">
+
+    <fieldset>
+      <legend><%= glp("ui.com.lbl.infos") %></legend>
+
+      <%-- TITLE ------------------------------------------------------------ --%>
+      <%
+      Map titleMap  = new HashMap();
+      for (Iterator it = channel.getLanguageList().iterator() ; it.hasNext() ; ) {
+        String itLang = (String)it.next();
+        String titleVal = commonFormHandler.getAvailableTitle(itLang);
+
+        if (Util.notEmpty(titleVal)){
+          titleMap.put(itLang,titleVal);
+        }
+      }
+      %>
+      <jalios:field name="title" label="ui.wrkspc-edit.lbl.title" required='true' ml='<%= channel.isMultilingual() %>' value='<%= titleMap %>'>
+        <jalios:control settings='<%= new TextFieldSettings().showLanguageChooser() %>' />
+      </jalios:field>
+
+      <%-- ADMINISTRATORS ------------------------------------------------------------ --%>
+      <% if (checkAccess("admin/work/workspace") ||
+             (commonFormHandler.getWorkspace() != null && commonFormHandler.getWorkspace().isAdmin(loggedMember))) { %>
+        <% com.jalios.jcms.Member[] administratorsValues = commonFormHandler.getAvailableAdministrators(); %>
+        <jalios:field name="administrators" label='ui.wrkspc-edit.lbl.admin' required='true' value='<%= administratorsValues %>' keyword="true">
+          <jalios:control settings="<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>" />
+        </jalios:field>
+      <% } else { %>
+      <div class="widget">
+        <%
+        StringBuffer adminsSB = new StringBuffer();
+        WidgetUtil.printMandatory(adminsSB);
+        WidgetUtil.printLabel(adminsSB, glp("ui.wrkspc-edit.lbl.admin"), (String) null);
+        %><%= adminsSB.toString() %>
+        <ul>
+          <jalios:foreach array='<%= commonFormHandler.getAvailableAdministrators() %>' type='Member' name='itMember'>
+            <li>
+             <jalios:link data='<%= itMember %>'/>
+             <input type='hidden' name='administrators' value='<%= itMember.getId() %>' />
+            </li>
+          </jalios:foreach>
+        </ul>
+      </div>
+      <% } %>
+
+      <%-- DEFAULT GROUP ------------------------------------------------------------ --%>
+      <% Group defaultGroup = commonFormHandler.getAvailableDefaultGroup(); %>
+      <jalios:field name='defaultGroup' label='ui.wrkspc-edit.lbl.default-grp' value='<%= defaultGroup %>' css='<%= workspc != null ? "ws_" + workspc.getId() : "" %>'>
+        <jalios:control settings='<%= new GroupSettings().workspace(workspc) %>' />
+      </jalios:field>
+
+      <%-- CATEGORIES ------------------------------------------------------------ --%>
+      <jalios:field name="catSet" label="ui.wrkspc-edit.lbl.cat" required="true" value='<%= commonFormHandler.getAvailableCatSet() %>'>
+        <% if (checkAccess("admin/work/workspace")) { %>
+        <% Set catSet = commonFormHandler.getAvailableCatSet(); %>
+        <jalios:treecatview
+            prefix="catSet"
+            input="catSet"
+            type="checkbox"
+
+            opened="<%= catSet %>"
+            checked="<%= catSet %>"
+            highlighted="<%= catSet %>"
+
+            collection="<%= Util.getHashSet(channel.getRootCategory()) %>"
+
+            selectable="false"
+            dragdrop="true"
+            showCtxMenu="true"
+            css="autocomplete" />
+        <% setIncludeString("isMulti", "false"); %>
+      <% } else { %>
+        <ul class="form-control-static list-unstyled">
+          <jalios:foreach collection='<%= commonFormHandler.getAvailableCatSet() %>' type='Category' name='itCategory'>
+            <li>
+             <jalios:icon src="category" /> <jalios:link data='<%= itCategory %>'/>
+             <input type='hidden' name='catSet' value='<%= itCategory.getId() %>'/>
+            </li>
+          </jalios:foreach>
+        </ul>
+      <% } %>
+      </jalios:field>
+
+      <%-- TAG ROOT ------------------------------------------------------------ --%>
+      <% Set<Category> tagRootSet = Util.getHashSet(commonFormHandler.getAvailableTagRoot()); %>
+      <jalios:field name="tagRoot" label="ui.wrkspc-edit.lbl.tags" value='<%= tagRootSet %>'>
+        <jalios:control settings='<%= new CategorySettings().tree().filter(CategoryFilter.READ) %>' />
+        <input type="radio"
+                name='tagRoot'
+                id='noTag'
+                <%= (workspc == null || workspc.getTagRoot() == null) ? "checked='checked'" : "" %> /> <label for='noTag'><%= glp("ui.wrkspc-edit.lbl.tags.None") %></label>
+      </jalios:field>
+
+    </fieldset>
+
+  </div><div class="col-md-6">
+
+    <fieldset>
+      <legend><%= glp("ui.work.form.tab.adv") %></legend>
+
+      <%-- LANGUAGE ---------------------------------------------------------------- --%>
+      <% if (channel.isMultilingual()) { %>
+      <% String languageValues = commonFormHandler.getAvailableLanguage(); %>
+      <jalios:field label='ui.wrkspc-edit.lbl.language' description='ui.wrkspc-edit.lbl.language.help'>
+        <select name="language" class="form-control">
+          <% boolean isSelected = Util.isEmpty(languageValues); %>
+          <option value=' ' <%= isSelected ? "selected='selected'" : ""%>>
+            <%= glp("ui.wrkspc-edit.lbl.language.inheritedlanguage", glp("lang." + commonFormHandler.getAvailableDefaultLanguage()) ) %>
+          </option>
+          <jalios:foreach collection='<%= channel.getLanguageListOrdered() %>' name='itLang' type='String'>
+          <% isSelected = itLang.equals(languageValues); %>
+          <option value='<%= itLang %>' <%= isSelected ? "selected='selected'" : ""%>>
+            <%= glp("lang." + itLang) %>
+          </option>
+          </jalios:foreach>
+        </select>
+      </jalios:field>
+      <% } %>
+
+      <%-- INCOMING MAIL ---------------------------------------------------------------- --%>
+      <jalios:field name='incomingMailEnabled' label="ui.wrkspc-edit.lbl.incoming-mail.enabled" description="ui.wrkspc-edit.lbl.incoming-mail.enabled.h"  value='<%= commonFormHandler.getAvailableIncomingMailEnabled() %>'>
+        <jalios:control type="<%= ControlType.BOOLEAN %>" />
+      </jalios:field>
+
+      <%
+      String localPart = commonFormHandler.getAvailableIncomingMailLocalPart();
+      boolean printIncomingMailWidget = workspc != null && workspc.isPersisted() && !workspc.isModel() && (Util.notEmpty(workspc.getIncomingMailLocalPart()) || workspc.isIncomingMailEnabled());
+      %>
+      <% if (printIncomingMailWidget) { %>
+      <jalios:field name='incomingMailLocalPart' label="ui.wrkspc-edit.lbl.incoming-mail.local-part" description='<%= printIncomingMailWidget ? "ui.wrkspc-edit.lbl.incoming-mail.local-part.h" : "" %>'  value='<%= commonFormHandler.getAvailableIncomingMailLocalPart() %>'>
+        <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+      </jalios:field>
+      <% } else { %>
+      <input type='hidden' name='incomingMailLocalPart' value='<%= localPart %>' />
+      <% } %>
+
+      <%-- GLOBAL CSS ------------------------------------------------------------ --%>
+      <%
+      String[] globalCSSValues = commonFormHandler.getAvailableGlobalCSS();
+      String[] globalCSS = commonFormHandler.getGlobalCSSValues();
+      %>
+      <jalios:field name='globalCSS' label='ui.wrkspc-edit.lbl.wysiwygcss' required='false' value='<%= globalCSSValues %>'>
+        <jalios:control settings='<%= new EnumerateSettings().select().multiple().enumValues(globalCSS).enumLabels(globalCSS) %>' />
+      </jalios:field>
+
+      <%-- ORDER --%>
+      <% String orderValues = ""+commonFormHandler.getAvailableOrder(); %>
+      <jalios:field name='order' label='ui.wrkspc-edit.lbl.order' description='ui.wrkspc-edit.lbl.order.h' required='false' value='<%= orderValues %>'>
+        <jalios:control type="<%= ControlType.NUMBER %>" />
+      </jalios:field>
+
+      <%-- MODEL --%>
+      <jalios:if predicate='<%= checkAccess("admin/work/workspace") %>'>
+        <% boolean modelValues = commonFormHandler.getAvailableModel(); %>
+        <jalios:field name='model' label='ui.com.lbl.workspacemodel' description='ui.com.lbl.workspacemodel.h' required='false' value='<%= ""+modelValues %>'>
+          <jalios:control type="<%= ControlType.BOOLEAN %>" />
+        </jalios:field>
+      </jalios:if>
+
+      <%-- CLOSED --%>
+      <% boolean closedValues = commonFormHandler.getAvailableClosed(); %>
+      <jalios:field name='closed' label='ui.wrkspc-edit.closed-workspace' description='ui.wrkspc-edit.closed-workspace.h' required='false' value='<%= ""+closedValues %>'>
+        <jalios:control type="<%= ControlType.BOOLEAN %>" />
+      </jalios:field>
+
+      <%-- PARENT WORKSPACE --%>
+      <% Workspace workspaceValues = commonFormHandler.getAvailableParent(); %>
+      <jalios:field label='ui.wrkspc-edit.parent-workspace' name='parent' required='false' value='<%= workspaceValues %>'>
+      <% if (checkAccess("admin/work/workspace")) { %>
+        <jalios:control type="<%= ControlType.WORKSPACE %>" />
+      <% } else if (Util.notEmpty(workspaceValues)) { %>
+        <% String workspaceParentTitle = Util.notEmpty(workspaceValues) ? workspaceValues.getTitle(userLang) + " (" + workspaceValues.getId() + ")" : ""; %>
+        <p class="form-control-static"><%= encodeForHTML(workspaceParentTitle) %></p>
+      <% } %>
+      </jalios:field>
+
+      <jalios:field label="ui.wrkspc-edit.workspace-quota-use-default" name='useDefaultQuota' value='<%=formHandler.getAvailableUseDefaultQuota() %>' >
+        <%
+         Map<String, Object> htmlAttributesMap = new HashMap<String, Object>();
+         htmlAttributesMap.put("onchange", "toggleWidgetState(this,'useDefaultQuota',jQuery(this).closest('FORM').find('.quota-elements'));");
+         BooleanSettings useDefaultQuotaSettings = new BooleanSettings().htmlAttributes(htmlAttributesMap);
+        %>
+        <jalios:control settings="<%= useDefaultQuotaSettings %>"/>
+      </jalios:field>
+
+      <div class="quota-elements">
+        <jalios:field label="ui.wrkspc-edit.workspace-quota" name="quotaValue" value='<%= formHandler.getAvailableQuotaValue() %>' disabled='<%= formHandler.getAvailableUseDefaultQuota() %>'  css="field-number">
+          <jalios:control type="<%= ControlType.NUMBER %>" />
+          <%
+          request.setAttribute(FieldTag.FIELD_NAME, "quotaUnit");
+          request.setAttribute(FieldTag.FIELD_VALUE, formHandler.getAvailableQuotaUnit());
+          %>
+          <div class="input-group-btn" style="min-width: 80px;">
+              <jalios:control settings='<%= new EnumerateSettings().select().enumValues(Util.getFileSizeUnitLabels(Locale.ENGLISH)).enumLabels(Util.getFileSizeUnitLabels(userLocale)) %>' />
+          </div>
+        </jalios:field>
+      </div>
+
+      <div class="quota-elements">
+        <jalios:field label="ui.wrkspc-edit.alert-threshold" name='alertThreshold' description='ui.adm.mn.files.alert-threshold.description' value='<%= ""+formHandler.getAvailableAlertThreshold() %>' disabled='<%= formHandler.getAvailableUseDefaultQuota() %>'>
+          <jalios:control type="<%= ControlType.NUMBER %>">
+            <jalios:buffer name='APPEND'>%</jalios:buffer>
+          </jalios:control>
+        </jalios:field>
+      </div>
+
+      <%-- EXTRA DATA INFO ----------------------------------------- --%>
+      <% request.setAttribute("formHandler",commonFormHandler); %>
+      <jalios:include jsp="/jcore/doEditExtraData.jsp" />
+
+      <%-- EXTENSION ------------------------------------------------------------ --%>
+      <%@ include file="/types/WorkspaceExtension/doEditWorkspaceExtension.jspf" %>
+
+    </fieldset>
+  </div>
+</div>

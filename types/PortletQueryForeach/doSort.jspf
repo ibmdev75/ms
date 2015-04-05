@@ -1,0 +1,27 @@
+<%--
+  @Summary: Sort the result of the PortletQueryForeach
+            jsp included after doQuery.jsp and before doForeachHeader.jsp
+--%><%!
+  public static Date getSortDate(Publication pub , String comparator){
+    return pub.getDate(comparator , pub.getCdate());
+  }
+%><%
+    String sort = PortalManager.receiveAction(request , box , "sort");
+    boolean reversePager = Util.toBoolean(PortalManager.receiveAction(request , box , "reverse"), false);
+    if ("Random".equalsIgnoreCase(box.getOrderBy())){
+      List list = new ArrayList();
+      list.addAll(collection);
+      Collections.shuffle(list);
+      collection = list;
+    }
+    else {
+      Comparator<? super Publication> comp = ComparatorManager.getComparator(queryHandlerTypesCommonSuperClass, Util.getString(sort, box.getOrderBy()), reversePager);
+      if (comp != null){
+        if ("request".equals(box.getReverseOrder()))
+          comp = new ReverseComparator(comp);
+        TreeSet tmp = new TreeSet(comp);
+        tmp.addAll(collection);
+        collection = tmp;
+      }
+    }
+%>

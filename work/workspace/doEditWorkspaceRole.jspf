@@ -1,0 +1,190 @@
+    <%@page import="com.jalios.jcms.taglib.settings.impl.EnumerateSettings"%>
+<div class="navbar navbar-default navbar-table-header">
+	    <div class="navbar-text text-right"><%= glp("ui.com.lbl.workflow") %>: </div>
+	    <div class="navbar-form navbar-left">
+	    <jalios:field resource="field-light">
+		    <select name='wfId' class="form-control" onchange='javascript:submitForm("opChangeWF");' class="form-control">
+		      <option value=''><%/*%>All Workflow<%*/%><%= glp("ui.wrkspc-edit.allwswf") %></option>
+		      <option value='<%= WorkflowConstants.ALL_WF %>' <%= WorkflowManager.ALL_WF.equals(roleFormHandler.getAvailableWfId()) ? "selected" : "" %>><%/*%>All Workflow<%*/%><%= glp("ui.wrkspc-edit.allwf") %></option>
+		      <option value=''>----------</option>
+		      <jalios:foreach collection='<%= roleFormHandler.getAvailableAllWorkflowSet() %>' type='Workflow' name='itWorkflow' counter='itCounter2'>
+		        <jalios:if predicate='<%= itWorkflow != WorkflowManager.DEFAULT_WORKFLOW %>'>
+		          <option value='<%= itWorkflow.getId() %>' <%= itWorkflow.getId().equals(roleFormHandler.getAvailableWfId()) ? "selected" : "" %>  ><%= itWorkflow.getLabel(userLang) %></option>
+		        </jalios:if>
+		      </jalios:foreach>
+		    </select>
+			</jalios:field>
+	    </div>     
+    </div> 
+    <div class="table-responsive">
+    <table id='groupTable' class='table-data table-condensed editWorkspaceRole' style="min-width:1200px">
+      <tr> 
+	    <th><%= glp("ui.wrkspc-edit.workflow") %></th>
+	    <th><%= glp("ui.com.lbl.roles") %></th>
+	    <th class="role"><%= glp("ui.wrkspc-edit.wkrolegroups") %></th>
+	    <th class="member"><%= glp("ui.wrkspc-edit.wkrolemembers") %></th>
+	    <th>&nbsp;</th>
+      </tr>
+      <% int cpt = 1;%>
+      <jalios:foreach collection='<%= roleFormHandler.getAvailableWorkflowSet() %>' type='Workflow' name='itWorkflow' counter='c1'>
+        <jalios:foreach collection='<%= itWorkflow.getRoleSet() %>' type='WFRole' name='itWFRole' counter='c2'>
+          <% WKRole itWKRole = (WKRole) roleFormHandler.getAvailableRoleMap().get(itWFRole.getId()); %>
+          <tr>
+            <%-- WF --%>
+            <td>
+              <jalios:icon src='wf'  />
+              <a href='<%= ServletUtil.getUrlWithUpdatedParam(request, "wfId", itWorkflow.getId()) %>'><%= itWorkflow.getLabel(userLang) %></a>
+            </td>
+            <%-- ROLE --%>
+            <td class="text-overflow">
+              <jalios:icon src='role'  />
+              <%= itWFRole.getName(userLang) %>
+              <% if (Util.notEmpty(itWFRole.getDescription(userLang))) { %>
+              <jalios:tooltip><%= Util.escapeJavaStringChar(itWFRole.getDescription(userLang)) %></jalios:tooltip>
+              <% } %>
+            </td>
+            <% request.setAttribute("field-vertical", true); %>
+            
+ <%-- GROUPS --%>
+            <td class="nowrap role widget vTop">
+              <jalios:select>
+                <jalios:if predicate='<%= roleFormHandler.isWKRoleEditable(itWFRole) %>'>                 
+                 <%-- ## ROLE GROUPS ###################################### --%>
+                 <% {
+                 int count = roleFormHandler.getRoleGroupsCount();
+                 Group[] roleGroupsArray = roleFormHandler.getAvailableRoleGroups(); 
+                 %>
+                <ul class="list-unstyled">       
+                <% for(int i = 0; i < count; i++) { 
+                  int     weightValue  = roleFormHandler.getWeightForGroup(i);
+                  boolean isPercentage = roleFormHandler.isPercentageForGroup(i);
+                %> 
+              <li class="form-inline">  
+               <jalios:field  resource="field-vertical" name='<%= "roleGroups" %>' value='<%= Util.getObject(roleGroupsArray,i, null)  %>'>
+                 <jalios:control type="<%= ControlType.GROUP %>" />
+               </jalios:field>
+               <%= glp("ui.wrkspc-edit.weight") %>
+               <input class="form-control text-right" type="textfield" size="3" name="roleWeight" value='<%= weightValue != 0 ? ""+weightValue : "0"  %>' />
+               <select name="roleWeightType" class="form-control" >
+                 <option value="false" <%= isPercentage ? "" : "selected" %>><% /* %>Members<% */ %><%= glp("ui.com.lbl.members") %></option>
+                 <option value="true"  <%= isPercentage ? "selected" : "" %>>%</option>
+               </select>
+              </li>               
+              <% } %>
+              <div><a href='javascript:document.editForm.roleGroupsAddCount.value=<%= count - roleFormHandler.getAvailableRoleGroups().length %>;submitAction("opAddItem","<%= itWFRole.getId() %>");'><jalios:icon src="add-widget" /> <%= glp("ui.com.alt.add") %></a></div>
+              <input type="hidden" name="roleGroupsAddCount" value='0'/>
+              <div class='form-horizontal'>
+                <jalios:field name="openRole"  label="ui.wrkspc-edit.role.open" value="<%= roleFormHandler.getAvailableOpenRole() %>" resource="field-vertical">
+                  <%
+                  EnumerateSettings settings = new EnumerateSettings()
+                  .radio().inline()
+                  .enumValues(WKRole.OPEN_MODE_DISABLED, WKRole.OPEN_MODE_ENABLED, WKRole.OPEN_MODE_REQUIRED)
+                  .enumLabels(glp("ui.wrkspc-edit.role.open-mode." + WKRole.OPEN_MODE_DISABLED), glp("ui.wrkspc-edit.role.open-mode." + WKRole.OPEN_MODE_ENABLED), glp("ui.wrkspc-edit.role.open-mode." + WKRole.OPEN_MODE_REQUIRED));
+                  %>
+                  <jalios:control settings="<%= settings %>" />
+                </jalios:field>
+  
+                <jalios:field name="groupMode" label="ui.wrkspc-edit.role.mode" value="<%= roleFormHandler.getAvailableGroupMode() %>" resource="field-vertical">
+                  <%
+                  EnumerateSettings settings = new EnumerateSettings()
+                  .radio().inline()
+                  .enumValues(WKRole.AND_MODE, WKRole.OR_MODE)
+                  .enumLabels(glp("ui.wrkspc-edit.role.and"), glp("ui.wrkspc-edit.role.or"));
+                  %>
+                  <jalios:control settings="<%= settings %>" />
+                </jalios:field>  
+         <% } %>
+         </ul>
+         </jalios:if>
+         <jalios:if predicate='<%= itWKRole != null %>'>
+           <ul>
+           <jalios:foreach collection='<%= itWKRole.getGroupList() %>' type='Group' name='itGroup' counter='c4'> 
+             <% if (itGroup!= null) { %>
+               <li>
+               <%= itGroup.getName(userLang) %>
+               <% if (Util.notEmpty(itGroup.getMemberSet())) { %>
+               <jalios:tooltip><%= Util.join(itGroup.getMemberSet(), ", ", 5, "...") %></jalios:tooltip>
+               <% } %>
+               - <%= itWKRole.isPercentageForGroup(itGroup) ? itWKRole.getWeightForGroup(itGroup) + "&nbsp;%" : glp("ui.wrkspc-edit.mbr-cnt", itWKRole.getWeightForGroup(itGroup)) %>
+               </li>
+             <% } %>
+           </jalios:foreach>
+           <% if (WKRole.isOpen(itWKRole)) { %>
+           <li><%= glp("ui.wrkspc-edit.role.open") + " : " + glp("ui.wrkspc-edit.role.open-mode." + itWKRole.getOpenMode()) %></li>
+           <% } %>
+           <% if (itWKRole.getGroupList().size() > 1) { %>
+           <li><%= glp("ui.wrkspc-edit.role.mode") %> : <%= itWKRole.getGroupMode() == WKRole.AND_MODE ? glp("ui.wrkspc-edit.role.and") : glp("ui.wrkspc-edit.role.or") %></li>
+           <% } %>
+           </jalios:if>
+           </ul>
+         </jalios:select>
+        </td>              
+            
+        
+        <%-- MEMBERS --%>
+			  <td class="text-overflow member vTop" style="max-width:200px">
+			    <jalios:select>
+				  <jalios:if predicate='<%= roleFormHandler.isWKRoleEditable(itWFRole) %>'>
+				    <% Member[] roleMembersArray = roleFormHandler.getAvailableRoleMembers(); %>
+					 <jalios:field  resource="field-vertical" name='<%= "roleMembers" %>' required='<%= false %>' value='<%= roleMembersArray %>' mv='<%= 1 %>'>
+             <jalios:control settings="<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>" />
+           </jalios:field>
+
+           <jalios:field name="involvedAuthor" label="ui.com.lbl.author" value="<%= roleFormHandler.getAvailableInvolvedAuthor() %>" resource="field-vertical">
+             <jalios:control type="<%= ControlType.BOOLEAN %>" />
+           </jalios:field>
+
+
+           <jalios:field name="memberMode" label="ui.wrkspc-edit.role.mode" value="<%= roleFormHandler.getAvailableMemberMode() %>" resource="field-vertical">
+              <%
+              EnumerateSettings settings = new EnumerateSettings()
+              .radio().inline()
+              .enumValues(WKRole.AND_MODE, WKRole.OR_MODE)
+              .enumLabels(glp("ui.wrkspc-edit.role.and"), glp("ui.wrkspc-edit.role.or"));
+              %>
+              <jalios:control settings="<%= settings %>" />
+            </jalios:field>  
+            
+				  </jalios:if>
+				  <jalios:if predicate='<%= itWKRole != null %>'>
+            <ul>
+			        <jalios:foreach collection='<%= itWKRole.getMemberList() %>' type='Member' name='itMember' counter='c5'> 
+			         <% if (itMember != null) { %>
+			         <li><%= itMember %></li>
+			         <% } %>
+			        </jalios:foreach>
+				      <% if (itWKRole.isInvolvedAuthor()) { %>
+				      <li><b><%= glp("ui.com.lbl.author") %></b></li>
+              <% } %>
+		          <% if (itWKRole.getMemberList().size() > 0) { %>
+		          <li>
+		            <%= glp("ui.wrkspc-edit.role.mode") %> : 
+		            <%= itWKRole.getMemberMode() == WKRole.AND_MODE ? glp("ui.wrkspc-edit.role.and") : glp("ui.wrkspc-edit.role.or") %>
+		          </li>
+		          <% } %>
+		        </ul>
+				  </jalios:if>
+				</jalios:select>
+		      </td>
+           
+          <% request.removeAttribute("field-vertical"); %>
+        
+        <td align='center'>
+          <jalios:select>
+          <jalios:if predicate='<%= roleFormHandler.isWKRoleEditable(itWFRole) %>'>
+            <input class='btn btn-primary' type='button' name='' value='<%= glp("ui.wrkspc-edit.role.save") %>' onclick='javascript:submitAction("opSaveRole","<%= itWFRole.getId() %>");' />
+          </jalios:if>
+          <jalios:if predicate='<%= itWKRole != null %>'>
+            <input class='btn btn-default' type='button' name='' value='<%= glp("ui.wrkspc-edit.role.edit") %>' onclick='javascript:submitAction("opEditRole","<%= itWFRole.getId() %>");' />
+          </jalios:if>
+          <jalios:default>
+            <input class='btn btn-default' type='button' name='' value='<%= glp("ui.wrkspc-edit.role.edit") %>' onclick='javascript:submitAction("opEditRole","<%= itWFRole.getId() %>");' />
+          </jalios:default>
+        </jalios:select>
+          </td>        
+                
+		    </tr>
+		  </jalios:foreach>
+	    </jalios:foreach>
+	  </table>
+  </div>

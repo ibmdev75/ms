@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="Interview" expirable="false" reviewable="true" visible="true" debatable="false" superclass="com.jalios.jcms.Content" categoryRequired="true" categoryTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="summary" cols="80" compactDisplay="false" editor="textarea" wiki="true" maxlength="5000" required="true" rows="5" searchable="true" type="String" ml="true" abstract="true" />
+    <field name="intro" cols="80" compactDisplay="false" editor="textarea" wiki="true" maxlength="5000" pattern="" required="false" rows="3" searchable="true" size="" type="String" ml="true" />
+    <field name="bio" cols="80" compactDisplay="false" editor="textarea" wiki="true" maxlength="5000" required="false" rows="5" searchable="true" type="String" ml="true" />
+    <field name="questions" tabGroup="item" cols="80" compactDisplay="true" editor="textarea" wiki="true" maxlength="" pattern="" required="false" rows="3" searchable="true" size="" type="String[]" ml="true" />
+    <field name="answers" tabGroup="item" cols="80" compactDisplay="false" editor="textarea" wiki="true" required="false" rows="8" searchable="true" type="String[]" ml="false" descriptionType="text" html="false" checkHtml="true" />
+    <field name="questionPrefix" cols="" compactDisplay="false" editor="textfield" maxlength="" pattern="" required="true" rows="" searchable="false" size="80" type="String" />
+    <field name="answerPrefix" cols="" compactDisplay="false" editor="textfield" maxlength="" pattern="" required="true" rows="" searchable="false" size="80" type="String" />
+    <field name="photo" compactDisplay="false" editor="image" required="false" searchable="false" size="80" type="String" ml="false" descriptionType="tooltip" dataimage="true" html="false" checkHtml="true" fileChooser="false" imageMap="false" resize="false" resizeWidth="100" resizeHeight="75" />
+  </fields>
+</type>
+

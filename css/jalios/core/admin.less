@@ -1,0 +1,163 @@
+@import "init-mixins.less";
+
+/* Work & Admin Areas */
+
+// Fix the spliter full height issue
+HTML,BODY {
+	height:100%;
+}
+
+TABLE.layout {
+	width:100%;
+	TD {vertical-align:top;}
+	.layout-main {
+		padding:0 @baseline;
+	}
+}
+
+.displayWork {
+  background-color: #FFFFFF;
+}
+.WorkArea.work-displayWork .boTitleInfo { 
+  float: right;
+  padding-left: 2px;
+  font-weight: normal;
+  font-size: small;
+}
+
+// Work Areas Exceptions
+// -------------------------------------
+.sticky-display {
+  margin:  0px; 
+  padding: 0px;
+  height: 100%;
+  overflow: visible; zoom: 1;
+}
+.WorkArea, .AdminArea, .EditArea {
+  &.sticky-display {
+    margin:  0px; 
+    padding: 0px;
+  }
+}
+
+// Import Admin Diff
+@import "admin/jalios-admin-diff.less";
+
+// Import Admin Splitter
+@import "admin/jalios-admin-splitter.less";
+
+// Import Admin Tabs
+@import "admin/jalios-admin-tabs.less";
+
+// Import Admin Header
+@import "admin/jalios-admin-header.less";
+
+// Import Admin Icons
+@import "admin/jalios-admin-icons.less";
+
+// Import Admin Box
+@import "admin/jalios-admin-box.less";
+
+// Import Admin Menu
+@import "admin/jalios-admin-menu.less"; 
+
+// Import Admin Notes
+@import "admin/jalios-admin-notes.less";
+
+// Import Admin Notes
+@import "admin/jalios-admin-quota.less";
+
+// Pub browser
+// -------------------------------------
+.portlet-behavior-copy {
+  cursor: help;
+  &.copy { }
+  &.ref { color: red; }
+  &.ws { color: orange; }
+}
+
+
+// UpgradeMgr
+// -------------------------------------
+
+// Is it revelant ? Could it be more generic ?
+.browser-IE7 .admin-deploy-upgradeMgr,
+.browser-IE8 .admin-deploy-upgradeMgr {
+	.box {
+	  .widget {
+	    float: none;
+    }
+  }
+}
+
+// Specific code for doEditWorkspaceRole
+// -------------------------------------
+
+BODY.browser-IE7,
+BODY.browser-IE8{
+	.editWorkspaceRole{
+	  TD{
+       &.role{width:500px;}
+       &.member{width:300px;} 
+    }
+	} 
+}
+
+
+// Specific code for editWorkspaceInstance
+// -------------------------------------
+
+.instance-workflow {
+	&.disabled {
+	 A {
+	   display:none;
+	 }
+	}
+}
+
+.workflow-instance-form{
+  .availableWorkflows, .selectedWorkflows{
+    min-height : 200px;
+    padding-right:0px;
+    background-color: @grayLightest;
+    &.empty {
+      border : 1px dashed @grayLight;
+    } 
+  }
+	.group-edit {
+	  margin-left : 0px;
+	  margin-right:0px;
+	}
+	.select-area{
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-top: 10px;
+	}
+	.button-column .row {
+	  margin-bottom: 20px;
+	}
+}
+
+// Reset top space on the pub chooser
+.pubchooser-wrapper {
+  .WorkArea {
+    padding-top: 0;
+  }
+  .pub-chooser-menu {
+    margin-top: 0;
+  }
+}
+
+// main .WorkArea sticky to top
+.WorkArea TABLE.layout .WorkArea { padding-top: 0; }
+
+// Specific code for mailInfo
+// -------------------------------------
+
+PRE.pattern {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: inherit;
+}
+

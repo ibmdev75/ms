@@ -1,0 +1,91 @@
+// ------------------------------------------
+//  BACKWARD COMPATIBILITY
+//  Bootstrap 1.0.4 => 2.0.1 => 2.2.1 => 3.0.2
+// ------------------------------------------
+
+
+@baseline:           @line-height-computed; // Use everywhere with factor ?
+@debug:              #C900B3;
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+@baseColor:          @brand-primary;
+@textColor:          @text-color;
+
+@linkColor:          @link-color;
+@linkColorHover:     @link-hover-color;
+
+@basefont:           @font-size-base;
+@baseFontSize:       @font-size-base;
+@fontSizeLarge:      @font-size-large;
+@fontSizeSmall:      @font-size-small;
+@baseLineHeight:     @line-height-computed;
+
+@complement:         @brand-success;
+@emphasisColor:      #46A546;
+@emphasisColorHover: #238323;
+
+
+@white:              #FFFFFF;
+@black:              #000000;
+@grayDark:           @gray-dark;
+@grayLight:          @gray-light;
+@grayLighter:        @gray-lighter;
+@grayLightest:       lighten(#000, 97%);
+
+@blue:               @link-color;
+@orange:             @state-warning-bg;
+@red:                @state-danger-bg;
+@zindexPopover:      1060; // FIX:JCMS : Could be in modal
+@zindexTooltip:      1070; // FIX:JCMS : Could be in modal
+
+@infoText:           @state-info-text;
+@errorText:          @state-warning-text;
+@successText:        @state-success-text;
+@wellBackground:     @well-bg;
+
+@baseBorderRadius:   @border-radius-base;
+@borderRadiusLarge:  @border-radius-large;
+@borderRadiusSmall:  @border-radius-small;
+@paddingMini:        1px 6px;   // 24px
+
+@btnBackground:                 @btn-default-bg;
+@btnBackgroundHighlight:        @btn-default-color;
+@btnInverseBackground:          @btn-default-bg;
+@btnInverseBackgroundHighlight: @btn-default-color;
+@btnInfoBackground:             @btn-info-bg;
+@btnInfoBackgroundHighlight:    @btn-info-color;
+@btnWarningBackground:          @btn-warning-bg;
+@btnWarningBackgroundHighlight: @btn-warning-color;
+@btnDangerBackground:           @btn-danger-bg;
+@btnDangerBackgroundHighlight:  @btn-danger-color;
+
+@inputBorder:                   @input-border;
+@inputDisabledBackground:       @input-bg-disabled;
+
+.buttonBackground(@startColor, @endColor, @textColor: #fff, @textShadow: 0 -1px 0 rgba(0,0,0,.25)) {
+  .button-variant(@textColor, @startColor, @endColor);
+}
+
+// ------------------------------------------
+//  ZINDEX OVERRIDE 
+// ------------------------------------------ 
+
+@zindex-navbar:            1000;
+@zindex-dropdown:          1060;
+@zindex-popover:           1060;
+@zindex-tooltip:           1070;
+@zindex-navbar-fixed:      1030;
+@zindex-modal-background:  1040;
+@zindex-modal:             1050;
+
+// Z-index JCMS components
+@zindexAdminNotes:          500; 
+@zindexTopBarEdit:         1035; // Under modal backdrop
+@zindexTopBar:             1055; // Over Modal but under popover and menus
+@zindex-bottombar:         1055; 
+@zindexAjaxWait:           1055; 
+@zindexPopin:              @zindexPopover;
+@zindexTopLevel:           1070; // Could be in modal in a Popover
+@zindexTypeAhead:          @zindexTopLevel;

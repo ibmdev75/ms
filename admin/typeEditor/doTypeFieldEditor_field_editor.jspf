@@ -1,0 +1,49 @@
+<fieldset class="col-xs-12">
+  <legend><%= glp("ui.adm.type-edit.lbl.prop2") %></legend>
+
+<%-- TAB --%> 
+<% if (showTab) { %>
+<jalios:field name="tab" label="ui.adm.type-edit.lbl.tab" tooltip="ui.adm.type-edit.lbl.tab.h">
+  <select name="tab" class="form-control" onchange='toggleEltVisibility("newTab", (this.options.selectedIndex == this.options.length - 1))'>
+    <option></option>
+    <jalios:foreach collection='<%= formHandler.getTabMap().keySet() %>' name='itTabID' type='String'>
+      <option value='<%= itTabID %>' <%= itTabID.equals(formHandler.getFieldTab()) ? "selected" : "" %>><%= formHandler.getTabLabel(itTabID) %></option>
+    </jalios:foreach>
+    <option>------------------</option>
+    <option value="<%= TypeEditorHandler.NEW_TAB_ID %>"><%= glp("ui.adm.type-edit.lbl.new-tab") %></option>
+  </select>
+  <div id='newTab' style='display: none'>
+    <input class="form-control" type='text' name='newTab' value='' size='50' />
+  </div>          
+</jalios:field>
+<% } %>
+
+
+<%-- DB PROP --%>
+<%@ include file='/admin/typeEditor/doTypeFieldEditor_field_db.jspf' %>
+
+<%-- STRING --%>
+<%@ include file='/admin/typeEditor/doTypeFieldEditor_field_string.jspf' %>
+
+ 
+<%-- LINK: MEMBER / MEMBER[] / GROUP / GROUP[] / LINK / LINK[] --%>
+<%@ include file='/admin/typeEditor/doTypeFieldEditor_field_link.jspf' %>
+
+ 
+<%-- NUMBER: INT / DOUBLE / BOOLEAN / DURATION --%>
+<%@ include file='/admin/typeEditor/doTypeFieldEditor_field_number.jspf' %>
+
+
+<%-- CATEGORY--%>
+<%@ include file='/admin/typeEditor/doTypeFieldEditor_field_category.jspf' %>
+
+ 
+ 
+<%-- TAB GROUP --%> 
+<% if (isFieldMV && !fieldEditor.equals("category")) { %>
+<jalios:field name="tabGroup" label="ui.adm.type-edit.lbl.tab-grp" tooltip="ui.adm.type-edit.lbl.tab-grp.h"  value='<%= Util.getString(fieldElt.getAttributeValue("tabGroup"), "") %>'>
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>
+<% } %>
+
+</fieldset>

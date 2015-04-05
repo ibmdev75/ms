@@ -1,0 +1,93 @@
+/* ----------------------------------------------- */
+/*  JCMS Publication actions                       */
+/* ----------------------------------------------- */
+
+.panel-body .pub-action-group .nav-tabs {
+  margin-left: 0;
+  padding-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.publication-actions {
+  font-size: @font-size-small;
+  margin-bottom: 0;
+  
+  .list-group.sticky-action-group {
+    margin-top: -@panel-body-padding;
+    margin-bottom: -@panel-body-padding;
+    margin-left: -@panel-body-padding;
+    margin-right: -@panel-body-padding;    
+  }  
+  
+  
+  .pub-action-group {
+    border-bottom: 2px solid @list-group-border;
+    margin-left: -15px;
+    margin-right: -15px;
+    
+    .item-box {
+      margin-left: 0;
+      margin-right: 0;
+    }    
+    
+    &:last-child {
+      margin-bottom: -15px;
+      border-bottom: 0;
+    }          
+    
+  }
+  
+  .pub-action-footer {
+    background-color: #F8f8f8;
+    border-top: 1px solid #EEE;
+    padding: 5px;
+    /* border-bottom: 1px solid #CCC; */
+  }
+  
+  
+  .pub-action-group-title {
+    background-color: #F8f8f8;
+    border-bottom: 1px solid #EEE;
+    padding: 5px 5px;
+  }
+    
+
+  
+  .list-group-item {
+    border: 0 none;
+    
+    &.list-group-item-extended .list-group-item-action {
+      border-left: 0 none;
+      display: none;
+    }
+    
+    &.pub-action-toggle {
+      .border-bottom-radius(0);
+      margin-bottom: -1px;
+    }
+  }
+  
+  .pub-action-optional {
+    display: none;
+  }
+  
+  .selection-wrapper-side-open & {
+    .pub-action-edit-icon.ctx-caret:after {
+      border: 0 none;
+    }
+    
+    .pub-group-icon-collapse {
+      display: none;
+    }
+    
+    .list-group-item.list-group-item-extended .list-group-item-action {
+      display: table-cell;
+    }    
+    
+    .pub-action-optional {
+      display: block;
+    }
+  }
+  
+}

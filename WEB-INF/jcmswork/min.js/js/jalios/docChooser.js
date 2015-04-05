@@ -1,0 +1,1 @@
+!function(b){var a=function(){b(parent.document).find("#editForm").on("submit",function(){setTimeout(function(){var c=b(parent.document).find(".doc-chooser-upload");c.removeClass("hide");c.find(".upload-infos").refresh()},500)})};b(document).ready(function(c){a()})}(window.jQuery);

@@ -1,0 +1,38 @@
+/* ----------------------------------------------- */
+/*  WFSTATE                                        */
+/* ----------------------------------------------- */
+
+.wfstate {
+  #JCMS > .badge();
+  background-color: @pstatus-not-visible;
+  
+  &.pstatus-10               { background-color: @pstatus-scheduled; }
+  &.pstatus0                 { background-color: @pstatus-published; }
+  &.pstatus10                { background-color: @pstatus-expired;   }
+  &.pstatus20                { background-color: @pstatus-archived;   }
+  &.pstatus-visible          { background-color: @pstatus-visible;   }
+  &.pstatus0.pstatus-visible { background-color: @pstatus-published; }
+  
+}
+
+// Fix for firefox
+.browser-Firefox .wfstate {
+  padding-top: 2px;
+}
+
+/* ----------------------------------------------- */
+/*  PREVIEW                                        */
+/* ----------------------------------------------- */
+
+.stateSelection,
+.stateInfo {
+  margin-bottom: @baseline/2;
+}
+
+.stateSelection {
+  FORM { display: inline; }
+}
+  
+.stateHistory {
+  border: 1px solid #EEE;
+}

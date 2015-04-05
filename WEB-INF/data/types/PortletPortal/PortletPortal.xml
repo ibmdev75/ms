@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletPortal" reviewable="false" debatable="false" categoryTab="true" categoryRequired="false" visible="true" superclass="generated.AbstractPortal" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field type="super" />
+  </fields>
+</type>
+

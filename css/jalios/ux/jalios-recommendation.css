@@ -1,0 +1,48 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+.recommendation-modal .message {
+  background: #EDF8FE;
+  border: 1px solid #DAEDF9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-left: 60px;
+  position: relative;
+  overflow: initial;
+}
+.recommendation-modal .message .tail {
+  left: -16px;
+  position: absolute;
+  top: 2px;
+}
+.recommendation-modal .badge-success {
+  background-color: #3c763d;
+}
+.recommendation-modal .badge-important {
+  background-color: #8a6d3b;
+}
+.recommendation-modal .recommendation-tracking .title {
+  background-color: #CCCCCC;
+  border-bottom: 1px solid #AAAAAA;
+  border-top: 1px solid #AAAAAA;
+  padding: 5px 15px;
+}
+.recommendation-modal .recommendation-meta {
+  padding-top: 5px;
+  padding-bottom: 10px;
+  font-size: 90%;
+  color: #888;
+}
+.recommendation-modal .recommendation {
+  border-bottom: 1px solid #DADADA;
+}
+.recommendation-modal .recommendation.bottom-less {
+  border-bottom: 0 none;
+}
+.recommendation-modal .recommendation-container {
+  margin-left: 60px;
+}
+.ttRecoGroup {
+  padding: 10px;
+  width: 400px;
+}

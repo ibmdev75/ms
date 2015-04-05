@@ -1,0 +1,59 @@
+/* ----------------------------------------------- */
+/*  FULLDISPLAY                                    */
+/* ----------------------------------------------- */
+
+.displayHeaderToolbar {
+  float: right;
+  border: 1px solid @grayLighter;
+  background: #F7F7F7;
+  line-height: @baseline*1.5 - 2;
+  padding: 0  @baseline/2 - 1;
+
+  > * {  margin: 0 1px; }
+}
+
+.fullDisplay {
+
+  A.thumbnail,
+  DIV.thumbnail {
+    margin: 0 @baseline/2 @baseline/2 - 6 0;
+    border: 1px solid @grayLight;
+    SPAN { width: 124px; height: 94px; font-size: 90px; }
+  }
+  
+  IMG.thumbnail { 
+    margin: 2px;  
+  }
+  
+  // .abstractDetail{ clear: both; } // Break Faceted search
+}
+
+
+/* ----------------------------------------------- */
+/*  RESULTDISPLAY                                  */
+/* ----------------------------------------------- */
+
+.resultDisplay {
+  overflow: auto;
+  
+  A.thumbnail,
+  DIV.thumbnail { 
+    float: left;
+    margin: 0 @baseline/2 @baseline/2 - 6 0;
+    border: 1px solid @grayLight;
+    SPAN { width: 64px; height: 48px; font-size: 44px; }
+  }
+  .gauge.relevance{ margin-right: @line-height-computed / 2; }
+  H3 {
+    font-size: @font-size-base * 1.25; // H3
+    line-height: @line-height-computed;
+    margin: (@line-height-computed / 4) 0px;
+  }
+  
+
+  IMG.thumbnail { 
+    margin: 2px;
+  }
+  
+  // .abstractDetail{ clear: both; } // Break Faceted search
+}

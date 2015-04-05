@@ -1,0 +1,22 @@
+<% if (Util.notEmpty(alert.getMessage())) { %>
+<table cellspacing="5" cellpadding="5">
+	<tr>
+	  <td class='vTop'>
+      <jalios:memberphoto size="<%= PhotoSize.TINY %>" member="<%= alert.getAuthor() %>" />
+    </td>
+	  <td>&nbsp;</td>
+		<td style="background:#f6f6f6; width:480px; padding:5px 10px 5px;border-collapse:collapse;font-family:Arial,Sans-serif;font-size:12px;color:#535353;line-height:160%;">
+			<div>
+				<% String messageMarkup = alert.getMessageMarkup(); %>
+				<% if (AlertBuilder.HTML_MARKUP.equals(messageMarkup)) { %>
+				    <%= alert.getMessage() %>
+				<% } else if (AlertBuilder.WIKI_MARKUP.equals(messageMarkup)) { %>
+				    <jalios:wiki><%= alert.getMessage() %></jalios:wiki>
+				<% } else { %>
+				    <p><%= alert.getMessage() %></p>
+				<% } %>
+			</div>
+		</td>
+	</tr>
+</table>
+<% } %>

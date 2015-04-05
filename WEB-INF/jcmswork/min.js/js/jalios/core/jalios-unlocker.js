@@ -1,0 +1,1 @@
+!function(a){var b=function(){var d=a(".unlocker");if(d.exists()){var c=d.data("jalios-unlocker-url");if(c){a.ajax({url:c})}}};a(window).on("beforeunload",b);a(document).on("click.dismiss.bs.modal",'[data-dismiss="modal"]',b)}(window.jQuery);

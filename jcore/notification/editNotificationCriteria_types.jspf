@@ -1,0 +1,24 @@
+<% if (formHandler.TYPES_STEP == step) { %>
+
+<jalios:message msg="ui.work.notification.edit-criteria.types.info" title="" />
+
+<ul id="content-types">
+  <% Set<Class<? extends Publication>> selectedClassSet = formHandler.getAvailableClassSet(); %>
+  <jalios:foreach collection="<%= formHandler.getAllClassList() %>" name="itClass" type="Class">
+  <% 
+  String typeId = "editNotificationCriteria_types" + itClass.getName();
+  boolean selected = selectedClassSet.contains(itClass);
+  %>
+  
+  <li>
+    <div class="checkbox">
+      <label>
+        <input data-jalios-action="toggle:label toggle:label-warning" data-jalios-target="span" data-jalios-target-position="next" name="types" type="checkbox" id="<%= typeId %>" value="<%= itClass.getName() %>" <%= selected ? "checked='checked'" : "" %> />
+        <span  class="<%= selected ? "label label-warning" : "" %>"><%= channel.getTypeLabel(itClass, userLang) %></span>
+      </label>
+    </div>
+  </li>
+  </jalios:foreach>
+</ul>
+
+<% } %>

@@ -1,0 +1,667 @@
+<%@page import="generated.AbstractPortletStat"%>
+<%@page import="generated.EditAbstractPortletStatHandler"%>
+<%@page import="com.jalios.jcms.stat.PortletStat"%>
+<%@page import="com.jalios.jcms.portlet.Portal"%>
+<%@page import="com.jalios.jcms.portlet.PortalElement"%>
+<%@page import="com.jalios.jcms.portlet.PortalManager"%>
+<%@page import="com.jalios.jcms.portlet.EditPortalHandler"%>
+<%@page import="com.jalios.jcms.portlet.EditPortalElementHandler"%>
+<%@page import="com.jalios.jcms.portlet.EditPortletCollectionHandler"%>
+<%@page import="com.jalios.jcms.taglib.ControlType"%>
+<%@page import="com.jalios.jcms.taglib.settings.impl.EnumerateSettings"%>
+<%@page import="com.jalios.jcms.taglib.settings.impl.PublicationSettings"%>
+<% EditPortalElementHandler genericFormHandler = (EditPortalElementHandler) formHandler; %>
+</div>
+
+<div class="row">
+<div class="col-xs-12">
+<div class="tab-pane" id="CommonEditPortlet">
+
+<jalios:if predicate="<%= PortletStat.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="portal-log" title="ui.portal.alt.portallog" /></h2>
+
+    <% if (((EditAbstractPortletStatHandler) genericFormHandler).isFieldEdition("tabGroup")) { %>
+      <%-- TabGroup ------------------------------------------------------------ --%>
+      <%
+      Map tabGroupMap  = new HashMap();
+      for (Iterator it = channel.getLanguageList().iterator() ; it.hasNext() ; ) {
+        String itLang = (String) it.next();
+        String tabGroupVal = ((EditAbstractPortletStatHandler) genericFormHandler).getAvailableTabGroup(itLang);
+        
+        if (Util.notEmpty(tabGroupVal)){
+         tabGroupMap.put(itLang,tabGroupVal);
+        }
+      }
+      %>
+      <jalios:field name="tabGroup" label="ui.stateditor.lbl.portlet.tabgrp" description="ui.stateditor.lbl.portlet.tabgrp.h" ml="<%= channel.isMultilingual() %>" value="<%= tabGroupMap %>">
+        <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+      </jalios:field>
+    <% } %>
+    
+    <% if (((EditAbstractPortletStatHandler)genericFormHandler).isFieldEdition("topTen")) { %>
+      <%-- TopTen ------------------------------------------------------------ --%>
+      <% int topTenValues = ((EditAbstractPortletStatHandler) genericFormHandler).getAvailableTopTen(); %>
+      <jalios:field name="topTen" label="ui.stateditor.lbl.portlet.disptop" value="<%= topTenValues %>">
+        <jalios:control type="<%= ControlType.NUMBER %>" />
+      </jalios:field>
+    <% } %>
+    
+    <% if (((EditAbstractPortletStatHandler)genericFormHandler).isFieldEdition("displayAverage")) { %>
+      <%-- DisplayAverage ------------------------------------------------------------ --%>
+      <% boolean displayAverageValues = ((EditAbstractPortletStatHandler) genericFormHandler).getAvailableDisplayAverage(); %>
+      <jalios:field name="displayAverage" label="ui.stateditor.lbl.portlet.dispavg" value="<%= displayAverageValues %>">
+        <jalios:control type="<%= ControlType.BOOLEAN %>" />
+      </jalios:field>
+    <% } %>
+    
+    <% if (((EditAbstractPortletStatHandler)genericFormHandler).isFieldEdition("displayTimeChart")) { %>
+      <%-- DisplayTimeChart ------------------------------------------------------------ --%>
+      <% boolean  displayTimeChartValues = ((EditAbstractPortletStatHandler) genericFormHandler).getAvailableDisplayTimeChart(); %>
+      <jalios:field name="displayTimeChart" label="ui.stateditor.lbl.portlet.disptime" value="<%= displayTimeChartValues %>">
+        <jalios:control type="<%= ControlType.BOOLEAN %>" />
+      </jalios:field>
+    <% } %>
+    
+    <% if (((EditAbstractPortletStatHandler)genericFormHandler).isFieldEdition("displayWeekChart")) { %>
+      <%-- DisplayWeekChart ------------------------------------------------------------ --%>
+      <% boolean  displayWeekChartValues = ((EditAbstractPortletStatHandler) genericFormHandler).getAvailableDisplayWeekChart(); %>
+      <jalios:field name="displayWeekChart" label="ui.stateditor.lbl.portlet.dispweek" value="<%= displayWeekChartValues %>">
+        <jalios:control type="<%= ControlType.BOOLEAN %>" />
+      </jalios:field>
+    <% } %>
+    
+    <% if (((EditAbstractPortletStatHandler)genericFormHandler).isFieldEdition("filteredArea")) { %>
+      <%-- FilteredArea ------------------------------------------------------------ --%>
+      <% String filteredAreaValues = ((EditAbstractPortletStatHandler) genericFormHandler).getAvailableFilteredArea(); %>
+      <jalios:field name="filteredArea" label="ui.stateditor.lbl.portlet.areaflt" value="<%= filteredAreaValues %>">
+        <jalios:control settings='<%= new EnumerateSettings().select().enumValues(AbstractPortletStat.filteredAreaValues).enumLabels(AbstractPortletStat.filteredAreaLabelMap.get(userLang)) %>' />
+      </jalios:field>
+    <% } %>
+    
+    <% if (((EditAbstractPortletStatHandler) genericFormHandler).isFieldEdition("regExpFilter")) { %>
+      <%-- RegExpFilter ------------------------------------------------------------ --%>
+      <% boolean regExpFilterValues = ((EditAbstractPortletStatHandler)genericFormHandler).getAvailableRegExpFilter(); %>
+      <jalios:field name="regExpFilter" label="ui.stateditor.lbl.portlet.dispflt" description="ui.stateditor.lbl.portlet.dispflt.h" value="<%= regExpFilterValues %>">
+        <jalios:control type="<%= ControlType.BOOLEAN %>" />
+      </jalios:field>
+    <% } %>
+
+  </div>
+</jalios:if>
+
+
+<jalios:if predicate="<%= Portal.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="portal-collection" title="ui.editportlet.children" /></h2>
+    
+    <% if (((EditPortalHandler) genericFormHandler).isFieldEdition("pageTitle")) { %>
+      <%-- PageTitle ------------------------------------------------------------ --%>
+      <%
+        Map pageTitleMap  = new HashMap();
+        for (Iterator it = channel.getLanguageList().iterator() ; it.hasNext() ; ) {
+          String itLang = (String)it.next();
+          String pageTitleVal = ((EditPortalHandler)genericFormHandler).getAvailablePageTitle(itLang);
+          
+          if (Util.notEmpty(pageTitleVal)){
+           pageTitleMap.put(itLang,pageTitleVal);
+          }
+        }
+      %>
+      <jalios:field name="pageTitle" label="ui.editportlet.pagetitle" description="ui.editportlet.pagetitle.h" ml="<%= channel.isMultilingual() %>" value="<%= pageTitleMap %>">
+        <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+      </jalios:field>
+    <% } %>
+
+    <% if (((EditPortalHandler) genericFormHandler).isFieldEdition("child")) { %>
+      <%-- Child ------------------------------------------------------------ --%>
+      <% com.jalios.jcms.portlet.PortalElement childValues = ((EditPortalHandler)genericFormHandler).getAvailableChild(); %>
+      <jalios:field name="child" label="ui.editportlet.child" value="<%= childValues %>" tooltip="ui.editportlet.title.child">
+        <jalios:control settings='<%= new PublicationSettings().superType(PortalElement.class) %>' />
+      </jalios:field>
+    <% } %>
+
+    <% if (formHandler.isFieldEdition("exactCategory")) { %>
+      <%-- ExactCategory ------------------------------------------------------------ --%>
+      <% boolean exactCategoryValues = ((EditPortalHandler) genericFormHandler).getAvailableExactCategory(); %>
+      <jalios:field name="exactCategory" label="ui.editportlet.exaccat" description="ui.editportlet.exaccat.h" value="<%= exactCategoryValues %>">
+        <jalios:control type="<%= ControlType.BOOLEAN %>" />
+      </jalios:field>
+    <% } %>
+
+    <%-- CssFile ------------------------------------------------------------ --%> 
+    <% String cssFile = ((EditPortalHandler) genericFormHandler).getAvailableCssFile(); %>
+    <%
+       List cssPath = new ArrayList();
+       File[] cssFiles = PortalManager.getCssFiles();
+       if (cssFiles != null){
+         for (int i = 0 ; i < cssFiles.length ; i++){
+           cssPath.add(channel.getRelativePath(cssFiles[i]));
+         }
+       }
+    %>
+    <jalios:field name="cssFile" label="ui.editportlet.cssfile" tooltip="ui.editportlet.title.cssfile" value="<%= cssFile %>">
+      <jalios:control settings='<%= new EnumerateSettings().select().enumValues(cssPath) %>' />
+    </jalios:field>
+  
+  </div>
+</jalios:if>
+
+
+<jalios:if predicate="<%= PortletParent.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="portal-collection" /></h2>
+    
+    <% if (((EditPortletParentHandler)genericFormHandler).isFieldEdition("child")) { %>
+      <%-- Child ------------------------------------------------------------ --%>
+      <% com.jalios.jcms.portlet.PortalElement childValues = ((EditPortletParentHandler) genericFormHandler).getAvailableChild(); %>
+      <jalios:field name="child" label="ui.editportlet.child" value="<%= childValues %>" description="ui.editportlet.title.child">
+        <jalios:control settings='<%= new PublicationSettings().superType(PortalElement.class) %>' />
+      </jalios:field>
+    <% } %>
+
+  </div>
+</jalios:if>
+
+
+<jalios:if predicate='<%= PortletCollection.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>'>
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src='portal-collection' title='<%= glp("ui.editportlet.children") %>' /></h2>
+
+    <% if (((EditPortletCollectionHandler)genericFormHandler).isFieldEdition("children")) { %>
+      <%-- Children ------------------------------------------------------------ --%>
+      <jalios:message msg="ui.editportlet.children-bind.help" title="" />
+    
+      <div class="row">
+        <div class="col-sm-6">
+        <% 
+          PortalElement[] childrenValues  = ((EditPortletCollectionHandler) genericFormHandler).getAvailableChildren(); 
+          String[] childrenBindingsValues = ((EditPortletCollectionHandler) genericFormHandler).getAvailableChildrenBindings(); 
+          int mvBinds = 1;
+          if (childrenValues != null && 
+              childrenBindingsValues != null && 
+              childrenValues.length != childrenBindingsValues.length){
+            String[] oldBindings = childrenBindingsValues;
+            childrenBindingsValues = new String[childrenValues.length];
+            if (oldBindings.length > 0){
+              int cblen = (childrenBindingsValues.length > oldBindings.length) ? oldBindings.length : childrenBindingsValues.length;
+              System.arraycopy(oldBindings,0,childrenBindingsValues,0,cblen);
+            }
+            mvBinds = childrenBindingsValues.length;
+          }
+        %>
+      <jalios:field name="children" label="ui.editportlet.children" value="<%= childrenValues %>" mv="1" css="nolist-widget" resource="field-vertical">
+        <jalios:control settings='<%= new PublicationSettings().superType(PortalElement.class) %>' />
+      </jalios:field>
+      
+      </div>
+      <div class="col-sm-6">
+        <jalios:field name="childrenBindings" label="ui.editportlet.children-bind" tooltip="ui.editportlet.children-bind.h" value="<%= childrenBindingsValues %>" mv="1" resource="field-vertical">
+          <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+        </jalios:field>
+      </div>
+    </div>
+    
+    <% } %>
+
+  </div>
+</jalios:if>
+
+
+<div class="tab-page">
+  <h2 class="tab"><jalios:icon src="portal-look-nfeel2" title="ui.editportlet.tmpl" /></h2>
+  
+  <%-- Templates ----------------------------------------------%>
+  <jsp:include page="/work/doEditCommonTemplates.jsp" flush="true"/>
+  
+  <%-- Classes ----------------------------------------------%>
+  <jalios:field name="cssClasses" label="ui.editportlet.cssclasses" tooltip="ui.editportlet.cssclasses.h" value="<%= formHandler.getAvailableCssClasses() %>">
+    <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+  </jalios:field>
+
+</div>
+
+<jalios:if predicate="<%= PortletSkinable.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>" >
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="portal-look-nfeel3" title="ui.editportlet.skin" /></h2>
+    
+    <%-- Templates ----------------------------------------------%>
+    <% request.setAttribute("skinTemplate","true"); %>
+    <jsp:include page="/work/doEditCommonTemplates.jsp" flush="true" />
+    
+    <% //Outter CSS
+    Map cssSkinMap = PortalManager.getCSSMap(PortalManager.CSS_OUTER , formHandler.getPublicationClass());
+    boolean hasCssSkinDisplay = Util.notEmpty(cssSkinMap.entrySet());
+    String  cssSkinDisplay = hasCssSkinDisplay ? Util.getString(((EditPortletSkinableHandler)genericFormHandler).getAvailableSkinCSS(),"") : "";
+    %>
+    <jalios:if predicate="<%= hasCssSkinDisplay %>">
+      <% 
+      List labelList = new ArrayList();
+      labelList.add(glp("ui.editportlet.no-skin-css"));
+      labelList.add("--------------------");
+      labelList.addAll(cssSkinMap.keySet());
+      
+      List valueList = new ArrayList();
+      valueList.add("");
+      valueList.add("");
+      valueList.addAll(cssSkinMap.values());
+      %> 
+      <jalios:field name="skinCSS" label="ui.editportlet.displaycss" value='<%= cssSkinDisplay %>'>
+        <jalios:control settings='<%= new EnumerateSettings().select().enumValues(valueList).enumLabels(labelList) %>' />
+      </jalios:field>
+    </jalios:if>
+    
+    <%-- Classes ----------------------------------------------%>
+    <% String skinClassesValues  = ((EditPortletSkinableHandler)genericFormHandler).getAvailableSkinClasses(); %>
+    <jalios:field name='<%= "skinClasses" %>' label="ui.editportlet.skinclasses" tooltip="ui.editportlet.skinclasses.h" value='<%= skinClassesValues %>'>
+      <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+    </jalios:field>
+
+  </div>
+</jalios:if>
+
+
+<jalios:if predicate="<%= Portlet.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="portal-look-nfeel" title="ui.editportlet.looknfeel" /></h2>
+    <% boolean enable = PortletSkinable.class.isAssignableFrom(genericFormHandler.getPublicationClass()); %>
+    <% request.setAttribute("field-inline", "true"); %>
+    <div class="br col-md-9 col-md-offset-3">
+      <table>
+        <tr>
+          <td rowspan="2">
+            <%-- DISPLAY TITLE--%>
+            <jalios:if predicate="<%= enable %>">
+              <% Map displayTitleMap = ((EditPortletSkinableHandler)genericFormHandler).getAllAvailableDisplayTitleML(); %>
+              <jalios:field label="&nbsp;" name="displayTitle" ml="<%= channel.isMultilingual() %>" value="<%= displayTitleMap %>">
+                <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+              </jalios:field>
+            </jalios:if>
+  
+            <jalios:if predicate="<%= !enable %>">
+              <jalios:field name="displayTitle" ml="<%= channel.isMultilingual() %>" disabled="true">
+                <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+              </jalios:field>
+            </jalios:if>
+          </td>
+          <td>
+            <%-- EXPAND STATE --%>
+            <% String expandState = enable ? Util.getString(((EditPortletSkinableHandler) genericFormHandler).getAvailableExpandState(),"") : ""; %>
+            <jalios:field name='expandState' disabled='<%= !enable %>' value='<%= expandState %>'>
+              <jalios:control settings='<%= new EnumerateSettings().select()
+                                                .enumValues("Enable", "Hidden", "Minimized")
+                                                .enumLabels("ui.editPortlet.skin.enabled", "ui.editPortlet.skin.disabled", "ui.editPortlet.skin.minimized") %>' />
+            </jalios:field>
+          </td>
+          <td><img src="s.gif" alt="" /></td>
+        </tr>
+        <tr>
+          <td rowspan="3"><jalios:icon src="lookn-feel" /></td>
+          <td>
+            <%-- POPUP STATE--%>
+            <% String popupState = enable ? Util.getString(((EditPortletSkinableHandler) genericFormHandler).getAvailablePopupState(),"") : ""; %>
+            <jalios:field name="popupState" disabled="<%= !enable %>" value="<%= popupState %>">
+            <jalios:control settings='<%= new EnumerateSettings().select()
+                                              .enumValues("Hidden", "Enable", "Popup")
+                                              .enumLabels("ui.editPortlet.skin.disabled", "ui.editPortlet.skin.enabled", "ui.editPortlet.skin.popup") %>' />
+            </jalios:field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%-- BACK IMAGE--%>
+            <jalios:field name="backImage" resource="field-light" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableBackImage() %>">
+              <jalios:control type="<%= ControlType.IMAGEPATH %>" />
+            </jalios:field>
+          </td>
+          <td>
+            <%-- BORDER--%>
+          <jalios:field name="border" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableBorder() %>">
+              <jalios:control type="<%= ControlType.NUMBER %>" />
+            </jalios:field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%-- BACK COLOR--%>
+            <jalios:field name="backColor" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableBackColor() %>">
+              <jalios:control type="<%= ControlType.COLOR %>" />
+            </jalios:field>
+            </td>
+            <td>
+            <%-- BORDER COLOR--%>
+            <jalios:field name="borderColor" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableBorderColor() %>">
+              <jalios:control type="<%= ControlType.COLOR %>" />
+            </jalios:field>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <% request.removeAttribute("field-inline"); %>
+    
+    <%-- Id ----------------------------------------------%>
+    <% String cssIdValues = formHandler.getAvailableCssId();  %>
+  <jalios:field name='<%= "cssId" %>' label="ui.editportlet.cssid" tooltip="ui.editportlet.cssid.h" value='<%= cssIdValues %>'>
+      <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+    </jalios:field>
+  </div>
+</jalios:if>
+
+<%-- ORIGINAL PORTLET --%>
+<jalios:if predicate="<%= Portlet.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <input class="formTextfield" type="hidden" name="originalPortlet" size="6" style="background-color: #DDDDDD" value='<%= ((EditPortletHandler) genericFormHandler).getAvailableOriginalPortlet() == null ? "" : ((EditPortletHandler)genericFormHandler).getAvailableOriginalPortlet().getId() %>' />
+</jalios:if> 
+
+<jalios:if predicate="<%= Portlet.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="portal-geometry" title="ui.editportlet.inset-padding" /></h2>
+
+    <% request.setAttribute("field-inline", "true"); %>  
+    <table>
+      <tr>
+        <td>&nbsp;</td>
+        <td colspan="3">
+         <%-- INSET TOP --%>
+         <jalios:field name="insetTop" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableInsetTop() %>">
+           <jalios:control type="<%= ControlType.NUMBER %>">
+             <jalios:buffer name="APPEND">px</jalios:buffer>
+           </jalios:control>
+         </jalios:field>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr><td colspan="5" class="text-center"><jalios:icon src="dual-arrow-v" /></td></tr>
+      <tr>
+        <td>
+          <%-- INSET LEFT --%>
+          <jalios:field name="insetLeft" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableInsetLeft() %>">
+            <jalios:control type="<%= ControlType.NUMBER %>">
+              <jalios:buffer name="APPEND">px</jalios:buffer>
+            </jalios:control>
+          </jalios:field>
+        </td>
+        <td class="text-center"><jalios:icon src="dual-arrow-h" /></td>
+        <td>
+          <table background="images/jalios/icons/portal/interfaces/Geometry.gif" style="background-repeat: no-repeat; width: 163px; height: 109px;">
+            <tr><td><img src="s.gif" width="1" height="20" alt="" /></td></tr>
+            <tr>
+              <td><img src="s.gif" width="10" height="1" alt="" /></td>
+              <td>
+                <jalios:field name="cellPadding" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableCellPadding() %>">
+                  <jalios:control type="<%= ControlType.NUMBER %>">
+                    <jalios:buffer name="APPEND">px</jalios:buffer>
+                  </jalios:control>
+                </jalios:field>
+              </td>
+              <td><img src="s.gif" width="10" height="1" alt="" /></td>
+            </tr>
+            <tr><td><img src="s.gif" width="1" height="10" alt="" /></td></tr>
+          </table>
+        </td>
+        <td class="text-center"><jalios:icon src="dual-arrow-h" /></td>
+        <td>
+          <%-- INSET RIGHT --%>
+          <jalios:field name="insetRight" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableInsetRight() %>">
+            <jalios:control type="<%= ControlType.NUMBER %>">
+              <jalios:buffer name="APPEND">px</jalios:buffer>
+            </jalios:control>
+          </jalios:field>
+         </td>
+      </tr>
+      <tr>
+        <td colspan="5" class="text-center"><jalios:icon src="dual-arrow-v" /></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td colspan="3">
+          <%-- INSET BOTTOM --%>
+          <jalios:field name="insetBottom" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableInsetBottom() %>">
+            <jalios:control type="<%= ControlType.NUMBER %>">
+              <jalios:buffer name="APPEND">px</jalios:buffer>
+            </jalios:control>
+          </jalios:field>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+</jalios:if>
+
+
+<jalios:if predicate="<%= Portlet.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="portal-geometry2" title="ui.editportlet.box-text-align" /></h2>
+    <% request.setAttribute("field-inline", "true"); %>
+    <div class="col-md-9 col-md-offset-3 br">
+      <table>
+        <tr>
+          <td class="text-center"><jalios:icon src="arrow-small-up" /></td>
+          <td colspan="3" rowspan="3">
+            <table background="images/jalios/icons/portal/interfaces/GeometrySize.gif" style="background-repeat: no-repeat; width: 126px; height: 89px; ">
+              <tr>
+                <td colspan="3"><img src="s.gif" width="1" height="15" alt="" /></td>
+              </tr>
+              <tr>
+                <td><img src="s.gif" width="10" height="1" alt="" /></td>
+                <td>
+                  <%-- WIDTH --%>
+                  <jalios:tooltip property="ui.editportlet.width.h" />
+                  <input class="formTextfield" name="width" type="text" value="<%= ((EditPortletHandler) genericFormHandler).getAvailableWidth() %>" size="4" />
+                </td>
+                <td><img src="s.gif" width="10" height="1" alt="" /></td>
+              </tr>
+              <tr><td colspan="3"><img src="s.gif" width="1" height="10" alt="" /></td></tr>
+            </table>
+          </td>
+          <td rowspan="3">&nbsp;&nbsp;</td>
+          <td rowspan="3">
+          
+          <%-- ALIGN TABLE --%>
+          <% String alignTable = Util.getString(((EditPortletHandler) genericFormHandler).getAvailableAlignTable(), ""); %>
+          <jalios:field resource="field-light" label="ui.editportlet.table-align" name="alignTable" value="<%= alignTable %>">
+            <select name="alignTable" class="form-control">
+              <option value="" <%= alignTable.equals("") ? "selected" : "" %>>&nbsp;</option>
+              <jalios:foreach array="<%= (String[])(AbstractPortlet.alignTableLabelMap.get(userLang)) %>" name="itLabel" type="String" counter="itCounter2">
+                <% String itValue = AbstractPortlet.alignTableValues[itCounter2.intValue() - 1]; %>
+                <option value="<%= itValue %>" <%= alignTable.equals(itValue) ? "selected" : "" %>><%= itLabel %></option>
+              </jalios:foreach>
+            </select>
+          </jalios:field>
+    
+          </td>
+        </tr>
+        <tr>
+          <td>
+          
+          <%-- ALIGN V --%>
+          <% String alignV = Util.getString(((EditPortletHandler)genericFormHandler).getAvailableAlignV(),""); %>
+          <jalios:field name="alignV" value="<%= alignV %>">
+            <select name="alignV" class="form-control">
+              <jalios:foreach array="<%= (String[])(AbstractPortlet.alignVLabelMap.get(userLang)) %>" name="itLabel" type="String" counter="itCounter2">
+                <% String itValue = AbstractPortlet.alignVValues[itCounter2.intValue() - 1]; %>
+                <option value="<%= itValue %>" <%= alignV.equals(itValue) ? "selected" : "" %>><%= itLabel %></option>
+              </jalios:foreach>
+            </select>
+          </jalios:field>
+    
+          </td>
+        </tr>
+        <tr>
+          <td class="text-center"><jalios:icon src="arrow-small-down" /></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><jalios:icon src="arrow-small-left" /></td>
+          <td>
+          
+            <%-- ALIGN H --%>
+            <%
+              String alignH = ((EditPortletHandler)genericFormHandler).getAvailableAlignH();
+                     alignH = (alignH != null ? alignH : "left");  
+            %>
+            <jalios:field name="alignH" value="<%= alignH %>">
+              <select name="alignH" class="form-control">
+                <jalios:foreach array="<%= (String[])(AbstractPortlet.alignHLabelMap.get(userLang)) %>" name="itLabel" type="String" counter="itCounter2">
+                  <% String itValue = AbstractPortlet.alignHValues[itCounter2.intValue() - 1]; %>
+                  <option value="<%= itValue %>" <%= alignH.equals(itValue) ? "selected" : "" %>><%= itLabel %></option>
+                </jalios:foreach>
+              </select>
+            </jalios:field>
+            
+          </td>
+          <td><jalios:icon src="arrow-small-right" /></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+       </table>
+   </div>
+   <% request.removeAttribute("field-inline"); %>
+  </div>
+</jalios:if>
+
+<jalios:if predicate="<%= PortalElement.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="caches" title="ui.portal.alt.portalcache" /></h2>
+
+      <%-- CacheType ------------------------------------------------------------ --%> 
+      <% String cacheType = Util.getString(genericFormHandler.getAvailableCacheType(),""); %>
+      <jalios:field name='<%= "cacheType" %>' label='<%= glp("ui.editportlet.cachetype") %>' tooltip='<%= glp("ui.editportlet.title.cachetype") %>' required='<%= true %>' value='<%= cacheType %>'>
+        <jalios:control settings='<%= new EnumerateSettings().select().enumValues(AbstractPortlet.cacheTypeValues).enumLabels(AbstractPortlet.cacheTypeLabelMap.get(userLang)) %>' />
+      </jalios:field>
+
+          
+      <%-- CacheSensibility ------------------------------------------------------------ --%> 
+      <% String cacheSensibility = Util.getString(genericFormHandler.getAvailableCacheSensibility(),""); %>
+      <jalios:field name='<%= "cacheSensibility" %>' label='<%= glp("ui.editportlet.cacherefine") %>' description='<%= glp("ui.editportlet.title.cacherefine") %>' required='<%= true %>' value='<%= cacheSensibility %>'>
+        <jalios:control settings='<%= new EnumerateSettings().select().enumValues(AbstractPortlet.cacheSensibilityValues).enumLabels(AbstractPortlet.cacheSensibilityLabelMap.get(userLang)) %>' />
+      </jalios:field>
+
+      <%-- CacheData ------------------------------------------------------------ --%> 
+      <% 
+        String[] invalidClassArray   = genericFormHandler.getAvailableInvalidClass();
+        
+        List<String> enumValues = new ArrayList<String>();
+        enumValues.add("Data");
+        enumValues.add("Category");
+        enumValues.add("Member");
+        enumValues.add("Group");
+        enumValues.add("Content");
+        enumValues.add("PortalElement");
+        enumValues.add("Publication");
+        
+        
+        List<String> enumLabels = new ArrayList<String>();
+        enumLabels.add(glp("ui.com.lbl.datas"));
+        enumLabels.add(glp("ui.com.lbl.categories"));
+        enumLabels.add(glp("ui.com.lbl.members"));
+        enumLabels.add(glp("ui.com.lbl.groups"));
+        enumLabels.add(glp("ui.com.lbl.contents"));
+        enumLabels.add(glp("ui.com.lbl.portalelements"));
+        enumLabels.add(glp("ui.com.lbl.publications"));
+      
+      
+        List classList = channel.getSubTypeList(Publication.class, userLang);
+        for (Iterator it = classList.iterator(); it.hasNext(); ){
+          Class itClass = (Class) it.next();
+          enumValues.add(itClass.getName());
+          enumLabels.add(channel.getTypeLabel(itClass,genericFormHandler.getWorkspace(), userLang));
+        }
+      %>
+      
+      <jalios:field name='<%= "invalidClass" %>' label='<%= glp("ui.editportlet.cachedata") %>' value='<%= invalidClassArray %>' mv='<%= 1 %>'>
+            <jalios:control settings='<%= new EnumerateSettings().select().enumValues(enumValues).enumLabels(enumLabels) %>' />
+          </jalios:field>
+          
+      <% if (formHandler.isFieldEdition("invalidtime")) { %>
+        <%-- Invalidtime ------------------------------------------------------------ --%>
+        <% long invalidtimeValues = formHandler.getAvailableInvalidTime(); %>
+        <jalios:field name='<%= "invalidTime" %>' label="ui.editportlet.cachetimeout" description="ui.editportlet.title.cachetimeout" value='<%= ""+invalidtimeValues %>'>
+          <jalios:control settings='<%= new DurationSettings().resolution(DurationSettings.Resolution.MINUTE) %>' />
+        </jalios:field>
+      <% } %>
+
+  </div>
+</jalios:if>
+
+
+<jalios:if predicate='<%= Portlet.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>'>
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src='advanced-gray' title='<%= glp("ui.portal.alt.portalcustomize") %>' /></h2>
+
+      <%-- BehaviorCopy ------------------------------------------------------------ --%> 
+      <jalios:field name='<%= "behaviorCopy" %>' label='<%= glp("ui.editportlet.behaviorcopy") %>' required='<%= true %>' value='<%= ""+genericFormHandler.getAvailableBehaviorCopy() %>'>
+        <jalios:control settings='<%= new EnumerateSettings().select().enumValues("true", "false", "ws").enumLabels("ui.editportlet.behaviorcopy.copy", "ui.editportlet.behaviorcopy.ref", "ui.editportlet.behaviorcopy.ws") %>' />
+      </jalios:field>
+
+      <%-- Condition ------------------------------------------------------------ --%> 
+      <% 
+      TypeFieldEntry conditionTFE = channel.getTypeFieldEntry(AbstractPortlet.class, "condition", true);
+      String conditionLabel = conditionTFE.getLabel(userLang);
+      String[] conditionValues = ((EditPortletHandler)genericFormHandler).getAvailableCondition();
+      String conditionDescription = conditionTFE.getDescription(userLang);
+      String[] enumLabels = (String[]) AbstractPortlet.getConditionLabels(userLang);
+      String[] enumValues = AbstractPortlet.conditionValues;
+      String[] enumLabelsCustom = channel.getPolicyManager().getConditionLabels(enumLabels,(Class<PortalElement>)genericFormHandler.getPublicationClass(),userLang);
+      String[] enumValuesCustom = channel.getPolicyManager().getConditionValues(enumValues,(Class<PortalElement>)genericFormHandler.getPublicationClass());
+      int addCount = enumValues != enumValuesCustom ? 1 : 0;
+      %>
+      <jalios:field name='<%= "condition" %>' label='<%= conditionLabel %>' description='<%= conditionDescription %>' required='<%= true %>' value='<%= Util.getFirst(conditionValues) %>'>
+        <jalios:control settings='<%= new EnumerateSettings().select().enumValues(enumValuesCustom).enumLabels(enumLabelsCustom) %>' />
+      </jalios:field>
+
+
+      <% 
+        String[] abilities      = PortalElement.getAllAbilities(formHandler.getPublicationClass()); 
+        List     abilitiesList  = Arrays.asList(formHandler.getAvailableAbilities());
+        if (Util.notEmpty(abilities)) {
+      %>
+    
+  <jalios:field name="abilities" label="ui.editportlet.abilities" description="ui.editportlet.abilities.h">
+    <input type="hidden" name="abilities" value="" />
+      <% String section = null; %>
+      <jalios:foreach array="<%= abilities %>" type="String" name="itAbility">
+        <% 
+          String tmpSection = itAbility.substring(0,itAbility.lastIndexOf('.'));
+          if (!tmpSection.equals(section)){ 
+          // Close previous section if any
+            if (section != null) { %></ol></li><% }
+          // Open new section
+            %><li class='list-unstyled'>    <label><%= glp(tmpSection) %></label><ol><%
+            section = tmpSection;
+          }
+        %>
+        <li>
+         <label>
+           <input type="checkbox"name="abilities" value="<%= itAbility %>" class="formCheckbox" <%= abilitiesList.contains(itAbility) ? "checked='checked'" : "" %>/>
+           <%= glp(itAbility) %>
+         </label>
+        </li>
+      </jalios:foreach>
+      </ol></li><%-- ends of section --%>
+    </ol>
+  </jalios:field>
+  <% } %>
+  </div>
+</jalios:if>
+
+<jalios:if predicate="<%= PortalElement.class.isAssignableFrom(genericFormHandler.getPublicationClass()) %>">
+  <div class="tab-page">
+    <h2 class="tab"><jalios:icon src="info" title="ui.portal.alt.portaldescription" alt="" /></h2>
+
+    <%-- Portlet Image (DataImage) ----------------------------------------------%>
+    <jalios:field name="portletImage" label="ui.editportlet.image" tooltip="ui.editportlet.image.h" ml="<%= channel.isMultilingual() %>" value="<%= formHandler.getAllAvailablePortletImageML() %>">
+      <jalios:control type="<%= ControlType.IMAGEPATH %>" />
+    </jalios:field>
+  
+    <%-- Description ------------------------------------------------------------ --%> 
+    <jalios:field name="description" label="ui.editportlet.description" ml="<%= channel.isMultilingual() %>" value="<%= genericFormHandler.getAllAvailableDescriptionML() %>">
+      <jalios:control settings='<%= new WikiAreaSettings().rows(5) %>' />
+    </jalios:field>
+
+  </div>
+</jalios:if>
+</div>
+</div>
+</div>
+
+<div class="row">

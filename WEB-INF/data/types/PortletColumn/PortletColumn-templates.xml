@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates type="PortletColumn" version="5.0">
+  <template name="default" file="doPortletColumnFullDisplay.jsp" usage="box" />
+  <template name="tab" file="doPortletColumnTabDisplay.jsp" usage="box" />
+</templates>
+

@@ -1,0 +1,110 @@
+
+.alert-level {
+  
+  &-warning          { background-color: @brand-danger; }
+  &-warning[href]    { background-color: darken(@brand-danger, 10%); }
+
+  &-action           { background-color: @brand-warning; }
+  &-action[href]     { background-color: darken(@brand-warning, 10%); }
+  
+  &-info              { background-color: @brand-info; }
+  &-info[href]        { background-color: darken(@brand-info, 10%); }
+}
+
+
+.alert-modal {
+  .alert-entry {
+    margin-left: -@modal-inner-padding;
+    margin-right: -@modal-inner-padding;
+    padding: @baseline / 2  @baseline;
+    border-top: 1px solid @grayLighter;
+    
+    .alert-container {
+      margin-left:65px;
+    }
+    .message { 
+			position: relative; 
+			background: #EDF8FE; 
+			border: 1px solid #DAEDF9; 
+			padding: 15px;
+			.border-radius(5px);
+			
+			.tail {
+				left: -16px;
+				position: absolute;
+				top: 2px;
+			}
+    } 
+    
+    .metadata {
+      color: @gray;
+      font-size: @font-size-base * 0.8;
+    }
+    
+    .alert-content {
+      padding: @baseline / 2;
+    }
+    
+    &.alert-read {
+      background-color: #F7F7F7;
+      border-bottom: 1px solid #DDDDDD;
+      color:@gray;
+      border-top: 1px solid #DDDDDD;
+    }
+    
+    .icons {
+      float: right;
+      margin-left: @baseline /2;
+    }    
+  }
+}
+
+#alert-rule-editor {
+  .any-alert-type {
+    font-style: italic;
+    color: @grayLight;
+  }
+
+  TR#alert-rule-model {
+    display: none;
+  }
+}
+
+#topbar.navbar {
+  LI.alerts {
+		A.btn {
+		  padding: 2px 6px;
+		  margin: 9px;
+		  line-height: 16px;
+		  color: #FFF;
+		  font-weight: bold;
+		  
+		  &:hover {
+		    color: #FFF;
+		    
+		    text-decoration: none;
+		    background-color: darken(#FFF, 10%);
+		    background-position: 0 -15px;
+		
+		    // transition is only when going to hover, otherwise the background
+		    // behind the gradient (there for IE<=9 fallback) gets mismatched
+		   .transition(background-position .1s linear);
+		  }
+		  
+		  &.level-none {
+		    .buttonBackground(@btnInverseBackground, @btnInverseBackgroundHighlight);
+        color: #BBB;
+		  }
+		
+		  &.level-info {
+		    .buttonBackground(@btnInfoBackground, @btnInfoBackgroundHighlight);
+		  }
+		  &.level-action {
+		    .buttonBackground(@btnWarningBackground, @btnWarningBackgroundHighlight);
+		  }
+		  &.level-warning {
+		    .buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+		  }
+		}
+  }
+}

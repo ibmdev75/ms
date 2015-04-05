@@ -1,0 +1,12 @@
+<%@ taglib uri="jcms.tld" prefix="jalios" %><%
+
+String  lazy          =  portlet instanceof PortletSkinable ? Util.getString(((PortletSkinable)portlet).getSkinClasses(),"") : "";
+boolean isEditPortlet = Util.toBoolean(request.getAttribute("isPortletMode"),false);
+
+if (jcmsContext.isAjaxRequest() || lazy.indexOf("ajax-lazy") < 0 || lazy.indexOf("ajax-lazy-custom") >= 0 || isEditPortlet){
+	try { %><jalios:include target="INCLUDE_BEFORE_TEMPLATE" targetContext="skin" /><jsp:include page='<%= "/"+portlet.getTemplatePath(jcmsContext) %>' flush="true" /><jalios:include target="INCLUDE_AFTER_TEMPLATE" targetContext="skin" /><% }
+	catch (Throwable ex) {
+	  PortalManager.printPortletException(out, ex, portlet, org.apache.log4j.Logger.getLogger("jsp.doIncludePortletTemplate_jsp"));
+	}
+}
+%>

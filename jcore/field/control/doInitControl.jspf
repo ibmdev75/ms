@@ -1,0 +1,102 @@
+<%@ page import="com.jalios.jcms.taglib.settings.ControlSettings" %><%
+%><%@page import="com.jalios.jcms.taglib.settings.BasicSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.ControlUtils"%><%
+%><%@ include file="/jcore/doInitPage.jspf" %><%
+%><%!
+String resolveLabel(Object value, String label) {
+  return resolveLabel(value, label, false);
+}
+
+String resolveLabel(Object value, String label, boolean multiple) {
+  String lbl = label;
+  if(multiple && label == null) {
+    String[] array = Util.split(resolveValue(value), ", "); // Split when the delimiter is ',' or ' ' 
+    if(array != null) {
+      List<String> labels = new ArrayList<String>();
+      for(String s : array) {
+        labels.add(resolveLabel(s, null));
+      }
+      lbl = Util.join(labels, ", ", 3, "..."); // Same code as CategoryChooser.jsp
+    }
+  }
+  return ControlUtils.resolveLabel(value, lbl, userLangTL.get());
+}
+
+String resolveValue(Object value) {
+  return ControlUtils.resolveValue(value);
+}
+
+String[] resolveValues(Object[] values) {
+  List<String> list = new ArrayList<String>();
+  if(values != null) {
+    for(Object value : values) {
+      list.add(resolveValue(value));
+    }
+  }
+  return list.toArray(new String[] {});
+}
+
+<T> T addOption(String optionName, T optionValues) {
+  ControlSettings settings = (ControlSettings) getIncludeObject(ControlTag.CONTROL_SETTINGS, null);
+  return ControlUtils.addOption(settings, optionName, optionValues);
+}
+
+<T> T getOption(String optionName, T defaultValue) {
+  ControlSettings settings = (ControlSettings) getIncludeObject(ControlTag.CONTROL_SETTINGS, null);
+  return ControlUtils.getOption(settings, optionName, defaultValue);
+}
+
+String formatAttribute(String attrFormat, String... args) {
+  String s = "";
+  if(!Util.isEmpty(args, true)) {
+    List<String> params = new ArrayList<String>();
+    for(String arg : args) {
+      params.add(encodeForHTMLAttribute(glp(arg)));
+    }
+    s = String.format(attrFormat, params.toArray());
+  }
+  return s;
+}
+
+String formatDataAttributes(Map<String, Object> dataAttributes) {
+  StringBuilder sb = new StringBuilder();
+  if(dataAttributes != null) {
+    for(Map.Entry<String, Object> entry : dataAttributes.entrySet()) {
+      String dataName = entry.getKey();
+      String dataValue = HttpUtil.encodeForHTMLAttribute(Util.getString(entry.getValue(), ""));
+      if (sb.length() > 0) {
+        sb.append(" ");
+      }
+      sb.append(!dataName.startsWith(BasicSettings.DATA_ATTR_PREFIX) ? BasicSettings.DATA_ATTR_PREFIX : "").append(dataName).append("='").append(dataValue).append("'");
+    }
+  }
+  return sb.toString();
+}
+
+/**
+ * Method to include a value for the current control but not forwarded to the parent Field
+ */
+void includeLocalObject(String name, Object obj) {
+  HttpServletRequest request = channel.getCurrentServletRequest();
+  Map<String, Object> map = (Map<String, Object>) request.getAttribute(IncludeTag.INCLUDE_CONTEXT);
+  if (map == null) {
+    map = new HashMap<String, Object>();
+    request.setAttribute(IncludeTag.INCLUDE_CONTEXT, map);
+  }
+  map.put(name, obj);
+}
+
+%><%-- END Util methods --%><%
+
+String fieldName = Util.getString(request.getAttribute(FieldTag.FIELD_NAME), "");
+String fieldValue = Util.getString(request.getAttribute(FieldTag.FIELD_VALUE), "");
+String fieldId = Util.getString(request.getAttribute(FieldTag.FIELD_ID), "");
+String cptLang = (String) request.getAttribute(FieldTag.CPT_LANG);
+Integer cptField = (Integer) request.getAttribute(FieldTag.CPT_FIELD);
+Integer cptMax = (Integer) request.getAttribute(FieldTag.CPT_MAX);
+String[] fieldValuesArray = (String[]) request.getAttribute(FieldTag.FIELD_VALUES);
+List<String> fieldValues = Arrays.asList(fieldValuesArray != null ? fieldValuesArray : new String[] {});
+Boolean fieldDisabled = (Boolean) request.getAttribute(FieldTag.FIELD_DISABLED);
+Boolean fieldRequired = (Boolean) request.getAttribute(FieldTag.FIELD_REQUIRED);
+ControlType controlType = (ControlType) getIncludeObject(ControlTag.CONTROL_TYPE, null);
+%>

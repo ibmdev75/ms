@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="SignUp" superclass="com.jalios.jcms.Form" formOneSubmit="false" formNotify="true" formAuthor="j_2" formRedirectMode="home" categoryRequired="false" categoryTab="false" readRightTab="false" updateRightTab="true" templateTab="false" workflowTab="true" advancedTab="true" version="4.0">
+  <title ml="false" />
+  <fields>
+    <field name="name" editor="textfield" required="true" type="String" searchable="true" size="80" compactDisplay="false" ml="false" descriptionType="tooltip" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" />
+    <field name="firstName" editor="textfield" required="true" compactDisplay="false" type="String" searchable="false" size="80" ml="false" descriptionType="tooltip" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" />
+    <field name="email" editor="email" required="true" compactDisplay="false" type="String" searchable="false" size="50" maxlength="500" pattern="([-+0-9a-zA-Z_\.]+@[-0-9a-zA-Z_\.]+)?" ml="false" />
+    <field name="salutation" editor="enumerate" required="false" compactDisplay="false" type="String" chooser="listbox" valueList="miss|mr|mrs" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="jobTitle" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="80" ml="false" />
+    <field name="favoriteLogin" editor="textfield" required="true" compactDisplay="false" type="String" searchable="false" size="80" ml="false" />
+    <field name="message" editor="textarea" required="false" compactDisplay="false" type="String" searchable="false" rows="5" cols="80" ml="false" wiki="false" />
+  </fields>
+</type>
+

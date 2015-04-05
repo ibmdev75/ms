@@ -1,0 +1,231 @@
+/* ----------------------------------------------- */
+/*  TOPBAR search                                  */
+/* ----------------------------------------------- */
+
+// Topbar search wrapper (Input)
+.topbar-search-wrapper {
+  background-color: @tb-search-bg-color;
+  
+  height: @tb-height;
+  width: @tb-search-width;
+  margin: 0;
+  
+  text-align: right;
+    
+  .topbar-search-query {
+    display:none;
+  }
+  
+  .search-container {
+    position: absolute;
+    right: 0;
+    
+    width: @tb-search-width;
+    border-left: @tb-search-border-color;
+  
+    background-color: #FFF;
+    .transition (width 0.2s linear);
+    
+    &.focused {
+      width:@tb-search-width-focused;
+      
+      display: block;
+      position: absolute;
+      z-index: 1040;
+  
+      background-color: white;
+      border-left: @tb-search-border-color-focused;
+      
+      .search-icon {
+        cursor: default;
+      }
+  
+      .topbar-search-query {
+        display:inline;
+      }
+      
+      .search-filter {
+        display: block;
+      }
+    }    
+  }
+
+  .topbar-search-query {
+    border: 0 none;
+    height: @tb-height / 2;
+    padding-left: @tb-space-icon;
+    width: 100%;
+    
+    line-height: @tb-height / 2;
+    
+    background-image: none;
+    background-color: @tb-search-bg-color;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: @tb-font-size;
+    
+    color: @tb-search-icon-color;
+    
+    &:hover {
+      color: @tb-color;
+      cursor: pointer;
+    }
+  }
+
+  .open .dropdown-toggle.btn-default {
+    background-color: @tb-color-hover;
+    color: @tb-color-selected;
+  }
+}
+
+
+// Topbar search results (Typeahead list)
+.typeahead-menu.typeahead-search.typeahead-search-topbar {
+  right: 0 !important;
+  left: auto !important;
+  
+  margin: 10px 0 0 0;
+  max-width: none;
+  width: @tb-search-width-focused;
+  background-color: white;
+  
+  .typeahead-search-remove .jalios-icon {
+    color: white;
+    &:hover {
+      color: darken(white, 10%);
+    }
+  }  
+    
+  UL.list-group {
+    position: static;
+    padding-top: 0;
+    border: 0 none;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    LI {
+      border-left-color: #337eff;
+      border-right-color: #337EFF;
+      &:first-child {
+        .border-top-radius (0);
+      }
+
+      &:last-child {
+        border-bottom-color: #337EFF;
+        border-radius: 0;
+      }
+
+      &.typeahead-result-mbr {
+        padding: 10px 15px;
+        margin-top: -1px;
+        cursor: pointer;
+        .typeahead-result-mbr-name {
+          font-weight: bold;
+        }
+
+        A {
+          padding: 0;
+          border-bottom: 0;
+        }
+
+        &.focused {
+          color: #FFF;
+          A {
+            color: #FFF;
+          }
+        }
+      }
+    }
+
+    .typeahead-layout {
+      color: white;
+      font-weight: bold;
+      border-bottom: 1px solid #E8E8E8;
+      cursor: default;
+      background: none repeat scroll 0 0 #585858;
+      &.nomatch {
+        background-color: white;
+        color: @text-color;
+      }
+
+      &.typeahead-search-mbr {
+        background-color: @brand-info;
+      }
+
+      &.typeahead-search-pub {
+        background-color: @brand-success;
+      }
+    }
+  }
+}
+
+
+
+//Media queries for the search wrapper and the typeahead sizes 
+//(They should have same size when the search input is opened/focused)
+
+@media (min-width: @screen-xs-min) {
+  .typeahead-menu.typeahead-search.typeahead-search-topbar {
+    left: auto;
+    max-width: @tb-search-width-xs-focused;
+    width: @tb-search-width-xs-focused;
+  }
+  
+  // Set a small size for the search-wrapper on sm screens
+  .topbar .topbar-search-wrapper{
+    width: @tb-search-width-sm;
+    .search-container {
+      width:@tb-search-width-sm;
+      .topbar-search-query {
+        display:inline;
+      }
+      &.focused {
+        left: auto;
+        width: @tb-search-width-xs-focused;
+      }     
+    }
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .typeahead-menu.typeahead-search.typeahead-search-topbar {
+    max-width: @tb-search-width-md-focused;
+    width: @tb-search-width-md-focused;
+  }
+  
+  .topbar .topbar-search-wrapper{
+    width: @tb-search-width-md;
+    .search-container {
+      width:@tb-search-width-md;
+      &.focused {
+        width:@tb-search-width-md-focused;
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-lg-min) {
+  .typeahead-menu.typeahead-search.typeahead-search-topbar {
+    max-width: @tb-search-width-lg-focused;
+    width: @tb-search-width-lg-focused;
+  }
+  
+  .topbar .topbar-search-wrapper { 
+    width: @tb-search-width-lg;
+  
+    .search-container {
+      width:@tb-search-width-lg;
+      &.focused {
+        width: @tb-search-width-lg-focused;
+      }        
+    }  
+  }
+}

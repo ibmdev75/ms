@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type expirable="false" name="SmallNews" reviewable="false" visible="true" debatable="false" superclass="com.jalios.jcms.Content" categoryRequired="true" categoryTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field cols="80" name="intro" compactDisplay="false" editor="textarea" wiki="true" required="false" rows="5" searchable="true" type="String" ml="true" abstract="true" />
+    <field cols="80" name="content" compactDisplay="false" editor="textarea" wiki="true" maxlength="" pattern="" required="true" rows="7" searchable="true" size="" type="String" ml="true" />
+  </fields>
+</type>
+

@@ -1,0 +1,18 @@
+<% if (Util.notEmpty(weakReferrerSet)) { %>
+<div class="tab-pane" id="weak">
+  <table class="table-data table-not-striped">
+    <tr>
+      <th>#</th>    
+      <th><%= glp("ui.com.lbl.type") %></th>    
+      <th><%= glp("ui.adm.data-inspector.lbl.referrer") %></th>
+    </tr>
+    <jalios:foreach name="itReferrer" type="Data" collection="<%= weakReferrerSet %>"> 
+    <tr>
+      <td class="fit numeric"><%= itCounter %></td>
+      <td class="fit nowrap"><jalios:dataicon data="<%= itReferrer %>" /> <%= channel.getTypeLabel(itReferrer.getClass(), userLang) %></td>
+      <td><jalios:edit data="<%= itReferrer %>" /> <jalios:link data="<%= itReferrer %>"/></td>
+    </tr>
+    </jalios:foreach>
+  </table>
+</div>
+<% } %>

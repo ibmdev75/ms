@@ -1,0 +1,51 @@
+.navbar{
+  /* Useful for a navbar as head of a data table */
+  &.navbar-table-header {
+    margin-bottom:0;
+    border-bottom:0 none;
+    .border-bottom-radius(0);
+
+    + TEXTAREA,
+    + TABLE {
+      .border-top-radius(0);
+    }
+  }
+  /* Reset input group padding in nav-form */
+  .container-fluid > .navbar-form:first-child {
+    margin-left: -@navbar-padding-horizontal;
+  }
+  
+  .navbar-label {
+    font-weight: normal;
+    padding-left: @baseline / 2;
+    &:first-child {
+      padding-left: 0;
+    }
+  }  
+
+  &.no-navbar-brand {
+    .navbar-nav:first-child {
+      margin-left: -15px;
+    }
+  }
+}
+
+/* Div to be placed at the top most position in the DOM to push rest of content when using  navbar-fixed-top */
+.navbar-placeholder {
+  height: 70px;
+  width: 100%;
+}
+
+
+@media (min-width: @screen-sm-min) {
+  /*Navbar-form with input group btn https://github.com/twbs/bootstrap/issues/9950 */
+  .navbar-form .input-group {
+    max-width: 200px;//TODO > variable
+  }
+  
+  /* JCMS-4281 */
+  .navbar-collapse .navbar-form.navbar-right:last-child {
+    @navbar-form-right-margin: @navbar-padding-horizontal + @navbar-padding-horizontal;
+    margin-right: -@navbar-form-right-margin;
+  }
+}

@@ -1,0 +1,19 @@
+<div class="tab-page" id="statePage" >
+  <h2 class="tab"><% /* %>States<% */ %><%= glp("ui.adm.wf-edit.st.tab") %></h2>
+  <form method="post" action="admin/wfEditor.jsp" name="editStateForm" class="form-horizontal">
+    <input type='hidden' name='id' value="<%= formHandler.getAvailableId() %>" />
+    <div class="row">
+    
+      <%-- STATE LIST --%>    
+      <div class="col-md-8">
+        <%@ include file='/admin/wfEditor_state_list.jspf' %>
+      </div>
+
+      <%-- ADD/UPDATE A STATE --%>   
+      <div class="col-md-4">
+        <%@ include file='/admin/wfEditor_state_add.jspf' %>
+      </div>
+      
+    </div>
+  </form>
+</div>

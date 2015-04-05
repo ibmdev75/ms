@@ -1,0 +1,194 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+/* --- Portal Mode ------------------------------------------------------------------------------- */
+.PortalMode {
+  width: auto;
+  border-style: solid;
+  border-width: 0px 1px 1px 1px;
+}
+.topbar .right-group .PortalMode {
+  float: left;
+}
+TD.PortalMode {
+  background-color: #666666;
+}
+/* --- Portal Mode Header -------------------------------------------------------------------------------- */
+.PortalModeHeader {
+  width: auto;
+  border-top: 1px solid #666666;
+  border-bottom: 1px solid #666666;
+  background-color: #EEEEEE;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: normal 11px Arial, Helvetica, sans-serif;
+  height: 16px;
+}
+.PortalModeHeader:hover {
+  overflow: visible;
+}
+.PortalModeHeader A,
+.PortalModeHeader A:hover {
+  color: black;
+  text-decoration: none;
+  font: normal 11px Arial, Helvetica, sans-serif;
+}
+.PortalModeHeader A.portletPreview {
+  background-color: #FFFF70;
+}
+.PortalModeHeader IMG {
+  width: 14px;
+  height: 14px;
+}
+/*
+.PortalModeHeader IMG.infos  { background-image: url("../../images/jalios/icons/portal/advmode/infos.gif");    }
+.PortalModeHeader IMG.work   { background-image: url("../../images/jalios/icons/portal/advmode/copyWork.gif"); }
+.PortalModeHeader IMG.merge  { background-image: url("../../images/jalios/icons/portal/advmode/copyMerge.gif");}
+*/
+.PortalModeHeader IMG.edit {
+  background-image: url("../../images/jalios/icons/portal/advmode/edit.gif");
+}
+.PortalModeHeader .portlet-behavior-copy {
+  cursor: help;
+}
+.PortalModeHeader .portlet-behavior-copy.ref {
+  color: red;
+}
+.PortalModeHeader .portlet-behavior-copy.ws {
+  color: orange;
+}
+/* --- Portal Mode Column -------------------------------------------------------------------------------- */
+TD.PortalModeColumn {
+  border: 1px solid #666666;
+  padding: 4px 0px;
+  font: normal 11px Arial, Helvetica, sans-serif;
+  background-color: #EEEEEE;
+}
+TD.PortalModeColumn IMG {
+  margin: 2px 0px;
+}
+/* --- Portal Mode Row -------------------------------------------------------------------------------- */
+.PortalModeRow {
+  height: 16px;
+  border: 1px solid #666666;
+  padding: 0px 4px;
+  font: normal 14px Arial, Helvetica, sans-serif;
+  background-color: #EEEEEE;
+  text-align: center;
+}
+.PortalModeRow IMG {
+  margin: 0px 2px;
+}
+.PortalModeRow IMG.left {
+  margin-bottom: 3px;
+}
+.PortalModeRow IMG.right {
+  margin-bottom: 3px;
+}
+/* --- Portal Mode Cache -------------------------------------------------------------------------------- */
+.Cache1 {
+  background: #eeeeee url("../../images/jalios/icons/portal/advmode/gripLightGreyH.gif");
+}
+.Cache1 A,
+SPAN.Cache1 {
+  background-color: #EEEEEE;
+}
+.Cache2 {
+  background: #ccccff url("../../images/jalios/icons/portal/advmode/gripBlueH.gif");
+}
+.Cache2 A,
+SPAN.Cache2 {
+  background-color: #CCCCFF;
+}
+.Cache3 {
+  background: #ffbebe url("../../images/jalios/icons/portal/advmode/gripPinkH.gif");
+}
+.Cache3 A,
+SPAN.Cache3 {
+  background-color: #FFBEBE;
+}
+.Cache4 {
+  background: #ffebc6 url("../../images/jalios/icons/portal/advmode/gripOrangeV.gif");
+}
+.Cache4 A,
+SPAN.Cache4 {
+  background-color: #FFEBC6;
+}
+.Cache5 {
+  background: #d2ffd2 url("../../images/jalios/icons/portal/advmode/gripGreenH.gif");
+}
+.Cache5 A,
+SPAN.Cache5 {
+  background-color: #D2FFD2;
+}
+.Cache6 {
+  background: #edbaff url("../../images/jalios/icons/portal/advmode/gripPurpleH.gif");
+}
+.Cache6 A,
+SPAN.Cache6 {
+  background-color: #EDBAFF;
+}
+.Cache7 {
+  background: #f7fea0 url("../../images/jalios/icons/portal/advmode/gripYellowH.gif");
+}
+.Cache7 A,
+SPAN.Cache7 {
+  background-color: #F7FEA0;
+}
+.PortalMode.portletPreview {
+  border: 4px solid #FFFF70;
+}
+.PortalMode.portletPreview .PortalModeHeader {
+  border: 1px solid;
+}
+.dnd-container.dragover {
+  border: 4px solid #FFFF70;
+}
+/* --- Portal DnD --------------------------------------------------------------------------------- */
+SPAN.ddSource {
+  padding: 0px;
+  margin: 0px;
+}
+HTML > BODY SPAN.ddSource {
+  vertical-align: sub;
+}
+.ddTarget {
+  position: absolute;
+  padding: 0px;
+  display: none;
+}
+.ddTargetRow {
+  margin: -50px 0px 0px 0px;
+}
+.ddTargetCol {
+  margin: 0px 0px 0px -50px;
+}
+/* --- Portal Profiler --------------------------------------------------------------------------------- */
+.profiler {
+  border: 1px solid gray;
+}
+.profiler_header,
+.profiler_header,
+.profiler_header A,
+.profiler_header A:hover {
+  font-size: 10px;
+  font-family: Arial, sans-serif;
+}
+.profiler_header {
+  border-top: none;
+  background-image: none;
+}
+.profiler_results {
+  float: right;
+}
+.profiler.highlight {
+  border: 3px solid yellow;
+}
+.profiler_results.highlight {
+  background-color: #FFFFCC;
+}
+.profiler_results SPAN.high {
+  color: red;
+}

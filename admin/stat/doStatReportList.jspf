@@ -1,0 +1,172 @@
+<%
+  String  opDelete = getUntrustedStringParameter("reportDelete", null);
+	if(opDelete != null){
+ 		File   dirFile    = new File(channel.getRealPath(JcmsConstants.STATS_REPORT_DIR));
+ 		File   reportFile = new File(channel.getRealPath(opDelete));
+ 		if (reportFile.exists() && com.jalios.io.IOUtil.isParent(dirFile,reportFile)){
+ 			reportFile.delete();
+ 		}
+ 	}
+ 	TreeSet<Workspace> workspaceSet = new TreeSet<Workspace>();
+ 	TreeSet<PortletStatReport> reportSet = new TreeSet<PortletStatReport>();
+ 	if (showWorkspace) {
+ 	for(Iterator it = StatManager.getAllReport().entrySet().iterator(); it.hasNext();) {
+    Map.Entry itWSEntry = (Map.Entry)it.next();
+    String itID = (String)itWSEntry.getKey();
+    Workspace  itWS = channel.getWorkspace(itID);
+    if (itWS != null) {
+      workspaceSet.add(itWS);
+    }
+    
+    for(Iterator it2 = ((Map)itWSEntry.getValue()).entrySet().iterator(); it2.hasNext();) {
+      Map.Entry itReportEntry = (Map.Entry)it2.next();
+      PortletStatReport itReport = (PortletStatReport)channel.getData((String)itReportEntry.getKey());
+      if (itReport != null) {
+        reportSet.add(itReport);
+      }
+    }
+  }
+  } else {
+    workspaceSet.add(workspace);
+    Map reportMap = ((Map)(StatManager.getAllReport().get(workspace.getId())));
+    if (reportMap != null) {
+    for(Iterator it = reportMap.entrySet().iterator(); it.hasNext();) {
+      Map.Entry itReportEntry = (Map.Entry)it.next();
+      PortletStatReport itReport = (PortletStatReport)channel.getData((String)itReportEntry.getKey());
+      if (itReport != null) {
+        reportSet.add(itReport);
+      }
+    }
+    }
+  }
+  
+  Workspace         selectedWorkspace = getWorkspaceParameter("statWS");
+  if (selectedWorkspace == null && !showWorkspace) {
+    selectedWorkspace = workspace;
+  }
+  String statWS = selectedWorkspace != null ? selectedWorkspace.getId() : (showWorkspace ? StatListener.ALL_WORKSPACE : "");
+  
+  TreeSet<PortletStatReport>  allReportSet = channel.getDataSet(PortletStatReport.class);
+  PortletStatReport defaultReport     = (allReportSet != null && allReportSet.size() > 0) ? allReportSet.first() : null;
+  PortletStatReport firstReport       = (reportSet != null && reportSet.size() > 0) ? reportSet.first() : defaultReport;
+  PortletStatReport selectedReport = getDataParameter("statReport", PortletStatReport.class);
+  if (selectedReport == null) {
+    selectedReport = firstReport;
+  }
+  String statReport = selectedReport != null ? selectedReport.getId() : "";
+
+  Map map = (Map)StatManager.getAllReport().get(statWS);
+  Set fileSet = map != null ? (Set)map.get(statReport) : Util.EMPTY_TREESET;
+  if (fileSet == null) {
+    fileSet = Util.EMPTY_TREESET;
+  }
+
+%>
+<div class="page-header"><h1><%= glp("ui.statreport.lbl.title") %></h1></div>
+<% if (!StatManager.canAnalyze()) { %>
+ <%= isAdmin ? glp("ui.statreport.bo.analysis-disabled.admin") : glp("ui.statreport.bo.analysis-disabled.non-admin") %>
+<p></p>
+<% } %>
+<%-- *** WORKSPACE / MODEL ************************* --%>
+<form action='<%= ServletUtil.getResourcePath(request) %>' name='refineForm' style="display:inline;">
+<%= glp("ui.statreport.bo.display-report") %>
+<div>
+   <%= glp("ui.statreport.bo.filtered-on") %>
+   <% if (showWorkspace) { %>
+    <select class='formSelect' name='statWS' onchange='javascript:refineForm.submit()'>
+      <option value='<%= StatListener.ALL_WORKSPACE %>'><%= glp("ui.statreport.lbl.allworkspace") %></option>
+      <jalios:foreach collection='<%= workspaceSet %>' name='itWS' type='Workspace'>
+      <option value='<%= itWS.getId() %>' <%= itWS == selectedWorkspace ? "selected" : "" %>><%= itWS.getTitle(userLang) %></option>
+      </jalios:foreach>
+    </select>
+   <% } else { %>
+     <%= workspace.getTitle(userLang) %>
+   <% } %>
+
+   <%= glp("ui.statreport.bo.created-with") %>
+   <select class='formSelect' name='statReport' onchange='javascript:refineForm.submit()'>
+     <jalios:foreach collection='<%= reportSet %>' name='itReport' type='PortletStatReport'>
+     <option value='<%= itReport.getId() %>' <%= itReport == selectedReport? "selected" : "" %>><%= itReport.getTitle(userLang) %></option>
+     </jalios:foreach>
+   </select>
+</div>
+</form>
+<p>
+<%-- *** REPORT LIST ************************* --%>
+<table id='reportsTable' class="table-data table-condensed">
+  <tr>
+    <th>&nbsp;</th>
+    <th width='100%'><%= glp("ui.statreport.lbl.report") %></th>
+    <jalios:if predicate='<%= showWorkspace %>'>
+      <th><%= glp("ui.statreport.lbl.workspace") %></th>
+    </jalios:if>
+    <jalios:if predicate='<%= showReport %>'>
+      <th><%= glp("ui.statreport.lbl.model") %></th>
+    </jalios:if>
+    <th>&nbsp;</th>
+  </tr>
+  <jalios:pager name='srlPagerHandler' declare='true' action='init' size='<%= fileSet.size() %>'/>
+  <jalios:foreach collection='<%= fileSet %>'
+                  type='java.io.File' name='itFile'
+                  max="<%= srlPagerHandler.getPageSize() %>"
+                  skip="<%= srlPagerHandler.getStart() %>"> 
+
+	  <jalios:if predicate='<%= (showWorkspace || workspace == selectedWorkspace)     && 
+	                            (showReport    || targetReport == selectedReport) && 
+	                            (selectedReport != null)                          &&
+	                            (loggedMember.canRead(selectedReport,true)) %>'>
+	                            
+		  <tr>
+		    <td class="text-right" nowrap="nowrap"><%= srlPagerHandler.getStart() + itCounter.intValue() %>.</td>
+		    <td>
+		   	  <jalios:icon src='stats'  />
+		   	  <a href='admin/stat/statReport.jsp?wsreport=<%= statWS %>&amp;report=<%= statReport %>&amp;datereport=<%= StatManager.getReportDate(itFile.getName()).getTime() %>' target='_blank'>
+		   	  <jalios:date date='<%= StatManager.getReportDate(itFile.getName()) %>' format='<%= "full" %>'/>
+				  <jalios:time date='<%= StatManager.getReportDate(itFile.getName()) %>' format='<%= "short" %>'/>
+		   	  </a>
+		   	</td>
+		    
+		    <jalios:if predicate='<%= showWorkspace %>'>
+		    <td nowrap="nowrap"><%= selectedWorkspace != null ? selectedWorkspace.getTitle(userLang) : StatListener.ALL_WORKSPACE.equals(statWS) ? glp("ui.work.mn.allworkspace") : selectedWorkspace.getTitle(userLang) %></td>
+		    </jalios:if>
+		    
+		    <jalios:if predicate='<%= showReport %>'>
+		    <td nowrap="nowrap"><%= selectedReport.getTitle(userLang) %></td>
+		    </jalios:if>
+		    <% String filePath = JcmsConstants.STATS_REPORT_DIR + statWS +"/"+ statReport +"/"+ itFile.getName(); %>
+		    <td nowrap="nowrap">
+		      <a href='<%= ServletUtil.getUrlWithUpdatedParam(request,"reportDelete",filePath) %>'><jalios:icon src='trash-empty'  /></a>
+		    </td>
+		  </tr>
+	  </jalios:if>
+  </jalios:foreach>
+ <% if (Util.isEmpty(fileSet)) { %>
+      <tr>
+        <td colspan="<%= 3 + (showWorkspace?1:0) + (showReport?1:0) %>">
+         <%= glp("ui.statreport.bo.no-available-report") %>
+        </td>
+      </tr>
+ <% } %>
+</table>
+<jalios:pager name='srlPagerHandler'/>
+  
+
+<% if (showModels) { %>
+<p>
+<%= glp("ui.statreport.bo.display-report-model") %>
+<% Collection portletStatReportColl = channel.getPublicationSet(PortletStatReport.class, loggedMember); %>
+<% if (Util.isEmpty(portletStatReportColl)) { %>
+  <br /><%=glp("ui.statreport.bo.no-portlet-stat-report", ServletUtil.encodeURL(ServletUtil.getUrl(request, false)), channel.getTypeLabel(PortletStatReport.class, userLang))%>
+<% } else { %>
+  <ul>
+  <jalios:foreach collection='<%= portletStatReportColl %>' name='itReport' type='PortletStatReport'>
+    <li><jalios:icon src='statsreport'  /> <a href='work/displayWork.jsp?id=<%= itReport.getId() %>'><%= itReport.getTitle(userLang) %></a> <jalios:edit pub="<%= itReport %>" /></li>
+  </jalios:foreach>
+  </ul>
+<% } %>
+</p>
+<% } %>
+<P>&nbsp;</P>
+<p>
+	<a href='<%= contextPath %>/admin/stat/adminExportRawData.jsp'><%= glp("ui.statreport.bo.export-stat-data-button") %></a>
+</p>

@@ -1,0 +1,31 @@
+<% 
+
+Data reqParam = getDataParameter("id");
+PortalInterface tmpPortal = null;
+if (reqParam == null) { 
+  tmpPortal = (PortalInterface) request.getAttribute("portal");
+  if (tmpPortal == null) {
+    tmpPortal = getDataParameter("portal", PortalInterface.class);
+  }
+  if (tmpPortal == null) {
+    tmpPortal = PortalManager.getDefaultPortal();
+  }
+}
+boolean inDisplay = jcmsContext.isInFrontOffice();
+if (!inDisplay && (tmpPortal != null || reqParam != null)) {
+  String jspToDisplay = ServletUtil.getResourcePath(request);
+  String redirect = JcmsUtil.getDisplayUrlWithUpdatedParams(
+             tmpPortal != null ? (Data)tmpPortal : reqParam, userLocale,
+             request, new String[] {"jsp"}, new String[] {jspToDisplay}, null, false);
+  //For Improvement JCMS-3078, force FrontOffice status to ensure
+  //redirection is using proper context information
+  request.setAttribute("inFO", Boolean.TRUE);
+  jcmsContext.forceUpdate();
+  sendRedirect(redirect, request, response);
+  return;
+}
+
+if (!inDisplay) { 
+  %><%@ include file='/jcore/doEmptyHeader.jspf' %><%
+}
+%>

@@ -1,0 +1,93 @@
+/* ----------------------------------------------- */
+/*  GAUGE                                          */
+/* ----------------------------------------------- */
+
+.gauge {
+  overflow: hidden;
+  position: relative;
+  height: @baseline - 2;
+  border: 1px solid @grayLight;
+  font-size: @font-size-base - 2;
+  font-weight: bold;
+  color: @gray;
+  .border-radius(3px);
+  #JCMS > .br();
+  
+  .progress {
+    position: absolute; top: 0; left: 0; z-index: 3;
+    height: @baseline - 2;
+    color: #FFF;
+    padding: 0px 3px;
+    text-align: right;
+    background-color: @emphasisColor;
+    #gradient > .vertical-three-colors(@emphasisColor, lighten(@emphasisColor,10%), 50%, @emphasisColor);
+    .border-radius(0 2px 2px 0);
+    .text-shadow( @whiteTxtShadow);
+  }  
+  
+  .progress.over {      
+    background-color: @red;
+    #gradient > .vertical-three-colors(@red, lighten(@red,10%), 50%, @red);
+  }
+  
+  .progress.alert {     
+    background-color: @orange;
+    #gradient > .vertical-three-colors(@orange, lighten(@orange,10%), 50%, @orange);
+  }
+  
+  .comfort {
+    position: relative; top: 0; left: 0; z-index: 2;
+    height: @baseline - 2;
+    color: #FFF;
+    padding: 0px;
+    text-align: right;
+    background-color: lighten(@emphasisColor,30%);
+    #gradient > .vertical-three-colors(lighten(@emphasisColor,30%), lighten(@emphasisColor,30%), 50%, lighten(@emphasisColor,30%));
+    .border-radius(0 2px 2px 0);
+    .text-shadow( @whiteTxtShadow);
+    float:left;
+  }
+  
+  .warning {
+    position: relative; top: 0;  z-index: 2;
+    height: @baseline - 2;
+    color: #FFF;
+    padding: 0px;
+    text-align: right;
+    background-color: lighten(@orange,20%);
+    #gradient > .vertical-three-colors(lighten(@orange,20%), lighten(@orange,30%), 50%, lighten(@orange,20%));
+    .border-radius(0 2px 2px 0);
+    .text-shadow( @whiteTxtShadow);
+    float:left;
+  }
+  .danger {
+    position: relative; top: 0;  z-index: 2;
+    height: @baseline - 2;
+    color: #FFF;
+    padding: 0px;
+    text-align: right;
+    background-color: lighten(@red,20%);
+    #gradient > .vertical-three-colors(lighten(@red,20%), lighten(@red,30%), 50%, lighten(@red,20%));
+    .border-radius(0 2px 2px 0);
+    .text-shadow( @whiteTxtShadow);
+    float:left;
+  }
+  
+  .start, .end, .status { line-height: 16px; }
+  .start { position: absolute; top: 0; left:  3px; z-index: 2;}
+  .end   { position: absolute; top: 0; right: 3px; z-index: 2;}
+  
+  &.tiny {
+    height: @baseline/2 - 2;
+    display: inline-block; float: left; width: @baseline*2;
+    vertical-align: middle;
+    border: 1px solid #006600;
+    .progress { height: @baseline/2 - 2; padding: 0px;}
+    .start, .end, .status { display: none; }
+    // #JCMS > .marged();
+  }
+}
+
+.gauge-placeholder {
+  margin-left: @baseline*2.5;
+}

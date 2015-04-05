@@ -1,0 +1,3 @@
+<% if (!jcmsContext.isInFrontOffice()) { %>
+<%@ include file='/jcore/doEmptyFooter.jspf' %>
+<% } %>

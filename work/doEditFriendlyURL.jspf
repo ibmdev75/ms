@@ -1,0 +1,28 @@
+<%--
+ @Summary: This JSP responsible for the edition of FriendlyURL of Data, is statically
+           included by some Data editors (such as doEditCommonPubAttribute and editCat.jsp)
+--%><%
+  Data dataEdited = (Data) request.getAttribute("data");
+  com.jalios.jcms.servlet.FriendlyURLFilter friendlyURLFilter = com.jalios.jcms.servlet.FriendlyURLFilter.getInstance();
+  if (json_bridge != null && friendlyURLFilter != null) {
+    json_bridge.registerObject("FriendlyURLFilter", friendlyURLFilter);
+  }
+  String furlInputHtmlAttribute = (dataEdited != null) ? ("autocomplete='off' data-jalios-id='" + dataEdited.getId() + "'") : "";
+%>
+
+	<jalios:field label="ui.com.lbl.friendly-urls" name="friendlyURL" css='nodnd' mv="1" value='<%= formHandler.getAvailableFriendlyURLSet() %>'>
+	  <jalios:control settings='<%= new TextFieldSettings().htmlAttributes(furlInputHtmlAttribute) %>' />
+  
+    <jalios:buffer name="WIDGET_APPEND">
+      <% if (isWSAdmin) { %>
+       <span class="help-block"><a href="work/friendlyURLsWS.jsp" target="friendlyURLs"><%= glp("ui.work.form.friendly-url.show-all")%></a></span>
+      <% } %>
+      
+      <jalios:message level='<%= MessageLevel.ERROR %>' msg='<%= glp("msg.edit.friendly-url.invalid", channel.getProperty("friendly-url.invalid-pattern")) %>' css="newFriendlyURLInvalidWarning hide" />
+      
+      <jalios:message level='<%= MessageLevel.ERROR %>' msg="msg.edit.friendly-url.unavailable" css="newFriendlyURLExistWarning hide" />
+    </jalios:buffer>
+    
+  </jalios:field>
+  
+<% jcmsContext.addJavaScript("js/jalios/ux/jalios-friendly-urls.js"); %>              

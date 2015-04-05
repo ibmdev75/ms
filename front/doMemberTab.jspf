@@ -1,0 +1,29 @@
+<% 
+String view = getAlphaNumParameter("view", ""); // http param hook
+if (Util.isEmpty(view)) {
+  view = (String) request.getAttribute("member-tab-view");  // request attribute hook for default view
+}
+String cardUrl = ServletUtil.getUrlWithUpdatedParam(request, "view", "card");
+String listUrl = ServletUtil.getUrlWithUpdatedParam(request, "view", "list");
+boolean isCardView = "card".equals(view);
+boolean isListView = !isCardView;
+%>
+<div class="member-view">
+  <ul class="nav nav-pills member-view-chooser">
+    <li class="<%= isCardView ? "active" : "" %>">
+      <a href="<%= cardUrl %>" class="ajax-refresh"><jalios:icon src="card-view" /> <%= glp("ui.membercard.cards")%></a>
+    </li>
+    <li class="<%= isListView ? "active" : "" %>">
+      <a href="<%= listUrl %>" class="ajax-refresh"><jalios:icon src="list-view" /> <%= glp("ui.membercard.list") %></a>
+    </li>
+  </ul>
+	<div class="member-view-menu">
+ 	  <jalios:include target="FRONT_MEMBER_TAB_MENU" targetContext="inline"/>
+	</div>
+	<% if (isCardView){ %>
+	<%@ include file="/front/doMemberCards.jspf" %>
+	<% } else if (isListView) { %>
+	<%@ include file="/front/doMemberList.jspf" %>
+	<% } %>
+	<jalios:include target="FRONT_MEMBER_TAB_VIEW" targetContext="inline"/>
+</div>

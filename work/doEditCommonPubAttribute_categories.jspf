@@ -1,0 +1,41 @@
+<%-- CATEGORIES ------------------------------------------------------------ --%> 
+<% Set typeRemovedCatSet = (Set) request.getAttribute("removedCatSet"); %>
+<% if (formHandler.isCategoryTabHidden()) {%>
+  <jalios:foreach collection="<%= formHandler.getHiddenCatSet(typeRemovedCatSet) %>" name="itCat" type="Category">
+  <input type="hidden" name="cids" value="<%= itCat.getId() %>">
+  </jalios:foreach>
+<% } else if (typeRemovedCatSet != null && typeRemovedCatSet.contains(channel.getRootCategory())) { %>
+  <%-- do not print anything, a category field already contains the root category --%>
+<% } else { %>
+  <% Set catSet = formHandler.getCategorySet("cids"); 
+  currentTabIndex++;%>
+  <div class="tab-page treefix">
+    <h2 class="tab">
+      <jalios:icon src="category-tree" alt="C" title="ui.work.form.lbl.categories" />
+      <%= glp("ui.work.form.lbl.categories") %>
+    </h2>
+  
+    <jalios:include target="EDIT_PUB_CATTAB_HEADER" />
+  <%
+  {
+    boolean showOtherCategories = true;
+    Set<Category> wsCategorySet = formHandler.getAvailableWorkspace().getCatSet();
+    if (wsCategorySet == null || Util.getFirst(wsCategorySet) == channel.getRootCategory()) {
+      wsCategorySet = channel.getRootCategory().getChildrenSet();
+      showOtherCategories = false;
+    }
+    %>
+    <jalios:field name="cids" label='<%= showOtherCategories ? "ui.work.form.lbl.ws-cat" : "" %>' value="<%= catSet %>" resource="field-vertical">
+      <jalios:control settings='<%= new CategoryTreeSettings().root(wsCategorySet).multiple().removed(typeRemovedCatSet) %>' />
+    </jalios:field>
+    
+    <% if (showOtherCategories) { %>
+    <jalios:field name="cids" label="ui.work.form.lbl.other-cat" value="<%= catSet %>" resource="field-vertical">
+      <jalios:control settings='<%= new CategoryTreeSettings().root(channel.getRootCategory().getChildrenSet()).multiple().removed(Util.unionSet(wsCategorySet, typeRemovedCatSet)) %>' />
+    </jalios:field>      
+    <% } %>
+  <% } %>
+  </div><%-- End CATEGORIES 'tab-page' --%>
+<% } %>
+<%-- Add an empty cids to allow to remove all checked categories (update by delta) --%>
+<input type="hidden" name="cids" value="" />

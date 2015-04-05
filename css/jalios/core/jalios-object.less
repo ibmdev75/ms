@@ -1,0 +1,22 @@
+/* ----------------------------------------------- */
+/*  OBJECT                                         */
+/* ----------------------------------------------- */
+
+BODY.modal-open { overflow: hidden; } // prevent scrolling
+
+BODY.modal-open OBJECT,
+BODY.modal-open EMBED { visibility: hidden;  }
+
+BODY.modal-open .modal OBJECT,
+BODY.modal-open .modal EMBED { visibility: visible;  }
+
+BODY.contextual-menu-displayed OBJECT,
+BODY.contextual-menu-displayed EMBED { visibility: hidden;  }
+
+/* Fix bug JCMS-2491, regression of bug JCMS-2415 */
+/* BODY.contextual-menu-displayed                  IFRAME { display: none;  } developers shoud decide to activate  */
+BODY.contextual-menu-displayed .mceIframeContainer IFRAME { display: block; }
+
+/* Fix bug JCMS-2429 */
+BODY.contextual-menu-displayed .FileDocument EMBED,
+BODY.contextual-menu-displayed .FileDocument OBJECT { visibility: visible;  }

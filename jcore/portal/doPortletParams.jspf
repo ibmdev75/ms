@@ -1,0 +1,9 @@
+<%
+  PortalInterface portal           = (PortalInterface) request.getAttribute(PortalManager.PORTAL_PORTAL);
+  PortalElement   portlet          = (PortalElement)   request.getAttribute(PortalManager.PORTAL_PORTALELEMENT);
+  Category        currentCategory  = (Category)        request.getAttribute(PortalManager.PORTAL_CURRENTCATEGORY);
+  Category        portalCategory   = (Category)        request.getAttribute(PortalManager.PORTAL_PORTALCATEGORY);
+  boolean         isPortletMode    = Util.toBoolean(   request.getAttribute("isPortletMode"),false);
+  Category[]      ctxCategories    = (Category[])      request.getAttribute(PortalManager.PORTAL_CTXCATEGORIES);
+  String          portletDomId     = Util.getString(request.getAttribute(PortalManager.PORTAL_PORTALELEMENT_DOMID), ServletUtil.generateUniqueDOMId(request, "layout"));
+%>

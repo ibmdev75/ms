@@ -1,0 +1,106 @@
+<%--
+  @Summary: Performs selection between: publication, jsp, portlet, ... then call return.
+            Otherwise the caller code continue it's execution doing default display
+--%><%
+{
+  PortletSelection selection      = (PortletSelection) portlet;
+  Publication      pub            = (Publication) request.getAttribute("publication");
+  String           jsp            = getUntrustedStringParameter("jsp", null); // Validated below
+  PortalElement    pelm           = getDataParameter("portlet", PortalElement.class);
+  boolean          includeHF      = false;
+
+  Publication publication  = pub;
+
+  if (portal.equals(publication)) {
+    publication = null;
+  }
+
+  if (publication != null) {
+    includeHF = selection.getShowDisplayHeaderFooter() && !(publication instanceof Portlet);
+  }
+
+  if (pelm != null) {
+    publication = pelm;
+  }
+
+  if (JcmsUtil.isLegalFile(jsp)) {
+    if (trace != null) { trace.put("jsp", jsp); } 
+    request.setAttribute("isInPortletSelection", Boolean.TRUE); // Deprecated
+    jcmsContext.setTemplateUsage(TypeTemplateEntry.USAGE_DISPLAY_FULL);
+
+    %><jsp:include page='<%= "/"+jsp %>' flush="true" /><% 
+
+    request.removeAttribute("isInPortletSelection"); // Deprecated
+    return;
+  } 
+  else if (publication != null) {  // Publication
+
+    request.setAttribute("isInPortletSelection", Boolean.TRUE); // Deprecated
+    jcmsContext.setTemplateUsage(TypeTemplateEntry.USAGE_DISPLAY_FULL);
+    
+    if (pub != null || pelm != null) {
+      request.setAttribute("title" , publication.getDataName(userLang));
+
+      Set catNameSet = new HashSet();
+      Category[] categories = publication.getCategories(loggedMember);
+      if (Util.notEmpty(categories)) {
+        for(int i = 0; i < categories.length; i++) {
+          Category cat = categories[i];
+          catNameSet.add(cat.getName(userLang));
+        }
+      }
+      request.setAttribute("metakeywords", Util.join(catNameSet, ","));
+      request.setAttribute("metadescription", publication.getAbstract(userLang));
+    }
+
+    if (trace != null) {
+      trace.put("publication", publication.getId());
+    }
+
+    boolean hideSelectionSide = false;
+
+    if ((publication instanceof PortalElement) && (! (((PortalElement)publication).isChildTreeNode(selection) || selection.equals(publication)))) {
+      displayPortlet = (PortalElement) publication;
+      %><%@ include file='/jcore/portal/doIncludePortlet.jspf' %><%
+    } else if (!(publication instanceof PortalElement)) { %><div class="selection-wrapper pub-action-toggler"><%
+      if (includeHF) { %>
+        <div class="selection-header"><%@ include file='/jcore/doDisplayHeader.jspf' %></div>
+        <% 
+        hideSelectionSide = !isLogged || Util.toBoolean(request.getAttribute("jcms.publication.actions.hide"),false);
+        %>
+        <div class="selection-body">
+        <% if (!hideSelectionSide) { %>
+          <div class="selection-side">
+            <jalios:include jsp="<%= ResourceHelper.getPublicationAction() %>" />
+          </div>
+        <% } 
+      } else {
+        hideSelectionSide = true;
+      }
+
+      request.setAttribute("isInContentFullDisplay", Boolean.TRUE); // Deprecated
+      String displayTemplate = "/" + publication.getTemplatePath(jcmsContext);
+      String selectionMainClasses = hideSelectionSide ? " wide" : ""; 
+      %><% if (!hideSelectionSide) { %><div class="selection-main<%= selectionMainClasses %>"><% } %>
+        <jsp:include page='<%= displayTemplate %>' flush="true" />
+      <% if (!hideSelectionSide) { %></div><% } %><%
+      request.removeAttribute("isInContentFullDisplay"); // Deprecated
+
+      if (includeHF) { %>
+        </div><%--end 'selection-body' --%>
+        <div class="selection-footer">
+          <%@ include file='/jcore/doDisplayFooter.jspf' %>
+        </div>
+      <% } %></div><%-- EOF .selection-wrapper --%><%
+    }
+
+    // Add ReaderTracker
+    if (Util.isEmpty(request.getAttribute("redirect"))) {
+      publication.trackReader(loggedMember);
+    }
+
+    request.removeAttribute("isInPortletSelection"); // Deprecated
+    return;
+  }
+}
+%>

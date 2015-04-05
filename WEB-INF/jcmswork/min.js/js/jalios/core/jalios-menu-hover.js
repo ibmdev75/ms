@@ -1,0 +1,1 @@
+!function(a){a(document).ready(function(){a(".jalios-menu-hover .btn-group").mouseenter(function(){a(this).addClass("open")}).mouseleave(function(){a(this).removeClass("open")})})}(jQuery);

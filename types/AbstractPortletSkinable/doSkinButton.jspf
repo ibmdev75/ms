@@ -1,0 +1,16 @@
+<jalios:include target="SKIN_BEFOREBUTTON" targetContext="skin" /><% 
+  String  clickExpand  = (String) request.getAttribute("clickExpand"); 
+  String  classExpand  = Util.getString(request.getAttribute("classExpand"),"");
+  
+  if (canExpand && clickExpand == null){
+    boolean notMinimized = "Enable".equals(portletSkinable.getExpandState());
+%>
+<a href='<%= PortalManager.sendAction(request , portletSkinable , PORTAL_ACTION_EXPAND , (notMinimized == isExpand) ? (isExpand ? "false" : "true") : PortalManager.PORTAL_ACTION_REMOVE) %>'><img src='<%= expandIcon %>' alt='X' class='icon expand' /></a>
+<% } else if (canExpand && clickExpand != null) { %>
+  <a href="#" onclick="<%= clickExpand %> return false;"><img src='<%= expandIcon %>' alt='X' class='icon <%= classExpand %>' /></a>
+<% 
+   } 
+   if (canPopup) {
+     String popupURL = contextPath+"/jcore/portal/popupPortal.jsp?id="+portletSkinable.getId()+"&amp;cid="+currentCategory.getId()+"&amp;portal="+portal.getId();
+%><a href="#" onclick="Popup.popupWindow('<%= popupURL %>', '<%= portletSkinable.getId() %>', 400, 300,'no',true,false,false); return false;"><img src='<%= popupIcon %>' alt='' class='icon popup' /></a>
+<% } %><jalios:include target="SKIN_AFTERBUTTON" targetContext="skin" />

@@ -1,0 +1,49 @@
+<%
+boolean showUrl = false;
+if (!fileUnreachable && indexer != null && indexer.provideExternalURLForFiles()) { 
+  String externalUrl = indexer.getExternalURL(file, request, repository);
+  showUrl = Util.notEmpty(externalUrl) && file.exists();
+  if (showUrl) {
+%> <a href="<%= externalUrl %>" ><%
+} }
+
+String fileEventDetailId = "Id_fileEventDetail_" + itCounter;
+%><%= getFileTypeIcon(filename) %>
+<%= FPUtil.getFileVeryShortName(filename) %>
+<% if (file.exists()) { %> (<jalios:filesize size="<%= file.length() %>" />)<% }
+   if (showUrl) { %></a><% } 
+   if (file.exists()) { 
+%> (<jalios:date date="<%= new Date(file.lastModified()) %>" format="short" />
+   <jalios:time date="<%= new Date(file.lastModified()) %>" format='<%= "HH:mm" %>' />)
+<% } %> 
+<a href="#" class="showFileDetailLink" data-jalios-action="toggle:fileEventDetailHidden" data-jalios-target="#<%= fileEventDetailId %>"><%= glp("fileprocessor.adm.filestatus.details") %></a>
+
+<%-- Construction of the detail buffer, hidden by default --%>
+<jalios:buffer name="detail" >
+  <span class="fileShortName"><%= filename  %></span>
+  <%
+    List<FileProcessingLog> logList = repository.getFileProcessingLogs(file);
+    if ( Util.notEmpty(logList)) {
+      int indiceProcessor = 0;
+      String formPrefix = "processor_"; 
+      for (FileProcessingLog log : logList) {
+        
+        Class itActionComponentClass = null;
+        try {
+          itActionComponentClass  = channel.getClass(log.getComponent());
+        } catch (Exception ex) {}
+        if (itActionComponentClass == null) {
+          continue;
+        }
+        %><%@include file="doAdminFileActionComponentDetail.jspf" %><%
+      }
+    }
+     
+  %>
+  <div class="fileGlobalAction">
+    <% formName = "blackListForm_" + itCounter; %>
+  </div>
+</jalios:buffer>
+<%-- The detail in a div, hidden in javascript --%>
+<div id="<%= fileEventDetailId %>" class="fileEventDetailHidden"><%= detail %></div>
+    

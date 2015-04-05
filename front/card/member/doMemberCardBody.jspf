@@ -1,0 +1,19 @@
+<%--
+  @Summary: Common front card body for Member card
+  @Category: UI Component
+  @Author: Sylvain DEVAUX
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-9.1
+--%><div class="card-content card-member-content">
+<% if (customContent != null) { %>
+  <%= customContent %>
+<% } else { %>
+  <div class="card-member-abstract-job">
+    <%@ include file="/front/card/member/doMemberOrganizationDepartment.jspf" %>
+    <%@ include file="/front/card/member/doMemberJob.jspf" %>
+  </div>                      
+<% } %>
+</div>

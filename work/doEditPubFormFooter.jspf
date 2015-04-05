@@ -1,0 +1,63 @@
+          </table>
+
+<% if (formHandler.showWFRole()) { %>
+
+          <% 
+   Workflow wf = formHandler.getWorkflow();
+   WFState state = wf.getInitState();
+   boolean showRoles = false;
+   if (state.hasOpenRole(workspace)) {
+%>
+    <fieldset><legend><%= glp("ui.work.form.tab.wf-role") %></legend>
+      <table class='layout'>  
+        <jalios:foreach collection="<%= state.getRoleSet() %>" name='wfRole' type='WFRole'>
+         <% WKRole wkRole = workspace.getRole(wfRole); %>
+         <% if (wkRole != null && WKRole.isOpen(wkRole)) {
+              showRoles = true;
+              Set<WFState> wfStateSet = wf.getWorkStateSet(wfRole);
+              if (Util.notEmpty(wfStateSet)) { %>
+        <tr id="role_choice_<%= wfRole.getId() %>">
+          <td class="text-left">
+            <jalios:icon src='role'  />
+            <% if (WKRole.OPEN_MODE_REQUIRED.equals(wkRole.getOpenMode())) { %><span class="formMandatory">* </span><% } %>
+            <span class='formLabel'><%= wfRole.getName(userLang) %></span>
+          </td>
+          <td class='formInfo'>
+            <% 
+              Publication currentPub = formHandler.getPublication();
+              Class pubClass = formHandler.getPublicationClass();            
+              Set allWorkerSet = JcmsUtil.select(wkRole.getWorkerSet(currentPub, true, pubClass), null, new Member.NameComparator());
+            %>
+            <input type="hidden" name="roleId" value="<%= wfRole.getId() %>" />
+            <jalios:field name='<%= "roleMbr_" + wfRole.getId() %>' value='<%= null %>' mv='<%= 1 %>'>
+              <jalios:control settings='<%= new EnumerateSettings().select().enumValues(allWorkerSet) %>' />
+            </jalios:field>
+
+          </td>
+        </tr>
+        <% } }%>
+        </jalios:foreach>
+      </table>
+    </fieldset>
+<% } %>
+<% } %>
+</div>
+    
+<%-- *** PLUGINS ***************************** --%>
+<jalios:include target="EDIT_PUB_FORM_FOOTER" />    
+    
+<%-- BUTTONS --------------------------------------------------------------- --%> 
+<div class="form-group">
+  <div class="col-sm-offset-3 col-sm-9">
+    <input type='submit' name='opCreate' value='<%= glp("ui.com.btn.submit") %>' class='btn btn-primary' />
+  </div>
+</div>
+<jalios:if predicate='<%= formInPortal %>'>
+  <input type="hidden" name="noSendRedirect" value='true' />
+  <%= printEnabledHiddenParams(request, Arrays.asList(new String[]{"portal","id","cid","jsp"})) %>
+</jalios:if>
+
+</div>
+</form>
+
+<% request.setAttribute("loggedMember", realLoggedMember); %>

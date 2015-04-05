@@ -1,0 +1,116 @@
+
+    <jalios:include target="EDIT_NOTIFICATION_HEADER" />
+      <jalios:if predicate='<%= request.getAttribute("showGroupsParameters") != null%>'>
+      <ul class="menu-list">
+        <li>
+          <input name="selectionCriteriaMode" type="radio" value="grpmbr" <%= notificationFormHandler.getAvailableSelectionCriteriaMode() == NotificationManager.USE_CRITERIA_GROUP_AND_MEMBER ? "checked=\"checked\"" : "" %> /> 
+          <%= glp("ui.work.notification.criteria.grpmbr") %>
+        </li>
+        <li>  
+          <input name="selectionCriteriaMode" type="radio" value="mbr" <%= notificationFormHandler.getAvailableSelectionCriteriaMode() == NotificationManager.USE_CRITERIA_MEMBER_ONLY ? "checked=\"checked\"" : "" %> />
+          <%= glp("ui.work.notification.criteria.mbr") %>
+        </li>
+        <li>  
+          <input name="selectionCriteriaMode" type="radio" value="grp" <%= notificationFormHandler.getAvailableSelectionCriteriaMode() == NotificationManager.USE_CRITERIA_GROUP_ONLY ? "checked=\"checked\"" : "" %> />
+          <%= glp("ui.work.notification.criteria.grp") %>
+        </li>
+      </ul>             
+      </jalios:if>
+
+      <%-- Criteria ------------------------------------------------------------ --%> 
+<script language="Javascript" type="text/javascript">
+<!--
+function openNotificationQueryChooser(window, ctxPath, form, widget, pos){ 
+ var formName   = getFormName(window.document, form);
+ var widgetPos  = getFormElementPos(form,widget) + (pos * 4); // we have 4 input per criteria
+ var chooser    = ctxPath+"/work/queryChooser.jsp?targetInput=document."+formName+".elements["+widgetPos+"].value&targetLabel=document."+formName+".elements["+(widgetPos-1)+"].value&qs="+escape(form.elements[widgetPos].value);
+ popupWindow(chooser, 'NotificationQueryChooser', 800, 400,'no','yes','yes',false);
+}
+function clearNotificationCriteria(form, widget, pos) {
+ var widgetPos  = getFormElementPos(form,widget) + (pos * 4); // we have 4 input per criteria
+ clearField(document.editForm.elements[ widgetPos - 1 ],  // label
+            document.editForm.elements[ widgetPos     ],  // query
+            document.editForm.elements[ widgetPos + 1 ],  // mutationTypes
+            document.editForm.elements[ widgetPos + 2 ]); // periodTypes
+}
+-->
+</script>
+      
+      <h5><%= glp("ui.work.notification.criteria")%></h5>
+      <p><%= notificationFormHandler.getCriteriaText() %></p>
+      <% NotificationCriteria[] criteriaArray = notificationFormHandler.getAvailableCriteria(); %> 
+      <ol>
+      <% for(int idx = 0; idx < notificationFormHandler.getCriteriaCount(); idx++) { %> 
+       <li style="white-space: nowrap;" class="form-inline">
+         <% NotificationCriteria itPub = criteriaArray != null && idx < criteriaArray.length ? criteriaArray[idx] : null; %>
+         <%
+            String queryString = itPub != null ? itPub.getQuery() : null;
+            String __label = "";
+            if (queryString != null && queryString.length() > 0) {
+	            com.jalios.jcms.handler.QueryHandler qh = null;
+	            try {
+	              qh = new com.jalios.jcms.handler.QueryHandler(queryString,request);
+	            } catch (IllegalArgumentException ex) {
+	              logger.warn("An invalid queryString was given to doEditNotification.jsp during member or group edition "+ (itPub != null ? ("(NotificationCriteria " + itPub.getId() + ")"): "")+", an empty search will be used : '"+queryString+"' : " + ex.getMessage());
+	              qh = new com.jalios.jcms.handler.QueryHandler("", request);
+	            }
+	            String description = qh.getDescription();
+	            __label = description != null ? description : ""; 
+            }
+         %>
+         <div class="form-group">                             
+         <input class='form-control col-md-3' type='text' value="<%= __label %>" disabled="disabled" />
+         </div>
+         <div class="form-group">                             
+         <input name='notificationQueryStrings' class='form-control' disabled="disabled" type='text' value="<%= encodeForHTMLAttribute(queryString != null ? queryString : "") %>" />
+         <a href="" onclick="openNotificationQueryChooser(window, '<%= contextPath %>', document.editForm, 'notificationQueryStrings', <%= idx %>); return false;"><jalios:icon src="portal-query"  alt='<%= glp("ui.com.alt.query-chooser") %>' /></a>
+         </div>
+         <%
+           int mutationType = -1,periodType = -1;
+           if (itPub != null) {
+             mutationType = itPub.getMutationType();
+             periodType = itPub.getPeriodType();
+           }
+         %>
+         <div class="form-group">                             
+         <select name='mutationTypes' class='form-control'>
+          <option value='-1'>-- <%= glp("ui.work.notification.mutation-type") %> --</option>
+          <option value='<%= NotificationManager.MUTATION_CREATE %>' <%= mutationType==NotificationManager.MUTATION_CREATE ? "selected=\"selected\"" : ""%>><% /* %> Creation <% */ %><%=glp("ui.work.notification.mutation-create")%></option>
+          <option value='<%= NotificationManager.MUTATION_MAJOR %>' <%= mutationType==NotificationManager.MUTATION_MAJOR ? "selected=\"selected\"" : ""%>><%=glp("ui.work.notification.mutation-major")%></option>
+          <option value='<%= NotificationManager.MUTATION_ALL %>' <%= mutationType==NotificationManager.MUTATION_ALL ? "selected=\"selected\"" : ""%>><%=glp("ui.work.notification.mutation-all")%></option>
+         </select>
+         </div>
+         <div class="form-group">                             
+         <select name='periodTypes' class='form-control'>
+          <option value='-1'>-- <%= glp("ui.work.notification.period") %> --</option>
+          <% int[] availablePeriods = channel.getNotificationManager().getAvailablePeriods(); %>
+          <% for (int j = 0; j < availablePeriods.length; j++) {
+              out.println("<option value='" + availablePeriods[j] + "' ");
+              if (periodType==availablePeriods[j]) {
+                out.println("selected='selected'");
+              }
+              out.println(">"+glp(channel.getNotificationManager().getPeriodLabel(availablePeriods[j]))+"</option>");
+            }
+           %>
+         </select>
+         </div>
+         <a href="" onclick="clearNotificationCriteria(document.editForm, 'notificationQueryStrings', <%= idx %>); return false;"><jalios:icon src="remove" title="ui.com.alt.clear" alt="ui.com.alt.clear"/></a>
+         <% if (idx+1==notificationFormHandler.getCriteriaCount()) { %>
+          <a href="#" onclick="submitForm('opAddItem'); return false;"><%= WidgetUtil.getHtmlIcon(WidgetUtil.ICON_PLUS, glp("ui.com.alt.add-item"), glp("ui.com.alt.add-item")) %></a>
+         <% } %>
+       </li>
+      <% } %> 
+      </ol>
+      <input type="hidden" name="criteriaAddCount" value="<%= notificationFormHandler.getAvailableCriteriaAddCount() %>" />
+      
+      <%-- EXTRA DATA INFO ----------------------------------------- --%>
+      <% Object tmpFormhandler = request.getAttribute("formHandler"); 
+         request.setAttribute("formHandler",notificationFormHandler);
+         request.setAttribute("extraDataFieldSet","false");
+      %>
+      <jalios:buffer name="editExtraDataBuffer"><jalios:include jsp="/jcore/doEditExtraData.jsp" /></jalios:buffer>
+      <% if (Util.notEmpty(editExtraDataBuffer.toString().trim())) { %>
+      <table class='layout'><%= editExtraDataBuffer.toString() %></table>
+      <% } %>
+			<% request.setAttribute("formHandler",tmpFormhandler);  %>
+    <jalios:include target="EDIT_NOTIFICATION_FOOTER" />

@@ -1,0 +1,42 @@
+<%@page import="com.jalios.jcms.mashup.ExportManager"%>
+
+<div class="navbar navbar-default search-header">
+
+  <div class="container-fluid">
+   
+    <div class="navbar-header">
+      <div class="navbar-brand"><%= glp("ui.work.query.txt.search") %></div>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#query-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>      
+    </div>
+   
+    <div class="navbar-collapse collapse" id="query-navbar-collapse">
+      <ul class="nav navbar-nav navbar-left">
+        <%@ include file='/front/doQueryNavbar_sort.jspf' %>
+        <%@ include file='/front/doQueryNavbar_actions.jspf' %>
+      </ul>
+      
+      <%-- SEARCH --%>
+      <div class="navbar-form navbar-right">
+        <div class="form-group">
+        <% String textInputValue = queryHandler.getText(); %>
+        <jalios:field name="text" css="search" value="<%= textInputValue %>" resource="field-light">
+         <jalios:control settings='<%= new TextFieldSettings().placeholder("ui.com.placeholder.search") %>' />
+           <span class="input-group-btn">
+            <% boolean isAjax = channel.getBooleanProperty("query.facets.ajax", false); %>
+             <button id="facets-submit" class='btn btn-default <%= isAjax ? "ajax-refresh": "" %>' name="opSearch" type="submit" value="true"><jalios:icon src="search"/></button>
+           </span>               
+        </jalios:field>
+        </div>
+      </div>
+    
+    </div>
+    
+  </div>
+</div>
+
+
+

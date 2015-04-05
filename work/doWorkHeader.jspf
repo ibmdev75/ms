@@ -1,0 +1,352 @@
+<%--
+  @Summary: Work Area header
+  @Category: Work Area / Presentation
+  @Author: Oliver Dedieu
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-2.1
+--%><%
+
+  if (!isLogged || !(isAdmin || loggedMember.isWorker(workspace) || request.getAttribute("authorized") == Boolean.TRUE || checkAccess("admin/") || checkAccess("admin-ws/"))) {
+    sendForbidden(request, response);
+    return;
+  }
+
+  if (!channel.isValidWorkspacesIP(request)) {
+    sendForbidden(request, response);
+    return;  
+  }
+  
+  if (!jspFile.endsWith("work/doWorkMsg.jsp") && 
+      JcmsUtil.checkDataWriteDisabled(request, response, "work/doWorkMsg.jsp", userLang)) {
+    return;
+  }
+
+  /* ####################################################### *\
+  ** ###################### ADMIN MENU ##################### **
+  \* ####################################################### */
+
+	boolean adminCommonMenu      = request.getAttribute("adminCommonMenu")      != null;
+	boolean adminTypesMenu       = request.getAttribute("adminTypesMenu")       != null;
+  boolean adminGroupMenu       = request.getAttribute("adminGroupMenu")       != null;
+	boolean adminAccessAuditMenu = request.getAttribute("adminAccessAuditMenu") != null;
+	boolean adminMemberMenu      = request.getAttribute("adminMemberMenu")      != null;
+  boolean adminDBMemberMenu    = request.getAttribute("adminDBMemberMenu")      != null;
+	boolean adminRolesMenu       = request.getAttribute("adminRolesMenu")       != null;
+	boolean adminPropertiesMenu  = request.getAttribute("adminPropertiesMenu")  != null;
+	boolean adminMailMenu        = request.getAttribute("adminMailMenu")        != null;
+	boolean adminReportingMenu   = request.getAttribute("adminReportingMenu")   != null;
+	boolean adminWAMenu          = adminCommonMenu     || 
+                                 adminTypesMenu      || 
+                                 adminGroupMenu      || 
+                                 adminAccessAuditMenu||
+                                 adminMemberMenu     || 
+                                 adminDBMemberMenu   || 
+                                 adminRolesMenu      || 
+                                 adminMailMenu       ||
+                                 adminReportingMenu  ||
+	                               request.getAttribute("adminWAMenu") != null;
+								   
+	if (adminWAMenu && !checkAccess("admin-ws/")){
+		sendForbidden(request, response);
+  		return;
+	}
+
+  /* ####################################################### *\
+  ** #################### CONTENT MENU ##################### **
+  \* ####################################################### */
+
+	boolean wkspcFilter          = getBooleanParameter("workspaceFilter",true);
+	boolean allowWkspFilter      = Util.toBoolean((String)request.getAttribute("allowWkspFilter"),!adminWAMenu);
+	if (!allowWkspFilter)
+		wkspcFilter = true;
+	
+	boolean myContentWAMenu      = request.getAttribute("myContentWAMenu")      != null;
+	boolean allContentWAMenu     = request.getAttribute("allContentWAMenu")     != null;
+	boolean deletedContentWAMenu = request.getAttribute("deletedContentWAMenu") != null;
+	boolean archivedContentWAMenu= request.getAttribute("archivedContentWAMenu")!= null;
+	boolean contentWAMenu        = myContentWAMenu       ||
+	                               allContentWAMenu      || 
+	                               deletedContentWAMenu  || 
+	                               archivedContentWAMenu ||
+	                               request.getAttribute("contentWAMenu")        != null;
+
+  /* ####################################################### *\
+  ** ################### WORKFLOW MENU ##################### **
+  \* ####################################################### */
+
+	boolean workListWAMenu       = request.getAttribute("workListWAMenu")       != null;
+  boolean workReportWAMenu       = request.getAttribute("workReportWAMenu")       != null;
+	boolean pubCalendarWAMenu    = request.getAttribute("pubCalendarWAMenu")    != null;
+	boolean expCalendarWAMenu    = request.getAttribute("expCalendarWAMenu")    != null;
+	boolean archCalendarWAMenu   = request.getAttribute("archCalendarWAMenu")   != null;
+	boolean workflowWAMenu       = workListWAMenu     || 
+                                 workReportWAMenu     ||
+	                               pubCalendarWAMenu  || 
+	                               expCalendarWAMenu  || 
+	                               archCalendarWAMenu || 
+	                               request.getAttribute("workflowWAMenu")       != null;
+
+  /* ####################################################### *\
+   ** ###################### UGC MENU ###################### **
+   \* ####################################################### */
+
+   boolean myUGCWAMenu         = request.getAttribute("myUGCWAMenu")         != null;
+   boolean allUGCWAMenu        = request.getAttribute("allUGCWAMenu")        != null;
+   boolean deletedUGCWAMenu    = request.getAttribute("deletedUGCWAMenu")    != null;
+   boolean ugcWAMenu           = myUGCWAMenu       ||
+                                 allUGCWAMenu      || 
+                                 deletedUGCWAMenu  || 
+                                 request.getAttribute("ugcWAMenu")           != null;
+
+  /* ####################################################### *\
+  ** #################### PORTLET MENU ##################### **
+  \* ####################################################### */
+
+	boolean myPortletWAMenu      = request.getAttribute("myPortletWAMenu")      != null;
+	boolean allPortletWAMenu     = request.getAttribute("allPortletWAMenu")     != null;
+	boolean deletedPortletWAMenu = request.getAttribute("deletedPortletWAMenu") != null;
+	boolean portletWizardWAMenu  = request.getAttribute("portletWizardWAMenu")  != null;
+	boolean portletWAMenu        = myPortletWAMenu      ||
+	                               allPortletWAMenu     || 
+	                               deletedPortletWAMenu || 
+	                               portletWizardWAMenu  ||
+	                               request.getAttribute("portletWAMenu")        != null;
+
+  /* ####################################################### *\
+  ** ###################### FORM MENU ###################### **
+  \* ####################################################### */
+
+	boolean myFormWAMenu         = request.getAttribute("myFormWAMenu")         != null;
+	boolean allFormWAMenu        = request.getAttribute("allFormWAMenu")        != null;
+	boolean deletedFormWAMenu    = request.getAttribute("deletedFormWAMenu")    != null;
+	boolean archivedFormWAMenu   = request.getAttribute("archivedFormWAMenu")   != null;
+	boolean formWAMenu           = myFormWAMenu       ||
+	                               allFormWAMenu      || 
+	                               deletedFormWAMenu  || 
+	                               archivedFormWAMenu ||
+	                               request.getAttribute("formWAMenu")           != null;
+
+  /* ####################################################### *\
+  ** #################### CATEGORY MENU #################### **
+  \* ####################################################### */
+
+	boolean editCategoriesWAMenu = request.getAttribute("editCategoriesWAMenu") != null;
+	boolean profileWAMenu        = request.getAttribute("profileWAMenu")!=null;
+  
+  /* ####################################################### *\
+  ** ###################### CADDY MENU ##################### **
+  \* ####################################################### */
+
+  boolean caddyPublicationMenu = request.getAttribute("caddyPublicationMenu")  != null;
+  boolean caddyCategoryMenu    = request.getAttribute("caddyCategoryMenu")     != null;
+  boolean caddyWorkspaceMenu   = request.getAttribute("caddyWorkspaceMenu")    != null;
+  boolean caddyGroupMenu       = request.getAttribute("caddyGroupMenu")        != null;
+  boolean caddyMemberMenu      = request.getAttribute("caddyMemberMenu")       != null;
+  boolean caddyDBMemberMenu    = request.getAttribute("caddyDBMemberMenu")     != null;
+  boolean caddyWAMenu          = caddyPublicationMenu  || 
+                                 caddyCategoryMenu     || 
+                                 caddyWorkspaceMenu    || 
+                                 caddyGroupMenu        || 
+                                 caddyMemberMenu       ||
+                                 caddyDBMemberMenu     ||
+                                 request.getAttribute("caddyWAMenu") != null;
+
+  /* ####################################################### */
+  
+  
+  boolean showDeletedMenu = isAdmin || (isWSAdmin && channel.getBooleanProperty("channel.show-deleted", false));
+  boolean boMenuOff = Util.toBoolean(request.getAttribute("boMenuOff"),false); 
+  
+	request.setAttribute("title",Util.getString(Util.html2Ascii((String)request.getAttribute("title")), glp("ui.com.alt.work")));
+	request.setAttribute("zone","WorkArea");
+	jcmsContext.forceEditIcon(true);
+
+%><%@ include file='/jcore/doEmptyHeader.jspf' %><%
+%><jalios:include jsp='jcore/topbar/doWorkTopbar.jsp' />
+<jalios:include jsp='jcore/sidebar/doSidebar.jsp' /><%
+
+%><%-- ####################################################### --%><%
+%><%-- #################### MENU LEVEL 1 ##################### --%><%
+%><%-- ####################################################### --%><%
+
+if (!boMenuOff) {
+%>
+<div class="boMenu pull-right">
+  <ul class="nav nav-tabs">
+  
+   <jalios:include target="WORK_HEADER_RIGHT" targetContext="li" />
+   
+  </ul>
+</div>
+
+<div class="boMenu">
+	<ul class="nav nav-tabs">
+	  <jalios:include target="WORK_HEADER_LEFT" targetContext="li" />
+	  
+	  <%-- CONTENTS --%>
+	  <li id="contentWAMenu" class="<% if (contentWAMenu){%> active<%}%>"><a href="work/pubBrowser.jsp"><jalios:icon src="contents"  /> <%= glp("ui.work.mn.ctnt") %></a></li>
+	  
+	  <%-- UGC --%>
+	  <% if (loggedMember.canPublishSome(UserContent.class, workspace)) { %>
+	  <li id="ugcWAMenu" class="<% if (ugcWAMenu){%> active<%}%>"><a href="work/pubBrowser.jsp?mode=all&amp;super=com.jalios.jcms.UserContent"><jalios:icon src="contents-user"  /> <%= glp("ui.work.mn.ugc") %></a></li>
+	  <% } %>
+	  
+	  <%-- WORKFLOW --%>
+	  <li id="workflowWAMenu" class="<% if (workflowWAMenu){%> active<%}%>"><a href="work/<%= isWSAdmin ? "workReport.jsp" : "workList.jsp" %>"><jalios:icon src="workflows"  /> <%= glp("ui.work.mn.wf") %></a></li>
+	  
+	  <%-- CATEGORIES --%>
+    <% if (loggedMember.canEditCategories(workspace)) { %>
+    <li id="editCategoriesWAMenu" class="white <% if (editCategoriesWAMenu){%> active<%}%>"> 
+      <a href="work/editCat.jsp"><jalios:icon src="category-tree"  /> <%= glp("ui.work.mn.cat") %></a>
+    </li>
+    <% } %>
+	  
+    <%-- PORTLETS --%>
+    <% if (loggedMember.canPublishSome(PortalElement.class, workspace)) { %>
+    <li id="portletWAMenu" class="<% if (portletWAMenu){%> active<%}%>"> 
+      <a href="work/pubBrowser.jsp?mode=all&amp;super=com.jalios.jcms.portlet.PortalElement"><jalios:icon src="portlets"  /> <%= glp("ui.work.mn.ptl") %></a>
+    </li>
+    <% } %>
+	  
+	  <%-- FORM --%>
+    <% if (loggedMember.canPublishSome(Form.class, workspace)) { %>
+    <li id="formWAMenu" class="<% if (formWAMenu){%> active<%}%>"> 
+      <a href="work/pubBrowser.jsp?mode=all&amp;super=com.jalios.jcms.Form"><jalios:icon src="forms"  /> <%= glp("ui.work.mn.form") %></a>
+    </li>
+    <% } %>
+	  
+	  <%-- ADMIN --%>
+    <% if (checkAccess("admin-ws/") && wkspcFilter) { %>
+    <li id="adminWAMenu" class="<% if (adminWAMenu){%> active<%}%>"> 
+      <a href="work/workspace/adminWorkspace.jsp"><jalios:icon src="advanced"  /> <%= glp("ui.work.mn.admin") %></a>
+    </li>
+    <% } %>
+	  
+	  <jalios:include target="WORK_HEADER_MENU"  targetContext="li" />
+	</ul>
+</div>
+<% } %>
+
+<%-- ####################################################### --%>
+<%-- #################### MENU LEVEL 2 ##################### --%>
+<%-- ####################################################### --%>
+
+  <%-- ##### NO MENU ##### --%>
+  <% if (boMenuOff) { %>
+  
+	<%-- ##### CONTENT ##### --%>
+	<% } else if (contentWAMenu) { %>
+	<ul id="contentWASubMenu" class="nav nav-pills boSubMenu">
+    <li class='<%=  myContentWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp<%= ServletUtil.getUpdatedParams(request, new String[] {"mode"}, new String[] {"mine"}, new String[] {"mid"}) %>" ><% /* %>My Contents<% */ %><%= glp("ui.work.mn.ctnt.mine") %></a></li> 
+    <li class='<%=  allContentWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp<%= ServletUtil.getUpdatedParams(request, new String[] {"mode"}, new String[] {"all"}) %>" ><% /* %>All Contents<% */ %><%= glp("ui.work.mn.ctnt.all") %></a></li>
+    <li class='<%=  archivedContentWAMenu? "active" : "" %>'><a href="work/archiveBrowser.jsp?originalType=content"><jalios:icon src='archive'  /> <% /* %>Archived Contents<% */ %><%= glp("ui.work.mn.ctnt.archived") %></a></li>
+    <% if (showDeletedMenu) { %><li class='<%=  deletedContentWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp?mode=deleted" title="<%= glp("msg.js.confirm-show-deleted") %>" class='modal confirm'><jalios:icon src='trash-empty'  /> <% /* %>Deleted Contents<% */ %><%= glp("ui.work.mn.ctnt.deleted") %></a></li><% } %>
+    <jalios:include target="WORK_CONTENT_SUBMENU" targetContext="li" />
+	</ul>
+
+  <%-- ##### UGC ##### --%>
+  <% } else if (ugcWAMenu) { %>
+  <ul id="ugcWASubMenu" class="nav nav-pills boSubMenu">
+    <li class='<%=  myUGCWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp<%= ServletUtil.getUpdatedParams(request, new String[] {"mode"}, new String[] {"mine"}) %>"><% /* %>My UGC<% */ %><%= glp("ui.work.mn.ugc.mine") %></a></li>
+    <li class='<%=  allUGCWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp<%= ServletUtil.getUpdatedParams(request, new String[] {"mode"}, new String[] {"all"}) %>"><% /* %>All UGC<% */ %><%= glp("ui.work.mn.ugc.all") %></a></li>
+    <% if (showDeletedMenu) { %><li class='<%=  deletedUGCWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp?mode=deleted&amp;super=com.jalios.jcms.UserContent" title="<%= glp("msg.js.confirm-show-deleted") %>" class='modal confirm'><jalios:icon src='trash-empty'  /> <% /* %>Deleted UGC<% */ %><%= glp("ui.work.mn.ugc.deleted") %></a></li><% } %>
+    <jalios:include target="WORK_UGC_SUBMENU" targetContext="li" />
+  </ul>
+ 
+	<%-- ##### WORKFLOW ##### --%>
+	<% } else if (workflowWAMenu) { %>
+  <ul id="workflowWASubMenu" class="nav nav-pills boSubMenu">
+    <li class='<%= workListWAMenu ? "active" : "" %>'><a href="work/workList.jsp"><% /* %>Work List<% */ %><%= glp("ui.work.mn.wf.wl") %></a></li>
+    <% if (isWSAdmin) { %>
+    <li class='<%= workReportWAMenu ? "active" : "" %>'><a href="work/workReport.jsp"><% /* %>Overview<% */ %><%= glp("ui.work.mn.wf.wr") %></a></li>
+    <% } %>
+	  <li class='<%= pubCalendarWAMenu  ? "active" : "" %>'><a href="work/pubCalendar.jsp?type=pdate"><% /* %>Publication Calendar<% */ %><%= glp("ui.work.mn.wf.pub-cal") %></a></li>
+	  <li class='<%= expCalendarWAMenu  ? "active" : "" %>'><a href="work/pubCalendar.jsp?type=edate"><% /* %>Expiry Calendar<% */ %><%= glp("ui.work.mn.wf.exp-cal") %></a></li>
+	  <li class='<%= archCalendarWAMenu ? "active" : "" %>'><a href="work/pubCalendar.jsp?type=adate"><% /* %>Archiving Calendar<% */ %><%= glp("ui.work.mn.wf.arch-cal") %></a></li>
+	  <jalios:include target="WORK_WORKFLOW_SUBMENU" targetContext="li" /> 
+	</ul>
+	
+	<%-- ##### PORTLET ##### --%>
+	<% } else if (portletWAMenu) { %>
+  <ul id="portletWASubMenu" class="nav nav-pills boSubMenu">
+	  <li class='<%=  myPortletWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp<%= ServletUtil.getUpdatedParams(request, new String[] {"mode"}, new String[] {"mine"}) %>"><% /* %>My Portlet<% */ %><%= glp("ui.work.mn.ptl.mine") %></a></li> 
+	  <li class='<%=  allPortletWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp<%= ServletUtil.getUpdatedParams(request, new String[] {"mode"}, new String[] {"all"}) %>"><% /* %>All Portlet<% */ %><%= glp("ui.work.mn.ptl.all") %></a></li>
+	  <% if (showDeletedMenu) { %><li class='<%=  deletedPortletWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp?mode=deleted&amp;super=com.jalios.jcms.portlet.PortalElement" title="<%= glp("msg.js.confirm-show-deleted") %>" class='modal confirm'><jalios:icon src='trash-empty'  /> <% /* %>Deleted Portlet<% */ %><%= glp("ui.work.mn.ptl.deleted") %></a></li><% } %>
+	  <jalios:include target="WORK_PORTLET_SUBMENU" targetContext="li"/>
+	</ul>
+	
+	<%-- ##### FORM ##### --%>
+	<% } else if (formWAMenu) { %>
+  <ul id="formWASubMenu" class="nav nav-pills boSubMenu">
+	  <li class='<%=  myFormWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp<%= ServletUtil.getUpdatedParams(request, new String[] {"mode"}, new String[] {"mine"}) %>"><% /* %>My Form<% */ %><%= glp("ui.work.mn.form.mine") %></a></li>
+	  <li class='<%=  allFormWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp<%= ServletUtil.getUpdatedParams(request, new String[] {"mode"}, new String[] {"all"}) %>"><% /* %>All Form<% */ %><%= glp("ui.work.mn.form.all") %></a></li>
+	  <li class='<%=  archivedFormWAMenu ? "active" : "" %>'><a href="work/archiveBrowser.jsp?originalType=form"><jalios:icon src='archive'  /> <% /* %>Archived Form<% */ %><%= glp("ui.work.mn.form.archived") %></a></li>
+	  <% if (showDeletedMenu) { %><li class='<%=  deletedFormWAMenu ? "active" : "" %>'><a href="work/pubBrowser.jsp?mode=deleted&amp;super=com.jalios.jcms.Form" title="<%= glp("msg.js.confirm-show-deleted") %>" class='modal confirm'><jalios:icon src='trash-empty'  /> <% /* %>Deleted Form<% */ %><%= glp("ui.work.mn.form.deleted") %></a></li><% } %>
+	  <jalios:include target="WORK_FORM_SUBMENU" targetContext="li"/>
+	</ul>
+
+	<%-- ##### ADMIN ##### --%>
+	<% } else if (adminWAMenu) { %>
+  <ul id="adminWASubMenu" class="nav nav-pills boSubMenu">
+    <% if (checkAccess("admin-ws/users/member")) { %>
+      <li class='<%=  adminMemberMenu ? "active" : "" %>'><a href="work/workspace/workspaceMemberList.jsp"><jalios:icon src='mbr-default'  /> <%= glp("ui.com.lbl.members") %></a></li>
+      <% if (workspace.hasDBMember()) { %>
+        <li class='<%=  adminDBMemberMenu ? "active" : "" %>'><a href="work/workspace/workspaceDBMemberList.jsp"><jalios:icon src='dbmbr-default'  /> <%= glp("ui.com.lbl.dbmembers") %></a></li>
+      <% } %>
+    <% } %>
+    <% if (checkAccess("admin-ws/users/group")) { %>
+	  <li class='<%= adminGroupMenu ? "active" : "" %>'><a href="work/workspace/workspaceGroupList.jsp"><jalios:icon src='group'  /> <%= glp("ui.com.lbl.groups") %></a></li>
+    <% } %>
+    <% if (checkAccess("admin-ws/users/acl-audit")) { %>
+      <li class='<%= adminAccessAuditMenu ? "active" : "" %>'><a href="work/workAccessAudit.jsp"><jalios:icon src='key'  /> <%= glp("accesscontrol.audit") %></a></li>
+    <% } %>
+    <% if (checkAccess("admin-ws/users/role")) { %>
+	  <li class='<%= adminRolesMenu ? "active" : "" %>'><a href="work/workspace/editWorkspaceRole.jsp"><jalios:icon src='role'  /> <%= glp("ui.com.lbl.roles") %></a></li>
+    <% } %>
+    <% if (checkAccess("admin-ws/conf/ws")) { %>
+	  <li class='<%=  adminTypesMenu ? "active" : "" %>'><a href="work/workspace/editWorkspaceType.jsp"><jalios:icon src='form'  /> <%= glp("ui.work.mn.types") %></a></li>
+	  <li class='<%=  adminCommonMenu ? "active" : "" %>'><a href="work/workspace/editWorkspaceCommon.jsp"><jalios:icon src='properties'  /> <%= glp("ui.adm.mn.conf.prop") %></a></li>
+    <% } %>
+    <% if (checkAccess("admin-ws/reporting/data-report")) { %>
+	  <li class='<%= adminReportingMenu  ? "active" : "" %>'><a href="work/wsDataReport.jsp"><jalios:icon src='list'  /> <%= glp("ui.adm.mn.reporting") %></a></li>
+    <% } %>
+    <jalios:include target="WORK_ADMIN_SUBMENU" targetContext="li" />
+	</ul>
+  
+  <%-- ##### CADDY ##### --%>
+  <% } else if (caddyWAMenu) { %>
+  <ul id="caddyWASubMenu" class="nav nav-pills boSubMenu">
+    <%-- See CaddyTag for detail information of caddy "access right" --%>
+    <% if (Caddy.checkCaddyAccess(Publication.class, loggedMember, workspace)) { %><li class='<%=  caddyPublicationMenu ? "active" : "" %>'><a href="work/caddy/publicationCaddyManager.jsp" ><jalios:icon src='txt'  /> <% /* %> Publication <% */ %><%= glp("ui.com.lbl.publications") %></a></li><% } %>
+    <% if (Caddy.checkCaddyAccess(Category.class, loggedMember, workspace)) { %><li class='<%=  caddyCategoryMenu ? "active" : "" %>'><a href="work/caddy/categoryCaddyManager.jsp" ><jalios:icon src='categories'  /> <% /* %> Categories <% */ %><%= glp("ui.com.lbl.categories") %></a></li><% } %>
+    <% if (Caddy.checkCaddyAccess(Workspace.class, loggedMember, workspace)) { %><li class='<%=  caddyWorkspaceMenu ? "active" : "" %>'><a href="work/caddy/workspaceCaddyManager.jsp" ><jalios:icon src='work'  /> <% /* %> Workspaces <% */ %><%= glp("ui.com.lbl.workspaces") %></a></li><% } %>
+    <% if (Caddy.checkCaddyAccess(Group.class, loggedMember, workspace)) { %><li class='<%=  caddyGroupMenu ? "active" : "" %>'><a href="work/caddy/groupCaddyManager.jsp" ><jalios:icon src='group'  /> <% /* %> Groups <% */ %><%= glp("ui.com.lbl.groups") %></a></li><% } %>
+    <% if (Caddy.checkCaddyAccess(Member.class, loggedMember, workspace)) { %><li class='<%=  caddyMemberMenu ? "active" : "" %>'><a href="work/caddy/memberCaddyManager.jsp" ><jalios:icon src="<%= ResourceHelper.getMemberDefaultIcon() %>"   /> <% /* %> Members <% */ %><%= glp("ui.com.lbl.members") %></a></li><% } %>
+    <% if (Caddy.checkCaddyAccess(DBMember.class, loggedMember, workspace)) { %><li class='<%=  caddyDBMemberMenu ? "active" : "" %>'><a href="work/caddy/dbmemberCaddyManager.jsp" ><jalios:icon src="<%= ResourceHelper.getDBMemberDefaultIcon() %>"   /> <% /* %> DB Members <% */ %><%= glp("ui.com.lbl.dbmembers") %></a></li><% } %>
+  </ul>
+  <% } %>
+<%
+  // Code duplicated in doWorkHeader/doAdminHeader.jsp
+  String jspCssName = ServletUtil.getResourcePath(request);
+  jspCssName = Util.replace(jspCssName, "s!\\.jsp!!g"); // remove ".jsp"
+  jspCssName = Util.replace(jspCssName, "s![\\./]!-!g"); // replace '/' and '.'  with "-"
+  // Code duplicated in doEditPubHeader.jsp
+  String customCSS = Util.getString(request.getAttribute("boHeaderCSS"),"");
+  String pubBrowserCss = "";
+  if (deletedContentWAMenu ||
+      deletedPortletWAMenu ||
+      deletedFormWAMenu)  { pubBrowserCss = "deleted"; }
+  else if (contentWAMenu) { pubBrowserCss = "content"; }
+  else if (portletWAMenu) { pubBrowserCss = "portlet"; }
+  else if (formWAMenu)    { pubBrowserCss = "form"; }
+  else if (ugcWAMenu)     { pubBrowserCss = "ugc"; }
+%>
+<div class="WorkArea <%= (jspCssName + " " + pubBrowserCss + " " + customCSS).trim() %>">
+<% /* %>
+  </div>
+</body>
+</html>
+<% */ %>

@@ -1,0 +1,186 @@
+/* ----------------------------------------------- */
+/*  TYPEAHEAD                                      */
+/* ----------------------------------------------- */
+.typeahead {
+    margin-top:0; //Reset bootstrap since our .typeahead is used to display the input
+}
+
+.typeahead-menu {
+  position: absolute;
+
+  z-index: @zindexTypeAhead;
+
+	.dropdown-menu.list-group {
+	  margin: 0;
+	  padding: 0;
+	  
+	  LI {
+	    margin: 0 0 -1px 0;
+	  }
+	  
+	  .ac-pub-title {
+	    font-weight: bold;
+	  }
+	}
+
+	UL.dropdown-menu {
+    display: block; 
+    max-width: 350px; // Gracefull degradation for IE7/8
+    overflow: hidden;
+    
+    .info { 
+			font-size: @font-size-small; 
+	    .text-overflow();
+	    display:block;
+    }
+    
+    &.typeahead-photo LI A {
+      padding-left: 42px;
+      position: relative;
+      
+      .thumb {
+        position: absolute;
+        left: 6px; 
+        top: 6px;
+        width: 28px; 
+        height: 28px;        
+        
+        display: block; zoom:1;
+        border: 1px solid @gray-light;
+        overflow: hidden;
+        
+        background-color: #FFF;
+        
+        text-align: center;
+      }
+    }
+
+    LI    { 
+	    A { border-bottom: 1px dotted #CCC; }
+	    &:last-child A   { border-bottom: none; }
+	    &.nomatch A   { font-weight: bold; }
+	    
+	    &.next A   { 
+		    color: @blue;
+		    font-weight: bold;
+		    text-align: right;
+	    }
+	    
+	    &.previous A { 
+		    color: @blue;
+		    font-weight: bold; 
+		    padding-left: 15px; 
+	    }
+	    
+	    &.results A { 
+		    text-align:  center; 
+		    padding-left: 15px; 
+	    }
+	    
+	    &.add A { 
+		    color: @brand-success; 
+		    font-weight: bold; 
+		    text-align: center; 
+	    }
+	    &.add.active A { 
+		    background-color:  @brand-info; 
+		    color: #FFF; 
+	    }
+	    &.next, 
+	    &.previous { 
+		    &.active A  { 
+			    background-color: @blue; 
+			    color: #FFF; 
+		    }
+	    }
+      &.active {
+        .meta-text {
+          color: #EEEEEE; 
+        }
+      }
+    }
+  }
+
+
+  /*
+  * Search autocomplete
+  */
+  &.typeahead-search {
+    &.typeahead-search-topbar {
+	    left: auto !important;
+	    right: 10px !important;
+	    UL.list-group {
+		    width:100%;
+	    }
+    }
+    
+    margin-top: 2px;
+    max-width: 300px;
+    width: 300px;
+    
+    UL.list-group {
+      .typeahead-search-full  {
+        A        { 
+	        color: @blue;
+	        font-weight: bold;
+        }
+        &.active A { 
+	        background: @blue; 
+	        color: #FFF; 
+        }
+      }
+      
+	    .typeahead-layout {
+	        background: none repeat scroll 0 0 #585858;
+	        border-bottom: 1px solid #E8E8E8;
+		      padding: 5px 5px 5px 10px;
+	        text-align: left;
+	        color:white;
+	        font-weight:bold;
+	        cursor:default;
+	        &.nomatch {
+		        background-color: white;
+		        color:@text-color;
+	        }
+	    }    
+    
+	    padding-top:0;
+	    
+	    LI {
+	      text-align:left;
+	      
+	      A {
+		      padding: 10px 15px;
+         .text-overflow();
+	      }
+	    }
+    }
+  }
+}
+
+/* ----------------------------------------------- */
+/*  AUTOCOMPLETE                                   */
+/* ----------------------------------------------- */
+
+BODY.body {
+  INPUT.form-control-autocomplete {
+    background: @autocomplete-bg url('../../../images/jalios/assets/16x16/autocomplete.gif') no-repeat 2px center;
+    padding-left: 20px;
+  }
+  INPUT.treecatcomplete {
+    background-color: @autocomplete-bg;
+    max-width: @baseline*10;
+    margin-top:    2px;
+    margin-bottom: 2px;
+  }
+  INPUT.treecatcomplete + UL.treeview{
+    clear: left;
+  }
+  INPUT.treecatrefresh {
+    font-weight: bold;
+    background-color: #FFFF70;
+  }
+  .disabled .form-control-autocomplete {
+    background-color: @inputDisabledBackground; // see input[disabled]
+  }
+}

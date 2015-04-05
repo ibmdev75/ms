@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletImage" reviewable="false" debatable="false" categoryTab="false" categoryRequired="false" visible="true" superclass="generated.AbstractPortletSkinable" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="image" editor="image" required="true" compactDisplay="true" type="String" searchable="false" size="80" maxlength="500" ml="true" tab="portlet" />
+    <field name="link" editor="url" required="false" compactDisplay="true" type="String" searchable="false" size="80" maxlength="500" ml="true" tab="portlet" openWindow="false" />
+    <field name="alt" editor="textfield" required="false" compactDisplay="true" type="String" searchable="false" size="80" ml="true" pattern="[^&quot;]*" tab="portlet" abstract="true" />
+    <field name="targetWindow" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList=" | _blank" tab="advanced" descriptionType="tooltip" chooser="listbox" />
+    <field name="imgWidth" editor="int" required="false" compactDisplay="true" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="10000" unit="px" unitPos="after" tab="advanced" />
+    <field name="imgHeight" editor="int" required="false" compactDisplay="true" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="10000" unit="px" unitPos="after" tab="advanced" />
+    <field type="super" />
+  </fields>
+  <tabs>
+    <tab id="advanced" />
+    <tab id="portlet" />
+  </tabs>
+</type>
+

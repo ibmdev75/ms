@@ -1,0 +1,44 @@
+<%
+  String confirm = encodeForHTMLAttribute(glp("msg.js.confirm"));
+  boolean isDisabled = caddyPagerHandler.getItemsNbr() == 0;
+  String disabled = isDisabled ? "disabled=\"disabled\"" : "";
+%>
+  <div style="margin-top:15px;">
+      <button type="button" onclick="confirmSubmitFormLightBox(window,document.editForm,'opUpdate',this.title)" title="<%= confirm %>" class="btn btn-default <%= isDisabled ? "" :"btn-primary" %>" <%= disabled %>>
+        <jalios:icon src="save"  /> <%= glp("ui.com.btn.update-conf") %>
+      </button>
+      
+      <button type="button" onclick="confirmSubmitFormLightBox(window,document.editForm,'opDelete',this.title)"  title="<%= confirm %>" class="btn btn-default" <%= disabled %>>
+        <jalios:icon src="trash-empty"  /> <%= glp("ui.com.btn.delete") %>
+      </button>
+      
+      &nbsp;
+
+    <% if (showExportCSV) { %>
+      <button type="button" onclick="document.location='<%= contextPath %>/admin/exportCSV<%= dataType %>.jsp?caddy=true';" class="btn btn-default" <%= disabled %>>
+        <jalios:icon src="csv"  /> <%= glp("ui.com.btn.csv") %>
+      </button>
+    <% } %>
+
+      <button type="button" onclick="Popup.popupWindow('<%= contextPath %>/work/caddy/printCaddy.jsp?dataType=<%= dataType %>', 'printCaddy', 640, 600);" class="btn btn-default" <%= disabled %>>
+        <jalios:icon src="printer"  /> <%= glp("ui.com.alt.print-caddy") %>
+      </button>
+      <button type="button" onclick="submitForm('opClearCaddy')" class="btn btn-default" <%= disabled %>>
+        <jalios:icon src="caddy-out"  /> <%= glp("ui.com.alt.clear-caddy") %>
+      </button>
+
+      <input type="hidden" name="action" value="true" />
+      <input type="hidden" name="anchor" />
+      <jalios:if predicate='<%= formHandler.isTabForced() %>'>
+        <jalios:javascript>
+          setSelectedTab('mainTab', <%= formHandler.getOpenTab() %>);
+        </jalios:javascript>
+      </jalios:if>
+      
+    <% if (caddyPagerHandler.getPagesNbr() > 1) { %>
+      <div class="formInfo" style="font-size: x-small; color:maroon;">
+        <%= glp("msg.work.caddy.pager-warning")%>.
+      </div>
+    <% } %>
+    
+  </div>

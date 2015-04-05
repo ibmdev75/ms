@@ -1,0 +1,32 @@
+<div class="tab-page">
+  <h2 class="tab"><%= glp("ui.adm.type-edit.edit.tab", formHandler.getTitleLabel()) %></h2>
+  <form method="post" action="admin/typeEditor.jsp" name="editForm_title" class="form-horizontal">
+
+    <%-- TITLE / LABEL ------------------------------------------------------- --%> 
+    <jalios:field name="titleLabels" label="ui.com.lbl.label" required='true' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getTitleLabelMap() %>'>
+      <jalios:control settings='<%= new TextFieldSettings().showLanguageChooser() %>' />
+    </jalios:field>
+
+    <%-- TITLE / DESCRIPTION ------------------------------------------------------- --%> 
+    <jalios:field name="titleDescriptions" label="ui.com.lbl.description" tooltip="ui.adm.type-edit.lbl.desc.h" required='true' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getTitleDescriptionMap() %>'>
+      <jalios:control settings='<%= new TextAreaSettings().rows(3) %>' />
+    </jalios:field>
+
+    <%-- TITLE / MULTILINGUAL ------------------------------------------------------- --%> 
+    <% if (channel.isMultilingual() && !isDatabase) { %>
+    <jalios:field name="ml" label="ui.adm.type-edit.lbl.ml" tooltip="ui.adm.type-edit.lbl.ml.h" value="<%= formHandler.isTitleML() %>">
+      <jalios:control type="<%= ControlType.BOOLEAN %>" />
+    </jalios:field>        
+    <% } %>
+    <%-- TITLE / SEARCHABLE ------------------------------------------------------- --%>
+    <jalios:field name="searchable" label="ui.adm.type-edit.lbl.searchable" tooltip="ui.adm.type-edit.lbl.searchable.h" value="<%= formHandler.isTitleSearchable() %>">
+      <jalios:control type="<%= ControlType.BOOLEAN %>" />
+    </jalios:field>        
+
+    <input type='hidden' name='type' value='<%= formHandler.getTypeName() %>' />
+    <input type='hidden' name='name' value='title' />
+    <input type='hidden' name='editTitle' value='true' />
+    <button class='btn btn-primary' type='submit' name='opUpdateTitle' value='true'><%= glp("ui.com.btn.update") %></button>
+
+  </form>
+</div>

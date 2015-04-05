@@ -1,0 +1,9 @@
+<% Set<String> vidSet = data.getVirtualIDSet(); %>
+<% if (Util.notEmpty(vidSet)) { %>
+<h4><%= glp("ui.adm.data-inspector.lbl.vids") %> (<%= Util.getSize(vidSet) %>)</h4>
+<ul>
+  <jalios:foreach collection="<%= vidSet %>" name="vid" type="String">
+  <li><%= vid %></li>
+  </jalios:foreach>
+</ul>
+<% } %>

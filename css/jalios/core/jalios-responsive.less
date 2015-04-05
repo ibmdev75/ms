@@ -1,0 +1,82 @@
+// Small grid
+//
+// Columns, offsets, pushes, and pulls for the small device range, from phones
+// to tablets.
+//
+// Note that `.col-sm-12` doesn't get floated on purpose--there's no need since
+// it's full-width.
+
+.responsive[max-width~="480px"] {
+  DIV[class*="col-xs-"],DIV[class*="col-sm-"],DIV[class*="col-md-"],DIV[class*="col-lg-"] {
+    float: none;
+    text-align: left;
+    width: 100%;
+  }
+  DIV[class*="col-xs-offset-"],DIV[class*="col-sm-offset-"],DIV[class*="col-md-offset-"],DIV[class*="col-lg-offset-"] {
+    margin-left: 0;
+  }
+}
+
+.box-responsive FORM.form-horizontal[max-width~="480px"] {
+  DIV[class*="col-xs-"],DIV[class*="col-sm-"],DIV[class*="col-md-"],DIV[class*="col-lg-"] {
+    float: none;
+    text-align: left;
+    width: 100%;
+  }
+  DIV[class*="col-xs-offset-"],DIV[class*="col-sm-offset-"],DIV[class*="col-md-offset-"],DIV[class*="col-lg-offset-"] {
+    margin-left: 0;
+  }
+}
+
+/* Add a margin-bottom on direct children col-* elements based on given responsive breakpoint */ 
+
+.br-col-xs > DIV {
+  @media (max-width: @screen-xs-max) {
+    margin-bottom: @baseline;
+  }
+}
+.br-col-sm > DIV {
+  @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+    margin-bottom: @baseline;
+  }
+}
+.br-col-md > DIV {
+  @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+    margin-bottom: @baseline;
+  }
+}
+.br-col-lg > DIV {
+  @media (min-width: @screen-lg-min) {
+    margin-bottom: @baseline;
+  }
+}
+
+/* ----------------------------------------------- */
+/*  RESPONSIVE                                     */
+/* ----------------------------------------------- */
+.responsive[max-width~="480px"] {
+  .pull-left-xs { float: left; }
+  .hidden-xs { .responsive-invisibility(); }
+  .visible-xs { .responsive-visibility(); }
+}
+
+@media (max-width: @screen-xs-max) {
+  .pull-left-xs { float: left; }
+  .br-xs { margin-bottom: @line-height-computed}
+  .no-br-xs { margin-bottom: 0}
+}
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+  .pull-left-sm { float: left; }
+  .br-sm { margin-bottom: @line-height-computed}
+  .no-br-sm { margin-bottom: 0}
+}
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+  .pull-left-md { float: left; }
+  .br-md { margin-bottom: @line-height-computed}
+  .no-br-md { margin-bottom: 0}
+}
+@media (min-width: @screen-lg-min) {
+  .pull-left-lg { float: left; }
+  .br-lg { margin-bottom: @line-height-computed}
+  .no-br-lg { margin-bottom: 0}
+}

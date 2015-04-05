@@ -1,0 +1,99 @@
+
+// PHOTO WRAPPER
+// -----------------------------------------------
+
+//Rounded photo 
+
+.wrapper-photo {
+  .border-radius(50%);
+  IMG.photo {
+	  .border-radius(50%);
+  }
+}
+
+.wrapper-photo {
+  position: relative;
+  
+  // Inline block ?
+  display:  block; float: left;
+  
+  padding: 2px;
+  border:  1px solid #CDD8E1;
+  background-color: #FFFFFF;
+  
+  .box-shadow(1px 1px 4px #DDD);
+  
+  IMG.photo { 
+	  border: 0;   
+  }
+  .photo-anchor { position: relative; }
+  
+  &.iconPhoto,
+  &.icon-photo {
+    display: inline;
+    float: none;
+    padding: 0;
+    border:  0;
+    .box-shadow(none);
+    IMG.photo{ 
+      border: 1px solid @gray-light;
+      .border-radius(3px); 
+    }
+    background: none;
+    A:hover {
+	    text-decoration:initial;
+    }
+  }
+  
+  IMG.jalios-icon {
+    vertical-align: middle;
+  }
+  .photo-anchor IMG.jalios-icon {
+    position: absolute;
+  }
+  
+  .photo-icon-bottom-right { right: 0px; bottom: 0px; }
+  .photo-icon-bottom-left { left: 0px; bottom: 0px; }
+  
+  &.tiny-photo {
+    IMG.jalios-icon { width: 16px; height: 16px; }
+    .photo-anchor {
+      .photo-icon-bottom-right { right: -4px; bottom: -4px; }
+      .photo-icon-bottom-left { left: -4px; bottom: -4px; }
+    }
+  }
+  &.small-photo {
+    .photo-anchor {
+      .photo-icon-bottom-right { right: -6px; bottom: -6px; }
+      .photo-icon-bottom-left { left: -6px; bottom: -6px; }
+      .mbr-status { right: -8px; bottom: -10px; }
+    }
+  }
+  &.large-photo,
+  &.normal-photo {
+    .photo-anchor {
+      .photo-icon-bottom-right { right: -4px; bottom: -4px; }
+      .photo-icon-bottom-left { left: -4px; bottom: -4px; }
+    }
+  }
+  &.small-photo,
+  &.normal-photo,
+  &.large-photo {
+    IMG.mbr-status {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+// Member Status
+
+IMG {
+  &.mbr-status, 
+  &.mbr-status-0, 
+  &.mbr-status-1, 
+  &.mbr-status-2, 
+  &.mbr-status-3 {
+    width: 16px;
+    height: 16px;
+  }
+}

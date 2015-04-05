@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates version="5.0">
+  <template name="default" usage="box" file="doDBMailMessageFullDisplay.jsp" />
+  <template name="default" usage="edit" file="editDBMailMessage.jsp" />
+  <template name="default" usage="full" file="doDBMailMessageFullDisplay.jsp" />
+  <template name="default" usage="query" file="doDBMailMessageResultDisplay.jsp" />
+</templates>
+

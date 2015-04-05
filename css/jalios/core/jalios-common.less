@@ -1,0 +1,148 @@
+
+.mceContentBody {
+  padding: 4px;
+}
+
+/* ----------------------------------------------- */
+/*  TXT-{}                                         */
+/* ----------------------------------------------- */
+
+// Declare and increase strength of mixins
+BODY.body {
+  .br            { #JCMS > .br();    }
+  .nobr          { #JCMS > .nobr();  }
+  .inline        { display: inline-block;  }
+  .text-overflow { .text-overflow();  }
+  DIV.broker     {  cursor: pointer; }
+  .fixme         { border: 1px solid #FF0000; }
+  .nowrap        { white-space: nowrap; }
+  .clear         { clear: both; }
+}
+
+FIELDSET {
+  margin-bottom: 20px;
+}
+
+/* ----------------------------------------------- */
+/*  Normalize                                      */
+/* ----------------------------------------------- */
+
+BODY.body {
+  DIV.paragraph {  // Mimic <P> for DIV wrapping a wiki content
+    font-size: normal;
+    font-weight: normal;
+    line-height: @baseline;
+    margin-bottom: @baseline / 2;
+  }
+}
+
+/* ----------------------------------------------- */
+/*  Highlight                                      */
+/* ----------------------------------------------- */
+
+BODY.body {
+  LABEL.highlight{
+    background-color: @highlight;
+    margin-top: 6px; padding-top: 0px; // Invert padding and margin
+  }
+  .highlight {
+    background-color: @highlight;
+  }
+}
+
+/* ----------------------------------------------- */
+/*  Rotate                                         */
+/* ----------------------------------------------- */
+
+.r90 {
+  rotation: 90deg;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+}
+
+.r180 {
+  rotation: 180deg;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+}
+
+.r270 {
+  rotation: 270deg;
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+/* ----------------------------------------------- */
+/*  DRAG and DROP                                  */
+/* ----------------------------------------------- */
+
+BODY.body {
+
+  .sortable {
+    .sortable-handle, &.sortable-handle { cursor: move; }
+  }
+
+  .draggable {
+    .handle, &.handle { cursor: move; }
+  }
+
+  .droppable {
+    border : 1px solid transparent;
+    &.hover { border : 1px dotted @gray; }
+  }
+
+  .dnd-placeholder {
+    border: 1px dashed #CC0000;
+    min-height: @baseline*5;
+    margin-bottom: @baseline;
+  }
+}
+
+/* ----------------------------------------------- */
+/*  RESIZABLE                                      */
+/* ----------------------------------------------- */
+
+BODY.body {
+  .ui-resizable{
+    .ui-resizable-s {
+      cursor: s-resize;
+      height: 7px;
+      width: 100%;
+      bottom: -5px;
+      left: 0;
+    }
+  }
+}
+
+// Bootstrap fixes
+/* Handle empty DD tag https://github.com/twbs/bootstrap/pull/3821#issuecomment-6561752 */
+.dl-horizontal > dd:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+
+/* Prevent overflow for CODE tag */
+CODE {
+  white-space: normal;
+}
+
+/* ----------------------------------------------- */
+/*  OVERFLOWING / LEFT PANEL                       */
+/* ----------------------------------------------- */
+
+.overflowing-panel {
+  overflow-x: auto;
+}
+
+/* ----------------------------------------------- */
+/*  CLICKABLE                                      */
+/* ----------------------------------------------- */
+/* For Jalios Clickable hook. */
+.clickable[data-jalios-url] {
+  cursor: pointer;
+}

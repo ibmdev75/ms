@@ -1,0 +1,561 @@
+<%--
+  @Summary: Declaration of internal methods
+  @Category: Internal
+  @Author: Oliver Dedieu
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-2.0 
+--%><%!
+  // ------------------------------------------------------------
+  // ||| BUFFER / INCLUDE TAG |||||||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+
+  String getIncludeBody(){
+    return getIncludeString(IncludeTag.INCLUDE_BODY, "");
+  }
+  String getIncludeString(String name, String def){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return IncludeTag.getIncludeString(request, name, def);
+  }
+  Object getIncludeObject(String name, Object def){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return IncludeTag.getIncludeObject(request, name, def);
+  }
+  void setIncludeString(String name, String value){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    IncludeTag.setIncludeString(request, name, value);
+  }
+  
+  // ------------------------------------------------------------
+  // ||| ACCESS CONTROL |||||||||||||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+
+  boolean checkAccess(String resource) throws java.io.IOException {
+    return ((JcmsJspContext)channel.getCurrentJcmsContext()).checkAccess(resource);
+  }
+
+  boolean checkAccess(String resource, Map<String,Object> ctxt) throws java.io.IOException {
+    return ((JcmsJspContext)channel.getCurrentJcmsContext()).checkAccess(resource, ctxt);
+  }
+  
+  // ------------------------------------------------------------
+  // ||| STRING SANITIZERS (OUTPUT)  ||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+  
+  String encodeForXML(String input) {
+    return HttpUtil.encodeForXML(input);
+  }
+  String encodeForXMLAttribute(String input) {
+    return HttpUtil.encodeForXMLAttribute(input);
+  }
+  String encodeForHTML(String input) {
+    return HttpUtil.encodeForHTML(input);
+  }
+  String encodeForHTMLAttribute(String input) {
+    return HttpUtil.encodeForHTMLAttribute(input);
+  }
+  String encodeForHTMLAttribute(String input, boolean unescapeHTML) {
+    return HttpUtil.encodeForHTMLAttribute(input, unescapeHTML);
+  }
+  String encodeForJavaScript(String input) {
+    return HttpUtil.encodeForJavaScript(input);
+  }
+  String encodeForURL(String input) {
+    return HttpUtil.encodeForURL(input);
+  }
+  
+  // ------------------------------------------------------------
+  // ||| PARAMETER VALIDATION (INPUT)  ||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+
+  /**
+   * @see HttpUtil#getValidHttpUrl(HttpServletRequest, String)
+   */
+  String getValidHttpUrl(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getValidHttpUrl(request, parameterName);
+  }
+  
+  /**
+   * @see HttpUtil#getChooserParameter(HttpServletRequest, String)
+   */
+  String getChooserParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getChooserParameter(request, parameterName);
+  }
+   
+  /**
+   * @see HttpUtil#getDataParameter(HttpServletRequest, String, Class)
+   */
+  <T> T getDataParameter(String parameterName, Class<T> clazz) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getDataParameter(request, parameterName, clazz);
+  }
+  
+ /**
+  * @see HttpUtil#getDataListParameter(HttpServletRequest, String, Class)
+  */
+ <T extends Data> List<T> getDataListParameter(String parameterName, Class<T> clazz) {
+   HttpServletRequest request = channel.getCurrentServletRequest();
+   return HttpUtil.getDataListParameter(request, parameterName, clazz);
+ }
+
+  /**
+   * @see HttpUtil#getDataParameter(HttpServletRequest, String)
+   */
+  Data getDataParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getDataParameter(request, parameterName);
+  }
+  
+  <T> TreeSet<T> getDataSetParameterValues(String parameterName, Class<? extends T> clazz) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    TreeSet<T> dataSet = channel.getDataSet(request.getParameterValues(parameterName), clazz, true); // JspChecker.VERIFIED_FOR_SECURITY
+    return dataSet;
+  }
+
+  /**
+   * @see HttpUtil#getWorkspaceParameter(HttpServletRequest, String)
+   */
+  Workspace getWorkspaceParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getWorkspaceParameter(request, parameterName);
+  }
+
+  /**
+   * @see HttpUtil#getCategoryParameter(HttpServletRequest, String)
+   */
+  Category getCategoryParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getCategoryParameter(request, parameterName);
+  }
+
+  /**
+   * @see HttpUtil#getPublicationParameter(HttpServletRequest, String)
+   */
+  Publication getPublicationParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getPublicationParameter(request, parameterName);
+  }
+
+  /**
+   * @see HttpUtil#getMemberParameter(HttpServletRequest, String)
+   */
+  Member getMemberParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getMemberParameter(request, parameterName);
+  }
+
+  /**
+   * @see HttpUtil#getGroupParameter(HttpServletRequest, String)
+   */
+  Group getGroupParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getGroupParameter(request, parameterName);
+  }
+
+  /**
+   * @see HttpUtil#getDataIdParameter(HttpServletRequest, String)
+   */
+  String getDataIdParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getDataIdParameter(request, parameterName);
+  }
+
+  /**
+   * @see HttpUtil#hasParameter(HttpServletRequest, String)
+   */
+  boolean hasParameter(String parameterName) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.hasParameter(request, parameterName);
+  }
+  
+  /**
+   * @see HttpUtil#getBooleanParameter(HttpServletRequest, String, boolean)
+   */
+  boolean getBooleanParameter(String parameterName, boolean defaultValue) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getBooleanParameter(request, parameterName, defaultValue);
+  }
+
+  /**
+   * @see HttpUtil#getIntParameter(HttpServletRequest, String, int)
+   */
+  int getIntParameter(String parameterName, int defaultValue) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getIntParameter(request, parameterName, defaultValue);
+  }
+
+  /**
+   * @see HttpUtil#getLongParameter(HttpServletRequest, String, long)
+   */
+  long getLongParameter(String parameterName, long defaultValue){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getLongParameter(request, parameterName, defaultValue);
+  }
+
+  /**
+   * @see HttpUtil#getDoubleParameter(HttpServletRequest, String, double)
+   */
+  double getDoubleParameter(String parameterName, double defaultValue){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getDoubleParameter(request, parameterName, defaultValue);
+  }
+
+  /**
+   * @see HttpUtil#getDateTimeParameter(HttpServletRequest, String, String, Date)
+   */
+  Date getDateTimeParameter(String parameterName, String dateLanguage, Date defaultValue){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getDateTimeParameter(request, parameterName, dateLanguage, defaultValue);
+  }
+
+  /**
+   * @see HttpUtil#getDateParameter(HttpServletRequest, String, String, Date)
+   */
+  Date getDateParameter(String parameterName, String dateLanguage, Date defaultValue){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getDateParameter(request, parameterName, dateLanguage, defaultValue);
+  }
+
+  /**
+   * @see HttpUtil#getDateParameter(HttpServletRequest, String, DateFormat, Date)
+   */
+  Date getDateParameter(String parameterName, DateFormat dateFormat, Date defaultValue){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getDateParameter(request, parameterName, dateFormat, defaultValue);
+  }
+  
+  /**
+   * @see HttpUtil#getAlphaNumParameter(HttpServletRequest, String, String)
+   */
+  String getAlphaNumParameter(String parameterName, String defaultValue) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getAlphaNumParameter(request, parameterName, defaultValue);
+  }
+
+  /**
+   * @see HttpUtil#getStringEnumParameter(HttpServletRequest, String, String, String[])
+   */
+  String getStringEnumParameter(String parameterName, String defaultValue, String ... possibleValues) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getStringEnumParameter(request, parameterName, defaultValue, possibleValues);
+  }
+
+  /**
+   * @see HttpUtil#getStringParameter(HttpServletRequest, String, String, String)
+   */
+  String getStringParameter(String parameterName, String defaultValue, String regex) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getStringParameter(request, parameterName, defaultValue, regex);
+  }
+  
+  /**
+   * @see HttpUtil#getStringParameterValues(HttpServletRequest, String, String)
+   */
+  String[] getStringParameterValues(String parameterName, String regex) {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getStringParameterValues(request, parameterName, regex);
+  }
+  
+  /**
+   * @see HttpUtil#getUntrustedStringParameter(HttpServletRequest, String, String)
+   */
+  String getUntrustedStringParameter(String parameterName, String defaultValue){
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getUntrustedStringParameter(request, parameterName, defaultValue);
+  }
+
+  // ------------------------------------------------------------
+  // ||| CSRF Token access  |||||||||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+
+  /**
+   * @see HttpUtil#getCSRFToken(HttpServletRequest)
+   */
+  String getCSRFToken() {
+    HttpServletRequest request = channel.getCurrentServletRequest();
+    return HttpUtil.getCSRFToken(request);    
+  }
+  
+  // ------------------------------------------------------------
+  // ||| SEND REDIRECT && FORBIDEN ||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+  
+  void sendForbidden(HttpServletRequest request, HttpServletResponse response) throws java.io.IOException {
+    JcmsContext.sendForbidden(request,response);
+  }
+
+  void sendRedirect(String url, HttpServletRequest request, HttpServletResponse response) throws java.io.IOException {
+    JcmsContext.sendRedirect(url,request,response);
+  }
+
+  void sendRedirect(String url) throws java.io.IOException {
+    channel.getCurrentJcmsContext().sendRedirect(url);
+  }
+
+  void sendRedirect(Data data) throws java.io.IOException {
+    channel.getCurrentJcmsContext().sendRedirect(data);
+  }
+
+  // ------------------------------------------------------------
+  // ||| GLP (Get Lang Property) ||||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+  
+  ThreadLocal<String> userLangTL = new ThreadLocal<String>();
+  
+	String glp(String prop) {
+	  return JcmsUtil.glp(userLangTL.get(), prop); 
+	}
+	
+  String glp(String prop, Object... params) {
+    return JcmsUtil.glp(userLangTL.get(), prop, params); 
+  }
+  
+  // ------------------------------------------------------------
+  // ||| GFLA get Field Lang Attributes |||||||||||||||||||||||||
+  // ------------------------------------------------------------
+  
+  /**
+   * Retrieve the html lang attribute ("lang='' dir=''") to use for the given
+   * publication's or data's field, with the current user language.
+   * @see com.jalios.jcms.JcmsUtil#getFieldLangAttributes(Data, String, String)
+   */
+  String gfla(Data data, String fieldName) {
+    return JcmsUtil.getFieldLangAttributes(data, fieldName, userLangTL.get());
+  }
+  
+  // ------------------------------------------------------------
+  // ||| Message Box ||||||||||||||||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+
+  public void setSuccessMsg(String msg, HttpServletRequest request) {
+    JcmsContext.setSuccessMsg(msg, request);
+  }
+  public void setSuccessMsgSession(String msg, HttpServletRequest request) {
+    JcmsContext.setSuccessMsgSession(msg, request);
+  }
+  public void setInfoMsg(String msg, HttpServletRequest request) {
+    JcmsContext.setInfoMsg(msg, request);
+  }
+  public void setInfoMsgSession(String msg, HttpServletRequest request) {
+    JcmsContext.setInfoMsgSession(msg, request);
+  }
+  public void setWarningMsg(String msg, HttpServletRequest request) {
+    JcmsContext.setWarningMsg(msg, request);
+  }
+  public void setWarningMsgSession(String msg, HttpServletRequest request) {
+    JcmsContext.setWarningMsgSession(msg, request);
+  }
+  public void setErrorMsg(String msg, HttpServletRequest request) {
+    JcmsContext.setErrorMsg(msg, request);
+  }
+  public void setErrorMsgSession(String msg, HttpServletRequest request) {
+    JcmsContext.setErrorMsgSession(msg, request);
+  }
+ 
+
+
+  // ------------------------------------------------------------
+  // ||| CATEGORIES |||||||||||||||||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+  
+	void printSearchableCategories(Category[] cat, String urlPrefix, javax.servlet.jsp.JspWriter out) throws java.io.IOException {
+	  if (cat == null) {
+	    return;
+	  }
+	  
+	  for(int i=0; i < cat.length; i++) {
+	    if (cat[i] == null) {
+	      continue;
+	    }
+	    if (i > 0) {
+	      out.println(", ");
+	    }
+	    String description = "" ;
+	    if (Util.notEmpty(cat[i].getDescription())) {
+	      description = com.jalios.jcms.taglib.TooltipTag.getTooltipForText(cat[i].getDescription());
+	    }
+	    out.println("<a href='" + urlPrefix + "cids=" + cat[i].getId() + "'>" + cat[i].getName(userLangTL.get()) + "</a>" + description);
+	  }
+	}
+	
+	void printSelectableCategories(Category[] cat, boolean checked, javax.servlet.jsp.JspWriter out) throws java.io.IOException {
+	  if (cat == null) {
+	    return;
+	  }
+	  
+	  for(int i=0; i < cat.length; i++) {
+	    if (cat[i] == null) {
+	      continue;
+	    }
+	    if (i > 0) {
+	      out.println(", ");
+	    }
+	    
+	    String description = "" ;
+	    if (Util.notEmpty(cat[i].getDescription())) {
+	      description = com.jalios.jcms.taglib.TooltipTag.getTooltipForText(cat[i].getDescription());
+	    }
+	    out.println("<input type='checkbox' value='" + cat[i].getId() + "' name='cids' " + (checked ? "checked=\"checked\"" : "") + " />&nbsp;" + cat[i].getName(userLangTL.get()) + description);
+	  }
+	}
+	
+	void printSelectableCategoryTree(Category root, Set checkedSet, javax.servlet.jsp.JspWriter out) throws java.io.IOException {
+	  if (checkedSet == null) {
+	    checkedSet = new TreeSet();
+	  }
+	  _printSelectableCategoryTree(root, checkedSet, out, 0);
+	}
+	
+	void _printSelectableCategoryTree(Category category, Set checkedSet, javax.servlet.jsp.JspWriter out, int indentLevel) throws java.io.IOException {
+	  String description = "" ;
+	  if (Util.notEmpty(category.getDescription())) {
+	    description = com.jalios.jcms.taglib.TooltipTag.getTooltipForText(category.getDescription());
+	  }
+	  if (indentLevel > 0) {
+	    for(int i=0; i < (indentLevel-1); i++) {
+	      out.print("  ");
+	    }
+	    out.println("<input type='checkbox' name='cids' value='" + category.getId() + "' " + (checkedSet.contains(category) ? "checked=\"checked\"" : "" ) + " />&nbsp;" + category.getName(userLangTL.get()) + description);
+	  }
+	  // Sort children
+	  SortedSet children = new TreeSet(Category.getOrderComparator(userLangTL.get()));
+	  children.addAll(category.getChildrenSet());
+	  
+	  // Traverse each child
+	  for(Iterator it = children.iterator(); it.hasNext();) {
+	    Category child = (Category)it.next();
+	    indentLevel++;
+	    _printSelectableCategoryTree(child, checkedSet, out, indentLevel);
+	    indentLevel--;
+	  }
+	}
+	
+	void printSearchableCategoryTree(Category root, String urlPrefix, javax.servlet.jsp.JspWriter out) throws java.io.IOException {
+	  _printSearchableCategoryTree(root, urlPrefix, out, 0);
+	}
+	
+	void _printSearchableCategoryTree(Category category, String urlPrefix, javax.servlet.jsp.JspWriter out, int indentLevel) throws java.io.IOException {
+	  String description = "" ;
+	  if (Util.notEmpty(category.getDescription())) {
+	    description = com.jalios.jcms.taglib.TooltipTag.getTooltipForText(category.getDescription());
+	  }
+	  if (indentLevel > 0) {
+	    for(int i=0; i < (indentLevel-1); i++) {
+	      out.print("  ");
+	    }
+	    out.println("<a href='" + urlPrefix + "id=" + category.getId() + "'>" + category.getName(userLangTL.get()) + "</a>" + description);
+	  }
+	  // Sort children
+	  SortedSet children = new TreeSet(Category.getOrderComparator(userLangTL.get()));
+	  children.addAll(category.getChildrenSet());
+	  
+	  // Traverse each child
+	  for(Iterator it = children.iterator(); it.hasNext();) {
+	    Category child = (Category)it.next();
+	    indentLevel++;
+	    _printSearchableCategoryTree(child, urlPrefix, out, indentLevel);
+	    indentLevel--;
+	  }
+	}
+	
+	void generateTree(Category cat, JspWriter out) throws java.io.IOException {
+	  String nodeName = "n_" + cat.getId().replace(':', '_');
+	  Set children = cat.getChildrenSet();
+	  for(Iterator it = children.iterator(); it.hasNext();) {
+	    Category child = (Category)it.next();
+	    if (child.getChildrenSet() != null &&
+	        child.getChildrenSet().size() > 0) {
+	      generateTree(child, out);
+	    }
+	  }
+	  out.println("window." + nodeName + " = new Tree(\"" + cat.getName(userLangTL.get()) + "\");");
+	  for(Iterator it = children.iterator(); it.hasNext();) {
+	    Category child = (Category)it.next();
+	    if (child.getChildrenSet() != null &&
+	        child.getChildrenSet().size() > 0) {
+	      String subNodeName = "n_" + child.getId().replace(':', '_');
+	      
+	      out.println(nodeName + ".addTreeItem(" + subNodeName + ");");      
+	    }
+	    else {
+	      if (child.getPublicationSet() == null || child.getPublicationSet().size() == 0) {
+		continue;
+	      }
+	      String name = child.getName(userLangTL.get());
+	      int count = child.getPublicationSet().size();
+	      String url = ResourceHelper.getQuery() + "?cids=" + child.getId();
+	
+	      out.println(nodeName + ".addTreeItem(\""+ name + " (" + count + ")\",\"goUrl('" + url + "')\");");
+	    }
+	  }  
+	}
+
+  // ------------------------------------------------------------
+  // ||| PRINT HIDDEN PARAMS ||||||||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+
+	public String printHiddenParams(HttpServletRequest request){
+          return printHiddenParams(request, null, false);
+        }
+
+	public String printEnabledHiddenParams(HttpServletRequest request, List params){
+          return printHiddenParams(request, params, false);
+        }
+
+	public String printDisabledHiddenParams(HttpServletRequest request, List params){
+          return printHiddenParams(request, params, true);
+        }
+
+	public String printHiddenParams(HttpServletRequest request, List params, boolean disableParams){
+    StringBuffer sb = new StringBuffer();
+    boolean checkParams = Util.notEmpty(params);
+    for (Iterator it = request.getParameterMap().entrySet().iterator() ; it.hasNext() ; ) { // JspChecker.VERIFIED_FOR_SECURITY
+      Map.Entry itEntry = (Map.Entry) it.next();
+      String key = (String) itEntry.getKey();
+
+      // Skip some params
+      if (checkParams) {
+        if ((disableParams && params.contains(key)) || 
+            (!disableParams && !params.contains(key))) {
+           continue;
+        }
+      }      
+            
+      String[] values = (String[]) itEntry.getValue();
+      if (Util.isEmpty(values)) {
+        continue;
+      }
+     
+      String encodedKey = encodeForHTMLAttribute(key);
+      for (int i = 0 ; i < values.length ; i++){
+        sb.append("<input type='hidden' name='").append(encodedKey)
+          .append("' value='").append(encodeForHTMLAttribute(Util.getString(values[i],"")))
+          .append("' />\n");
+      }
+    }
+    return sb.toString();
+  }
+
+  // ------------------------------------------------------------
+  // ||| PORTAL |||||||||||||||||||||||||||||||||||||||||||||||||
+  // ------------------------------------------------------------
+
+  /**
+   * Write a colspan or a rowspan if necessary
+   * true means cols
+   * false mean rows
+   */
+  public String doSpan(int value , boolean colrow) {
+  	if (value <= 1)
+  		return "";
+  	else if (colrow)
+  		return "colspan='"+value+"'";
+  	else
+  		return "rowspan='"+value+"'";
+  }
+
+%>

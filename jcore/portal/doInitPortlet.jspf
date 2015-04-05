@@ -1,0 +1,18 @@
+<jalios:if predicate='<%= true %>'><%
+  // -----------------------------------------------------------------------------------
+  // ||| CUSTOM ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+  // -----------------------------------------------------------------------------------
+
+  boolean canAction  = isPortalMode && isLogged && loggedMember.canUpdateOther(displayPortlet);
+  request.setAttribute("isPortletMode", (isLogged && isPortalMode && canAction) ? Boolean.TRUE : Boolean.FALSE);
+
+  
+  // -----------------------------------------------------------------------------------
+  // ||| CONDITION |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+  // -----------------------------------------------------------------------------------
+  
+  if (displayPortlet instanceof Portlet){
+    channel.getPolicyManager().handleCondition(((Portlet)displayPortlet).getCondition());
+  }
+    
+%></jalios:if>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="WebPage" superclass="com.jalios.jcms.AbstractWebPage" reviewable="true" categorizable="true" visible="true" debatable="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="url" editor="url" required="true" compactDisplay="false" type="String" searchable="true" size="80" maxlength="500" ml="false" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" openWindow="false" html="false" pattern="^((http)|(https)|(ftp)|(mailto)):.*" />
+    <field name="urlToShot" editor="url" required="false" compactDisplay="false" type="String" searchable="true" size="80" maxlength="500" ml="false" html="false" pattern="^((http)|(https)|(ftp)|(mailto)):.*" />
+    <field name="description" editor="textarea" required="false" compactDisplay="false" type="String" searchable="true" rows="2" cols="80" ml="true" wiki="true" abstract="true" truncate="400" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" />
+  </fields>
+</type>
+

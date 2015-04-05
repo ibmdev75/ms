@@ -1,0 +1,50 @@
+
+/* ----------------------------------------------- */
+/*  INNER TABS                                     */
+/* ----------------------------------------------- */
+
+
+.inner-tabs { 
+  @borderColor: #BFBFBF;
+  margin-bottom: @baseline/6;
+  
+  &.sticky-bottom { margin-bottom: 0; }
+  UL.nav-tabs {
+    padding-left: 8px;
+    margin-bottom: 0;
+    A { 
+      padding: 3px 4px;
+      border-color: @borderColor;
+      #gradient > .vertical(#FFFFFF, @tabBg);
+      margin-right: 4px;
+    }
+    .active A { 
+      background: #FFF;
+      border-bottom-color: #FFF;
+    }
+  }
+  
+  &.reverse {
+    UL.nav-tabs A { background: #FFF; }
+    LI.active   A {
+      #gradient > .vertical(#FFFFFF, @tabBg);
+      border-bottom-color: @tabBg;
+    }
+  }
+  
+  &.glass  {
+    border-bottom: 1px solid @borderColor;
+		UL.nav-tabs A {
+		  .opacity(80);
+		  font-weight: bold;
+		  border-width: 2px 2px 1px 2px;
+		  padding: 6px 6px;
+		  margin-right: 4px;
+		  .border-radius(6px 6px 0px 0px);
+	  }
+		LI.active{
+		  margin-bottom: -2px;
+		  A { .opacity(100);  border-bottom-width: 2px; }
+		}
+  }
+}

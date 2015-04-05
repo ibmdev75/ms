@@ -1,0 +1,57 @@
+<%@page import="com.jalios.jcms.context.MessageLevel"%>
+
+<div class="search-header">
+  <%-- SPELL SUGGESTION --%>
+  <% String spellSuggestion = (String) queryResultSet.getAttribute(com.jalios.jcms.search.LucenePublicationSearchEngine.SPELLSUGGEST_ATTRIBUTE); %>
+  <jalios:buffer name="spellSuggestionBuffer">
+  <% if (Util.notEmpty(spellSuggestion)) { %>
+  <%= glp("ui.work.query.txt.didyoumean") %> <a rel="nofollow" href='<%= ServletUtil.getUrlWithUpdatedParam(request, "text", spellSuggestion) %>'><%= encodeForHTML(spellSuggestion) %></a>
+  <% } %>
+  </jalios:buffer>
+  
+  <%-- NO RESULTS --%>
+  <% if (Util.isEmpty(resultSet)) { %>
+    <% if (Util.isEmpty(request.getAttribute("query.memberIdList"))) { %>
+    <jalios:message title="" dismissable="false" level="<%= MessageLevel.WARN %>">
+      <p>
+        <%= glp("ui.com.lbl.no-result") %>
+        <% if (Util.notEmpty(spellSuggestionBuffer)) { %><%= spellSuggestionBuffer %><% } %>
+      </p>
+    </jalios:message>
+    <% } %>
+  <%-- RESULTS --%>
+  <% } else { %>
+    <jalios:message title="" dismissable="false" level="<%= MessageLevel.SUCCESS %>" >
+      <p>
+        <%= glp("ui.work.query.txt.result", resultSize) %>
+        <% if (Util.notEmpty(spellSuggestionBuffer)) { %><%= spellSuggestionBuffer %><% } %>
+      </p>
+    </jalios:message>
+  <% } %>
+</div>
+
+<jalios:foreach collection='<%= resultSet %>' name='itPublication' type='Publication'
+            max='<%= plPagerHandler.getPageSize() %>'
+            skip='<%= plPagerHandler.getStart() %>'>
+<%
+try {
+  if (itPublication != null) {
+    request.setAttribute(PortalManager.PORTAL_PUBLICATION, itPublication); 
+    request.setAttribute("counter", "" + (itCounter.intValue() + plPagerHandler.getStart())); 
+    request.setAttribute("isNew", new Boolean(itPublication.getCdate() == null ? false : itPublication.getCdate().after(lastWeekDate))); 
+    request.setAttribute("score", new Float(queryResultSet.getScore(itPublication))); 
+    jcmsContext.setTemplateUsage(TypeTemplateEntry.USAGE_DISPLAY_QUERY); 
+    
+    String template = "/" + itPublication.getTemplatePath(jcmsContext);
+%>
+<jsp:include page="<%= template %>" flush="true"></jsp:include>
+<% 
+  }
+} 
+catch(Exception ex) {
+  logger.info("Exception while including publication '" + itPublication + "'", ex);
+}
+%>
+
+
+</jalios:foreach>

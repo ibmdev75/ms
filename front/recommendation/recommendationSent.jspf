@@ -1,0 +1,26 @@
+<div class="modal-body">
+  <% 
+  	List<Recommendation> sentRecommendationList = recoMgr.getSentRecommendationList(recommendedData,loggedMember); 
+  	Map sentPagerMap = new HashMap();
+  	sentPagerMap.put("recommendationTab","sentRecommendationTab");
+  %>
+	<jalios:pager name='sentRecommendationPagerHandler' action='init' declare='true' 
+	              size='<%= Util.getSize(sentRecommendationList) %>' pageSize='1' parameterMap='<%= sentPagerMap %>'/>
+	<jalios:foreach collection="<%= sentRecommendationList %>" type="Recommendation" name="itRecommendation" 
+	              max='<%= sentRecommendationPagerHandler.getPageSize() %>' 
+	              skip='<%= sentRecommendationPagerHandler.getStart() %>'>
+    <% 
+      boolean isLast = sentRecommendationPagerHandler.getItemsNbr() == itCounter || sentRecommendationPagerHandler.getPageSize() + sentRecommendationPagerHandler.getStart() == itCounter; 
+      displayPager = sentRecommendationPagerHandler.getItemsNbr() > 1;
+      Recommendation recommendation = itRecommendation;
+      isMultiplePage = sentRecommendationPagerHandler.getPageSize() > 1;
+    %>
+    <%@ include file="/front/recommendation/recommendation.jspf" %>
+	</jalios:foreach>
+	<jalios:pager name='sentRecommendationPagerHandler' />
+</div>
+<div class="modal-footer">
+  <div class="buttons">
+    <a class="btn btn-primary" data-dismiss="modal"><%=  glp("ui.com.btn.close") %></a>
+  </div> 
+</div>   

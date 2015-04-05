@@ -1,0 +1,153 @@
+<%@page import="com.jalios.jcms.taglib.ControlType"%>
+<%@page import="com.jalios.jcms.taglib.settings.impl.TextAreaSettings"%>
+
+<%
+boolean hasLeftCol = fromEmail || fromMember || fromAck;
+boolean hasRightCol = toEmail || toMember || toMembers || toGroup || toGroups || fromBCC;
+%>
+<% if (hasLeftCol || hasRightCol){ %>
+<div class="row">
+  <% if (hasLeftCol){ %>
+  <div class="col-md-<%= hasRightCol ? "6" : "12"%>">
+    <fieldset class="col-md-12">
+      <legend>&nbsp;<% /* %>From<% */ %><%= glp("ui.adm.mail.lbl.from") %>&nbsp;</legend>
+      <% if (hasLeftCol) { %>
+        <% if (fromEmail) { %>
+        <jalios:field name='fromEmail' label='ui.com.lbl.email' value='<%= selectedFromEmail %>'>
+          <% if (!fromWkspcEdit) { %>
+            <p class="form-control-static"><%= encodeForHTML(selectedFromEmail) %></p>
+            <input type='hidden' name='fromEmail' value='<%= selectedFromEmail %>' />
+          <% } else { %>
+            <jalios:control type="<%= ControlType.EMAIL %>" />
+          <% } %>
+        </jalios:field>
+        <% } %>
+        <% if (fromMember) { %>
+        <jalios:field name='fromMember' label='ui.com.lbl.member' value='<%= selectedSender %>' css='nodnd'>
+          <jalios:control type="<%= ControlType.MEMBER %>" />
+        </jalios:field>
+        <% } %>
+        <% if (fromAck) { %>
+        <jalios:field name='fromAck' label='ui.work.mail.lbl.ack' value='<%= ""+selectedAck %>'>
+          <jalios:control type="<%= ControlType.BOOLEAN %>" />
+          <jalios:tooltip property="ui.adm.mail.lbl.ack" />
+        </jalios:field>
+        <% } %>
+      <% } %>
+    </fieldset>
+  </div>
+  <% } %>
+  <% if (hasRightCol){ %>
+  <div class="col-md-<%= hasLeftCol ? "6" : "12"%>">
+    <fieldset class="col-md-12">
+      <legend>&nbsp;<% /* %>Recipients<% */ %><%= glp("ui.adm.mail.lbl.recipients") %>&nbsp;</legend>
+      <% if (toEmail || toMember || toMembers || toGroup || toGroups || fromBCC) { %>
+        <% if (toEmail) { %>
+          <jalios:field name='toEmail' label='ui.com.lbl.email' value='<%= selectedEmail %>'>
+            <jalios:control type="<%= ControlType.EMAIL %>" />
+          </jalios:field>
+        <% } %>
+        <% if (toMember) { %>
+          <jalios:field name='toMember' label='ui.com.lbl.member' value='<%= selectedMember %>' css='nodnd'>
+            <jalios:control type="<%= ControlType.MEMBER %>" settings='<%= filterWK ? new MemberSettings().filterWorkspacePublication() : null %>' />
+          </jalios:field>
+        <% } %>
+        <% if (toMembers) { %>
+          <jalios:field name='toMembers' label='ui.com.lbl.members' value='<%= selectedMembers %>' mv='<%= 1 %>' css='nodnd'>
+            <jalios:control type="<%= ControlType.MEMBER %>" settings='<%= filterWK ? new MemberSettings().filterWorkspacePublication() : null %>' />
+          </jalios:field>
+        <% } %>
+        <% if (toGroup) { %>
+          <jalios:field name='toGroup' label='ui.com.lbl.group' value='<%= selectedGroup %>' css='nodnd'>
+            <jalios:control type="<%= ControlType.GROUP %>" settings='<%= filterWK ? new GroupSettings().workspace(workspace) : null %>' />
+          </jalios:field>
+        <% } %>
+        <% if (toGroups) { %>
+          <jalios:field name='toGroups' label='ui.com.lbl.groups' value='<%= selectedGroups %>' mv='<%= 1 %>' css='nodnd'>
+            <jalios:control type="<%= ControlType.GROUP %>" settings='<%= filterWK ? new GroupSettings().workspace(workspace) : null %>' />
+          </jalios:field>
+        <% } %>
+        <% if (fromBCC) { %>
+          <jalios:field name='fromBCC' label='ui.adm.mail.lbl.bcc' value='<%= ""+selectedBcc %>' css='nodnd'>
+            <jalios:control type="<%= ControlType.BOOLEAN %>" />
+            <jalios:tooltip property="ui.adm.mail.lbl.bcc.h" />
+          </jalios:field>
+       <% } %>
+      <% } %>
+    </fieldset>
+  </div>
+  <% } %>
+</div>
+<% } %>
+
+<div class="row">
+  <div class="col-md-12">
+    <fieldset class="col-md-12">
+      <legend>&nbsp;<% /* %>Recipients<% */ %><%= glp("ui.adm.mail.lbl.content") %>&nbsp;</legend>
+      <% if (!hideSubject || !hideContent || !hideAttachements) { %>
+        <div class="row">
+          <% if (!hideSubject) { %>
+            <jalios:field name='subject' label='ui.adm.mail.lbl.subject' value='<%= subject %>'>
+              <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+            </jalios:field>
+          <% } %>
+          <% if (!hideContent) { %>
+            <jalios:field name='subject' label='ui.adm.mail.lbl.content' value='<%= subject %>'>
+              <% if (Util.notEmpty(contentTab) && contentTab.length > 1) { %>
+                <div class="tab-pane" id="mail-tab">
+                  <jalios:foreach array='<%= contentTab %>' type='String' name='itTitle' counter='itCounter'>
+          				  <%-- *** TEXT/XXX ******************************************* --%>
+          				  <div class="tab-page">
+                      <h2 class="tab"><% /* %>Text/Plain<% */ %><%= glp(itTitle) %></h2>
+                      <% if (itTitle.endsWith("text_html") && useWysiwygEditor) { %>
+                        <% RichTextAreaSettings contentSettings = new RichTextAreaSettings()
+                                                                      .rows(10)
+                                                                      .parameters(RichTextAreaSettings.ParameterValue.BASIC, 
+                                                                                  RichTextAreaSettings.ParameterValue.FORMAT, 
+                                                                                  RichTextAreaSettings.ParameterValue.FONT, 
+                                                                                  RichTextAreaSettings.ParameterValue.TABLE); %>
+                        <jalios:field name='content' ml='false' value='<%= Util.getString(content,itCounter.intValue()-1,"") %>' resource='field-light'>
+                          <jalios:control settings='<%= contentSettings %>' />
+                        </jalios:field>
+                      <% } else { %>
+                        <jalios:field name='content' value='<%= Util.getString(content,itCounter.intValue()-1,"") %>' resource='field-light'>
+                          <jalios:control settings='<%= new TextAreaSettings().rows(10) %>' />
+                        </jalios:field>
+                      <% } %>
+                    </div>
+                  </jalios:foreach>
+                </div>
+              <% } else { %>
+                <jalios:field name='content' value='<%= Util.getString(content,0,"") %>' resource='field-light'>
+                  <jalios:control settings='<%= new TextAreaSettings().rows(10) %>' />
+                </jalios:field>
+              <% } %>
+            </jalios:field>
+          <% } %>
+          <% if (!hideAttachements) { %>
+            <jalios:field name='attachements' label='ui.adm.mail.lbl.attach' value='<%= attachements != null ? Arrays.asList(attachements) : null %>' mv='<%= 1 %>'>
+              <jalios:control settings='<%= new PublicationSettings().superType(FileDocument.class) %>' />
+            </jalios:field>
+          <% } %>
+        </div>
+      <% } %>
+    </fieldset>
+  </div>
+</div>
+
+<input type='hidden' name='adminUpdate' value='true' />
+<input type='hidden' name='redirect' value='<%= redirect %>' />
+<% boolean oneRecepient = (toEmail || toMember) && !(toMembers || toGroup || toGroups); %>
+<button class='btn<%= channel.isMailEnabled() ? " btn-primary" : "" %>' type='submit' value='true' name='opSendAll'<%= !channel.isMailEnabled() ? " disabled='disabled'": "" %>><%= oneRecepient ? glp("ui.adm.mail.btn.send-to-one") : sendAllButton %></button>
+<% if (hideSubject) { %>
+  <input type='hidden' name='subject' value='<%= encodeForHTMLAttribute(subject) %>' />
+<% } %>
+<% if (hideContent) { %>
+<jalios:foreach array='<%= contentTab %>' type='java.lang.String' name='itTitle' counter='itCounter'>
+  <input type='hidden' name='content' value='<%= encodeForHTMLAttribute(Util.getString(content,itCounter.intValue()-1,"")) %>' />
+</jalios:foreach>
+<% } %>
+<% if (!hideSendExample) { %>
+  <button class='btn btn-default' type='submit' value='true' name='opSendMe'<%= !channel.isMailEnabled() ? " disabled='disabled'": "" %>><%= glp("ui.adm.mail.btn.send-me") %></button>
+<% } %>
+<button class='btn btn-default' type='submit' value='true' name='opCancel'<%= !channel.isMailEnabled() ? " disabled='disabled'": "" %>><%= glp("ui.com.btn.cancel") %></button>

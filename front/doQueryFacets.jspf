@@ -1,0 +1,86 @@
+<% 
+   boolean enabled     = channel.getBooleanProperty("query.facets.enabled" ,true);
+   boolean advanced    = channel.getBooleanProperty("query.facets.advanced",false);
+   boolean visible     = channel.getBooleanProperty("query.facets.visible", true);
+   boolean ajax        = channel.getBooleanProperty("query.facets.ajax", false);
+ 
+
+   request.setAttribute("query.facets.handler",queryHandler);
+   request.setAttribute("query.facets.prefix","FacetedSearch_");
+   request.setAttribute("query.facets.ajax",""+ajax);
+   
+   request.setAttribute("query.facets.text",       channel.getProperty("query.facets.text"));
+   request.setAttribute("query.facets.categories", channel.getProperty("query.facets.categories"));
+   request.setAttribute("query.facets.tags",       channel.getProperty("query.facets.tags"));
+   request.setAttribute("query.facets.date",       channel.getProperty("query.facets.date"));
+   request.setAttribute("query.facets.docs",       channel.getProperty("query.facets.docs"));
+   request.setAttribute("query.facets.types",      channel.getProperty("query.facets.types"));
+   request.setAttribute("query.facets.lang",       channel.getProperty("query.facets.lang"));
+   request.setAttribute("query.facets.pstatus",    channel.getProperty("query.facets.pstatus"));
+   request.setAttribute("query.facets.author",     channel.getProperty("query.facets.author"));
+   request.setAttribute("query.facets.workspaces", channel.getProperty("query.facets.workspaces"));
+   
+   request.setAttribute("field-inline", "true");
+
+   jcmsContext.addJavaScript("js/jalios/ux/jalios-facets.js"); 
+%> 
+<div id="search-facets" class='search-facets <%= advanced ? "advanced" : "" %> <%= visible ? "show" : "" %> <%= ajax ? "ajax-submit":"" %>'>
+  <jalios:accordion>
+ 
+    <%-- FACET HOOK --%>
+    <jalios:include target="FACETED_SEARCH_HEADER" />
+      
+    <%-- FACET CONTENT --%>
+    <jalios:include jsp='/jcore/search/doFacetType.jsp' />  
+    
+    <%-- FACET DOCUMENTS --%>
+    <jalios:include jsp='/jcore/search/doFacetDocs.jsp' />
+    
+    <%-- FACET DATE --%>
+    <jalios:include jsp='/jcore/search/doFacetDate.jsp' />
+    
+    <%-- FACET TEXT --%>
+    <jalios:include jsp='/jcore/search/doFacetText.jsp' />
+    
+    <%-- FACET MEMBER/GROUP --%>
+    <jalios:include jsp='/jcore/search/doFacetAuthor.jsp' />
+    
+    <%-- FACET CATEGORY --%>
+    <jalios:include jsp='/jcore/search/doFacetCategories.jsp' />
+  	
+    <%-- FACET KEYWORD --%>
+    <jalios:include jsp='/jcore/search/doFacetTags.jsp' />
+  	
+    <%-- FACET LANG --%>
+    <jalios:include jsp='/jcore/search/doFacetLang.jsp' />
+  	
+    <%-- FACET STATUS --%>
+    <jalios:include jsp='/jcore/search/doFacetPstatus.jsp' />
+  
+    <%-- FACET SUB WORKSPACES --%>
+    <jalios:include jsp='/jcore/search/doFacetWorkspaces.jsp' />
+  	
+    <%-- FACET HOOK --%>
+    <jalios:include target="FACETED_SEARCH" />
+    <% request.removeAttribute("field-inline"); %>
+    <% request.removeAttribute("search.facets.handler"); %>
+  
+  </jalios:accordion>
+  
+  <%-- HIDDEN --%>
+  <%
+  Data reqPortal = getDataParameter("portal");
+  if (reqPortal == null) {
+    reqPortal = getDataParameter("id");
+  }
+  %>
+  <% if (reqPortal != null) { %><input type="hidden" name="id" value="<%= reqPortal.getId() %>" /><% } %>
+  
+  <% Workspace wrkspc = getWorkspaceParameter("wrkspc"); %>
+  <% if (wrkspc != null) { %><input type="hidden" name="wrkspc" value="<%= wrkspc.getId() %>" /><% } %>
+  
+  <% String sort = getUntrustedStringParameter("sort", null); %>
+  <% if (sort != null) { %><input type="hidden" name="sort" value="<%= sort %>" /><% } %>
+	
+  <input type="hidden" name="textSearch" value='false' />
+</div>

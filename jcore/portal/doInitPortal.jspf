@@ -1,0 +1,58 @@
+<%!
+  int bordersize = 1;
+  String portalALIGN  = "center";
+  String portalPREVIEW = "2";
+  String portalPREVIEWCOLOR = "#FFFF00";
+%><%
+  //--------------------------------------------------------
+  // VARS of the PORTAL ||||||||||||||||||||||||||||||||||||
+  //--------------------------------------------------------
+
+  final Category        SITEMAP_ROOT   = channel.getRootCategory();
+  final PortalInterface PORTAL_ROOT    = PortalManager.getDefaultPortal();
+        PortalInterface displayPortal  = PORTAL_ROOT;
+        PortalElement   displayPortlet = null;
+  final boolean         isPortalMode;
+
+  if (!initDone) {
+
+    // Set default value, overriden by display.jsp
+    if (PORTAL_ROOT != null) {
+      request.setAttribute(PortalManager.PORTAL_PORTAL , PORTAL_ROOT);
+    }
+    if (SITEMAP_ROOT != null) {
+      request.setAttribute(PortalManager.PORTAL_CURRENTCATEGORY , SITEMAP_ROOT);
+      request.setAttribute(PortalManager.PORTAL_PORTALCATEGORY , SITEMAP_ROOT);
+    }
+	  request.setAttribute(PortalManager.PORTAL_CTXCATEGORIES , PortalManager.getCtxCategories(request));
+
+    // Portal Mode
+    isPortalMode = inFO && isLogged && Util.notEmpty(PortalManager.receiveAction(request,null,PortalManager.PORTAL_ACTION_MODE));
+    request.setAttribute("EditPortal", new Boolean(isPortalMode));
+
+    // Portal Action
+    if (PortalManager.handleRequest(request , response ,loggedMember)){
+      if (debug) {
+        System.out.println((System.currentTimeMillis()-startPageRequest)+"ms to handle portal parameters\n");
+      }
+      return;
+    }
+
+    // Define Navigator
+    if (jcmsContext.isEditIcon() && jcmsContext.getBrowser().isOldBrowser()){
+      jcmsContext.setEditIcon(false,false,true);
+    }
+    
+  } else { // initDone
+  
+    // Portal Mode
+    isPortalMode = Util.toBoolean(request.getAttribute("EditPortal"), false);
+
+    // displayPortal
+    PortalInterface displayPortalTmp = (PortalInterface) request.getAttribute("Portal");
+    if (displayPortalTmp != null) {
+      displayPortal = displayPortalTmp;
+    }
+  }
+
+%>

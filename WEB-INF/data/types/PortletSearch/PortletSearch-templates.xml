@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates type="PortletSearch" version="5.0">
+  <template name="default" file="doPortletLightSearchFullDisplay.jsp" usage="box" />
+  <template name="full" file="doPortletSearchFullDisplay.jsp" usage="box" />
+  <template name="mixed" file="doPortletSearchMixedFullDisplay.jsp" usage="box" />
+  <template name="topbar" file="doPortletSearchTopbar.jsp" usage="box" />
+</templates>
+

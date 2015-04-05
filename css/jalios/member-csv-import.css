@@ -1,0 +1,59 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+#csvMemberImportForm TABLE.import-options {
+  margin-bottom: 0;
+}
+#csvMemberImportForm TABLE.import-options > TBODY > TR > TD:first-child {
+  width: 20%;
+}
+A[data-jalios-target='#formatRules'] {
+  cursor: help;
+}
+.workspace-group-list .wrapper {
+  /* ToggleManager */
+}
+.workspace-group-list .wrapper .ws-close {
+  display: block;
+}
+.workspace-group-list .wrapper .ws-open {
+  display: none;
+}
+.workspace-group-list .wrapper.group-show .ws-close {
+  display: none;
+}
+.workspace-group-list .wrapper.group-show .ws-open {
+  display: block;
+}
+.workspace-group-list UL.workspaces-container {
+  margin: 10px 0;
+}
+.workspace-group-list UL.workspaces-container .workspace {
+  margin-bottom: 5px;
+}
+.workspace-group-list UL.workspaces-container .workspace IMG.toggle-icon {
+  margin: 0 5px;
+}
+.workspace-group-list UL.workspaces-container .workspace .workspace-label {
+  margin-left: 5px;
+}
+.workspace-group-list UL.workspaces-container .workspace .group-name {
+  font-weight: normal;
+  margin-left: 5px;
+}
+.workspace-group-list UL.workspaces-container .workspace .group-name.default-group {
+  font-style: italic;
+}
+.workspace-group-list UL.workspaces-container .workspace UL.group-list {
+  margin-left: 35px;
+}
+.workspace-group-list UL.workspaces-container .workspace UL.group-list .group-icon {
+  margin-left: 5px;
+}
+.workspace-group-list UL.workspaces-container .workspace INPUT.group-checker {
+  margin-top: 0;
+  margin-left: 5px;
+}
+.csv-import-modal.modal-result OL {
+  margin-left: 40px;
+}

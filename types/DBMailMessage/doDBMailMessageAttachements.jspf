@@ -1,0 +1,28 @@
+<%@ page contentType="text/html; charset=UTF-8" %><%--
+  @Summary: DBMailMessage Full Display attachements
+  @Category: Custom
+  @Author: Sylvain DEVAUX
+  @Customizable: True
+  @Requestable: True
+--%><%
+
+%><jalios:if predicate='<%= Util.notEmpty(attachements) %>'><%
+  %><section class="attachements"><%
+    %><div class='count'><%
+      %><strong><%= glp("ui.incoming.mail.attachement",attachements.size()) %></strong><%
+    %></div><%
+    %><ol><%
+    ServletUtil.backupAttribute(pageContext , PortalManager.PORTAL_PUBLICATION); 
+    %><jalios:foreach collection="<%= attachements %>" name="itAttachement" type="FileDocument"><%
+      String displayURLparams = Util.getString(request.getAttribute("displayURLparams"), "");
+      %><li class='attachement'><%
+        %><jalios:link data='<%= itAttachement %>' params='<%= displayURLparams + "&amp;details=true" %>' css='attachement-icon'><%
+          %><jalios:fileicon doc='<%= (FileDocument)itAttachement %>' /><%
+        %></jalios:link>&nbsp;<%
+        %><jalios:link data="<%= itAttachement %>" params="<%= displayURLparams %>"/><%
+      %></li><%
+    %></jalios:foreach><% 
+    ServletUtil.restoreAttribute(pageContext, PortalManager.PORTAL_PUBLICATION); 
+    %></ol><%
+  %></section><%
+%></jalios:if>

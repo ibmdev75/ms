@@ -1,0 +1,14 @@
+<%--
+  @Summary: Workspace search panel
+  @Since: jcms-7.1.3, jcms-8.0
+--%><%@ page import="com.jalios.jcms.handler.QueryHandler" %>
+<%
+Set<Workspace> wsSet = (Set<Workspace>) request.getAttribute("dswWorkspaces");
+boolean checked = Util.toBoolean(request.getAttribute("dswSearchInSubWorkspaces"), false);
+%>
+<jalios:field name="wrkspc" label="ui.work.search.ws.workspaces" value="<%= wsSet %>" resource="field-vertical" keyword="true">
+  <jalios:control type="<%= ControlType.WORKSPACE %>" />
+</jalios:field>
+<jalios:field name="searchInSubWorkspaces" label="ui.work.search.ws.intro" value="<%= checked %>" resource="field-vertical">
+  <jalios:control type="<%= ControlType.BOOLEAN %>" />
+</jalios:field>

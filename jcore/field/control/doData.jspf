@@ -1,0 +1,14 @@
+<%@page import="com.jalios.jcms.Data"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.AbstractDataSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.SelectorSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.SelectorSettings.SelectorType"%><%
+%><%
+Class<? extends Data> dataClass = getOption(AbstractDataSettings.DATA_CLASS, null);
+if(dataClass != null) {
+  Data data = channel.getData(dataClass, resolveValue(fieldValue));
+  if(data == null) {
+    fieldValue = null;
+  }
+}
+addOption(SelectorSettings.SELECTOR_TYPE, getOption(SelectorSettings.SELECTOR_TYPE, SelectorType.CHOOSER));
+%><%@ include file="/jcore/field/control/doEnumerate.jspf" %>

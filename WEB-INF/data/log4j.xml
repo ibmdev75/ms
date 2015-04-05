@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- LOG4J Configuration Properties File for Jalios JCMS -->
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>	 
+
+  <!-- 1. RENDERERs ******************************************************** -->
+
+
+  <!-- 2. APPENDERs ******************************************************** -->
+
+  <!-- 
+   # JCMS Appender
+   # Output LogginEvents in singleton class for display inside JCMS.
+   # No layout needed.
+  --> 
+  <appender name="JCMS" class="com.jalios.jcms.tools.JCMSAppender">
+    <param name="MaximumEventNbr" value="50"/>
+  </appender>
+  
+  <!-- 
+   # Plugin Appender
+   # Output LogginEvents in singleton class for display inside JCMS.
+   # No layout needed.
+  --> 
+  <appender name="PLUGIN" class="com.jalios.jcms.plugin.PluginAppender">
+    <param name="MaximumEventNbr" value="20"/>
+  </appender>  
+
+  <!-- 
+   # Mail Appender
+   # Output LogginEvents in singleton class for display inside JCMS.
+   # No layout needed.
+  --> 
+  <appender name="MAIL_FETCHER" class="com.jalios.jcms.mail.MailAppender">
+    <param name="MaximumEventNbr" value="20"/>
+  </appender> 
+  
+  <!-- 
+   # CONSOLE Appender
+   # Output to console (System.out).
+   # simple pattern : "time priority [ChannelName] [logger] - message"
+  --> 
+  <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+    <layout class="com.jalios.jcms.logging.JcmsPatternLayout">
+      <param name="ConversionPattern" value="%d{ABSOLUTE} %p [%s] [%c{1}] - %m%n"/>
+    </layout>
+  </appender>
+  
+  <!-- 
+   # LOGFILE Appender
+   # Write log to a file, Roll the file every week
+   # More detailed pattern : "fulldate priority [thread] [ChannelName] [logger] NDC - message"
+  --> 
+  <appender name="LOGFILE" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="File" value="${com.jalios.jcms.log-file}"/>
+    <param name="DatePattern" value="'.'yyyy-ww"/>
+    <layout class="com.jalios.jcms.logging.JcmsPatternLayout">
+      <param name="ConversionPattern" value="%d %p [%t] [%s] [%c{2}] %x - %m%n"/>
+    </layout>
+  </appender>
+  
+  <!-- 
+   # Rolling ROLLFILE Appender
+   # Write log to a file, : 
+   #  - Roll the file every day,
+   #  - limit the size of each log files to 100MB, 
+   #  - limit the number of log files to 50
+   #  - GZip the files
+   # IMPORTANT : *Depends on Simon Spark Log4j appenders*
+   # http://www.simonsite.org.uk/javadoc/timeandsize/index.html
+   # More detailed pattern : "fulldate priority [thread] [ChannelName] [logger] NDC - message"
+  -->
+  <appender name="ROLLFILE" class="uk.org.simonsite.log4j.appender.TimeAndSizeRollingAppender">
+    <param name="File" value="${com.jalios.jcms.log-file}"/>
+    <!-- <param name="Threshold" value="DEBUG"/> -->
+    <!-- <param name="BufferedIO" value="false"/> -->
+    <param name="MaxFileSize" value="100MB"/>
+    <param name="DatePattern" value=".yyyy-MM-dd"/>
+    <param name="MaxRollFileCount" value="50"/>
+    <param name="CompressionAlgorithm" value="GZ"/>
+    <layout class="com.jalios.jcms.logging.JcmsPatternLayout">
+      <param name="ConversionPattern" value="%d %p [%t] [%s] [%c{2}] %x - %m%n"/>
+    </layout>
+  </appender>
+  
+  <!-- 
+   # SMTP Appender
+   # Detailed SMTP error output, send mail for ERROR and FATAL level.
+   # pattern : "date level [ChannelName] [logger]
+   #             [thread] package.method(classfilename:line)
+   #             NDC
+   #             message"
+  --> 
+  <!-- 
+  <appender name="SMTP" class="org.apache.log4j.net.SMTPAppender">
+    <param name="Threshold" value="ERROR"/>
+    <param name="SMTPHost" value="smtp.mycompany.com"/>
+    <param name="Subject" value="JCMS Error Log"/>
+    <param name="From" value="My JCMS Channel &lt;admin@mycompany.com&gt;"/>
+    <param name="To" value="Administrator &lt;admin@mycompany.com&gt;"/>
+    <layout class="com.jalios.jcms.logging.JcmsPatternLayout">
+      <param name="ConversionPattern" value="%d %p [%s] [%c]%n [%t] %l%n %x%n %m%n"/>
+    </layout>
+  </appender>
+  --> 
+
+  <!-- 
+   # SECURITY Appender
+   # Output to error console (System.err) when level >= WARN.
+   # Filter using the [SECURITY] string used in JCMS.
+   # really detailed pattern : "date level [thread] [ChannelName] (classfilename:line) NDC - message"
+  --> 
+  <!-- 
+  <appender name="SECURITY" class="org.apache.log4j.ConsoleAppender">
+    <param name="Threshold" value="WARN"/>
+    <param name="Target" value="System.err"/>
+    <layout class="com.jalios.jcms.logging.JcmsPatternLayout">
+      <param name="ConversionPattern" value="%d %p [%t] [%s] [%c{2}] %x - %m%n"/>
+    </layout>
+    
+    <filter class="org.apache.log4j.varia.StringMatchFilter">
+      <param name="StringToMatch" value="[SECURITY]" />
+      <param name="AcceptOnMatch" value="true" />
+    </filter>
+    <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+  </appender>
+  --> 
+  
+  <!-- 3. LOGGERs ********************************************************** -->
+
+  <!-- jsp Logger, used in every JCMS jsp --> 
+  <logger name="jsp" additivity="false">
+    <level value="INFO" />
+    <appender-ref ref="JCMS" />
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="ROLLFILE" />
+  </logger>
+  
+  <!-- custom Logger, used in all custom classes --> 
+  <logger name="custom" additivity="false">
+    <level value="INFO" />
+    <appender-ref ref="JCMS" />
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="ROLLFILE" />
+  </logger>
+  
+  <!-- generated Logger, used by JCMS generated classes --> 
+  <logger name="generated" additivity="false">
+    <level value="INFO" />
+    <appender-ref ref="JCMS" />
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="ROLLFILE" />
+  </logger>
+  
+  <!-- com.jalios Logger, for all Jalios classes (jcms, jaliosutil, ...) --> 
+  <logger name="com.jalios" additivity="false">
+    <level value="INFO" />
+    <appender-ref ref="JCMS" />
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="ROLLFILE" />
+  </logger>
+  
+  <!-- Mail Logger -->
+  <logger name="com.jalios.jcms.mail" additivity="true">
+    <level value="INFO" />
+    <appender-ref ref="MAIL_FETCHER" />
+  </logger>
+  
+  <!-- plugin Logger, used by JCMS all plugins' classes --> 
+  <logger name="jcmsplugin" additivity="false">
+    <level value="INFO" />
+    <appender-ref ref="JCMS" />
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="ROLLFILE" />
+    <appender-ref ref="PLUGIN" />
+  </logger>
+  
+  <!-- Uncomment this logger to trace all SQL requests sent by Hibernate -->
+  <!-- 
+  <logger name="org.hibernate.SQL">
+    <level value="DEBUG" /> 
+  </logger>
+   -->
+   
+  <!-- convenient appender declaration for quick modification of level -->
+  <!-- 
+   <logger name="com.jalios.jcms"> <level value="DEBUG" /> </logger>
+   <logger name="com.jalios.util"> <level value="DEBUG" /> </logger>
+   <logger name="com.jalios.ldap"> <level value="DEBUG" /> </logger>
+   <logger name="com.jalios.io"> <level value="DEBUG" /> </logger>
+   <logger name="com.jalios.jstore"> <level value="DEBUG" /> </logger>
+   <logger name="com.jalios.jspengine"> <level value="DEBUG" /> </logger>
+   <logger name="com.jalios.jcms.taglib"> <level value="DEBUG" /> </logger>
+   <logger name="com.jalios.jcms.webdav.WebdavManager"> <level value="DEBUG" /> </logger>
+   <logger name="com.jalios.jcms.webdav.cat"> <level value="DEBUG" /> </logger>
+   <logger name="jcmsplugin.VerbosePlugin"> <level value="DEBUG" /> </logger>
+  -->
+
+  <root>
+    <priority value="WARN" />
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="ROLLFILE" />
+  </root>
+
+</log4j:configuration>
+

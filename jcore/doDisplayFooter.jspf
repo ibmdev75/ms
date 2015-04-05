@@ -1,0 +1,17 @@
+<%--
+  @Summary: Sub-footer for display page
+  @Deprecated: False
+  @Customizable: True
+  @Requestable: False
+  @Summary: Sub-footer for display page
+  @Category: Presentation
+--%><%
+boolean skipFooter = Util.toBoolean(request.getAttribute("skipFooter"),false);
+if(!skipFooter){
+%>
+<div class="fulldisplay-footer">
+<jalios:include jsp="/front/vote/doVoteFooter.jsp" />
+<%-- *** PLUGINS ***************** --%><%
+%><jalios:include target="DISPLAY_FOOTER" />
+</div>
+<% } %>

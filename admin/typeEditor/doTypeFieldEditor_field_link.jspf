@@ -1,0 +1,47 @@
+<%-- MEMBER / MEMBER[] =============================================== --%>
+<% if (fieldEditor.equals("member") || fieldEditor.equals("member[]")) { %>
+<%-- MEMBER CHOOSER ------------------------------------------------------- --%>
+<jalios:field name="mbrChooser" label="ui.adm.type-edit.lbl.mbr-ch" tooltip="ui.adm.type-edit.lbl.mbr-ch.h">
+  <div class="radio">
+    <label><input type="radio" name="mbrChooser" value="popup"   <%= formHandler.getFieldMbrChooser().equals("popup")    ? "checked" : "" %>><% /* %>Popup window<% */ %><%= glp("ui.adm.type-edit.lbl.popup") %></label>
+  </div>
+  <div class="radio">
+    <label><input type="radio" name="mbrChooser" value="listbox" <%= formHandler.getFieldMbrChooser().equals("listbox")  ? "checked" : "" %>><% /* %>List-box<% */ %><%= glp("ui.adm.type-edit.lbl.listbox") %></label>
+  </div>
+  <div class="radio">
+    <label><input type="radio" name="mbrChooser" value='keyword' <%= formHandler.getFieldMbrChooser().equals("keyword") ? "checked" : "" %>><% /* %>Keyword<% */ %><%= glp("ui.adm.type-edit.lbl.keyword") %></label>
+  </div>
+  <%-- TODO: Should we checks fieldEditor.equals("member[]") for last option ? --%>
+</jalios:field> 
+
+<%-- GROUP ------------------------------------------------------- --%> 
+<jalios:field name="gids" label="ui.adm.type-edit.lbl.mbr-grp" value="<%= formHandler.getFieldGroupSet() %>" mv="1">
+  <jalios:control type="<%= ControlType.GROUP %>" />
+</jalios:field>        
+<% } %>
+
+<%-- GROUP / GROUP[] =============================================== --%>
+<% if (fieldEditor.equals("group") || fieldEditor.equals("group[]")) { %>
+<%-- GROUP CHOOSER ------------------------------------------------------- --%> 
+<jalios:field name="grpChooser" label="ui.adm.type-edit.lbl.grp-ch" tooltip="ui.adm.type-edit.lbl.grp-ch.h">
+  <div class="radio">
+    <label><input type="radio" name="grpChooser" value="popup"   <%= formHandler.getFieldGrpChooser().equals("popup")    ? "checked" : "" %>><% /* %>Popup window<% */ %><%= glp("ui.adm.type-edit.lbl.popup") %></label>
+  </div>
+  <div class="radio">
+    <label><input type="radio" name="grpChooser" value='keyword' <%= formHandler.getFieldGrpChooser().equals("keyword") ? "checked" : "" %>><% /* %>Keyword<% */ %><%= glp("ui.adm.type-edit.lbl.keyword") %></label>
+  </div>
+</jalios:field>
+<% } %>
+
+<%-- LINK / LINK[] =============================================== --%>
+<% if (fieldEditor.equals("link") || fieldEditor.equals("link[]")) { %>
+<%-- LINK CHOOSER ------------------------------------------------------- --%> 
+<jalios:field name="pubChooser" label="ui.adm.type-edit.lbl.link-ch" tooltip="ui.adm.type-edit.lbl.link-ch.h">
+  <div class="radio">
+    <label><input type="radio" name="pubChooser" value=""        <%= !formHandler.getFieldPubChooser().equals("keyword") ? "checked" : "" %>><% /* %>Textfield<% */ %><%= glp("ui.adm.type-edit.lbl.popup") %></label>
+  </div>
+  <div class="radio">
+    <label><input type="radio" name="pubChooser" value='keyword' <%=  formHandler.getFieldPubChooser().equals("keyword") ? "checked" : "" %>><% /* %>Keyword<% */ %><%= glp("ui.adm.type-edit.lbl.keyword") %></label>
+  </div>
+</jalios:field>
+<% } %>

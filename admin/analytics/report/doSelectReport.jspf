@@ -1,0 +1,116 @@
+<%@page import="com.jalios.jcms.analytics.ui.ReportHandler.PredefinedPeriod"%>
+<%@page import="com.jalios.jcms.analytics.*"%><%
+%><%@page import="java.util.*"%><%
+%><%@page import="com.jalios.util.*"%><%
+%><%@page import="com.jalios.jcms.*"%><%
+%><jsp:useBean id='formHandler' scope='page' class='com.jalios.jcms.analytics.ui.ReportHandler'><%
+ %><jsp:setProperty name='formHandler' property='request' value='<%= request %>' /><%
+ %><jsp:setProperty name='formHandler' property='response' value='<%= response %>' /><%
+ %><jsp:setProperty name='formHandler' property='*' /><%
+%></jsp:useBean><%
+
+request.setAttribute("ui.analytics.current-report-handler", formHandler);
+
+Set<Workspace> workspaceSet = AnalyticsManager.getCompatibleWorkspaceSet(loggedMember);
+Workspace selectedWorkspace = getDataParameter( "analyticsWS",Workspace.class);
+if(selectedWorkspace == null){
+  selectedWorkspace = (Workspace)request.getAttribute("jcms.analytics.selected-workspace");
+}
+formHandler.setAnalyticsWS(selectedWorkspace == null ? null : selectedWorkspace.getId());
+String selectedPredefinedPeriod = getStringEnumParameter("predefinedPeriod", null, formHandler.getPredefinedPeriodIds());
+
+boolean isFirstDisplay =  formHandler.getAvailableBeginDate() == null && formHandler.getAvailableEndDate() == null && Util.isEmpty(selectedPredefinedPeriod);
+
+if(Util.isEmpty(selectedPredefinedPeriod)){
+  PredefinedPeriod computedPredefinedPeriod = formHandler.getSelectedPredefinedPeriodFromDates();
+  if(computedPredefinedPeriod != null){
+  	selectedPredefinedPeriod = computedPredefinedPeriod.getId();
+  }
+}
+
+String prefId = getAlphaNumParameter("prefId", null);
+if(Util.isEmpty(prefId)){
+	prefId = Long.toHexString(System.currentTimeMillis());  
+}
+
+if(formHandler.validate()){  
+}
+if(isFirstDisplay){
+  selectedPredefinedPeriod = PredefinedPeriod.LAST_7_DAYS.getId();
+}
+String[] fields = {"analyticsWS","predefinedPeriod", "prefId", "beginDate", "endDate", "opSubmit", "predefinedPeriodSelect" };
+%><%@ include file='/jcore/doMessageBox.jspf'%><%
+%>
+
+<div class="navbar navbar-default" role="navigation">
+  <form action='<%= ServletUtil.getUrlWithRemovedParams(request, fields, true) %>' name="reportForm" method="post" class="reportForm navbar-form form-inline row" >	
+		<% if (showWorkspace) { %>
+		  <div class="col-md-3 navbar-form">
+			  <label><%=glp("ui.analytics.report.filtered-on") %></label>
+			  <div class="form-group">
+			    <div class="input-group">
+						<select class='form-control' name='analyticsWS'
+							onchange="jQuery('<input>').attr({type: 'hidden',name: 'opSubmit', value:'opSubmit'}).appendTo(reportForm);reportForm.submit()">
+							<option value='<%=StatListener.ALL_WORKSPACE%>'><%=glp("ui.statreport.lbl.allworkspace")%></option>
+							<jalios:foreach collection='<%= workspaceSet %>' name='itWS'
+								type='Workspace'>
+								<option value='<%=encodeForHTMLAttribute(itWS.getId())%>'
+									<%=itWS.equals(selectedWorkspace) ? "selected=\"selected\"" : ""%>><%=encodeForHTML(itWS.getTitle(userLang))%></option>
+							</jalios:foreach>
+						</select>	
+					</div>
+				</div>
+			</div>
+		<%}else{ %>
+			<input type='hidden' name='analyticsWS'  value="<%=encodeForHTMLAttribute(selectedWorkspace == null ? "" : selectedWorkspace.getId())%>"/>	
+		<% } %>
+		<div class="col-md-3 navbar-form">
+			  <label><%= glp("ui.analytics.report.predefined-period") %></label>
+        <div class="form-group">
+          <div class="input-group">
+						<select class='form-control' name='predefinedPeriodSelect' onchange="jQuery.jalios.analytics.doSelectChange(this);">
+							<option <%= !isFirstDisplay && Util.isEmpty(selectedPredefinedPeriod)? "selected=\"selected\"" : ""%> value=''><%=glp("ui.analytics.report.no-predefined-period")%></option>						
+							<%
+							for(PredefinedPeriod predefinedPeriod : PredefinedPeriod.values()){
+						   	String label = "";
+							 	if(predefinedPeriod.equals(PredefinedPeriod.CURRENT_YEAR) || predefinedPeriod.equals(PredefinedPeriod.LAST_YEAR)){
+							  	int year = Calendar.getInstance(userLocale).get(Calendar.YEAR);
+							  	if(predefinedPeriod.equals(PredefinedPeriod.LAST_YEAR)){
+							  	  year -= 1;
+							  	}
+							  	label = glp(predefinedPeriod.getLabel(), year);
+								}
+								else{
+								 	label = glp(predefinedPeriod.getLabel());
+								}
+								%>
+								<option value='<%=predefinedPeriod.getId()%>'
+										<%=predefinedPeriod.getId().equals(selectedPredefinedPeriod)? "selected=\"selected\"" : ""%>><%=label%></option>
+							<%}%>
+						</select> 		
+					</div>
+				</div>
+		 </div>
+     <div class="col-md-5 navbar-form date-criteria <%=Util.isEmpty(selectedPredefinedPeriod)?"":"hide"%>">  
+			<div class='form-group navbar-label'>
+        <label><%= glp("ui.analytics.report.beginDate") %></label>
+				<div class="form-group">
+			    <jalios:field label="ui.analytics.report.beginDate" resource="field-light" name="beginDate" value="<%= formHandler.getAvailableBeginDate() %>" required="true">
+			      <jalios:control type="<%= ControlType.DATE %>" />
+			    </jalios:field>
+				</div>
+				<label><%= glp("ui.analytics.report.endDate") %></label>
+				<div class="form-group">
+			    <jalios:field label="ui.analytics.report.endDate" resource="field-light" name="endDate" value="<%= formHandler.getAvailableEndDate() %>" required="true">
+			      <jalios:control type="<%= ControlType.DATE %>" />
+			    </jalios:field>			
+				</div>	
+			</div>			
+	  </div>
+    <input type='hidden' name='predefinedPeriod' value='' />
+    <input type='hidden' name='prefId'  value="<%=prefId %>"/>
+    <div class="col-md-1 navbar-form">
+  		<button class='btn btn-primary<%=Util.isEmpty(selectedPredefinedPeriod)?"":" hide"%>' type='Submit' value='true' name='opSubmit'><%= glp("ui.analytics.report.filter") %></button>        			
+    </div>
+	</form>		
+</div>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webappext:WebAppExtension xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+   xmlns:webappext="webappext.xmi" xmlns:webapplication="webapplication.xmi"
+   xmi:id="WebAppExtension_1" 
+   
+   reloadingEnabled="true" reloadInterval="2" 
+   additionalClassPath="" fileServingEnabled="true"
+   directoryBrowsingEnabled="false"
+   serveServletsByClassnameEnabled="true"
+   autoRequestEncoding="true" autoResponseEncoding="false">
+
+<!--
+  More information about this file in articles:
+  
+  1. Configuring JSP engine parameters 
+  http://publib.boulder.ibm.com/infocenter/wasinfo/v6r1/topic/com.ibm.websphere.wsfep.multiplatform.doc/info/ae/ae/tweb_jspengine.html
+  
+  2. JSP engine configuration parameters
+  http://publib.boulder.ibm.com/infocenter/wasinfo/v6r1/topic/com.ibm.websphere.wsfep.multiplatform.doc/info/ae/ae/rweb_jspengine.html
+-->
+
+  <webApp href="WEB-INF/web.xml#WebApp_1"/>
+  <jspAttributes xmi:id="JSPAttribute_1" name="reloadEnabled" value="true"/>
+  <jspAttributes xmi:id="JSPAttribute_2" name="reloadInterval" value="10"/>
+  <jspAttributes xmi:id="JSPAttribute_3" name="jdkSourceLevel" value="15"/>
+  <!-- Uncomment the following if you need to debug jsp. -->
+  <!-- 
+    <jspAttributes xmi:id="JSPAttribute_10" name="keepgenerated" value="true"/>
+    <jspAttributes xmi:id="JSPAttribute_11" name="deprecation" value="true"/>
+  -->
+</webappext:WebAppExtension>

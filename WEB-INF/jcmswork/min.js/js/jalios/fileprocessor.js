@@ -1,0 +1,1 @@
+Event.observe(window,"load",function(){$$("#fpAdmin .confirm").each(function(a){Event.observe(a,"click",function(b){if(!top.confirm(I18N["fileprocessor.confirm"])){Event.stop(b)}})})});

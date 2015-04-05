@@ -1,0 +1,108 @@
+
+<jalios:if predicate='<%= box.getDisplayAverage() %>'>
+
+	<H2><%= glp("ui.statreport.lbl.portlet.average") %></H2>
+
+	<%
+	  ObjectIntTreeMap dayMap     = (ObjectIntTreeMap)wsMap.get("Day");
+	  ObjectIntTreeMap weekMap    = (ObjectIntTreeMap)wsMap.get("Week");
+	  ObjectIntTreeMap monthMap   = (ObjectIntTreeMap)wsMap.get("Month");
+	%>
+	<div align='center'>
+	<table class='layout border'>
+	
+	<% if (dayMap != null && weekMap != null && monthMap != null && dayMap.isMultiMap()){ %>
+	    <% Beautifier  beautifier = listener.getBeautifier(); %>
+	    
+  		<tr class='head'>
+  		  <td class='label' nowrap="nowrap" width='100%'><%= glp("ui.statreport.lbl.average") %></td>
+  		  <td class='label' nowrap="nowrap">&nbsp;<%= glp("ui.statreport.lbl.portlet.total") %>&nbsp;</td>
+  		  <td class='label' nowrap="nowrap">&nbsp;<%= glp("ui.statreport.lbl.portlet.day")   %>&nbsp;</td>
+  		  <td class='label' nowrap="nowrap">&nbsp;<%= glp("ui.statreport.lbl.portlet.week")  %>&nbsp;</td>
+  		  <td class='label' nowrap="nowrap">&nbsp;<%= glp("ui.statreport.lbl.portlet.month") %>&nbsp;</td>
+  		</tr>
+
+		  <jalios:foreach collection="<%= ObjectIntTreeMap.getSortedMapEntrySet(monthMap, ObjectIntTreeMap.getGreaterComparator()) %>" type="Map.Entry" name="itEntry" max="<%= plm.getTopTen() > 0 ? plm.getTopTen() : 10 %>">
+		  <%
+		    String itKey = (String) itEntry.getKey();
+		    ObjectIntTreeMap valueDay   = (ObjectIntTreeMap) dayMap.get(itKey);
+		    ObjectIntTreeMap valueWeek  = (ObjectIntTreeMap) weekMap.get(itKey);
+		    ObjectIntTreeMap valueMonth = (ObjectIntTreeMap) monthMap.get(itKey);
+		  %>
+		  <tr class='<%= itCounter.intValue() % 2 == 0 ? "odd" : "even" %>'>
+		    <td class='label' width='100%'><%= beautifier.beautify(itKey) %></td>
+		    <td align='right'><%= valueMonth != null ? ""+valueMonth.getSum()        : "" %></td>
+		    <td align='right'><%= valueDay   != null ? ""+valueDay.getAverage()   : "" %></td>
+		    <td align='right'><%= valueWeek  != null ? ""+valueWeek.getAverage()  : "" %></td>
+		    <td align='right'><%= valueMonth != null ? ""+valueMonth.getAverage() : "" %></td>
+		  </tr>
+		  </jalios:foreach>
+		  
+		  <tr class='head'>
+  		  <td class='label' nowrap="nowrap" width='100%'><%= glp("ui.statreport.lbl.portlet.total") %></td>
+  		  <td class='label' style='text-align: right;' nowrap="nowrap"><%= monthMap.getSum() %></td>
+  		  <td class='label' style='text-align: right;' nowrap="nowrap"><%= dayMap.getAverageSum() %></td>
+  		  <td class='label' style='text-align: right;' nowrap="nowrap"><%= weekMap.getAverageSum() %></td>
+  		  <td class='label' style='text-align: right;' nowrap="nowrap"><%= monthMap.getAverageSum() %></td>
+  		</tr>
+		
+	<% } else { %>
+	
+	  <tr class='head'>
+  		  <td class='label' width='100%' nowrap="nowrap"><%= glp("ui.statreport.lbl.scope") %></td>
+  		  <td class='label' nowrap="nowrap">&nbsp;&nbsp; <%= glp("ui.statreport.lbl.average") %>&nbsp;&nbsp;</td>
+  		</tr>         
+		<jalios:if predicate='<%= monthMap != null %>'>
+			<tr class='odd'>
+			  <td class='label' width='100%'><%= glp("ui.statreport.lbl.portlet.total") %></td>
+			  <td class='text' align='right'>&nbsp;&nbsp;<%= monthMap.getSum() %>&nbsp;&nbsp;</td>
+			</tr>
+		</jalios:if>
+		<jalios:if predicate='<%= dayMap != null %>'>
+			<tr class='even'>
+			  <td class='label'><%= glp("ui.statreport.lbl.portlet.day") %> (<%= dayMap.getCount() %>)</td>
+			  <td class='text' align='right'>&nbsp;&nbsp;<%= dayMap.getAverage() %>&nbsp;&nbsp;</td>
+			</tr>
+		</jalios:if>
+		<jalios:if predicate='<%= weekMap != null %>'>
+			<tr class='odd'>
+			  <td class='label'><%= glp("ui.statreport.lbl.portlet.week") %> (<%= weekMap.getCount() %>)</td>
+			  <td class='text' align='right'>&nbsp;&nbsp;<%= weekMap.getAverage() %>&nbsp;&nbsp;</td>
+			</tr>
+		</jalios:if>
+		<jalios:if predicate='<%= monthMap != null %>'>
+			<tr class='even'>
+			  <td class='label'><%= glp("ui.statreport.lbl.portlet.month") %> (<%= monthMap.getCount() %>)</td>
+			  <td class='text' align='right'>&nbsp;&nbsp;<%= monthMap.getAverage() %>&nbsp;&nbsp;</td>
+			</tr>
+		</jalios:if>
+	
+	<% } %>
+		
+	</table>
+	</div>
+	<br />
+	<hr width='100%' size='1' noshade="noshade" style='page-break-after: auto;'/>
+	
+	
+	
+	<%-- ### Display Day of Month ### 
+	<jalios:if predicate='<%= Util.notEmpty(dayMap) %>'>
+		<H2 style='page-break-before: auto;'><%= glp("ui.statreport.lbl.portlet.day") %></H2>
+		<jalios:chart dataMap='<%= dayMap %>' 
+				          display='<%= "hchart" %>' 
+				          isPercent='<%= false %>' 
+				          mixedChart='<%= true %>'
+				          colorFirst='<%= 3 %>'
+				          colorRotate='<%= 0 %>'
+				          locale='<%= userLocale %>'
+				          unit='<%= glp("ui.statreport.lbl.hits") %>'
+				          beautifier='<%= new com.jalios.jtaglib.ChartTagBeautifier(new BeautifierDate("y D","EEE dd MMMMM",Locale.ENGLISH,userLocale,12)) %>'
+				          />
+		<hr width='100%' size='1' noshade="noshade"/>
+</jalios:if>
+	--%>
+</jalios:if>
+
+
+

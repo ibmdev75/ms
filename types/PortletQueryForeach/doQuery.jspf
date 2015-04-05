@@ -1,0 +1,28 @@
+<%@ page import="com.jalios.jcms.handler.QueryHandler" %><%
+
+  Collection collection    = new TreeSet();
+  Set        allCidSet     = new TreeSet();
+  int        resultSize    = 0;
+  Class      queryHandlerTypesCommonSuperClass = Publication.class;
+  {
+    %><%@ include file='/types/PortletQueryForeach/doQueryHandlers.jspf' %><%
+    
+    for (Iterator itHandler = queryHandlerSet.iterator(); itHandler.hasNext(); ){
+      QueryHandler handler = (QueryHandler) itHandler.next();
+      QueryResultSet qrSet = handler.getResultSet();
+      if (queryHandlerSet.size() == 1) {
+        collection = qrSet;
+        resultSize = qrSet.getResultSize();
+      } else {
+        collection.addAll(qrSet);
+        resultSize += qrSet.getResultSize();
+      }
+      allCidSet.addAll(handler.getAllCidSet());
+    }
+    queryHandlerTypesCommonSuperClass = QueryHandler.getTypesCommonSuperClass((QueryHandler[]) queryHandlerSet.toArray(new QueryHandler[queryHandlerSet.size()]));
+  }
+
+  int maxResults  = box.getMaxResults();
+  int skipResults = box.getSkipFirstResults();
+
+%>

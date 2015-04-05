@@ -1,0 +1,7 @@
+<% 
+  String skTitle = (String) request.getAttribute("skinTitle"); 
+  request.removeAttribute("skinTitle");
+  if (Util.isEmpty(skTitle)){
+    skTitle = portletSkinable.getSkinTitle(userLang,currentCategory,portalCategory);
+  }
+%><jalios:include target="SKIN_BEFORETITLE" targetContext="skin" /><span class="skinTitle<%= jcmsContext.getBrowser().isIE() ? " dnd-header" : "" %>"><%= skTitle %></span><jalios:include target="SKIN_AFTERTITLE" targetContext="skin" /><%@ include file="doSkinAdd.jspf" %>

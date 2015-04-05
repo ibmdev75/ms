@@ -1,0 +1,235 @@
+<%@page import="com.jalios.jcms.Workflow"%><%
+%><%@page import="com.jalios.jcms.WorkflowManager"%><%
+%><%@page import="com.jalios.jcms.HttpUtil"%><%
+%><%@page import="com.jalios.util.Util"%><%
+
+List allTypeList = new ArrayList();
+Workflow wfFileDoc = WorkflowManager.getInstance().getWorkflow("filedocument");
+int gbCounter = 0;
+HashMap workflowIdMap = typeFormHandler.getAvailableInstanceWorkflowIdMap();
+HashMap workflowGroupMap = typeFormHandler.getAvailableInstanceWorkflowGroupMap();
+int typeCounter = 0;
+%>
+<ul class="nav nav-tabs br">
+  <jalios:foreach array='<%= typeFormHandler.getAvailableRootClass() %>' type='Class' name='clazz' counter='itClassCounter'>
+    <li <%= typeCounter == 0 ? "class=\"active\"" : "" %>><a href="#wsType-<%= Util.getClassShortName(clazz) %>" data-toggle="tab" onclick="return false;"><%= channel.getTypeLabel(clazz, userLang) %></a></li>
+    <% typeCounter++; %>
+  </jalios:foreach>
+</ul>
+<div class="tab-content" id="editWorkspaceType-tab">  
+  <% typeCounter = 0; %>
+  <jalios:foreach array='<%= typeFormHandler.getAvailableRootClass() %>' type='Class' name='clazz' counter='itClassCounter'>
+    <% 
+    String clazzName = Util.getClassShortName(clazz);
+    List typeList = channel.getSubTypeList(clazz, userLang);
+    // typeList.remove(FileDocument.class);
+    allTypeList.addAll(typeList);
+    allTypeList.add(clazz);
+    boolean isUGC = Publication.isUserContentType(clazz);
+    %>
+    <div class="tab-pane<%= typeCounter == 0 ? " active" : "" %> fade in" id="wsType-<%= Util.getClassShortName(clazz) %>">
+      <div class="navbar navbar-default navbar-table-header">
+        <div class="navbar-text text-right"><%= glp("ui.com.core-type.lbl." + Util.getClassShortName(clazz)) %></div>
+        <div class="navbar-form navbar-left">
+         <jalios:field resource="field-light">
+           <select name='typeMap' class="form-control">
+            <option value='<%= clazz.getName() %>|<%= WorkflowManager.DEFAULT_WORKFLOW.getId() %>' <%= WorkflowManager.DEFAULT_WORKFLOW.getId().equals(typeFormHandler.getAvailableTypeMap().get(clazz)) ? "selected=\"selected\"" : "" %>>&nbsp;</option>
+            <jalios:foreach collection='<%= WorkflowManager.getInstance().getWorkflowSet() %>' type='Workflow' name='itWorkflow' counter='itCounter2'>
+              <% if (itWorkflow != WorkflowManager.DEFAULT_WORKFLOW /*&& itWorkflow != wfFileDoc */) { %>
+                <option value='<%= clazz.getName() %>|<%= itWorkflow.getId() %>' <%= itWorkflow.getId().equals(typeFormHandler.getAvailableTypeMap().get(clazz)) ? "selected=\"selected\"" : "" %>><%= itWorkflow.getLabel(userLang) %></option>
+              <% } %>
+            </jalios:foreach>
+          </select>
+        </jalios:field>
+        </div>
+      </div>
+      <table class="table-data table-condensed">
+        <tr>
+          <th>&nbsp;</th>
+          <th><%= glp("ui.com.lbl.type") %></th>
+          <th><%= glp("ui.work.form.lbl.wf") %></th>
+          <th><%= glp("ui.work.form.lbl.wf-by-instance") %></th>
+          <% if (!isUGC) { %>
+          <th><%= glp("ui.adm.type-list.lbl.debatable") %></th>
+          <% } %>
+          <th><%= glp("ui.wrkspc-edit.lbl.tabs") %></th>
+          <th><%= glp("ui.adm.type-edit.prop.tab.cat") %></th>
+          <th><%= glp("ui.adm.type-edit.prop.tab.rr") %></th>
+          <th>&nbsp;</th>
+         </tr>
+         <%
+         int trCounter = 1;
+         Workflow defaultWF = WorkflowManager.getInstance().getWorkflow((String)typeFormHandler.getAvailableTypeMap().get(clazz));
+         if(defaultWF == null){
+          defaultWF = WorkflowManager.DEFAULT_WORKFLOW;
+         }
+         %>
+        <jalios:foreach collection='<%= typeList %>' type='java.lang.Class' name='itClass' counter="itCounter3">
+        <% 
+        TypeEntry te = channel.getTypeEntry(itClass);
+        WSTypeEntry wste = channel.getWSTypeEntry(itClass,typeFormHandler.getWorkspace());
+        boolean custom = !wste.isForced();
+        String disable = custom ? "" : "_gray";
+          
+        String trStyle = te.isAbstract() ? "font-style: italic;" : "font-style: normal;";
+        boolean isTypeNotUsed = !typeFormHandler.getAvailableTypeMap().containsKey(itClass);
+        boolean isDBType   = DBData.class.isAssignableFrom(itClass);
+        if (custom){trStyle += " font-weight: bold;"; }
+        else if (isTypeNotUsed) { trStyle += " color: #AAAAAA; ";  }
+        %>
+        <tr>
+          <td class="text-right nowrap"><%= trCounter %>.&nbsp;<% if (workspc != null) { %><a href="work/workspace/editWSTypeEntry.jsp?typeName=<%= itClass.getName() %>&amp;ws=<%= workspc.getId() %>&amp;redirect=<%= ServletUtil.encodeURL("work/workspace/editWorkspaceType.jsp?ws="+workspc.getId()) %>"><jalios:icon src='edit'  alt='E' title='<%= glp("ui.com.alt.edit") %>'/></a><% } %></td>
+          <td class="nowrap<%= isTypeNotUsed ? " text-muted" : "" %>"><%= isTypeNotUsed ? "<s>" : "" %><%= channel.getTypeLabel(itClass, workspace, userLang) %><%= isTypeNotUsed ? "</s>" : "" %></td>
+          <td>
+            <div class="input-group jalios-input-group">
+              <select name='typeMap' id='type_<%= clazzName %>_<%= gbCounter++ %>' class="form-control ajax-refresh" onchange="jQuery.JCMS.admin.instanceWorkflow.toggleInstanceWorkflowState(this);">
+                <% if(WorkflowManager.getInstance().isCompatibleWorkflow(defaultWF, itClass)){ %>
+                <option value='<%= itClass.getName() %>|' <%= typeFormHandler.getAvailableTypeMap().containsKey(itClass) ? "selected=\"selected\"" : "" %>><% /* %>Enabled<% */ %><%= glp("ui.wrkspc-edit.usetype") %></option>
+                <%} %>
+                <option value='<%= itClass.getName() %>|disabled' <%= !typeFormHandler.getAvailableTypeMap().containsKey(itClass) ? "selected=\"selected\"" : "" %>><% /* %>Disabled<% */ %><%= glp("ui.wrkspc-edit.notype") %></option>
+                <optgroup label="<%= glp("ui.wrkspc-edit.usewf") %>">
+                  <jalios:foreach collection='<%= WorkflowManager.getInstance().getWorkflowSet(itClass) %>' type='Workflow' name='itWorkflow' counter='itCounter2'>
+                    <% if (itWorkflow != WorkflowManager.DEFAULT_WORKFLOW) { %>
+                      <option value='<%= itClass.getName() %>|<%= itWorkflow.getId() %>' <%= itWorkflow == wste.getWorkflow(false) ? "selected=\"selected\"" : "" %>><%= itWorkflow.getLabel(userLang) %></option>
+                    <% } %>
+                  </jalios:foreach>
+                </optgroup>
+              </select>
+              <% if (trCounter == 1) { %>
+                <div class="input-group-btn" style="width: auto;">
+                  <a href="#" class="btn btn-default" onclick="selectAllwithId(document.editForm, 'typeMap', 'type_<%= clazzName %>_'); return false;"><jalios:icon src='bullet-square-down-arrow'  title='<%= glp("ui.com.alt.select-all") %>' /></a>
+                </div>
+              <% } %>
+            </div>
+          </td>
+          <td class='text-center instance-workflow'>
+            <% if(loggedMember != null && 
+              ((typeFormHandler.getWorkspace() != null && typeFormHandler.getWorkspace().isAdmin(loggedMember))) || 
+              isAdmin || checkAccess("admin/work/workspace")) { %>
+              <jalios:field  css="center-block" resource="field-light" name='<%= EditWorkspaceTypeHandler.WF_BY_INSTANCE_ENABLED+itClass.getName() %>' value='<%= ""+wste.getInstanceWorkflowEnabled() %>' disabled='<%= isTypeNotUsed %>'>
+                <%
+                EnumerateSettings enumSettings = new EnumerateSettings().inline().multiple().checkbox().enumValues("true").enumLabels("")
+                                                          .dataAttribute("jalios-target", ".configurator").dataAttribute("jalios-target-position", "next")                                          
+                                                          .onChange("toggle:inline toggle:hide"); %>
+                <jalios:control settings='<%= enumSettings %>'>
+                  <jalios:buffer name="APPEND">
+                    <a href="#" onclick="return jQuery.JCMS.admin.instanceWorkflow.updateInstanceWorkflow(this, '<%=HttpUtil.encodeForJavaScript(itClass.getName()) %>', '<%=typeFormHandler.getWorkspace() == null?"":HttpUtil.encodeForJavaScript(typeFormHandler.getWorkspace().getId()) %>');" class="configurator <%=wste.getInstanceWorkflowEnabled()?"inline":"hide" %>">
+                      <jalios:icon src="edit-field" />
+                    </a>
+                  </jalios:buffer>
+                </jalios:control>
+              </jalios:field>
+              <%
+              String workflowIdValue = "";
+                if( Util.notEmpty(workflowIdMap)){
+                  Set<String> workflowIdSet = (Set<String>) workflowIdMap.get(itClass);
+                  if(Util.notEmpty(workflowIdSet)){
+                    for(String wfId : workflowIdSet){
+                      if(Util.isEmpty(wfId)){
+                        continue;
+                      }
+                      workflowIdValue += wfId +",";
+                    }
+                  }
+                }
+                String groupsValue = "";
+                if( Util.notEmpty(workflowGroupMap)){
+                  Set<String> workflowGroupSet = (Set<String>) workflowGroupMap.get(itClass);
+                  if(Util.notEmpty(workflowGroupSet)){
+                    for(String grpId : workflowGroupSet){
+                      if(Util.isEmpty(grpId)){
+                        continue;
+                      }
+                      groupsValue += grpId +",";
+                    }
+                  }
+                }
+              %>
+              <input type="hidden" name="<%= EditWorkspaceTypeHandler.WF_BY_INSTANCE_LIST+itClass.getName() %>" value="<%=workflowIdValue %>" class="selectedWorkflows"/>
+              <input type="hidden" name="<%= EditWorkspaceTypeHandler.WF_BY_INSTANCE_GROUP_LIST+itClass.getName() %>" value="<%=groupsValue %>" class="selectedGroups"/>
+            <% } else { %>
+              <%= wste.getInstanceWorkflowEnabled() ? channel.getProperty("list.boolean.on", "x") : channel.getProperty("list.boolean.off", "-") %>
+            <% } %>
+          </td>
+  
+          <% if (!isUGC) { %>
+          <td class='text-center'><%= wste.isDebatable() ? channel.getProperty("list.boolean.on", "x") : channel.getProperty("list.boolean.off", "-") %></td>
+          <% } %>
+          <td class='text-center'>
+            <%
+            if(wste.isCategoryTab() && !isDBType) {
+              String iconSrc = "images/jalios/icons/categories"+ disable +".gif"; 
+              String iconTitle = encodeForHTMLAttribute(glp("ui.work.form.lbl.categories")); 
+              %><jalios:icon src="<%= iconSrc %>" alt="C" title="<%= iconTitle %>" /><%
+            }
+            if(wste.isReadRightTab() && !isDBType) { 
+              String iconSrc = "images/jalios/icons/read_right"+ disable +".gif"; 
+              String iconTitle = encodeForHTMLAttribute(glp("ui.work.form.lbl.read-rights")); 
+              %><jalios:icon src="<%= iconSrc %>" alt="R" title="<%= iconTitle %>" /><%
+            }
+            if(wste.isUpdateRightTab() && !isDBType) {
+              String iconSrc = "images/jalios/icons/update_right"+ disable +".gif"; 
+              String iconTitle = encodeForHTMLAttribute(glp("ui.work.form.lbl.update-rights")); 
+              %><jalios:icon src="<%= iconSrc %>" alt="U" title="<%= iconTitle %>" /><%
+            }
+            if(wste.isTemplateTab() && !isDBType) {
+              String iconSrc = "images/jalios/icons/template"+ disable +".gif"; 
+              String iconTitle = encodeForHTMLAttribute(glp("ui.work.form.lbl.templates")); 
+              %><jalios:icon src="<%= iconSrc %>" alt="T" title="<%= iconTitle %>" /><%
+            }
+            if(wste.isWorkflowTab()) {
+              String iconSrc = "images/jalios/icons/wf"+ disable +".gif"; 
+              String iconTitle = encodeForHTMLAttribute(glp("ui.work.form.lbl.wf")); 
+              %><jalios:icon src="<%= iconSrc %>" alt="W" title="<%= iconTitle %>" /><%
+            }
+            if(wste.isAdvancedTab()) {
+              String iconSrc = "images/jalios/icons/advanced"+ disable +".gif"; 
+              String iconTitle = encodeForHTMLAttribute(glp("ui.work.form.tab.adv")); 
+              %><jalios:icon src="<%= iconSrc %>" alt="A" title="<%= iconTitle %>" /><%
+            }
+            %>
+          </td>
+          <td>
+            <% if (Util.notEmpty(channel.getDataSet(wste.getAvailableCategories()))) { %>
+              <ul>
+                <jalios:foreach collection='<%= channel.getDataSet(wste.getAvailableCategories()) %>' type='Category' name='itCat' counter='itCounter2'>
+                  <li><%= itCat.getName(userLang) %></li>
+                </jalios:foreach>
+              </ul>
+            <% } %>
+          </td>
+          <td>
+            <% if (Util.notEmpty(channel.getDataSet(wste.getAvailableGroups()))) { %>
+              <ul>
+                <jalios:foreach collection='<%= channel.getDataSet(wste.getAvailableGroups()) %>' type='Group' name='itGrp' counter='itCounter2'>
+                  <li><%= itGrp.getName(userLang) %></li>
+                </jalios:foreach>
+              </ul>
+            <% } %>
+          </td>
+          <td class='text-center'>
+            <% if (workspc != null && custom) { %>
+              <% String restoreActionURL = contextPath + "/work/workspace/editWSTypeEntry.jsp?typeName=" + itClass.getName() + "&amp;ws=" + workspc.getId() + "&amp;opDelete=true&amp;redirect=" + ServletUtil.encodeURL("work/workspace/editWorkspaceType.jsp?ws="+workspc.getId()); %>
+              <a href='<%= restoreActionURL %>' onclick='confirmAction("<%= encodeForJavaScript(glp("msg.js.confirm")) %>", this.href); return false;' title="<%= glp("ui.wrkspc-edit.alt.reset") %>"><jalios:icon src='delete'  alt='D' title='<%= glp("ui.wrkspc-edit.alt.reset") %>' /></a>&nbsp;
+            <% } %>
+          </td>
+        </tr>
+        <% trCounter++; %>
+        </jalios:foreach>
+      </table>
+    </div>
+    <% typeCounter++; %>
+  </jalios:foreach>
+</div>
+<jalios:foreach collection='<%= typeFormHandler.getAvailableTypeMap().entrySet() %>' type='Map.Entry' name='itEntry'>
+  <% if (itEntry.getKey() != null && !allTypeList.contains(itEntry.getKey())) { %>
+    <%  
+    String key = ((Class)itEntry.getKey()).getName();
+    String value = itEntry.getValue() instanceof WSTypeEntry ?  ((WSTypeEntry)itEntry.getValue()).getWorkflowId() : (String)itEntry.getValue();
+    %>
+    <input type='hidden' name='typeMap' value='<%= key %>|<%= value %>' />
+  <% } %>
+</jalios:foreach>
+<jalios:foreach array="<%= typeFormHandler.getAvailableRootClass() %>" name="itClass" type="Class">
+  <input type='hidden' name='rootClass' value='<%= itClass.getName() %>' />
+</jalios:foreach>

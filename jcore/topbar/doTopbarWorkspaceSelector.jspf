@@ -1,0 +1,44 @@
+<%@page import="com.jalios.jcms.context.JcmsContext"%>
+<%  
+	if (isLogged) {
+	
+	Set<Workspace> mbrWorkspaceSet = new TreeSet<Workspace>(Workspace.getFavoriteComparator(loggedMember,userLang));
+	mbrWorkspaceSet.addAll(loggedMember.getWorkspaceSet());
+  
+  String topbarLocation = "";
+  if (isSiteTopbar) {
+    topbarLocation = "site";
+  } else if (isWorkTopbar) {
+    topbarLocation = "work";
+  } else {
+    topbarLocation = "admin";
+  }
+  
+  request.setAttribute("jcms.topbar.topbar-location",topbarLocation);
+  if (Util.notEmpty(mbrWorkspaceSet)) { 
+%>
+	<!-- Spaces -->
+	<div class="spaces topbar-ws-search topbar-item typeahead-container">
+		<jalios:icon src="topbar-work-all-ws"/>
+		<span class="hidden-xs hidden-sm topbar-ws-label typeahead-label">
+			<% if (isSiteTopbar) { %>
+			  <%= glp("ui.topbar.myworkspaces") %> 
+			<% } else if (!wkspcFilter) { %>
+			  <%= glp("ui.work.mn.allworkspace") %>
+			<% } else if (isWorkTopbar) { %>
+			  <%= encodeForHTML(workspace.getTitle(userLang)) %>
+			<% } else { %>
+			  <%= glp("ui.com.alt.admin") %>
+			<% } %>
+			<jalios:icon src="caret" />
+		</span> 
+		<span class="topbar-ws-search-input typeahead-input" style="display:none">
+			<input type="search" id="search-space" class="search-space typeahead" placeholder="<%= glp("ui.topbar.workspace.placeholder") %>" 
+             data-jalios-ajax-refresh-url="/jcore/topbar/doTopbarWorkspaceList.jsp?topbarLocation=<%= topbarLocation %>"
+             data-ac-lookup-empty="true" data-ac-typeahead-menu="#topbar-typeahead-menu"/>
+			<jalios:icon src="topbar-space-close" css="close-button typeahead-close"/>
+		</span>
+	  <jalios:include jsp="/jcore/topbar/doTopbarWorkspaceList.jsp"/>
+	</div>
+	<% } %>    
+<% } %>

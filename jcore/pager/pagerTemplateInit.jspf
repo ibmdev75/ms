@@ -1,0 +1,28 @@
+<%--
+  @Summary: Fragement used by pager templates.
+            Provides the PagerHandler variables and such
+--%><%@ page import="com.jalios.jcms.handler.PagerHandler" %><%
+  PagerHandler handler = (PagerHandler) request.getAttribute(PagerHandler.HANDLER_ATTRIBUTE);
+  String templateName  = (String) request.getAttribute(PagerHandler.TEMPLATE_NAME_ATTRIBUTE);
+  String linkCss = handler.getLinkCss();
+
+  // Variable for pages size links 10, 20, 50 
+  // * pageSizes == { 10, 20, 50 }
+  int[] pageSizes = handler.getPageSizes();
+
+  // do not print anything if there is less items than the smallest page size
+  // i.e. : the number of page will always be 1, whatever page size we use.
+  boolean isPagingNeeded = Util.isEmpty(pageSizes) || handler.getItemsNbr() < handler.getPageSizes()[0];
+  if (isPagingNeeded) {
+    return;
+  }
+  
+  // Variable for pages links ... [3] [4] [5] ... 
+  // * startingPagesLinksHidden == has "..." at beginning
+  // * pageNbrs == { 3, 4, 5 }
+  // * endingPagesLinksHidden   == has "..." at end
+  boolean startingPagesLinksHidden = handler.getPagesLinksStartNbr() > 1;
+  boolean endingPagesLinksHidden = handler.getPagesLinksEndNbr() < handler.getPagesNbr();
+  int[] pagesLinksNbrs = handler.getPagesLinksNbrs();
+
+%>

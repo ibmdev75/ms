@@ -1,0 +1,54 @@
+<% if (showDisplayProperties) { %>
+<fieldset class="col-xs-12">
+<legend><%= glp("ui.adm.type-edit.lbl.prop3") %></legend>
+
+  <%-- String =============================================== --%>
+  <% if (isImage) { %>
+  <%-- RESIZE (image)  ----------------------------------------------- --%> 
+  <jalios:field name="resize" label="ui.adm.type-edit.lbl.resize">
+    <label class="radio-inline"><input type="radio" name="resize" value="true" <%= formHandler.isFieldResize() ? "checked" : "" %> onclick='toggleEltVisibility("resizeDimension", true)'> <%= glp("ui.com.lbl.yes") %></label>
+    <label class="radio-inline"><input type="radio" name="resize" value="false" <%= !formHandler.isFieldResize() ? "checked" : "" %> onclick='toggleEltVisibility("resizeDimension", false)'> <%= glp("ui.com.lbl.no") %></label>
+    <jalios:tooltip property="ui.adm.type-edit.lbl.resize.h" />
+  
+    <div id='resizeDimension' class="widget" style='<%= formHandler.isFieldResize() ? "" : "display: none;" %>'>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <input class="formTextfield" type='text' name='resizeWidth' value='<%= formHandler.getFieldResizeWidth() %>' size='3' />
+      x
+      <input class="formTextfield" type='text' name='resizeHeight' value='<%= formHandler.getFieldResizeHeight() %>' size='3' />
+    </div>
+
+  </jalios:field>
+  <% } %>
+  
+  <%-- OPEN WINDOW (URL)  ----------------------------------------------- --%> 
+  <% if (isURL) { %>
+  <jalios:field name="openWindow" label="ui.adm.type-edit.lbl.opn-wnd" tooltip="ui.adm.type-edit.lbl.opn-wnd.h" value='<%= formHandler.isFieldOpenWindow() %>'>
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>   
+  <% } %>
+  
+  <%-- DATE =============================================== --%>
+  <% if (isDate) { %>
+  <%-- DATE PRESENTATION ------------------------------------------------------- --%> 
+  <jalios:field name="dateOnly" label="ui.adm.type-edit.lbl.d-pres">
+    <div class="radio">
+      <label><input type="radio" name="dateOnly" value="false" <%= !formHandler.isFieldDateOnly() ? "checked" : "" %>><%= glp("ui.adm.type-edit.lbl.d-t") %></label>
+    </div>
+    <div class="radio">
+      <label><input type="radio" name="dateOnly" value="true" <%= formHandler.isFieldDateOnly() ? "checked" : "" %>><%= glp("ui.adm.type-edit.lbl.d-only") %></label>
+    </div>
+  </jalios:field>   
+
+  <%-- DATE FORMAT ------------------------------------------------------- --%> 
+  <jalios:field name="dateFormat" label="ui.adm.type-edit.lbl.d-fmt">
+    <select class='form-control' name="dateFormat">
+      <% Date date = new Date(); %>
+      <option value="short" <%= formHandler.getFieldDateFormat().equals("short") ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.short", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, userLocale).format(date)) %></option>
+      <option value="long" <%= formHandler.getFieldDateFormat().equals("long") ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.long", DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, userLocale).format(date)) %></option>
+      <option value="full" <%= formHandler.getFieldDateFormat().equals("full") ? "selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.full", DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, userLocale).format(date)) %></option>
+    </select>  
+  </jalios:field>
+  <% } %>
+  
+</fieldset>
+<% } %>

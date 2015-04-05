@@ -1,0 +1,14 @@
+<%--
+  @Summary: Vertical Member card
+  @Category: UI Component
+  @Author: Kevin BRANSARD
+  @Copyright: Jalios SA
+  @Deprecated: True
+  @Since: jcms-6.1.1
+--%>
+
+<%-- Deletegates to latest Vertical Member Card's template --%>
+<%
+request.setAttribute("card-member", itMember);
+%>
+<jsp:include page="/front/card/member/memberVerticalCard.jsp" />

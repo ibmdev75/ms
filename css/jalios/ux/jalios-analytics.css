@@ -1,0 +1,99 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+/* ----------------------------------------------- */
+/*  JCMS analytics                                 */
+/* ----------------------------------------------- */
+.jcms-analytics {
+  padding-top: 0px;
+}
+.jcms-analytics .main-criteria TD {
+  padding: 5px;
+}
+.jcms-analytics .tab-content .summary {
+  line-height: 40px;
+  text-align: center;
+}
+.jcms-analytics .tab-content .indicator {
+  font-family: inherit;
+  font-weight: bold;
+  line-height: 1.1;
+  font-size: 36px;
+  min-height: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #31708f;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.jcms-analytics .tab-content .indicator hr {
+  border-top-color: #a6e1ec;
+}
+.jcms-analytics .tab-content .indicator .alert-link {
+  color: #245269;
+}
+.jcms-analytics .tab-content .indicator .indicator-value {
+  margin-bottom: 10px;
+}
+.jcms-analytics .tab-content .indicator .indicator-text {
+  font-size: 21px;
+  font-weight: 200;
+}
+.jcms-analytics .tab-content .report-element {
+  padding-bottom: 18px;
+  padding-left: 18px;
+}
+.jcms-analytics .tab-content .report-element TD.report-chart,
+.jcms-analytics .tab-content .report-element TD.report-legend {
+  vertical-align: top;
+}
+.jcms-analytics .tab-content .report-element .chart {
+  float: left;
+}
+.jcms-analytics .tab-content .report-element .legend,
+.jcms-analytics .tab-content .report-element .custom-legend {
+  float: left;
+  padding: 3px;
+}
+.jcms-analytics .tab-content .report-element .legend .legendLabel LABEL,
+.jcms-analytics .tab-content .report-element .custom-legend .legendLabel LABEL {
+  color: #545454;
+  font-size: smaller;
+}
+.jcms-analytics .tab-content .report-element .legend .legendRadio INPUT,
+.jcms-analytics .tab-content .report-element .custom-legend .legendRadio INPUT {
+  display: none;
+}
+.jcms-analytics .tab-content .report-element .legend .unchecked-img,
+.jcms-analytics .tab-content .report-element .custom-legend .unchecked-img {
+  display: block;
+}
+.jcms-analytics .tab-content .report-element .legend .checked-img,
+.jcms-analytics .tab-content .report-element .custom-legend .checked-img {
+  display: none;
+}
+.jcms-analytics .tab-content .report-element .legend .tr-checked .unchecked-img,
+.jcms-analytics .tab-content .report-element .custom-legend .tr-checked .unchecked-img {
+  display: none;
+}
+.jcms-analytics .tab-content .report-element .legend .tr-checked .checked-img,
+.jcms-analytics .tab-content .report-element .custom-legend .tr-checked .checked-img {
+  display: block;
+}
+.jcms-analytics .tab-content .report-element .key {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.browser-IE7 .admin-analytics-report-index .tab-content .report-element,
+.browser-IE8 .admin-analytics-report-index .tab-content .report-element,
+.browser-IE7 .admin-analytics-report-indexWorkspace .tab-content .report-element,
+.browser-IE8 .admin-analytics-report-indexWorkspace .tab-content .report-element,
+.browser-IE7 .fo-analytics .tab-content .report-element,
+.browser-IE8 .fo-analytics .tab-content .report-element {
+  padding-left: 0px;
+}

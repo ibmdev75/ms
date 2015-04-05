@@ -1,0 +1,33 @@
+.files {
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  padding: 10px 10px 0;
+}
+
+.files .form-control {
+  margin-bottom: 10px;
+}
+
+TR.uploadMeter DIV.bar {
+  height: 16px; 
+  width: 200px;
+  float: left;
+  margin-right: 8px
+  margin-left: 16px;
+  border: 1px solid #333333; 
+}
+
+TR.uploadMeter DIV.meter {
+  height: 16px;
+  background-color: #0088AA;
+  width: 1%;
+}
+
+TR.uploadMeter SPAN.legend {
+  line-height: 18px;
+}
+
+TR#uploadStatus DIV#uploadLegend {
+  padding-left: 16px;
+}

@@ -1,0 +1,26 @@
+<%--
+  @Summary: Member CSV import : workspace's groups List
+  @since: jcms-8
+  @author Sylvain Devaux <sylvain.devaux@jalios.com>
+--%><%@page import="com.jalios.jcms.handler.MembersCsvImportHandler"%><%
+//---------------------------------------------------------------
+//
+//	Step 3 : editorial workspaces
+//
+//---------------------------------------------------------------
+if (step == MembersCsvImportHandler.STEP_3 && isEditoSpaces) { 
+  Set<Workspace> wsSet = formHandler.getWorkspaceSet();
+
+  String intro = JcmsUtil.glp(userLang, stepPrefixProp + "3.intro");
+  if (Util.notEmpty(intro)) {
+    %>
+    <p class='info'>
+      <%= intro %>
+    </p>      
+    <%
+  }
+  request.setAttribute("step-input-name-attribute", MembersCsvImportHandler.WS_GROUP_ID_PARAM);
+  List<String> selectedDatasIdList = Util.getArrayList(formHandler.getWsGrpIds());
+  out.print(getWorkspaces(request, wsSet, userLang, selectedDatasIdList, false, null, null));
+}
+%>

@@ -1,0 +1,8 @@
+<%
+com.jalios.jcms.handler.QueryHandler formHandler = Util.notEmpty(box.getQuery()) ? new com.jalios.jcms.handler.QueryHandler(box.getQuery()) : new com.jalios.jcms.handler.QueryHandler();
+formHandler.setTextSearch(true);
+formHandler.setMode(Util.getString(box.getSearchWith(), "all"));
+formHandler.setCatName(Util.arrayContains(box.getSearchIn(), "catName"));
+formHandler.setSearchInFiles(Util.arrayContains(box.getSearchIn(), "searchInFiles"));
+formHandler.setSearchInMembers(Util.arrayContains(box.getSearchIn(), "searchInMembers"));
+%>

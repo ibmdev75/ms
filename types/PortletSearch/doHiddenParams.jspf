@@ -1,0 +1,11 @@
+<% if ("Current".equals(box.getRefineQueries())) { %><input name="cids" type="hidden" value="<%= currentCategory.getId() %>" /><% } %>
+<% if ("Portal".equals(box.getRefineQueries())) { %><input name="cids" type="hidden" value="<%= portalCategory.getId() %>" /><% } %>
+<% if ("CurrentWS".equals(box.getRefineQueries())) { %><input name="wrkspc" type="hidden" value="<%= workspace.getId() %>" /><% } %>
+<% if (box.getQueryPortlet() != null) { %>
+	<input type="hidden" name="<%= PortalManager.getActionParam(box.getQueryPortlet(),"DynamicQuery") %>" value="true" />
+	<input type="hidden" name="portlet" value="<%= box.getQueryPortlet().getId() %>" />
+	<% List enabledParams = Arrays.asList( new String[]{ "id" , "portal" , "cid"}); %>
+	<%= printEnabledHiddenParams(request,enabledParams) %>
+<% } else { %>
+  <input type="hidden" name="id" value="<%= searchDisplayId %>" />
+<% } %>

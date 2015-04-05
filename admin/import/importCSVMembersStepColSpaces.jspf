@@ -1,0 +1,34 @@
+<%--
+  @Summary: Member CSV import : workspace's groups List
+  @since: jcms-8
+  @author Sylvain Devaux <sylvain.devaux@jalios.com>
+--%><%
+
+//---------------------------------------------------------------
+//
+//	Step 4 : collaborative workspaces
+//
+//---------------------------------------------------------------
+
+if (isCollabSpaces) {
+  
+  if ((isEditoSpaces && step == MembersCsvImportHandler.STEP_4)
+      ||
+      (!isEditoSpaces && step == MembersCsvImportHandler.STEP_3)) {
+
+	  Set<Workspace> wsSet = formHandler.getCollaborativeSpaceSet();
+	
+    String intro = JcmsUtil.glp(userLang, stepPrefixProp + "4.intro");
+    if (Util.notEmpty(intro)) {
+      %>
+      <p class='info'>
+        <%= intro %>
+      </p>      
+      <%
+    }
+		request.setAttribute("step-input-name-attribute", MembersCsvImportHandler.CS_GROUP_ID_PARAM);
+		List<String> selectedDatasIdList = Util.getArrayList(formHandler.getCsGrpIds());
+		out.print(getWorkspaces(request, wsSet, userLang, selectedDatasIdList, true, null, null));
+  }
+}
+%>

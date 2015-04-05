@@ -1,0 +1,23 @@
+<jalios:include target="EDIT_MBR_READRIGHTTAB_HEADER" />
+
+<% Set readCatSet = formHandler.getCategorySet("readcids"); %>
+<jalios:message msg="ui.adm.mbr-edit.pub-read-r.intro" dismissable="true" />
+<jalios:foreach name='itAxeCat' type='com.jalios.jcms.Category' counter='itAxeCatCounter' collection='<%= AudienceRights.getInstance().getCategoriesAxesList() %>'>
+  <% if (itAxeCat != null) { %>
+  <jalios:field label='<%= glp("ui.adm.mbr-edit.pub-read-r.axe", itAxeCat.getName(userLang)) %>'>
+    <jalios:treecatview prefix='<%= "readcids_" + itAxeCat.getId() %>' 
+                        input="readcids" 
+                        type="checkbox"
+                        
+                        opened="<%= readCatSet %>" 
+                        checked="<%= readCatSet %>" 
+                        highlighted="<%= readCatSet %>" 
+                        collection="<%= itAxeCat.getChildrenSet() %>"
+                        selectable="true" 
+                        dragdrop="true"
+                        showCtxMenu="true"
+                        css="autocomplete" />  
+  </jalios:field>
+  <% } %>
+</jalios:foreach>
+<jalios:include target="EDIT_MBR_READRIGHTTAB_FOOTER" />

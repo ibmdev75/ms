@@ -1,0 +1,35 @@
+<% if (data instanceof Category) { %>
+<% Category cat = (Category)data; %>
+
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.name") %></td>
+   <td><%= cat.getName(userLang) %></td>           
+ </tr>
+ 
+ <% if (cat.getParent() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.work.cat.tab.parent") %></td>
+   <td><jalios:edit data="<%= cat.getParent() %>" /> <jalios:link data="<%= cat.getParent() %>" /></td>           
+ </tr>
+ <% } %>
+<% } %>
+
+<%--
+  Not Yet Displayed 
+  
+  protected HashMap<String,String> nameML;
+  protected boolean isExclusive = false;
+  protected boolean isSelectable = true;
+  protected int order;
+  protected int childrenOrder = CUSTOM_ORDER;
+  protected String icon;
+  protected HashMap<String,String> iconML;
+  protected String image;
+  protected HashMap<String,String> imageML;
+  protected String color;
+  protected TreeSet<String> friendlyURLSet;
+  protected TreeSet<Member> authorizedMemberSet;
+  protected TreeSet<Group> authorizedGroupSet;
+  transient protected int typeReferrerCount = -1;
+  transient protected String typeReferrer = ""; 
+ --%>

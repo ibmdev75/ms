@@ -1,0 +1,39 @@
+<%@ page import="com.jalios.jcms.workspace.WKRole" %>
+<%-- WORKFLOW  ------------------------------------------------------------ --%> 
+<% if (!formHandler.isWorkflowTabHidden()) { %>
+<%
+Workflow internalWf = formHandler.getAvailableInternalWorkflow(); 
+Workflow wf = formHandler.getWorkflow(); 
+List wfNoteList = WorkflowManager.getInstance().getWFNoteList(pub);
+boolean hasAlreadyVoted = Util.notEmpty(wfNoteList) && WorkflowManager.getInstance().hasAlreadyVoted(pub, loggedMember);
+boolean isWFHistoryAvailable = Util.notEmpty(wfNoteList);
+currentTabIndex++;
+%>
+<div class="tab-page">
+  <h2 class="tab">
+    <jalios:icon src="wf"  alt="W" title="ui.work.form.lbl.wf" />
+    <%= glp("ui.work.form.lbl.wf") %>
+  </h2>
+  <jalios:include target="EDIT_PUB_WFTAB_HEADER" />
+
+  <div class="tab-pane" id="content-wf-tab-pane-1">
+
+    <%-- WF / GENERAL ------------------------------------------------------------ --%> 
+    <div class="tab-page">
+      <h2 class="tab"><%= glp("ui.com.tab.general") %></h2>          
+      <% if (wf != null) { %>  
+      <%@ include file="/work/doEditCommonPubAttribute_wf_state.jspf" %>
+      <%@ include file="/work/doEditCommonPubAttribute_wf_schedule.jspf" %>       
+      <%@ include file="/work/doEditCommonPubAttribute_wf_roles.jspf" %>
+      <jalios:include target="EDIT_PUB_WFTAB_FOOTER" />
+      <% } %>
+    </div>
+
+    <%-- WF / HISTORY ------------------------------------------------------------ --%>       
+    <div class="tab-page">
+      <%@ include file="/work/doEditCommonPubAttribute_wf_history.jspf" %>
+    </div>
+    
+  </div>
+</div>
+<% } %>

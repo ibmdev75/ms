@@ -1,0 +1,72 @@
+<% if (refreshAndClose && !(showRadioInsert || showCheckInsert)) { %>
+  <jalios:javascript>
+    if (window.opener) {
+      window.opener.location = window.opener.location;
+    }
+    window.close();
+  </jalios:javascript>
+<% } %>
+<% if (showRadioInsert || showCheckInsert) { %>
+
+  <script language="JavaScript">
+  <%-- Cannot use namespace --%>
+  JCMS = window.JCMS || {};
+  JCMS.chooser = JCMS.chooser || {
+    myLabel : null,
+    myId : null, 
+    myDisplayURL : null
+  };
+
+	function insertLink(id, label, displayURL) {
+    JcmsLogger.info("inserLink", id, label, displayURL);
+		JCMS.chooser.myId = id;
+		JCMS.chooser.myLabel = label;
+		JCMS.chooser.myDisplayURL = displayURL;
+
+		<% 
+    // TinyMCE when used through toolbar button 
+    if (Util.getString(jsFunc, "").startsWith("tinymce.plugins.JcmsPluginCB.")) {
+      jcmsContext.addJavaScript("js/tiny_mce/tiny_mce_popup.js?nopack"); %>
+      tinyMCEPopup.getWin().<%= jsFunc %>(JCMS.chooser.myId, JCMS.chooser.myLabel, JCMS.chooser.myDisplayURL);
+      tinyMCEPopup.close(); <%
+    }
+    // TinyMCE when used through buttons inside other windows (file chooser in image/video popup)
+	  else if (hasParameter("tinyMCEPopup")) { 
+      jcmsContext.addJavaScript("js/tiny_mce/tiny_mce_popup.js?nopack"); %>
+      var win = tinyMCEPopup.getWindowArg("window");
+      win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = JCMS.chooser.myDisplayURL;
+      tinyMCEPopup.close(); <%
+    }
+    // JCMS
+    else { %>
+    	<% if (Util.notEmpty(targetInput)) { %>
+    		window.opener.<%= targetInput %> = JCMS.chooser.myId;
+    		window.opener.<%= targetLabel %> = JCMS.chooser.myLabel;
+    	<% } else if (Util.notEmpty(targetUrl)) { %>
+    	  <% String qsStart = targetUrl.indexOf('?') == -1 ? "?" : "&"; %>
+    		window.opener.location = '<%= targetUrl %><%= qsStart %><%= targetParam %>=<%= Util.notEmpty(targetValue) ? (targetValue+"|") : "" %>'+JCMS.chooser.myId;
+    	<% } else { %>
+    	  Popup.callback(id, label, undefined, displayURL);
+    	<% } %>
+    	window.close();
+    <% } %>
+	}
+  </script>
+  
+  <jalios:javascript>
+  <%
+  /* Remove dynamically added CSS with TinyMCE Popup (JCMS-1762) */
+  /* http://wiki.moxiecode.com/index.php/TinyMCE:Custom_filebrowser#Remove_TinyMCE.27s_default_popup_CSS */
+  if (Util.getString(jsFunc, "").startsWith("tinymce.plugins.JcmsPluginCB.") ||
+      hasParameter("tinyMCEPopup")) { %>
+    var allLinks = document.getElementsByTagName("link");
+    allLinks[allLinks.length-1].parentNode.removeChild(allLinks[allLinks.length-1]); <%
+  }
+  else if (Util.notEmpty(jsFunc)) { %>
+    Event.observe(window, 'unload', function(){ 
+      opener.<%= jsFunc %>(JCMS.chooser.myId, JCMS.chooser.myLabel, JCMS.chooser.myDisplayURL);
+    }); <%
+	}
+  %>
+  </jalios:javascript>
+<% } // showRadioInsert || showCheckInsert %>

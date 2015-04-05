@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletMyLocks" superclass="generated.AbstractPortletSkinable" debatable="false" unitFieldEdition="true" audienced="false" categoryTab="true" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" titleML="true" hbm="true" authgroups="||">
+  <title ml="true" />
+  <fields>
+    <field name="refineWorkspace" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" descriptionType="text" searchable="false" html="false" checkHtml="true" />      
+    <field type="super" />
+  </fields>
+</type>
+

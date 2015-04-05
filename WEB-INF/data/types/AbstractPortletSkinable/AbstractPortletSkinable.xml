@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="AbstractPortletSkinable" reviewable="false" debatable="false" categoryTab="false" categoryRequired="false" visible="true" superclass="com.jalios.jcms.portlet.PortletSkinable" formhandler="com.jalios.jcms.portlet.EditPortletSkinableHandler" abstract="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="description" editor="textarea" wiki="true" required="false" type="String" searchable="true" rows="5" cols="80" compactDisplay="false" ml="true" abstract="true" />
+    <field name="portletImage" editor="image" dataimage="true" required="false" type="String" searchable="true" compactDisplay="false" ml="true" />
+    <field name="cacheType" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="None | Server | Groups | Members | Session | SessionAndVisitors | VisitorsOnly " descriptionType="tooltip" chooser="listbox" html="false" />
+    <field name="cacheSensibility" editor="enumerate" required="false" compactDisplay="false" type="String" chooser="listbox" valueList="None | Portal | Current " ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="invalidClass" editor="enumerate" required="false" compactDisplay="false" type="String[]" searchable="false" ml="false" valueList="Data | Publication | Content" descriptionType="tooltip" chooser="listbox" />
+    <field name="invalidTime" editor="duration" required="false" compactDisplay="true" type="long" default="60" resolution="60000" />
+    <field name="displayCSS" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="value1 | value2 | value3" descriptionType="tooltip" chooser="listbox" />
+    <field name="width" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="40" ml="false" html="false" descriptionType="tooltip" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" maxlength="6" pattern="[\d]+(pt|pc|in|mm|cm|px|em|ex|%)*" checkHtml="true" />
+    <field name="insetLeft" editor="int" required="false" compactDisplay="false" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="1000" unit="px" unitPos="after" descriptionType="tooltip" />
+    <field name="insetRight" editor="int" required="false" compactDisplay="false" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="1000" unit="px" unitPos="after" descriptionType="tooltip" />
+    <field name="insetTop" editor="int" required="false" compactDisplay="false" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="1000" unit="px" unitPos="after" descriptionType="tooltip" />
+    <field name="insetBottom" editor="int" required="false" compactDisplay="false" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="1000" unit="px" unitPos="after" descriptionType="tooltip" />
+    <field name="cellPadding" editor="int" required="false" compactDisplay="false" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="1000" unit="px" unitPos="after" descriptionType="tooltip" />
+    <field name="alignH" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="left | center | right | " descriptionType="tooltip" chooser="listbox" html="false" />
+    <field name="alignV" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="middle | top | bottom" descriptionType="tooltip" chooser="listbox" />
+    <field name="alignTable" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList=" | center | left | right" descriptionType="tooltip" chooser="listbox" />
+    <field name="border" editor="int" required="false" compactDisplay="false" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="100" unit="px" unitPos="after" descriptionType="tooltip" />
+    <field name="borderColor" editor="color" required="false" compactDisplay="false" type="String" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="backColor" editor="color" required="false" compactDisplay="false" type="String" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="backImage" editor="image" required="false" compactDisplay="false" type="String" searchable="false" size="80" maxlength="500" ml="false" descriptionType="tooltip" />
+    <field name="displayTitle" editor="textfield" required="false" compactDisplay="false" type="String" searchable="true" size="80" ml="true" descriptionType="tooltip" html="true" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" />
+    <field name="skins" editor="textfield" required="false" compactDisplay="false" type="String[]" searchable="false" ml="false" valueList=" | css | custom" descriptionType="tooltip" chooser="listbox" />
+    <field name="skinCSS" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="value1 | value2 | value3" descriptionType="tooltip" chooser="listbox" />
+    <field name="popupState" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="Hidden | Enable | Popup" descriptionType="tooltip" chooser="listbox" />
+    <field name="expandState" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="Enable | Hidden | Minimized" descriptionType="tooltip" chooser="listbox" />
+    <field name="behaviorCopy" editor="enumerate" required="false" compactDisplay="false" type="String" chooser="listbox" valueList="true|false|ws" ml="false" descriptionType="tooltip" searchable="false" html="false" checkHtml="true" />
+    <field name="originalPortlet" editor="link" required="false" compactDisplay="false" type="com.jalios.jcms.portlet.PortalElement" parent="false" />
+    <field name="condition" editor="enumerate" required="false" compactDisplay="false" type="String[]" valueList="None|isLogged|notLogged" ml="false" searchable="false" descriptionType="tooltip" chooser="listbox" />
+    <field name="cssId" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="10" ml="false" html="false" descriptionType="tooltip" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" />
+    <field name="cssClasses" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="80" ml="false" html="false" />
+    <field name="skinClasses" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="80" ml="false" html="false" />
+  </fields>
+</type>
+

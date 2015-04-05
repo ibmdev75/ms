@@ -1,0 +1,38 @@
+<% 
+	int authentifiedAccessCount = readerMgr.getAuthentifiedReaderAccessCount(trackedPub);
+	int anonymousAccessCount = readerMgr.getAnonymousReaderAccessCount(trackedPub);
+        
+	int authentifiedDownloadCount = isDownloadTracked ? readerMgr.getAuthentifiedReaderDownloadCount(trackedPub) : 0;
+	int anonymousDownloadCount = isDownloadTracked ? readerMgr.getAnonymousReaderDownloadCount(trackedPub) : 0;
+%>
+<table class="table table-condensed table-striped">
+  <thead>
+  <tr>
+    <th><%= glp("ui.work.rdr.table.access-type")%></th>
+    <th class="text-center"><%= glp("ui.work.rdr.table.access-count")%></th>
+    <% if (isDownloadTracked) { %><th class="text-center"><%= glp("ui.work.rdr.table.download-count")%></th><% } %>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <th><%= glp("ui.work.rdr.table.unique-auth")%></th>
+    <td class="text-center"><%= readerMgr.getAuthentifiedReaderUniqueAccessCount(trackedPub) %></td>
+    <% if (isDownloadTracked) { %><td class="text-center"><%= readerMgr.getAuthentifiedReaderUniqueDownloadCount(trackedPub) %></td><% } %>
+  </tr>
+  <tr>
+    <th><%= glp("ui.work.rdr.table.total-auth")%></th>
+    <td class="text-center"><%= authentifiedAccessCount %></td>
+    <% if (isDownloadTracked) { %><td class="text-center"><%= readerMgr.getAuthentifiedReaderDownloadCount(trackedPub) %></td><% } %>
+  </tr>  
+  <tr>
+    <th><%= glp("ui.work.rdr.table.anonymous")%></th>
+    <td class="text-center"><%= anonymousAccessCount %></td>
+    <% if (isDownloadTracked) { %><td class="text-center"><%= anonymousDownloadCount %></td><% } %>
+  </tr>
+  <tr class="error">
+    <td class="listHeader "><b><%= glp("ui.work.rdr.table.total")%></b></td>
+    <td class="text-center"><b><%= authentifiedAccessCount + anonymousAccessCount %></b></td>
+    <% if (isDownloadTracked) { %><td class="text-center"><b><%= authentifiedDownloadCount + anonymousDownloadCount %></b></td><% } %>
+  </tr>  
+  </tbody>
+</table>

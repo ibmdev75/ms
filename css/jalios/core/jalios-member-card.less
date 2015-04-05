@@ -1,0 +1,152 @@
+// Include variables and mixins
+@import "init-mixins.less";
+
+// --------------------
+// MEMBER CARD
+// --------------------
+.card-member {
+  position:relative;
+  
+  .card-member-header {
+    &.media {
+      overflow: visible;
+    }
+  }
+  &.card-member-sm {
+    .card-header {padding-left: 100px;}
+    .card-member-body {padding: @card-padding-vertical 0;}
+    .card-content { padding-left: 100px;}
+    .card-picture {
+      top: 10px;
+      left: 10px;
+      max-height: none;
+      width: initial;
+      position: absolute;
+    }
+  }
+  .card-member-address { white-space: pre-wrap; }
+  .card-back {
+    text-align: left;
+    .card-body {
+      padding: 0;
+    }
+    .card-title { display: inline-block; }
+  }
+}
+
+// --------------------
+// DEFAULT MEMBER CARD
+// --------------------
+.card-member.card-member-default {
+  height: @baseline * 4;
+}
+
+// --------------------
+// VERTICAL MEMBER CARD
+// --------------------
+.card-member.card-member-vertical {
+  padding:0;
+  text-align: center;
+  
+  .card-member-body {
+    border-top: 1px dotted #CDD9E3;
+  }
+  .card-header {
+    background-color: white;
+    padding: @card-padding-vertical @card-padding-horizontal;
+  }
+  .wrapper-photo {
+    display: inline-block;
+    float: none;
+  }
+  height: 175px;
+  .card-back {
+    .card-body {
+      padding: @card-padding-body;
+    }
+  }
+}
+
+// --------------------
+// Old Member Card ".mbr-card"
+// --------------------
+
+/*
+BODY.debug .mbr-card {
+  border: 2px solid red;
+  &:before {
+    font-weight:bold;
+    content: "deprecated";
+    color: red;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}
+*/
+
+.mbr-card  {
+  margin-left: 0;
+  margin-top: 0;
+  margin-right: @baseline /2;
+  &:hover {
+    border-color: #BBB;
+    .box-shadow(0 0 4px #BBB);
+  }
+
+  #JCMS > .box(#FFFFFF, #F4F4F4, #F4F4F4, @borderRadiusLarge, @borderRadiusLarge, #FFF, @boxTxtShadow);
+  .border-radius(4px);
+  .box-shadow(0 1px 0 #AAAAAA);
+  
+  border: 1px solid #DDDDDD;
+  opacity: 1;
+  padding: 4px;
+  vertical-align: top;
+  word-wrap: break-word;
+  height:@baseline * 4;
+  overflow:hidden;
+  display:inline-block;
+  
+  &.mbr-card-small {
+    width:@baseline *8;
+  }
+  &.mbr-card-medium {
+    width:@baseline *10;
+  } 
+  &.mbr-card-large {
+    width:@baseline *15;
+  }
+  
+  .mbr-card-body{
+     clear:right;
+     
+     .mbr-card-name {
+       white-space: pre-wrap;
+       overflow: visible;
+       font-weight:bold;
+       font-size:@font-size-base - 1;
+     }
+     
+     > DIV {
+       .text-overflow();
+       font-size: @font-size-small;
+       padding-right:5px;
+     }
+  }
+}
+
+@media (max-width: 767px) {
+  .mbr-card {
+    float: none;
+    display: block;
+    width: 100%;
+    margin-right: 0;
+    .box-sizing(border-box);
+    
+    &.mbr-card-small,
+    &.mbr-card-medium,
+    &.mbr-card-large {
+    width: 100%;
+    }   
+     
+  }
+}

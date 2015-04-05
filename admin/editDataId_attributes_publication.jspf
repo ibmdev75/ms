@@ -1,0 +1,239 @@
+<% if (data instanceof Publication) { %>
+<% Publication pub = (Publication)data; %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.title") %></td>
+   <td><%= pub.getTitle() %></td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.workspace") %></td>
+   <td><jalios:edit data="<%= pub.getWorkspace() %>" /> <jalios:link data="<%= pub.getWorkspace() %>" /></td>           
+ </tr>
+
+  
+  <% Category[] categories = pub.getCategories(loggedMember); %>
+  <% if (Util.notEmpty(categories)) { %>
+  <tr>
+    <td class="fit nowrap"><%= glp("ui.com.lbl.categories") %></td>
+    <td>
+    <%@ include file="/custom/jcms/doCategoryList.jspf"  %>      
+    </td>           
+  </tr>
+  <% } %>  
+
+ <% if (pub.getPdate() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.pdate-long") %></td>
+   <td><jalios:date date="<%= pub.getPdate() %>" format="full" /> <jalios:time date="<%= pub.getPdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getEdate() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.edate-long") %></td>
+   <td><jalios:date date="<%= pub.getEdate() %>" format="full" /> <jalios:time date="<%= pub.getEdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getSdate() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.sdate-long") %></td>
+   <td><jalios:date date="<%= pub.getUdate() %>" format="full" /> <jalios:time date="<%= pub.getUdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getAdate() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.adate-long") %></td>
+   <td><jalios:date date="<%= pub.getAdate() %>" format="full" /> <jalios:time date="<%= pub.getAdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getUdate() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.udate-long") %></td>
+   <td><jalios:date date="<%= pub.getUdate() %>" format="full" /> <jalios:time date="<%= pub.getUdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getIndexingDate() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.idx-date-long") %></td>
+   <td><jalios:date date="<%= pub.getIndexingDate() %>" format="full" /> <jalios:time date="<%= pub.getIndexingDate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.isStrongLocked()) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.locking") %></td>
+   <td><jalios:icon src="lock-strong" /> <%= pub.getStrongLockInfo(userLocale) %></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub instanceof FileDocument) { %>
+ <%   FileDocument doc = (FileDocument)pub; %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.filedocument.lbl.upload-date") %></td>
+   <td><jalios:date date="<%= doc.getUploadDate() %>" format="full" /> <jalios:time date="<%= doc.getUploadDate() %>" format="full" /></td>           
+ </tr> 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.file") %></td>
+   <td><%= doc.getFile() %></td>           
+ </tr>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.filedocument.lbl.file-type") %></td>
+   <td><jalios:dataicon data="<%= doc %>" /> <%= doc.getTypeInfo(userLang) %></td>           
+ </tr> 
+  <tr>
+   <td class="fit nowrap"><%= glp("ui.filedocument.lbl.size") %></td>
+   <td><%= Util.formatFileSize(doc.getSize(), userLocale) %></td>           
+ </tr> 
+ <%   if (doc.isImage() && doc.getDimensions() != null) {  %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.filedocument.lbl.dimensions") %></td>
+   <td><%= doc.getDimensions() %></td>           
+ </tr> 
+ <%   } %>
+ <%   if (doc.isAudio()) {  %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.filedocument.lbl.dimensions") %></td>
+   <td><%= DateUtil.formatDuration(doc.getDuration(), userLocale) %></td>           
+ </tr> 
+ <%   } %>
+ <% } %>
+
+ 
+ <% if (channel.isMultilingual() && pub.getMainLanguage() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.work.form.lbl.main-language") %></td>
+   <td><jalios:lang lang="<%= pub.getMainLanguage() %>" /> <%= Channel.getChannel().getProperty(pub.getMainLanguage() + ".lang", pub.getMainLanguage()) %></td>           
+ </tr>
+ <% } %>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.version") %></td>
+   <td><%= pub.getVersionString() %></td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.workflow") %></td>
+   <td><jalios:icon src="wf" />
+   <% Workflow workflow = pub.getWorkflow(); %>
+   <% if (workflow != WorkflowManager.getInstance().getDefaultWorkflow() && checkAccess("admin/work/workflow")) { %> 
+   <a href="admin/wfEditor.jsp?id=<%= workflow.getId() %>"><%= workflow.getLabel(userLang) %></a>
+   <% } else { %>
+   <%= workflow.getLabel(userLang) %>
+   <% } %>
+   </td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.wf-edit.st.lbl.pstatus") %></td>
+   <td><%= pub.getWFStateLabelHtml(userLang) %> (<%= pub.getPstatus() %>)</td>           
+ </tr>
+
+ <% if (pub.isStored() || pub instanceof OpenRoleDBData) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.wrkspc-edit.role.open") %></td>
+   <td>
+     <% if (Util.notEmpty(pub.getRoleMap())) { %>
+     <dl>
+     <jalios:foreach collection="<%= pub.getRoleMap().entrySet() %>" name="itEntry" type="Map.Entry">
+       <%
+       String roleId = (String)itEntry.getKey();
+       Set mbrSet = (Set)itEntry.getValue();
+       %>
+       <dt><%= pub.getWorkflow().getRole(roleId).getName(userLang) %></dt>
+       <dd>
+         <jalios:foreach collection="<%= mbrSet %>" name="itMbr" type="Member" counter="c2">
+           <jalios:memberphoto member="<%= itMbr %>" size="<%= PhotoSize.ICON %>" /> 
+           <jalios:link data="<%= itMbr %>" />
+         </jalios:foreach>
+       </dd>
+     </jalios:foreach>  
+     </dl>
+     <% } %>
+   </td>
+ </tr>
+ <% } %>
+
+ <% if (pub.getMainInstance() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.original") %></td>
+   <td><jalios:link data="<%= pub.getMainInstance() %>" /></td>           
+ </tr>
+ <% } %>
+  
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.work.form.lbl.track") %></td>
+   <td><%= glp("ui.com.lbl." + pub.isTracked()) %></td>           
+ </tr>
+
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.alt.readers") %></td>
+   <td><%= pub.getReaderCount() %></td>           
+ </tr>
+
+ <%-- READ RIGHTS --%>
+ <% if (Util.notEmpty(pub.getAuthorizedMemberSet()) || Util.notEmpty(pub.getAuthorizedGroupSet())) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.work.form.lbl.read-rights") %></td>
+   <td>
+     <ul class="list-unstyled">
+       <jalios:foreach collection="<%= pub.getAuthorizedMemberSet() %>" name="itMember" type="Member">
+         <li><jalios:memberphoto member="<%= itMember %>" size="<%= PhotoSize.ICON %>"/> <jalios:link data="<%= itMember%>" /></li>
+       </jalios:foreach>
+       <jalios:foreach collection="<%= pub.getAuthorizedGroupSet() %>" name="itGroup" type="Group">
+         <li><jalios:dataicon data="<%= itGroup %>" /> <%= itGroup.getName(userLang) %></li>
+       </jalios:foreach>
+     </ul>
+   </td>           
+ </tr>
+ <% } %>
+
+ <%-- UPDATE RIGHTS --%>
+ <% if (Util.notEmpty(pub.getUpdateMemberSet()) || Util.notEmpty(pub.getUpdateGroupSet())) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.work.form.lbl.update-rights") %></td>
+   <td>
+     <ul class="list-unstyled">
+       <jalios:foreach collection="<%= pub.getUpdateMemberSet() %>" name="itMember" type="Member">
+         <li><jalios:memberphoto member="<%= itMember %>" size="<%= PhotoSize.ICON %>"/> <jalios:link data="<%= itMember%>" /></li>
+       </jalios:foreach>
+       <jalios:foreach collection="<%= pub.getUpdateGroupSet() %>" name="itGroup" type="Group">
+         <li><jalios:dataicon data="<%= itGroup %>" /> <%= itGroup.getName(userLang) %></li>
+       </jalios:foreach>
+     </ul>
+   </td>           
+ </tr>
+ <% } %>
+ 
+ <%-- Friendly URLS --%>
+ <% if (Util.notEmpty(pub.getFriendlyURLSet())) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.friendly-urls") %></td>
+   <td>
+     <ul class="list-unstyled">
+       <jalios:foreach collection="<%= pub.getFriendlyURLSet() %>" name="itURL" type="String">
+         <li><%= itURL %></li>
+       </jalios:foreach>
+     </ul>
+   </td>           
+ </tr>
+ <% } %>
+
+<% } %>
+
+<%--
+  Not Yet Displayed 
+
+  protected String[] templates = null;
+
+  transient protected AlarmEntry wfExpressAlarmEntry;
+  transient protected AlarmEntry wfReminderAlarmEntry;
+
+
+
+  protected transient int voteScore = 0;
+  protected transient int voteCount = 0;  
+ --%>

@@ -1,0 +1,84 @@
+<%--
+  @Summary: Member CSV import
+  @since: jcms-8
+  @author Sylvain Devaux <sylvain.devaux@jalios.com>
+--%><%@page import="com.jalios.jcms.taglib.ControlType"%>
+<%
+%><%@page import="com.jalios.jcms.upload.UploadManager"%><%
+
+if (step == 0) {
+	
+  String separator = formHandler.getSeparator();
+	
+  String formatRule          = glp("ui.member.csv-import.steps.0.format-link");
+  String formatRulePrefix    = "ui.member.csv-import.steps.0.format.rule.";
+  String maxMemberPerImport  = channel.getProperty(MemberImportManager.MAX_MEMBER_PER_IMPORT_PROP);
+
+  String csvSample           = glp("ui.member.csv-import.steps.0.format.sample", "admin/import/downloadSampleCsvFile.jsp");
+  
+  UploadManager.getInstance().addUploadComponentScripts(jcmsContext);
+  
+  String popup        = "Popup.popupEvent(this,'"+ServletUtil.getContextPath(request)+"/work/docChooser.jsp?"+ServletUtil.getQueryString(request,false)+"', 'DocChooser', 640, 600, 'no', 'yes', 'yes', false); Event.stop(event); JCMS.window.Modal.close(false); return false;";              
+  String title        = glp("ui.com.lbl.plupload.title");
+  String description  = glp("ui.com.lbl.plupload.description",popup);
+  String submit       = glp("ui.com.btn.upload");
+	%>
+  
+  <div class="row import-options">
+  
+    <%-- File ------------------------------------------------------------ --%>
+    <jalios:field name='documents' label='ui.member.csv-import.steps.0.csv-file.label'>
+      <jalios:control type="<%= ControlType.FILE %>" />
+      <jalios:buffer name='WIDGET_FOOTER'>
+        <p class='formDescription help-block'>
+          <jalios:icon src='help' />
+          <a href="#" onclick="return false;" data-jalios-action="toggle:hide" data-jalios-target="#formatRules"><%= glp("ui.member.csv-import.steps.0.format-link") %></a>
+        </p>
+        
+        <div id='formatRules' class='alert alert-info hide'>
+          <ul>
+            <li><%= glp(formatRulePrefix + "1") %></li>
+            <li><%= glp(formatRulePrefix + "2") %></li>
+            <li><%= glp(formatRulePrefix + "3") %></li>
+            <li><%= glp(formatRulePrefix + "4", maxMemberPerImport) %></li>
+          </ul>
+          <jalios:icon src="tip"  /> <%= csvSample %>
+        </div>
+      </jalios:buffer>
+    </jalios:field>
+    
+    <%-- Separator ------------------------------------------------------------ --%>
+    <%
+      String[] modelValues = new String[]{";", ","};
+      String[] modelLabels = new String[]{ "ui.member.csv-import.sep.semicolon.d", "ui.member.csv-import.sep.comma.d"};
+    %>
+    <jalios:field label="ui.member.csv-import.steps.0.separator.label" name='<%= MembersCsvImportHandler.SEPARATOR_HTML_PARAM %>' value='<%= Util.getString(separator, MembersCsvImportHandler.CSV_SEMICOLON_CHAR_SEP) %>'>
+      <jalios:control settings='<%= new EnumerateSettings().inline().enumValues(modelValues).enumLabels(modelLabels) %>' />
+    </jalios:field>
+    
+    <%-- Account or Contact ------------------------------------------------------------ --%>
+    <% if (formHandler.displayUsageOption()) {
+      String[] usageValues = new String[]{ String.valueOf(Member.USAGE_ACCOUNT), String.valueOf(Member.USAGE_CONTACT)};
+      String[] usageLabels = new String[]{ "ui.adm.mbr-edit.usage.0", "ui.adm.mbr-edit.usage.1" };
+      String defParam = formHandler.isAccountMode() ? usageValues[0] : usageValues[1];
+    %>
+    <jalios:field label="ui.adm.mbr-edit.lbl.usage" name='<%= MembersCsvImportHandler.USAGE_PARAM %>' value="<%= Util.getString(Member.USAGE_ACCOUNT, defParam) %>">
+      <% String htmlAttributes = "data-jalios-action=\"toggle:hide\" data-jalios-target=\".sendEmailRow\""; %>
+      <jalios:control settings='<%= new EnumerateSettings().inline().enumValues(usageValues).enumLabels(usageLabels).dataAttribute("jalios-action", "toggle:hide").dataAttribute("jalios-target", ".sendEmailRow") %>' />
+    </jalios:field>
+    <% } %>
+    
+	  <%-- Send Email ?------------------------------------------------------------ --%>
+	  <%
+	    String[] emailValues = new String[]{"1", "0"};
+	    String[] emailLabels = new String[]{"ui.com.lbl.yes", "ui.com.lbl.no"};
+	    String   cssEmail = "sendEmail sendEmailRow" + (formHandler.isContactMode() ? " hide" : "");
+	    String   ttEmail  =  glp("ui.member.csv-import.steps.0.sendEmail.h", new String[]{String.valueOf(channel.getIntegerProperty("member.csv-import.email-batch.deferr-seconds", MemberImportManager.DEFAULT_DEFERR_EMAILS))});
+	  %>
+    <jalios:field css='<%= cssEmail %>' tooltip='<%= ttEmail %>' label="ui.member.csv-import.steps.0.sendEmail.label" name='<%= MembersCsvImportHandler.SEND_EMAIL_HTML_PARAM %>' value='<%= Util.getString(formHandler.getSendEmail(), "0") %>'>
+      <jalios:control settings='<%= new EnumerateSettings().inline().enumValues(emailValues).enumLabels(emailLabels) %>' />
+    </jalios:field>
+
+  </div>
+<% } %>
+

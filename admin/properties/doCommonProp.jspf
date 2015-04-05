@@ -1,0 +1,3 @@
+<%@ include file="/jcore/doInitPage.jspf" %>  
+<% com.jalios.jcms.handler.PropertiesHandler formHandler = (com.jalios.jcms.handler.PropertiesHandler) request.getAttribute("formHandler"); %>
+

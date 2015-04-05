@@ -1,0 +1,16 @@
+<%@ page import='com.jalios.jcms.alert.*' %><%
+Alert alert = (Alert)(request.getSession().getAttribute(MailAlertChannel.ALERT_ATTR));
+if (alert == null && hasParameter("debug")) {
+  alert = new Alert();
+  alert.setRecipient(loggedMember);
+  alert.setLevel(Alert.Level.INFO);
+  alert.setDomain("debug");
+  alert.setAuthor(channel.getDefaultAdmin());
+  alert.setName("sample");
+  alert.setTitle("A sample alert");
+  alert.setDescription("Here is a sample alert");
+  alert.setMessage("---++ Titre 1 # \n Curabitur nec sem id sapien mattis interdum. Quisque et justo id quam tristique blandit sit amet quis nibh. Aliquam quis eros est; sit amet iaculis tortor! Proin feugiat vulputate rutrum. Vivamus fringilla cursus diam a vulputate. Quisque pretium interdum luctus. Phasellus dui erat, tempor vel pharetra cursus, sagittis in turpis. Nullam lorem dolor, auctor non ultrices quis, tincidunt vitae nisl? Sed at justo quis enim convallis fringilla. #");
+  alert.setMessageMarkup(AlertBuilder.WIKI_MARKUP);
+}
+request.setAttribute("jcms.mail.mail-subject",alert.getTitle());
+%>

@@ -1,0 +1,109 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+/* ----------------------------------------------- */
+/*  EDIT TOPBAR                                    */
+/* ----------------------------------------------- */
+#edit-topbar-placeholder {
+  height: 165px;
+}
+#edit-topbar-placeholder.edit-partial {
+  height: 80px;
+}
+#edit-topbar {
+  height: 165px;
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  z-index: 1025;
+  overflow: visible;
+  background-image: -webkit-linear-gradient(top, #bfdaef 0%, #e3eef8 100%);
+  background-image: -o-linear-gradient(top, #bfdaef 0%, #e3eef8 100%);
+  background-image: linear-gradient(to bottom, #bfdaef 0%, #e3eef8 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffbfdaef', endColorstr='#ffe3eef8', GradientType=0);
+  border-top: 1px solid #73ACDD;
+  border-bottom: 1px solid #73ACDD;
+}
+#edit-topbar.edit-partial {
+  height: 80px;
+}
+#edit-topbar .edit-topbar-header {
+  padding: 20px;
+  overflow: hidden;
+  zoom: 1;
+}
+#edit-topbar .edit-topbar-header H1 {
+  color: #4377BA;
+  font-size: 21px;
+  line-height: 20px;
+  margin: 0;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+  padding-top: 5px;
+}
+#edit-topbar .edit-topbar-header DIV.majorUpdate {
+  display: inline;
+}
+#edit-topbar .edit-topbar-header SPAN.info {
+  color: #769DD3;
+  font-size: 9.333333333333334px;
+  line-height: 20px;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+}
+#edit-topbar .edit-topbar-header .edit-pub-button > INPUT,
+#edit-topbar .edit-topbar-header .edit-pub-button > BUTTON,
+#edit-topbar .edit-topbar-header .edit-pub-button .input-append {
+  margin-right: 5px;
+}
+#edit-topbar .edit-topbar-header .zoom {
+  overflow: auto;
+  zoom: 1;
+  height: 47px;
+}
+#edit-topbar .edit-topbar-header .field-title {
+  max-width: 1200px;
+  clear: both;
+}
+#edit-topbar .edit-topbar-header .field-title .form-group,
+#edit-topbar .edit-topbar-header .field-title .widget-content {
+  max-width: 1200px;
+}
+#edit-topbar .edit-topbar-header .field-title INPUT {
+  height: 46px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 6px;
+}
+select#edit-topbar .edit-topbar-header .field-title INPUT {
+  height: 46px;
+  line-height: 46px;
+}
+textarea#edit-topbar .edit-topbar-header .field-title INPUT,
+select[multiple]#edit-topbar .edit-topbar-header .field-title INPUT {
+  height: auto;
+}
+#edit-topbar .edit-topbar-header .field-title .formDescription {
+  display: none;
+}
+.browser-IE7 #edit-topbar .edit-topbar-header .field-title .widget,
+.browser-IE8 #edit-topbar .edit-topbar-header .field-title .widget,
+.browser-IE9 #edit-topbar .edit-topbar-header .field-title .widget {
+  padding-top: 0;
+  margin-top: -9px;
+}
+.browser-IE7 #edit-topbar .edit-topbar-header .field-title .formDescription,
+.browser-IE8 #edit-topbar .edit-topbar-header .field-title .formDescription,
+.browser-IE9 #edit-topbar .edit-topbar-header .field-title .formDescription {
+  display: block;
+}
+.browser-IE7 #tab-pane-anchor,
+.browser-IE8 #tab-pane-anchor,
+.browser-IE9 #tab-pane-anchor {
+  margin-top: -15px;
+}
+.popupEdition #edit-topbar {
+  top: 0;
+}

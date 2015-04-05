@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow id="wfdraft" type="publish" init="-100" version="4">
+  <state pstatus="-100" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="-10" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="0" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="10" reminder="0" duration="0" targetPstatus="0" />
+  <state pstatus="20" reminder="0" duration="0" targetPstatus="0" />
+  <transition source="-100" target="-10" roleId="writer" />
+  <transition source="-100" target="20" roleId="writer" />
+  <transition source="-100" target="-100" roleId="writer" />
+  <transition source="-100" target="10" roleId="writer" />
+  <transition source="-100" target="0" roleId="writer" />
+  <transition source="-10" target="-100" roleId="writer" />
+  <transition source="-10" target="20" roleId="writer" />
+  <transition source="-10" target="10" roleId="writer" />
+  <transition source="-10" target="0" roleId="writer" />
+  <transition source="-10" target="-10" roleId="writer" />
+  <transition source="0" target="-10" roleId="writer" />
+  <transition source="0" target="-100" roleId="writer" />
+  <transition source="0" target="20" roleId="writer" />
+  <transition source="0" target="0" roleId="writer" />
+  <transition source="0" target="10" roleId="writer" />
+  <transition source="10" target="10" roleId="writer" />
+  <transition source="10" target="20" roleId="writer" />
+  <transition source="10" target="-100" roleId="writer" />
+  <transition source="10" target="0" roleId="writer" />
+  <transition source="10" target="-10" roleId="writer" />
+  <role roleId="writer" />
+</workflow>
+

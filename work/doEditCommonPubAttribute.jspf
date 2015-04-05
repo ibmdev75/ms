@@ -1,0 +1,10 @@
+<%
+boolean isPortlet = PortalElement.class.isAssignableFrom(formHandler.getPublicationClass());
+int currentTabIndex = 0;
+%>
+
+<%@ include file="/work/doEditCommonPubAttribute_categories.jspf" %>
+<%@ include file="/work/doEditCommonPubAttribute_rights.jspf" %>
+<%@ include file="/work/doEditCommonPubAttribute_templates.jspf" %>
+<%@ include file="/work/doEditCommonPubAttribute_wf.jspf" %>
+<%@ include file="/work/doEditCommonPubAttribute_advanced.jspf" %>

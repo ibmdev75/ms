@@ -1,0 +1,10 @@
+<%--
+  @Summary: Mobile fragment template for Member card
+  @Category: UI Component
+  @Author: Sylvain DEVAUX
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-9.1
+--%><% if (Util.notEmpty(itMember.getMobile())) { %><div class="card-info card-member-info card-member-mobile"><jalios:icon src="phone" /> <jalios:phone number="<%= itMember.getMobile() %>" region="<%= itMember.getCountry() %>" /></div><% } %>          

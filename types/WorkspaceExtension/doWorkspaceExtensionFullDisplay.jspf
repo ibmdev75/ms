@@ -1,0 +1,16 @@
+<%@ page contentType="text/html; charset=UTF-8" %><%
+%><%-- This file has been automatically generated. --%><%
+%><%--
+  @Summary: WorkspaceExtension display page
+  @Category: Generated
+  @Author: JCMS Type Processor
+  @Customizable: True
+  @Requestable: True
+--%><%
+%><%
+ WorkspaceExtension extension = (WorkspaceExtension) obj.getExtension();
+ if (extension == null) {
+   extension = new WorkspaceExtension();
+ }
+%><%-- **********4A616C696F73204A434D53 *** SIGNATURE BOUNDARY * DO NOT EDIT ANYTHING BELOW THIS LINE *** --%><%
+%><%-- ZgC0WALiTQhxZ0Q2eJZZYg== --%>

@@ -1,0 +1,140 @@
+
+/* ----------------------------------------------- */
+/*  MODAL                                          */
+/* ----------------------------------------------- */
+
+@modal-picture-max-size: floor((@font-size-h4 * @line-height-base));
+
+.modal-dialog {
+  padding-top: 20px;
+}
+
+.modal-header {
+	background-color: @modal-header-bg;
+	border-radius: @border-radius-base @border-radius-base 0 0;
+	
+	.modal-title {
+	  padding-right: 20px;
+	  font-size: 18px;
+	}
+
+  SPAN.modal-picture {
+    font-size: @modal-picture-max-size;
+  }
+  
+	IMG.modal-picture {
+		max-width: @modal-picture-max-size;
+		max-height: @modal-picture-max-size;
+	}  
+  
+}
+
+
+@half-baseline: @baseline / 2;
+
+.modal-steps {
+	padding: @half-baseline @baseline;
+	background-color: lighten(#000, 98%);
+	border-bottom: 1px solid @gray-lighter;
+	
+	.nav-steps {
+		margin:0;
+	}
+}
+
+.modal-menu {
+  padding: @half-baseline @baseline;
+  background-color: lighten(#000, 98%);
+  border-bottom: 1px solid @gray-lighter;
+}
+
+
+.modal-body {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  .separator {
+    border-top: 1px solid @modal-content-border-color;
+    padding-top: 15px;
+  } 
+  .jalios-tab-template {
+    padding-top: 15px;
+  } 
+  
+}
+
+
+/* handle nav-tabs in modal */
+.modal-content {
+  .modal-body .nav.nav-tabs { 
+	  margin-left: -@modal-inner-padding;
+		margin-right: -@modal-inner-padding;
+		padding-left: @modal-inner-padding;  
+  }
+  > .nav {
+  	margin-top:@modal-inner-padding;
+  	padding-left:@modal-inner-padding /2;
+  }
+}
+
+
+.modal-footer {
+	margin-top:0;
+	background-color: @modal-footer-bg;
+	border-radius: 0 0 @border-radius-base @border-radius-base;
+	position: relative;
+}
+
+.modal-confirm {
+	H3 {
+	 margin-top: 0;
+   margin-bottom: @baseline;
+	}
+}
+
+// --------------------
+// Inline Confirm
+// --------------------
+
+.modal-confirm-inline {
+  position: absolute; 
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0 0 @border-radius-base @border-radius-base;
+  background: @state-warning-bg; 
+  
+  padding: (@modal-inner-padding - 1) @modal-inner-padding @modal-inner-padding;
+  
+  SPAN {
+    font-size: @font-size-large;
+    line-height: floor((@font-size-large * @line-height-base));
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+  .modal-lg {
+	  width:auto;
+  }
+}
+
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max){
+  .modal-lg {
+	  width:auto; 
+	  margin: 0 @baseline;
+  }
+}
+
+@media (max-width: @modal-lg) {
+  .modal-lg {
+	  width:auto; 
+	  margin: 0 @baseline;
+  }
+}
+@media (max-width: @modal-md) {
+  .modal-md {
+	  width:auto; 
+	  margin: 0 @baseline;
+  }
+}

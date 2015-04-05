@@ -1,0 +1,10 @@
+<%
+  } /* end foreach iteration */
+  
+  ServletUtil.restoreAttribute(pageContext , PortalManager.PORTAL_PUBLICATION);
+  ServletUtil.restoreAttribute(pageContext , "counter");
+  ServletUtil.restoreAttribute(pageContext , "isNew");
+  ServletUtil.restoreAttribute(pageContext , "showInCurrentPortal");
+  ServletUtil.restoreAttribute(pageContext , "showWithContextCategory");
+  ServletUtil.restoreAttribute(pageContext , "displayURLparams");
+%>

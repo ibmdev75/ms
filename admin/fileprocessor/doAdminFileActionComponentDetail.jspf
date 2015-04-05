@@ -1,0 +1,52 @@
+<%@page import="com.jalios.jcms.fileprocessor.processingmanagement.*"%>
+<%
+  FileActionComponent itActionComponent = repository.getActionComponent(itActionComponentClass);
+  if (itActionComponent != null) {
+    String message = log.getMessage();
+    ProcessingStatus status  = log.getStatusEnum();
+    ProcessingType processingType = log.getProcessingTypeEnum();
+    indiceProcessor++;
+    formName = "blackListForm_" + formPrefix + "_" + indiceProcessor;
+%>
+<fieldset style="position: relative;">
+ <legend class='processorName'><%= itActionComponent.getName() %></legend>
+ <ul>
+  <li>
+   <%= glp("fileprocessor.adm.filestatus.label.processordescription") %>:
+   <%= itActionComponent.getDescription() %>
+  </li>
+  <li>
+   <%= glp("fileprocessor.adm.filestatus.label.class") %>:
+   <%= itActionComponentClass.getName() %>
+  </li>
+  <% if (Util.notEmpty(message)) { %>
+   <li>
+    <%= glp("fileprocessor.adm.filestatus.label.message") %>:
+    <% if (message.length() < 100) { %>
+      <%= encodeForHTML(message) %>
+    <% } else { %>
+      <span title="<%= encodeForHTMLAttribute(message) %>">
+        <jalios:truncate length="100" suffix="..." ><%= encodeForHTML(message) %></jalios:truncate>
+      </span>
+    <% } %>
+   </li>
+  <% } %>
+  <li>
+   <%= getStatusIconHtml(log) %> 
+   <%= glp("fileprocessor.adm.filestatus.label." + ((processingType == ProcessingType.PARSING) ? "indexingstatus" : "processingstatus")) %>:
+   <%= status.getText(userLang) %>
+  </li>
+  <li>
+   <%= glp("fileprocessor.adm.filestatus.label.udate") %>:
+   <%= DateUtil.formatRfc822Date(log.getCdate()) %>
+  </li>
+  <% if (log.getDuration() > 0) { %>
+  <li>
+   <%= glp("fileprocessor.adm.filestatus.label.duration") %>:
+   <%= DateUtil.formatDuration(log.getDuration()) %>
+  </li>
+  <% } %>
+ </ul>
+</fieldset>
+<% //  } 
+} %>

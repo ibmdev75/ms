@@ -1,0 +1,52 @@
+<%@page import="com.jalios.jcms.taglib.settings.SelectorSettings"%>
+<%@page import="com.jalios.util.Util"%><%
+%><%@page import="com.jalios.jcms.HttpUtil"%><%
+%><%@page import="com.jalios.jcms.JcmsUtil"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.BasicSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.AbstractChooserSettings"%><%
+%><%
+String acChooserName = getOption(AbstractChooserSettings.AC_CHOOSER_NAME, null);
+
+String fieldValueDisplay = getIncludeString("fieldValueDisplay", resolveLabel(fieldValue, null, getOption(SelectorSettings.MULTIPLE, false)));
+String placeholder = formatAttribute("placeholder=\"%s\"", getOption(BasicSettings.PLACEHOLDER, ""));
+String prepend = getIncludeString("PREPEND", getOption(BasicSettings.PREPEND, ""));
+String append = getIncludeString("APPEND", getOption(BasicSettings.APPEND, ""));
+String required = Util.toBoolean(fieldRequired, false) ? "aria-required='true'" : "";
+String disabled = Util.toBoolean(fieldDisabled, false) || Util.toBoolean(getIncludeObject("INPUT_DISABLED", false), false) ? "disabled='disabled'" : "";
+String css = getOption(BasicSettings.CSS, "");
+css = "form-control form-control-autocomplete form-control-display" + (" jalios-" + controlType.toString().toLowerCase() + "-display") + (Util.notEmpty(css) ? " " + css : "");
+String htmlAttributes = getOption(BasicSettings.HTML_ATTRIBUTES, "");
+String dataAttributes = formatDataAttributes(getOption(BasicSettings.DATA_ATTRIBUTES, (Map<String, Object>) null));
+String dataEvent = formatAttribute("data-jalios-event='%s'", getOption(BasicSettings.TRIGGER_EVENT, ""));
+String dataAction = formatAttribute("data-jalios-action='%s'", getOption(BasicSettings.TRIGGER_ACTION, ""));
+String dataChooserAction = formatAttribute("data-jalios-ac-action='acChooser:%s'", acChooserName);
+String dataChooserOptions = formatAttribute(" data-jalios-ac-options='%s'", getOption(AbstractChooserSettings.AC_CHOOSER_OPTION, ""));
+
+includeLocalObject("APPEND_CLEAR_BUTTON", true);
+%><%
+%><% if (Util.notEmpty(prepend)) { %><span class="input-group-addon"><%= prepend %></span><% } %>
+<input id="<%= encodeForHTMLAttribute(fieldId) %>"
+      name="<%= HttpUtil.encodeForHTMLAttribute(fieldName) %>ChooserDisplay"
+      type="text"
+      class="<%= css %>"
+      value="<%= encodeForHTMLAttribute(fieldValueDisplay) %>"
+      <%= JcmsUtil.getLangAttributes(cptLang) %>
+      <%= placeholder %>
+      <%= disabled %>
+      <%= required %>
+      <%= dataChooserAction %>
+      <%= dataChooserOptions %>
+      <%= htmlAttributes %> />
+<input name="<%= encodeForHTMLAttribute(fieldName) %>"
+      type="text"
+      class="form-control form-control-value hide <%= "jalios-" + controlType.toString().toLowerCase() %>"
+      value="<%= encodeForHTMLAttribute(resolveValue(fieldValue)) %>"
+      <%= disabled %>
+      <%= required %>
+      <%= dataEvent %>
+      <%= dataAction %>
+      <%= dataAttributes %> />
+
+<% if (Util.notEmpty(append)) { %><span class="input-group-addon"><%= append %></span><% } %><%
+%><%= getIncludeString("CONTROL_APPEND", "") %><%
+%><%@ include file='/jcore/field/control/doTextButtonAction.jspf' %>

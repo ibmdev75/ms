@@ -1,0 +1,29 @@
+/* The aim of the further class is to provide a way to make text visible only 
+ * for screen reader, but not for graphical usefull browser 
+ * Usefull for "skip to content Anchor" or so.
+ * 
+ * Exemple of use :
+ *
+ * <a href="#maincontent" class="invisibleZone" >Skip to main content</a>
+ * ...
+ * <a name="maincontent" title="begin main content" href="#maincontent" class="invisibleZone"/>
+ *
+ * Or :
+ * <a href="front/accessibilityStatement.jsp" title="options d'accessibilité de ce site"
+ *          class="invisibleZone" 
+ *          accesskey="0">Accessibility statement</a>
+ *
+ * For details, see : 
+ *    http://webaim.org/techniques/css/invisiblecontent/ 
+ * with modification in : 
+ *    http://webaim.org/blog/hiding-content-for-screen-readers/
+ *
+ */ 
+.invisibleZone {
+    position:   absolute  !important;
+    left:       -10000px  !important;
+    top:        auto;
+    width:      1px       !important;
+    height:     1px       !important;
+    overflow:   hidden    !important;
+}

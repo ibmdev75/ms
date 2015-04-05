@@ -1,0 +1,89 @@
+<%-- 
+  @Summary: doEndProfiler.jsp: statically included by display.jsp,
+                               after displaying the body and before the footer.
+            If the profiler is enabled, we ouput some javascript to display profiler results.
+  @Category: Internal
+  @Deprecated: False
+  @Customizable: False
+  @Requestable: True
+  @Since: jcms-5.5.0
+--%>
+<%
+  // Profiler
+  if (profilerEnabled) {
+    rProfiler.endMeasures(theBodyContent.length());
+  }
+  if (profilerShowGUI) {
+%>
+  <div id="profilerInfos" class="well well-small profilerInfos" style="display:none;">
+    <h3><%= glp("ui.profiler.fo.title") %></h3>
+    <p><%= glp("ui.profiler.fo.infos") %></p>
+  </div>
+  <div id="profilerInfos" class="well well-small profilerLegend" style="padding: 10px; background-image: none;">
+    <p><strong><%= glp("ui.profiler.cache-legend") %></strong></p>
+    <ul>
+      <li><span class="Cache1"><%= glp("ui.editportlet.cache.None") %></span></li>
+      <li><span class="Cache2"><%= glp("ui.editportlet.cache.Server") %></span></li>
+      <li><span class="Cache3"><%= glp("ui.editportlet.cache.Session") %></span></li>
+      <li><span class="Cache4"><%= glp("ui.editportlet.cache.Groups") %></span></li>
+      <li><span class="Cache5"><%= glp("ui.editportlet.cache.Members") %></span></li>
+      <li><span class="Cache6"><%= glp("ui.editportlet.cache.SessionAndVisitors") %></span></li>
+      <li><span class="Cache7"><%= glp("ui.editportlet.cache.VisitorsOnly") %></span></li>
+    </ul>
+  </div>
+
+  <jalios:javascript>
+  'JCMS.portal.PortalProfiler'._namespace({
+    displayResult: function (id, memStr, memPercent, timeStr, timePercent, outputSizeStr, outputSizePercent) {
+      var resultsElm = $('profiler_results_' + id);
+      if (resultsElm) {
+        var innerHTML = '';
+        // Memory 
+        if (memPercent > 15) innerHTML += '<span class="high">';
+        innerHTML += memStr;
+        if (memPercent > 15) innerHTML += '</span>';
+        // Time
+        innerHTML += ', ';
+        if (timePercent > 15) innerHTML += '<span class="high">';
+        innerHTML += timeStr;
+        if (timePercent > 15) innerHTML += '</span>';
+        // OutputSize
+        innerHTML += ', ';
+        if (outputSizePercent > 15) innerHTML += '<span class="high">';
+        innerHTML += outputSizeStr;
+        if (outputSizePercent > 15) innerHTML += '</span>';
+        resultsElm.innerHTML = innerHTML;
+      }
+    },
+    displayResults: function () {
+  <%
+    for (Iterator itEntry = rProfiler.getMeasuresMap().entrySet().iterator(); itEntry.hasNext(); ) {
+      Map.Entry entry = (Map.Entry) itEntry.next();
+      String measureId = (String) entry.getKey();
+      long[] measures = (long[]) entry.getValue();
+      long memoryConsumed = measures[0];
+      long timeTaken = measures[1];
+      long outputSize = measures[2];
+      String memoryConsumedStr = Util.formatFileSize(memoryConsumed, userLocale);
+      String timeTakenStr = DateUtil.formatDuration(timeTaken, userLocale);
+      String outpuSizeStr = Util.formatFileSize(outputSize, userLocale);
+      double percentMemoryConsumed = (double) (100 * memoryConsumed / rProfiler.getConsumedMemory());
+      double percentTimeTaken = (double) (100 * timeTaken / rProfiler.getElapsedTime());
+      double percentOutputSize = (double) (100 * outputSize / rProfiler.getOutputSize());
+  %>  this.displayResult('<%= measureId %>', '<%= memoryConsumedStr %>', '<%= percentMemoryConsumed %>', '<%= timeTakenStr %>', '<%= percentTimeTaken %>', '<%= outpuSizeStr %>', '<%= percentOutputSize %>');
+  <% } // end for %>
+    }, 
+    showInfos: function () {
+      var profilerInfosElm = $('profilerInfos');
+      profilerInfosElm.parentNode.removeChild(profilerInfosElm);
+      document.body.insertBefore(profilerInfosElm, document.body.firstChild);
+      profilerInfosElm.show();
+    },
+    initOnLoad: function () {
+      JCMS.portal.PortalProfiler.showInfos();
+      JCMS.portal.PortalProfiler.displayResults();
+    }
+  });
+  JCMS.portal.PortalProfiler.initOnLoad();
+  </jalios:javascript>
+<% } // end profilerShowGUI %>

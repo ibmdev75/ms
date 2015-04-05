@@ -1,0 +1,12 @@
+<% 
+  if (!Util.toBoolean(jcmsContext.getAjaxRequestAttribute(WikiToolbar.DISABLED),false)) {
+	  if (!jcmsContext.isInFrontOffice() || (isLogged && loggedMember.isWorker()) || Util.toBoolean(jcmsContext.getAjaxRequestAttribute(WikiToolbar.ENABLED),false)){
+	    WikiToolbar wt = new WikiToolbar(jcmsContext); 
+	    out.println(wt.printWikiToolbar()); 
+	    // out.println(wt.printImageMapToolbar());
+	    jcmsContext.addJavaScript("js/jalios/core/jalios-wiki-edit.js");
+	    jcmsContext.setAjaxRequestAttribute(WikiToolbar.ENABLED,"true");
+	    // See also "css/jalios/widget/wiki-edit.css" in JcmsJspContext
+	  }
+  }
+%>

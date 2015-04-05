@@ -1,0 +1,110 @@
+<%--
+
+  @Summary: prints the javascript code for one configuration of TinyMCE
+  @Since: jcms-7.1 
+              
+--%><%@ page contentType="text/javascript; charset=UTF-8"%><%
+
+ // The following variable MUST be declared before invoking this JSP fragment.
+ // String configurationPrefix = "..."; // eg "wysiwyg.tinymce.", "wysiwyg.tinymce.conf.foobar."
+
+ String editorSelector = channel.getProperty(configurationPrefix + "editor-selector", "");
+ if (Util.notEmpty(editorSelector)) {
+      
+ // CSS files to be loaded by the wysiwyg during edition
+  Set<String> wysiwygCSSFileSet = new TreeSet<String>();
+  // 1. Add global wysiwyg file set
+  wysiwygCSSFileSet.addAll(Workspace.getWysiwygCSSFileSet());
+  // 2. Add dedicated css file for edition (default is css/tinymce.css)
+  List<String> editorCssFileSet = Util.splitToList(channel.getProperty(configurationPrefix + "content-css", channel.getProperty("wysiwyg.tinymce.content-css", "")), ", ");
+  if (Util.notEmpty(editorCssFileSet)) {
+    wysiwygCSSFileSet.addAll(editorCssFileSet);
+  }
+  // Convert relative CSS path to absolute URL
+  String jcmsCSSFiles = "";
+  if (Util.notEmpty(wysiwygCSSFileSet)) {
+    jcmsCSSFiles = ServletUtil.getBaseUrl(request);
+    jcmsCSSFiles += Util.join(wysiwygCSSFileSet, "," + ServletUtil.getBaseUrl(request));
+  }
+%>
+  // Configuration "<%= configurationPrefix %>*" - selector = '<%= editorSelector %>'
+  tinyMCE.init({
+    document_base_url : JcmsJsContext.getBaseUrl(),
+    mode : 'textareas',
+    language : '<%= channel.getProperty("wysiwyg.tinymce.languagekey-mapping." + userLang, userLang) %>',
+    editor_selector : '<%= editorSelector %>',
+    editor_deselector : 'tinyMceInitialized', <%-- deseletor required for fix JCMS-2797 --%>
+    plugins : '<%= channel.getProperty(configurationPrefix + "plugins", channel.getProperty("wysiwyg.tinymce.plugins", "")) %>',
+    content_css: '<%= jcmsCSSFiles %>',
+    class_filter: function(cls, rule) { if (/<%= channel.getProperty("wysiwyg.tinymce.class-filter-regex", ".*") %>/.test(rule)) { return cls; } return false; },
+    spellchecker_rpc_url: 'JSON-RPC',
+    spellchecker_rpc_class: 'TinyMceSpellChecker',
+    spellchecker_languages : 'English=en,Français=fr,Deutsch=de,Español=es',
+    file_browser_callback : 'tinymce.plugins.JcmsPluginCB.jcmsFileBrowserCB', <%
+   Set<String> globalStyleSet  = workspace.getGlobalWYSIWYGStyle();
+   HashMap<String, String> customFormatMap = new HashMap<String,String>();
+   if (Util.notEmpty(globalStyleSet)) { %>
+    jcms_styles : {
+      // Styles available for current workspace '<%= workspace.getDataName(userLang) %>' (<%= workspace.getId() %>) <%
+       for (Iterator itGl = globalStyleSet.iterator(); itGl.hasNext();) {
+         String glStyle = (String) itGl.next(); %>
+      '<%= encodeForJavaScript(glStyle) %>': [ <%
+         Set localStyleSet = workspace.getLocalWYSIWYGStyle(glStyle);
+         if (Util.notEmpty(localStyleSet)) {
+           for (Iterator itLocal = localStyleSet.iterator(); itLocal.hasNext();) {
+            String localStyle = (String) itLocal.next();
+            %>'<%= encodeForJavaScript(localStyle) %>'<%
+            %><% if (itLocal.hasNext()) { %>, <% } %><%
+           }
+         }
+         %>]<%
+       %><% if (itGl.hasNext()) { %>,<% } %><%
+       } %>
+    }, <%
+   } %>
+   formats : { 
+     'jcms.local-style-block' : [
+       { selector : 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li', attributes : { 'class' : '%classname'} }
+     ],
+     'jcms.local-style-inline' : [
+       { inline: 'span', attributes : { 'class' : '%classname'} }
+     ],
+     'jcmsCode' : {inline : 'code'}
+   }, <%
+
+  // Toolbars
+  for (int i = 1; i < 10; i++) {
+    String toolbar = channel.getProperty(configurationPrefix + "toolbar-" + i, "");
+    if (i > 5 && Util.isEmpty(toolbar)) {
+      continue;
+    }
+    %>
+    theme_advanced_buttons<%= i %> : '<%= toolbar %>',<%
+  }
+  
+  %>
+  setup : function(ed) {
+    // Trigger an event when the wysiwyg editor is ready
+    ed.onInit.add(function(ed) {
+      var event = jQuery.Event("jalios:wysiwyg");
+      event.wysiwyg = {};
+      event.wysiwyg.type = 'ready';
+      event.wysiwyg.id = ed.id;
+      jQuery(document).trigger(event);
+    });
+  },
+  <%
+  
+  // JCMS default options (must not be empty)
+  String jcmsInitOptions = channel.getProperty(configurationPrefix + "jcms-init-options", channel.getProperty("wysiwyg.tinymce.jcms-init-options", "")).trim(); %>
+    <%= jcmsInitOptions %><%    
+  
+  // Custom options
+  String initOptions = channel.getProperty(configurationPrefix + "init-options", "").trim();
+  if (Util.notEmpty(initOptions)) {
+    %>,
+    <%= initOptions %><%    
+  }
+%>
+  });
+<% } %>

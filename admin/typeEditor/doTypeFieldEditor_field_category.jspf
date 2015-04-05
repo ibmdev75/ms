@@ -1,0 +1,26 @@
+<% if (fieldEditor.equals("category")) { %>
+  <%-- CATEGORY CHOOSER ------------------------------------------------------- --%>
+  <jalios:field name="catChooser" label="ui.adm.type-edit.lbl.cat-ch" tooltip="ui.adm.type-edit.lbl.cat-ch.h">
+    <% if (formHandler.isFormEditor()) { %>
+    <input type="hidden" name="catChooser" value="listbox" />
+    <%= glp("ui.adm.type-edit.lbl.listbox") %>
+    <% } else { %>
+    <select name="catChooser" class="form-control">
+      <option value='tree'    <%= formHandler.getFieldCatChooser().equals("tree") ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.tree") %></option>
+      <option value='listbox' <%= formHandler.getFieldCatChooser().equals("listbox") || formHandler.getFieldCatChooser().equals("combo")? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.listbox") %></option>
+      <option value='popup'   <%= formHandler.getFieldCatChooser().equals("popup")    ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.chooser") %></option>
+      <option value='keyword' <%= formHandler.getFieldCatChooser().equals("keyword") ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.keyword") %></option>
+    </select>
+    <% } %>
+  </jalios:field>
+
+  <%-- DISPLAY ROOT ------------------------------------------------------- --%> 
+  <jalios:field name="displayRoot" label="ui.adm.type-edit.lbl.disp-root" tooltip="ui.adm.type-edit.lbl.disp-root.h" value="<%= formHandler.isFieldDisplayRoot() %>" >
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>     
+
+  <%-- CATEGORY TREE ------------------------------------------------------- --%> 
+  <jalios:field name="cid" label="ui.adm.type-edit.lbl.root-cat" value="<%= formHandler.getSelectedCatSet() %>" >
+    <jalios:control settings='<%= new CategorySettings().tree().root(channel.getRootCategory()).filter(CategoryFilter.READ) %>' />
+  </jalios:field>
+<% } %>

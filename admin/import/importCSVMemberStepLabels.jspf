@@ -1,0 +1,19 @@
+<%--
+  @Summary: Member CSV import : dynamic step labels computation
+  @since: jcms-8
+  @author Sylvain Devaux <sylvain.devaux@jalios.com>
+--%><%
+
+//---------------------------------------------------------------
+//  Steps LABELS computing for Member CSV Import
+//---------------------------------------------------------------
+
+List<String> customLabels = new ArrayList<String>();
+
+customLabels.add(glp(stepPrefixProp + "0"));
+customLabels.add(glp(stepPrefixProp + "1"));
+if (isEditoSpaces) { customLabels.add(glp(stepPrefixProp + "2")); }
+if (isCollabSpaces) { customLabels.add(glp(stepPrefixProp + "3")); }
+
+request.setAttribute("custom-steps-labels", customLabels.toArray(new String[]{}));
+%>

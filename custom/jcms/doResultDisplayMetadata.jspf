@@ -1,0 +1,48 @@
+<div class="search-result-footer">
+  
+  	<div class="search-result-meta meta-text">
+    <% if (obj.hasAnyReadRights()) { %>
+      <jalios:icon src='key'  title='<%= glp("ui.com.alt.restricted", obj.getReadRightsString(5)) %>'  />
+      &middot;
+    <% } %>       
+    
+    <% if (obj instanceof FileDocument) { %>
+      <% if (obj.getAuthor() != null) { %>
+        <jalios:link data='<%= obj.getAuthor() %>' /> &middot; <jalios:link css="meta-link" data="<%= obj.getWorkspace() %>"/> &middot; <%= JcmsUtil.getFriendlyDate(obj.getCdate(), DateFormat.SHORT, true, userLocale) %>
+      <% } %>
+    <% } else { %>
+    <%   if (obj.getPdate() != null && Math.abs(obj.getMdate().getTime() - obj.getPdate().getTime()) > 2*JaliosConstants.MILLIS_IN_ONE_MINUTE ) { %>
+    <%     if (obj.getOpAuthor() != null) { %>
+      <jalios:link data='<%= obj.getOpAuthor() %>' /> &middot; <jalios:link css="meta-link" data="<%= obj.getWorkspace() %>"/> &middot; <%= JcmsUtil.getFriendlyDate(obj.getMdate(), DateFormat.SHORT, true, userLocale) %>
+    <%     } %>
+    <%   } %>
+    <% }
+    // ----------------------------------------------------------------------
+    // Hierarchical Workspaces
+    // ----------------------------------------------------------------------
+    boolean printWS = Util.toBoolean(request.getAttribute("query.result.showWs"), false);
+    Workspace forcedWS = getWorkspaceParameter("wrkspc");
+    Workspace searchedWS = forcedWS != null ? forcedWS : workspace;
+    if (printWS) {
+      %> <span class='workspace-membership <%= searchedWS.getAllSubWorkspaces().contains(obj.getWorkspace()) ? "sub-workspace" : "" %>'><%
+        %><%= glp("ui.work.query.txt.workspace") %> <jalios:link data='<%= obj.getWorkspace() %>' /><%
+      %></span><%
+    }
+    %>
+    </div>
+    
+    
+    <% if (obj instanceof FileDocument) { %>
+    <div class="search-result-meta search-result-document-meta meta-text">
+    <% FileDocument doc = (FileDocument)obj; %>
+    <jalios:filesize doc='<%= doc %>' />
+    <%   if (doc.isImage()) { %>&middot; <%= doc.getDimensions() %><% } %>
+    <%   if (doc.getDuration() > 0) { %>&middot; <jalios:duration time='<%= doc.getDuration() %>'/><% } %>
+    </div>
+    <% } %>
+    
+    <div class="search-result-meta search-result-categories">
+    <% Category[] categories = obj.getCategories(loggedMember); %>
+    <%@ include file="/custom/jcms/doCategoryList.jspf"  %>
+    </div>
+</div>

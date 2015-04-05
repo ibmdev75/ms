@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates version="5.0">
+  <template name="default" file="doPortletFeedFullDisplay.jsp" usage="box" />
+  <template name="default" file="doPortletFeedResultDisplay.jsp" usage="query" />
+</templates>
+

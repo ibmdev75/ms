@@ -1,0 +1,73 @@
+  <jalios:if predicate='<%= box.getDisplayTimeChart() %>'>
+    <% 
+      com.jalios.util.Beautifier            beautifier      = listener.getBeautifier();
+      com.jalios.jtaglib.ChartTagBeautifier chartBeautifier = (beautifier instanceof com.jalios.jtaglib.ChartTagBeautifier) ? (com.jalios.jtaglib.ChartTagBeautifier)beautifier : new com.jalios.jtaglib.ChartTagBeautifier(beautifier);
+    %>
+		<% ObjectIntTreeMap hourMap    = (ObjectIntTreeMap)wsMap.get("Hour"); %>
+		<jalios:if predicate='<%= Util.notEmpty(hourMap) %>'>
+		<H2 style='page-break-before: auto;'><%= glp("ui.statreport.lbl.portlet.hour") %></H2>
+		<jalios:chart dataMap='<%= hourMap %>' 
+				          display='<%= "hchart" %>' 
+				          isPercent='<%= false %>' 
+				          sort='<%= "none" %>' 
+				          mixedChart='<%= true %>'
+				          colorFirst='<%= 2 %>'
+				          colorRotate='<%= 0 %>'
+				          locale='<%= userLocale %>'
+				          unit='<%= glp("ui.statreport.lbl.hits") %>'
+				          fixHLengthWidth='<%= 15 %>' 
+				          beautifier='<%= chartBeautifier %>'
+				          />
+		</jalios:if>
+		<br/><span style="font: bold 11px Arial, Helvetica, Sans-Serif; color: #880000;"><%= glp("ui.statreport.lbl.totalactivity",hourMap.getSum()) %></span>
+		<hr width='100%' size='1' style="margin-top: 1px;" noshade="noshade"/>
+	</jalios:if>
+	
+	<jalios:if predicate='<%= box.getDisplayWeekChart() %>'>
+	  <% 
+      com.jalios.util.Beautifier            beautifier      = listener.getBeautifier();
+      com.jalios.jtaglib.ChartTagBeautifier chartBeautifier = (beautifier instanceof com.jalios.jtaglib.ChartTagBeautifier) ? (com.jalios.jtaglib.ChartTagBeautifier)beautifier : new com.jalios.jtaglib.ChartTagBeautifier(beautifier);
+    %>
+	  <% ObjectIntTreeMap weekDayMap = (ObjectIntTreeMap)wsMap.get("WeekDay"); %>
+		<jalios:if predicate='<%= Util.notEmpty(weekDayMap) %>'>
+		<%
+		  String[] weeks = new String[]{"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+		  Object first =  weekDayMap.values().iterator().next();
+		  if (first instanceof int[]){ // Single Map
+		  	for (int i = 0 ; i < weeks.length ; i++){
+		  		if (weekDayMap.containsKey(weeks[i])){
+		  			continue;
+		  		}
+		  		weekDayMap.put(weeks[i],new int[]{0});
+		  	}
+		  }
+		  else { // Multi Map
+			  for (Iterator it = weekDayMap.values().iterator() ; it.hasNext() ; ){
+			    Map itMap = (Map) it.next();
+			  	for (int i = 0 ; i < weeks.length ; i++){
+		  		  if (itMap.containsKey(weeks[i])){
+		  			  continue;
+		  		  }
+		  		  itMap.put(weeks[i],new int[]{0});
+		  	  }
+        }
+		  }
+		%>
+		<H2 style='page-break-before: auto;'><%= glp("ui.statreport.lbl.portlet.weekday") %></H2>
+		<% String orientation = ((Map.Entry)weekDayMap.entrySet().iterator().next()).getValue() instanceof int[] ? "vchart" : "hchart"; %>
+		<jalios:chart dataMap='<%= weekDayMap %>' 
+				          display='<%= orientation %>' 
+				          isPercent='<%= false %>' 
+				          mixedChart='<%= true %>'
+				          colorFirst='<%= 3 %>'
+				          colorRotate='<%= 0 %>'
+				          locale='<%= userLocale %>'
+				          unit='<%= glp("ui.statreport.lbl.hits") %>'
+				          legendComparator='<%= ObjectIntTreeMap.getSortedKeyComparator(weeks) %>'
+				          beautifier='<%= new com.jalios.jtaglib.ChartTagBeautifier(new BeautifierDate("EE","EEEEE",Locale.ENGLISH,userLocale,12),chartBeautifier) %>'
+		/>
+				          		          
+		</jalios:if>
+		<br/><span style="font: bold 11px Arial, Helvetica, Sans-Serif; color: #880000;"><%= glp("ui.statreport.lbl.totalactivity",weekDayMap.getSum()) %></span>
+		<hr width='100%' size='1' style="margin-top: 1px;" noshade="noshade"/>
+  </jalios:if>

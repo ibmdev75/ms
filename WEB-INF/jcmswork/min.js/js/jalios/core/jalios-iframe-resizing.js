@@ -1,0 +1,1 @@
+!function(b){function c(d){a(d);b(".iframe-resize").toggleClass("invisible")}function a(e){var d=b(window).height()-b(e).offset().top-5;if(e.oHeight!==d){b(e).height(0);e.style.height=0;b(e).height(d);e.style.height=d+"px";e.oHeight=d}setTimeout(function(){a(e)},250)}b(document).ready(function(){b("IFRAME.iframe-resize").each(function(){c(this)})})}(window.jQuery);

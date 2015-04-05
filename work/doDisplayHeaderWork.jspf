@@ -1,0 +1,63 @@
+<%--
+  @Summary: Sub-header for display working page
+  @Deprecated: False
+  @Customizable: True
+  @Requestable: False
+  @Category: Presentation
+--%>
+<%@page import="com.jalios.jcms.context.MessageLevel"%>
+<%@page import="com.jalios.jcms.taglib.MessageTag"%>
+
+
+<%-- WORK COPY --%>
+<% if (publication.isWorkCopy()) { %>
+  <jalios:message level="<%= MessageLevel.WARN %>" title="" dismissable="false">
+    <p>
+      <jalios:icon src="workcopy" title='<%= glp("ui.com.lbl.workcopy") %>' />
+      <%= glp("ui.com.lbl.workcopy") %> - 
+      <%= glp("ui.com.lbl.original") %> : <jalios:link data="<%= publication.getMainInstance() %>" />
+    </p>
+  </jalios:message>
+<% } %>
+
+<%-- VALIDATION FORM --%>
+<% Publication pub = publication; %>
+<%@ include file="/work/doWFValidateForm.jspf" %>
+
+
+
+<%-- NAVBAR --%>
+<% boolean printView = (request.getAttribute("printView") != null) || (hasParameter("printView")); %>
+<div class="navbar navbar-default">        
+  <div class="navbar-form">
+  <div class="navbar-left">
+    <span class="btn btn-default"><jalios:link data='<%= publication %>' params='<%= "preview=true" %>'><jalios:icon src="preview" css="tool" title='<%= glp("ui.com.alt.previewpub") %>' /></jalios:link></span> 
+
+    <span class="btn btn-default"><jalios:edit pub='<%= publication %>' /></span>
+  	
+  	<span class="btn btn-default"><jalios:link data='<%= publication %>' params='<%= "printView=true&amp;preview=true&amp;portal=" + channel.getProperty("channel.default-printportal") %>'><jalios:icon src="printer" css="tool" title='<%= glp("ui.com.alt.print") %>' /></jalios:link></span>
+  	<% if (Util.notEmpty(publication.getFriendlyURLSet())) { %>
+  	  <% String furl = (String)publication.getFriendlyURLSet().first(); %>
+  	  <a href='<%= furl.substring(1) %>' class="btn btn-default"><jalios:icon src='world-link' css="tool" alt='<%= glp("ui.com.alt.friendly-url") %>' title='<%= glp("ui.com.title.friendly-url") %>'/></a>
+  		<% } %>
+  </div>
+  
+  <% if (channel.isMultilingual()) { %>
+  <div class="navbar-right">
+   <%= glp("ui.work.dpl.preview-lang") %>
+   <select class='form-control' onchange="$('displayWorkIframe').src = '<%= contextPath %>/'+this.value;">
+   <% List langList = channel.getLanguageList();
+    for (Iterator itLang = langList.iterator(); itLang.hasNext(); ) {
+      String lang = (String) itLang.next();
+      %>
+     <option class="iso639flagSelect <%=lang %>-flag" <% if (lang.equals(userLang)) { %> selected="selected" <% } %> 
+             value='<%= iframeURL %>&amp;lang=<%=lang %>'><%= glp("lang." + lang) %></a>
+     </option>
+   <% } %>
+   </select>
+  </div>
+  <% } // isMultilingual %>
+  
+</div>  
+</div>
+

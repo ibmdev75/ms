@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates type="AbstractPortletSkinable" version="5.0">
+  <template name="default" file="doAbstractPortletSkinableFullDisplay.jsp" usage="box" />
+  <template name="default" file="doAbstractPortletSkinableFullDisplay.jsp" usage="full" />
+  <template name="noskin" file="doNoSkin.jsp" usage="box" />
+  <template name="jalios" file="doDefaultSkin.jsp" usage="box" />
+  <template name="light" file="doLightSkin.jsp" usage="box" />
+  <template name="light" file="doLightSkin.jsp" usage="full" />
+  <!-- Backward Compatibility -->
+  <!-- 
+  <template name="JaliosSkin1" file="doDefaultSkin.jsp" usage="box">
+    <label xml:lang="en">Jalios Skin</label>
+    <label xml:lang="fr">Apparence Jalios </label>
+    <description xml:lang="en">Available for backward compatibility</description>
+    <description xml:lang="fr">Disponible pour des raisons de compatibilité</description>
+  </template>
+  <template name="JaliosSkin2" file="doDefaultSkin.jsp" usage="box">
+    <label xml:lang="en">Jalios Skin</label>
+    <label xml:lang="fr">Apparence Jalios </label>
+    <description xml:lang="en">Available for backward compatibility</description>
+    <description xml:lang="fr">Disponible pour des raisons de compatibilité</description>
+  </template>
+  <template name="BlueSkin" file="doDefaultSkin.jsp" usage="box">
+    <label xml:lang="en">Jalios Skin</label>
+    <label xml:lang="fr">Apparence Jalios </label>
+    <description xml:lang="en">Available for backward compatibility</description>
+    <description xml:lang="fr">Disponible pour des raisons de compatibilité</description>
+  </template>
+   -->
+</templates>
+

@@ -1,0 +1,13 @@
+
+<jalios:if predicate='<%= (!Util.toBoolean((String)request.getSession().getAttribute("generating"),false)) 
+                           && box.getWorkspace().isAdmin(loggedMember) 
+                       %>'>                   
+<%
+	boolean showWorkspace = false;
+	boolean showReport    = false;
+	boolean showModels    = false;
+	generated.AbstractPortletStatReport targetReport = getDataParameter("id", AbstractPortletStatReport.class);
+%>
+<%@ include file='/admin/stat/doStatReportList.jspf' %>
+
+</jalios:if>

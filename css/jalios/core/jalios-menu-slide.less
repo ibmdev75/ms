@@ -1,0 +1,153 @@
+// Include variables and mixins
+@import "init-mixins.less";
+
+.jalios-menu-slide {
+    
+  .main-menu-item {
+    &.active {
+      .button-variant(@btn-info-color; @btn-info-bg; @btn-info-border);
+    }
+  }
+  
+  .menu-slide {
+    position: absolute;
+    left: 0;
+    top: 34px;
+    
+    .multilevelpushmenu_wrapper {
+      position: absolute;
+      overflow: hidden;
+      min-width: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+      z-index: @zindexMenu;
+  
+      .levelHolderClass {
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        width: auto;
+        min-height: 100%;
+        zoom: 1;
+      }
+  
+      .ltr {
+        margin-left: -100%;
+        left: 0;
+      }
+  
+      .rtl {
+        margin-right: -100%;
+        right: 0;
+      }
+  
+      .multilevelpushmenu_inactive {
+        background: transparent;
+      }
+  
+      H2, DIV.title {
+        font-weight: bold;
+        font-size: @font-size-h3;
+        /*padding: 10px;*/
+        margin: 0;
+        border-top: @menu-slide-border;
+        border-left: @menu-slide-border;
+        border-right: @menu-slide-border;
+        background-color: @menu-slide-background-color;
+        white-space: nowrap;
+      }
+  
+      UL {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border-left: @menu-slide-border;
+        border-right: @menu-slide-border;
+        border-bottom: @menu-slide-border;
+      }
+  
+      LI {
+        cursor: pointer;
+        border-top: @menu-slide-border;
+        background-color: @menu-slide-background-color;
+        
+        /*&:last-child {
+          border-bottom: @menu-slide-border;
+        }*/
+        
+        &:hover {
+          text-decoration: none;
+          background-color: @menu-slide-hover-background-color;
+        }
+        
+        &.active {
+          .button-variant(@btn-info-color; @btn-info-bg; @btn-info-border);
+          
+          > A {
+            color: @btn-info-color;
+          }
+        }
+      }
+      
+      A {
+        display: block;
+        outline: none;
+        overflow: hidden;
+        text-decoration: none;
+  
+        text-align: left;
+        padding: 10px 15px;
+        color: #555555;
+      }
+  
+      .backItemClass {
+        display: block;
+        background: @gray-lighter;
+        border-top: @menu-slide-border;
+        border-left: @menu-slide-border;
+        border-right: @menu-slide-border;
+        
+        I.iconSpacing_ltr {
+          padding: 10px 5px 10px 10px;
+        }
+        
+        &:hover {
+          text-decoration: none;
+          background-color: @menu-slide-hover-background-color;
+        }
+      }
+  
+      .floatRight {
+        float: right;
+      }
+  
+      .floatLeft {
+        float: left;
+      }
+  
+      .cursorPointer {
+        cursor: pointer;
+      }
+  
+      .iconSpacing_ltr { 
+        width: 30px;
+      
+        margin: -10px 0 -10px -15px;
+        padding: 10px 10px;
+        line-height: @line-height-base;
+        /*border-right: 1px solid #c8c8c8;*/
+      }
+  
+      .iconSpacing_rtl { 
+        width: 30px;
+        
+        margin: -10px -15px -10px 0;
+        padding: 10px 10px;
+        line-height: @line-height-base;
+        /*border-left: 1px solid #c8c8c8;*/
+      }
+    }
+  
+  }
+}

@@ -1,0 +1,35 @@
+<%--
+  @Summary: Admin footer
+  @Category: Admin / Presentation
+  @Author: Oliver Dedieu
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-2.0
+--%>
+</div>
+
+<div id="jalios-bottombar" class="row">
+  <div class="col-xs-6">
+    <jalios:date nowifnull="<%= true %>" />
+    <% if (channel.isJSyncEnabled()) { %>
+      <% String status = channel.getJSyncReplica().getStatus(); %>
+      - <jalios:icon src='<%= "replica-" + status %>'  title='<%= glp("ui.adm.jsync.r-st." + status) %>'  /> <%= glp("ui.adm.jsync.st.replica") %> <%= channel.getUrid() %>
+    <% } %>
+    <jalios:include target="ADMIN_FOOTER" />
+  </div>
+  <div class="col-xs-6 text-right">
+    <a href="http://www.jalios.com/"><% /* %>Powered by Jalios<% */ %><%= glp("ui.com.foot.powered") %></a>
+  </div>
+</div>
+<div id="jalios-bottombar-placeholder"></div>
+ 
+<%-- ** JAVASCRIPT REDIRECT ** --%>
+<% if (Util.notEmpty(request.getAttribute("redirect"))) { %>
+<jalios:javascript>
+document.location = "<%= encodeForJavaScript((String) request.getAttribute("redirect")) %>";
+</jalios:javascript>
+
+<% } %>
+<%@ include file="/jcore/doEmptyFooter.jspf" %>

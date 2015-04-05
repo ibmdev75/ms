@@ -1,0 +1,96 @@
+
+<div class="notification-editor br">
+  <jalios:message dismissable="true" title="">
+    <p><a href="#" onclick="return false;" data-jalios-action="toggle:hide" data-jalios-target="DIV#notification-help" class="<%= Util.isEmpty(notificationCriteriaArray) ? "hide" : "" %>"><%= glp("ui.work.notification.lbl.help") %></a></p>
+    <div id="notification-help" class="<%= Util.isEmpty(notificationCriteriaArray) ? "" : "hide" %>">
+      <%= glp("ui.work.notification.intro") %>
+    </div>
+  </jalios:message>
+
+<% if (Util.notEmpty(notificationCriteriaArray)) { %>
+<table class="table-data">
+
+  <%-- HEADER --%>
+  <tr>
+    <th></th>
+    <th class="text-overflow"><%= glp("ui.work.notification.period") %></th>
+    <th class="text-overflow"><%= glp("ui.work.notification.mutation-type") %></th>
+    <th style="width:30%;"><%= glp("ui.work.search.tab.cat") %></th>
+    <th style="width:30%;"><%= glp("ui.work.search.tab.text") %></th>
+    <th style="width:30%;"><%= glp("ui.com.lbl.workspace") %></th>
+    <th style="width:30%;"><%= glp("ui.work.search.tab.type") %></th>
+    <th></th>
+  </tr>
+  
+  <%-- CRITERIA LIST --%>
+  <jalios:foreach array="<%= notificationCriteriaArray %>" type="NotificationCriteria" name="itCriteria">
+  <% com.jalios.jcms.handler.QueryHandler qh = itCriteria.getQueryHandler(); %> 
+  <tr>
+    <td>
+      <% if (channel.isDataWriteEnabled()) { %>
+      <a class="modal" href="jcore/notification/editNotificationCriteria.jsp?id=<%= itCriteria.getId() %>&amp;redirect=<%= notificationRedirect %>" onclick="return false;" ><jalios:icon src="edit"  alt="Edit" /></a>
+      <% } %>
+    </td>
+    
+    <%-- Period --%>
+    <td class="text-overflow">
+      <jalios:icon src="calendar" />
+      <%= itCriteria.getPeriodTypeLabel(userLang) %>
+    </td>
+    
+    <%-- Mutation type --%>
+    <td class="text-overflow"><%= itCriteria.getMutationTypeLabel(userLang) %></td>
+    
+    <%-- Category --%>
+    <td>
+      <% if (qh != null) { %>
+      <jalios:foreach collection="<%= qh.getCategorySet(null) %>" name="itCat" type="Category" counter="c2">
+        <span class="label label-info"><%= itCat.getName(userLang) %></span>
+      </jalios:foreach>
+      <% } %>
+    </td>    
+    
+    <%-- Text --%>
+    <td>
+      <% if (qh != null && Util.notEmpty(qh.getText())) { %>
+      "<%= qh.getText() %>"
+      <% } %>
+    </td>
+    
+    <%-- Workspace --%>
+    <td>
+      <% if (qh != null) { %>
+      <jalios:foreach collection="<%= qh.getWorkspaceSet() %>" name="itWorkspace" type="Workspace" counter="c2">
+        <span class="label label-success"><%= itWorkspace.getTitle(userLang) %></span>
+      </jalios:foreach>
+      <% } %>
+    </td>    
+        
+    <%-- Types --%>
+    <td>
+      <% if (qh != null) { %>
+      <jalios:foreach collection="<%= qh.getClassSet() %>" name="itClass" type="Class" counter="c2">
+        <span class="label label-warning"><%= channel.getTypeLabel(itClass, userLang) %></span>
+      </jalios:foreach>
+      <% } %>      
+    </td>
+    
+    <%-- Delete --%>
+    <td>
+      <% if (channel.isDataWriteEnabled()) { %>
+      <a class="modal confirm notification-criteria-delete" href="jcore/notification/editNotificationCriteria.jsp?opDelete=true&amp;notifiedData=<%= dataId %>&amp;id=<%= itCriteria.getId() %>&amp;redirect=<%= notificationRedirect %>" ><jalios:icon src="trash-empty"  title='<%= glp("ui.com.btn.delete") %>'/></a>
+      <% } %>
+    </td>
+    
+  </tr>
+  </jalios:foreach>
+  
+</table>
+<% } %>
+
+<%-- Add --%>
+<% if (channel.isDataWriteEnabled()) { %>
+<a href="jcore/notification/editNotificationCriteria.jsp?notifiedData=<%= dataId %>&amp;redirect=<%= notificationRedirect %>" onclick="return false;" class="modal notification-criteria-add btn btn-default"><jalios:icon src="add"  /> <%= glp("ui.work.notification.lbl.add-criteria") %></a>
+<% } %>
+
+</div>

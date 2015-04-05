@@ -1,0 +1,179 @@
+<%-- *** FIELD LIST ******************************************* --%>
+<table id='fieldTable' class='table-data'>
+  <thead>
+  <tr> 
+    <td>&nbsp;</td>
+    <td width='100%'><%= glp("ui.com.lbl.label") %></td>
+    <td><%= glp("ui.adm.type-edit.lbl.tab") %></td>
+    <td><%= glp("ui.adm.type-edit.fld.lbl.req") %></td>
+    <td><%= glp("ui.adm.type-edit.fld.lbl.search") %></td>
+    <td colspan="2"><%= glp("ui.adm.type-edit.lbl.editor") %></td>
+    <td>&nbsp;</td>
+  </tr>
+  </thead>
+  <jalios:if predicate='<%= !formHandler.isFormEditor()  %>'>
+  <%-- Title ------------------------------------------- --%>
+  <tr> 
+    <td class="text-right" nowrap="nowrap">
+      1. <a href="admin/typeEditor.jsp?type=<%= formHandler.getTypeName() %>&amp;editTitle=true" title="<%= glp("ui.com.alt.edit") %>"><jalios:icon src="edit" /></a>
+    </td>
+    <td class="text-left" nowrap="nowrap"><strong><a href="admin/typeEditor.jsp?type=<%= formHandler.getTypeName() %>&amp;editTitle=true"><%= formHandler.getTitleLabel() %></a></strong></td>
+    <td class="text-left" nowrap="nowrap"></td>
+    <td class="text-center" nowrap="nowrap"><jalios:icon src='required'  /></td>
+    <td class="text-center" nowrap="nowrap"><% if (formHandler.isTitleSearchable()) { %><jalios:icon src='search'  /><% } %></td>
+    <td class="text-left" nowrap="nowrap">
+      <%= glp("ui.adm.type-edit.lbl.ed.textfield") %>
+    </td>
+    <td class="text-left" nowrap="nowrap">
+      <jalios:if predicate='<%= channel.isMultilingual() && formHandler.isTitleML() %>'>
+      <jalios:icon src='ml' title='<%= glp("ui.adm.type-edit.lbl.ml") %>' />
+      </jalios:if>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  </jalios:if>
+  <%-- Other fields ------------------------------------------- --%>
+  <% org.jdom.Element currentFieldElt = formHandler.getFieldElt(); %>
+  <jalios:foreach collection='<%= formHandler.getTypeElt().getChild(TypeConstants.FIELDS_ELT).getChildren() %>' name="itField" type="org.jdom.Element">
+  <%
+    boolean isNew = Util.notEmpty(itField.getAttributeValue(TypeConstants.FIELD_NEW_MARK));
+              boolean isUpdated    = Util.notEmpty(itField.getAttributeValue(TypeConstants.FIELD_UPDATED_MARK));
+              formHandler.updateField(itField);
+
+              String fieldName     = formHandler.getFieldName();
+              String fieldType     = formHandler.getFieldType();
+              String fieldLabelProperty = TypeUtil.getTypeFieldLabelProperty(formHandler.getTypeName(), fieldName);
+              String fieldLabel    = Util.getString(TypeUtil.getLabel(itField, userLang), glp(fieldLabelProperty));
+              String fieldEditor   = formHandler.getFieldEditor();
+              String fieldTabLabel = formHandler.getTabLabel(itField);
+              boolean isFieldMV    = formHandler.isFieldMV();
+              if (isFieldMV && fieldEditor.endsWith("[]")) {
+                fieldEditor = fieldEditor.substring(0, fieldEditor.length() - 2);
+              }
+
+              if (fieldEditor.equals("category")) {
+                Category rootCat = channel.getCategory(itField.getAttributeValue("root"));
+                if (rootCat != null) {
+                  usedCatSet.add(rootCat);
+                  fieldEditor = glp("ui.adm.type-edit.lbl.ed." + fieldEditor) + " > " + rootCat.getName(userLang);
+                } else {
+                  fieldEditor = glp("ui.adm.type-edit.lbl.ed." + fieldEditor);
+                }
+                isFieldMV = !Util.toBoolean(itField.getAttributeValue("exclusive"), false);
+              } else if (fieldType.startsWith("com.jalios.jcms.FileDocument")) {
+                fieldEditor = glp("ui.adm.type-edit.lbl.ed.doc");
+              } else if (fieldType.startsWith("com.jalios.jcms.DBFileDocument")) {
+                fieldEditor = glp("ui.adm.type-edit.lbl.ed.dbdoc");
+              } else if (fieldEditor.equals("link")) {
+                String fieldTypeShort = formHandler.getFieldTypeShort();
+                Class fieldClass = channel.getClass(fieldTypeShort);
+                fieldEditor = glp("ui.adm.type-edit.lbl.ed." + fieldEditor, channel.getTypeLabel(fieldClass, userLang));
+
+              } else {
+                fieldEditor = glp("ui.adm.type-edit.lbl.ed." + fieldEditor);
+              }
+              String tmpStr = null;
+              tmpStr = itField.getAttributeValue("required");
+              boolean fieldRequired = (tmpStr != null) && tmpStr.equals("true");
+              tmpStr = itField.getAttributeValue("compactDisplay");
+              boolean fieldCompactDisplay = (tmpStr != null) && tmpStr.equals("true");
+              tmpStr = itField.getAttributeValue("searchable");
+              boolean fieldSearchable = (tmpStr != null) && tmpStr.equals("true");
+              tmpStr = itField.getAttributeValue("ml");
+              boolean fieldML = (tmpStr != null) && tmpStr.equals("true");
+              tmpStr = itField.getAttributeValue("abstract");
+              boolean fieldAbstract = (tmpStr != null) && tmpStr.equals("true");
+              tmpStr = itField.getAttributeValue("dataimage");
+              boolean fieldDataImage = (tmpStr != null) && tmpStr.equals("true");
+              tmpStr = itField.getAttributeValue("parent");
+              boolean isFieldParent = (tmpStr != null) && tmpStr.equals("true");
+              tmpStr = itField.getAttributeValue("hidden");
+              boolean isFieldHidden = (tmpStr != null) && tmpStr.equals("true");
+
+              String confirmDelete = glp("msg.js.confirm-delete", fieldLabel);
+
+              boolean isSuper = "super".equals(fieldType);
+              
+              String editFieldURL = "admin/typeEditor.jsp?type=" + formHandler.getTypeName() + "&amp;pos=" + (itCounter.intValue() - 1);
+  %> 
+  <%  
+  String anchorClass = "";
+  if (isNew) { anchorClass = "newField"; } else if (isUpdated) { anchorClass = "updatedField"; }
+  %>
+  <tr> 
+    <td class="text-right" nowrap="nowrap">
+      <%= itCounter.intValue() + 1 %>.
+      <a href="<%= editFieldURL %>" title="<%= glp("ui.com.alt.edit") %>"><jalios:icon src="edit" /></a>
+    </td>
+    <td class="text-left" nowrap="nowrap">
+      <% if (isSuper) { 
+        String superTypeLabelProperty = TypeUtil.getTypeLabelProperty(formHandler.getSuperElt().getAttributeValue("name"));
+        String superTypeLabel = Util.getString(TypeUtil.getLabel(formHandler.getSuperElt(), userLang), glp(superTypeLabelProperty));                
+      %>
+         <i><%= glp("ui.adm.type-edit.fld.txt.super", superTypeLabel) %></i>
+         <a class="field <%= anchorClass %>" href="admin/typeEditor.jsp?type=<%= formHandler.getSuperElt().getAttributeValue("name") %>" title="<%= glp("ui.com.alt.edit") %>"><jalios:icon src="edit" /></a>
+         <ul>
+         <jalios:foreach collection="<%= formHandler.getInheritedFieldList() %>" name="itInheritedField" type="org.jdom.Element" counter="c3">
+         <%
+           String superTypeFieldLabelProperty = TypeUtil.getTypeFieldLabelProperty(formHandler.getSuperElt().getAttributeValue("name"), itInheritedField.getAttributeValue("name"));
+           String superTypeFieldLabel = Util.getString(TypeUtil.getLabel(itInheritedField, userLang), glp(superTypeFieldLabelProperty));                   
+         %>
+         <li><%= superTypeFieldLabel %>
+         </jalios:foreach>
+         </ul>
+      <% } else { %>
+        <strong><a class="<%= anchorClass %>" href="<%= editFieldURL %>"><%= fieldLabel %></a></strong>
+        <% if (fieldAbstract) { %><jalios:icon src="abstract"  title='<%= glp("ui.adm.type-edit.lbl.abstract") %>' /><% } %>
+        <% if (fieldDataImage) { %><jalios:icon src="image"  title='<%= glp("ui.adm.type-edit.lbl.image") %>' /><% } %>
+      <% } %>
+    </td>
+    <td class="text-left" nowrap="nowrap"><%= fieldTabLabel %></td>
+    <% if (isSuper) { %>
+    <td nowrap="nowrap" colspan='4'>&nbsp;</td>
+    <% } else { %>
+    <td class="text-center" nowrap="nowrap"><% if (fieldRequired) { %><jalios:icon src='required'  /><% } %></td>
+    <td class="text-center" nowrap="nowrap"><% if (fieldSearchable) { %><jalios:icon src='search'  /><% } %></td>
+    <td class="text-left" nowrap="nowrap">
+      <%= fieldEditor %>
+    </td>
+    <td class="text-left" nowrap="nowrap">
+      <% if (isFieldMV) { %>
+        <%
+        String attrValue = itField.getAttributeValue("tabGroup");
+        boolean hasListGroup = Util.notEmpty(attrValue);
+        String imgSuffix = hasListGroup ? "_relationship" : "";
+        String listGroupName = hasListGroup ? " - " + attrValue : "";
+        %>
+      <%   if (formHandler.isFieldTypeArray()) { %>
+      <jalios:icon src="list" css="<%= imgSuffix %>" title='<%= glp("ui.adm.type-edit.lbl.mv.array") + listGroupName %>' />
+      <%   } else if (formHandler.isFieldTypeList()) { %>
+      <jalios:icon src="list" css="<%= imgSuffix %>" title='<%= glp("ui.adm.type-edit.lbl.mv.list") + listGroupName %>' />
+      <%   } else if (formHandler.isFieldTypeSet()) { %>
+      <jalios:icon src="list" css="<%= imgSuffix %>" title='<%= glp("ui.adm.type-edit.lbl.mv.set") + listGroupName %>' />
+      <%   } %>
+      <% } %>
+      <% if (channel.isMultilingual() && fieldML) { %>
+      <jalios:icon src='ml' title='<%= glp("ui.adm.type-edit.lbl.ml") %>' />
+      <% } %>
+      <% if (isFieldParent) { %>
+      <jalios:icon src='tree' title='<%= glp("ui.adm.type-edit.lbl.parent") %>' />
+      <% } %>
+      <% if (isFieldHidden) { %>
+        <jalios:icon src='hidden-field'  title='<%= glp("ui.adm.type-edit.lbl.hidden") %>' />
+      <% } %>
+    </td>
+    <% } %>
+    <td class="text-left" nowrap="nowrap">
+      <% String fieldUpUrl = HttpUtil.getUrlWithCSRFToken("admin/typeEditor.jsp?type=" + formHandler.getTypeName() + "&amp;pos=" + (itCounter.intValue() - 1) + "&amp;opFieldUp=on", request, true); %>
+      <% String fieldDownUrl = HttpUtil.getUrlWithCSRFToken("admin/typeEditor.jsp?type=" + formHandler.getTypeName() + "&amp;pos=" + (itCounter.intValue() - 1) + "&amp;opFieldDown=on", request, true); %>
+      <a href="<%= fieldUpUrl %>" title="<%= glp("ui.com.alt.up") %>"><jalios:icon src="arrowup" /></a>
+      <a href="<%= fieldDownUrl %>" title="<%= glp("ui.com.alt.down") %>"><jalios:icon src="arrowdown" /></a>&nbsp;
+      <jalios:if predicate='<%= !isSuper %>'>
+        <% String deleteActionURL = contextPath + "/admin/typeEditor.jsp?type=" + formHandler.getTypeName() + "&amp;pos=" + (itCounter.intValue() - 1) + "&amp;opDelete=true&amp;confirm=true"; %>
+        <a href='<%= deleteActionURL %>' onclick='confirmAction("<%= encodeForJavaScript(confirmDelete) %>", this.href); return false;' title="<%= glp("ui.com.alt.remove") %>"><jalios:icon src="trash-empty" alt='<%= glp("ui.com.alt.remove") %>' /></a>
+      </jalios:if>
+    </td>
+  </tr>
+  </jalios:foreach>
+  <% formHandler.updateField(currentFieldElt); %>
+</table>

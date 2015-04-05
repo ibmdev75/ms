@@ -1,0 +1,63 @@
+<% 
+  Set<Group> groupSet = recommendation.getGroupSet(); 
+  int groupCount = Util.getSize(recommendation.getGroupSet()); 
+  boolean isAuthor = JcmsUtil.isSameId(recommendation.getAuthor(),loggedMember);
+  boolean isDataTracked = recoMgr.isDataTracked(recommendation);
+  int readerCount = recoMgr.getRecommendationReaderTrackingMemberCount(recommendation);
+  boolean canAccessReaderTracking = recoMgr.canAccessRecommendationReaderTracker(recommendation, loggedMember);
+  boolean hasMessage = Util.notEmpty(recommendation.getMessage());
+  Member photoMember = null;
+  int maxItems = 20;
+  int totalRecipientCount = recoMgr.getTotalRecipientCount(recommendation);
+%><%--  
+--%><div class="recommendation media<%= isLast ? " last" : ""  %><%= !displayPager ? " bottom-less" : "" %> br">
+	<% if (hasMessage) { %>
+	<div class="pull-left">
+    <jalios:memberphoto member="<%= recommendation.getAuthor() %>" size="<%= PhotoSize.TINY %>"/>
+	</div>
+	<div class="message media-body">
+		<span class="tail"><img src="images/jalios/layout/balloonTail.png" alt="" /></span>
+    <jalios:wiki><%= recommendation.getMessage() %></jalios:wiki>
+	</div>
+	<% } %>
+	<div class="recommendation-meta media">
+    <% if (!hasMessage) { %>
+      <jalios:memberphoto css="pull-left" member="<%= recommendation.getAuthor() %>" size="<%= PhotoSize.ICON %>"/>
+    <% } %>
+    <div class="recommendation-container media-body">   
+        <% if (displayRecommendationOn && recommendation.getData() != null) { %>
+        <div class="br">
+          <jalios:dataicon data="<%= recommendation.getData() %>"/> <jalios:link data="<%= recommendation.getData() %>"/>
+        </div>
+        <% } %>            
+        <div class="br">       
+        <% if (!isAuthor) { %><jalios:link data="<%= recommendation.getAuthor() %>"/> &middot; <% } %>
+        <%= JcmsUtil.getFriendlyDate(recommendation.getCdate(), DateFormat.SHORT, true, userLocale) %>
+        &middot; <span class="badge alert-level alert-level-<%= recommendation.getLevel().getKey() %>"><%= recommendation.getLevel().getLabel(userLang) %></span>
+        <% if (canAccessReaderTracking && !displayReaderTracking) { %>
+            &middot; <a href="<%= modalUrl %>?recommendationTab=readerTrackingTab&amp;recommendationId=<%= recommendation.getId() %>&amp;recommendedDataId=<%= recommendation.getDataId() %>" class="ajax-refresh"><%= glp("ui.recommendation.modal.lbl.reader-track") %></a> 
+        <% } %>         
+        <% if (canAccessReaderTracking && !displayReaderTracking) { %>&middot; <span class="badge badge-small <%= readerCount > 0 ? "badge-success" : "badge-important" %>"> <%= glp("ui.recommendation.modal.lbl.read") %> : <%= readerCount > totalRecipientCount ? totalRecipientCount : readerCount %> / <%= totalRecipientCount %> </span><% } %>
+        </div>
+        <% if (displayReaderTracking) { %>
+	        <div>
+	        <b><%= glp("ui.recommendation.modal.lbl.recipient") %> : </b>
+	        <% if (groupCount > 0) { %>
+	            <jalios:foreach collection="<%= recommendation.getGroupSet() %>" type="Group" name="itGroup" counter="itGroupCounter">
+	                <a href="#" class="ctxTooltipCard ID_ttRecoGroup GROUP-<%= itGroup.getId() %>" onclick="return false;"><%= itGroup.getName() %></a><%= itGroupCounter != groupCount ? " &middot " : ""  %>
+	            </jalios:foreach>                
+	        <% } %>
+	        <% 
+	            boolean isLoggedMemberUniqueRecipient =  JcmsUtil.isSameId(Util.getFirst(recommendation.getRecipientSet()),loggedMember); 
+	            int recipientCount = Util.getSize(recommendation.getRecipientSet());
+	        %>
+	        <% if (recipientCount > 0 && groupCount > 0){ %> &middot;<% } %>
+	        <jalios:foreach collection="<%= recommendation.getRecipientSet() %>" type="Member" name="itMember" counter="itRecipientCounter" max="<%= displayReaderTracking ? recipientCount : maxItems  %>">
+					    <jalios:memberphoto member="<%= itMember %>" size="<%= PhotoSize.ICON %>"/>
+	            <%= itRecipientCounter != recipientCount && itRecipientCounter < maxItems  ? " &middot; " : ""  %>
+	        </jalios:foreach>
+	        </div>
+        <% } %>
+    </div>
+  </div>
+</div>

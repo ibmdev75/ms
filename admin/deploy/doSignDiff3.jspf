@@ -1,0 +1,113 @@
+<%
+{
+Set diff3Set = (Set)request.getAttribute("diff3Set");
+boolean checkCanRead = (request.getAttribute("checkCanRead") == Boolean.TRUE); 
+boolean checkCanWrite = (request.getAttribute("checkCanWrite") == Boolean.TRUE); 
+boolean useRelativeFile = (request.getAttribute("useRelativeFile") == Boolean.TRUE); 
+boolean canSelectDeleted = (request.getAttribute("canSelectDeleted") == Boolean.TRUE); 
+File parentDir = (File)request.getAttribute("parentDir");
+%>
+<table class='table-data listDiff'>	
+  <tr>
+    <th></th>
+    <td class="text-center"><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAll(document.diffForm, "files", this)' /></td>
+    <th><%= glp("ui.adm.um.sign.dir") %></th>
+    <th><%= glp("ui.adm.um.sign.file") %></th>
+    <th><%= glp("ui.adm.um.sign.src-ch") %></th>
+    <th><%= glp("ui.adm.um.sign.tgt-ch") %></th>
+  </tr>
+  <% 
+  int count = 1;
+  int conflictCount = 0;
+  int ccConflictCount = 0;
+  int uuConflictCount = 0;
+  int udConflictCount = 0;
+  int duConflictCount = 0;
+  %>
+  <jalios:foreach collection='<%= diff3Set %>' type='com.jalios.io.SignatureDiff3Entry' name='itDiff'>
+  <% if (itDiff.hasSourceChanged()) { %>
+  <% 
+  String trClass = itDiff.isConflict() ? "listConflictRow" : (itDiff.isSourceCreated() ? "listCreateRow" : (itDiff.isSourceUpdated() ? "listUpdateRow" : "listDeleteRow"));
+  
+  String sourceChange = null;
+  if (itDiff.isSourceCreated()) {
+    sourceChange = "<span class='label label-success'>" + glp("ui.adm.um.diff.create")+ "</span>";
+  } else if (itDiff.isSourceUpdated()) {
+    sourceChange = "<span class='label label-warning'>" + glp("ui.adm.um.diff.update")+ "</span>";
+  } else if (itDiff.isSourceDeleted()) {
+    sourceChange = "<span class='label label-danger'>" + glp("ui.adm.um.diff.delete")+ "</span>";
+  } else {
+    sourceChange = "&nbsp;";
+  }
+  
+  String targetChange = null;
+  if (itDiff.isTargetCreated()) {
+    targetChange = "<span class='label label-success'>" + glp("ui.adm.um.diff.create")+ "</span>";
+  } else if (itDiff.isTargetUpdated()) {
+    targetChange = "<span class='label label-warning'>" + glp("ui.adm.um.diff.update")+ "</span>";
+  } else if (itDiff.isTargetDeleted()) {
+    targetChange = "<span class='label label-danger'>" + glp("ui.adm.um.diff.delete")+ "</span>";
+  } else {
+    targetChange = "&nbsp;";
+  }
+  
+  File itFile = itDiff.getFile();
+  File itAbsFile = new File(parentDir, itFile.toString());
+  boolean badAccess = false;
+  String accessErr = "";
+  if (checkCanRead) {
+    badAccess = !itAbsFile.canRead();
+    accessErr = glp("ui.adm.um.sign.read-err", itFile);
+  }
+  if (!badAccess && checkCanWrite) {
+    badAccess = !com.jalios.io.IOUtil.canWrite(itAbsFile, true);
+    accessErr = glp("ui.adm.um.sign.write-err", itFile);
+  }  
+  if (itDiff.isConflict()) {
+    conflictCount++;
+    if (itDiff.isCCConflict()) {
+      ccConflictCount++;
+    }
+    if (itDiff.isUUConflict()) {
+      uuConflictCount++;
+    }
+    if (itDiff.isUDConflict()) {
+      udConflictCount++;
+    }
+    if (itDiff.isDUConflict()) {
+      duConflictCount++;
+    }
+  }
+  %>
+  <tr class="<%= trClass %>">
+    <td class="numeric">
+      <%= count++ %>
+    </td>
+    <td class="text-center">
+      <% if (!itDiff.isSourceDeleted()) { %>
+      <%   if (badAccess) { %>
+      <jalios:icon src='warning' title="<%= accessErr %>"/>
+      <%   } else { %>
+      <input type="checkbox" name="files" value="<%= useRelativeFile ? itFile : itAbsFile %>" <%= itDiff.isConflict() ? "" : "checked" %>>
+      <%   } %>
+      <% } else if (canSelectDeleted) { %>
+      <input type="checkbox" name="files" value="<%= useRelativeFile ? itFile : itAbsFile %>" <%= itDiff.isConflict() ? "" : "checked" %>>
+      <% } else { %>
+      &nbsp;
+      <% } %>
+    </td>
+    <td><%= itDiff.getFile().getParent() %></td>
+    <td><%= itDiff.getFile().getName() %></td>
+
+    <td class="text-center"><%= sourceChange %></td>
+    <td class="text-center"><%= targetChange %></td>
+  </tr>
+  <% } %>
+</jalios:foreach>
+</table>
+<jalios:if predicate='<%= conflictCount > 0 %>'>
+<p>
+<jalios:icon src='warning'  />&nbsp;<%= glp("ui.adm.um.sign.conflict", new Integer(conflictCount), new Integer(ccConflictCount), new Integer(uuConflictCount), new Integer(udConflictCount), new Integer(duConflictCount)) %>
+</p>
+</jalios:if>
+<% } %>

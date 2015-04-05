@@ -1,0 +1,90 @@
+/* ----------------------------------------------- */
+/*  JCMS Portlet Selection                         */
+/* ----------------------------------------------- */
+
+// Selection structure
+// .selection-wrapper
+//   .selection-header
+//   .selection-body
+//     .selection-main
+//     .selection-side
+//   .selection-footer
+
+.selection-body {
+  margin-top: 10px;
+  position: relative;
+}
+
+.selection-main {
+  margin-right: @selection-side-width + @selection-side-margin-left;
+  &.wide {
+    margin-right: 0;
+  }
+}
+
+.selection-side {
+  top: 0;
+  right: 0;
+  position: absolute;
+  
+  width: @selection-side-width;
+  margin-left: @selection-side-margin-left;
+  
+  z-index: @zindexPublicationActions;
+  
+  -webkit-transition: width 200ms ease-in, box-shadow 200ms ease-in;
+       -o-transition: width 200ms ease-in, box-shadow 200ms ease-in;
+          transition: width 200ms ease-in, box-shadow 200ms ease-in;  
+
+  .pub-action-toggle {
+    margin-bottom: 0;
+    
+    .pub-action-toggle-closed{
+      display: inline-block;
+    }    
+    
+    .pub-action-toggle-opened{
+      display: none;
+    }        
+    
+  }
+  
+  .jalios-accordion-panel {
+    display: block;
+  }
+  
+  .jalios-accordion-panel{
+    display: none;
+    &.publication-action-main {
+      display: block;
+      border-radius: 0;
+    }    
+  }  
+
+  
+  
+  .publication-action-label {
+    display: none;
+  }  
+  
+  .selection-wrapper-side-open &{
+    width: 250px;
+    .box-shadow(@side-opened-box-shadow);   
+     
+    .pub-action-toggle .pub-action-toggle-closed{
+      display: none;
+    }    
+    
+    .pub-action-toggle .pub-action-toggle-opened{
+      display: inline-block;
+    }        
+    
+    .jalios-accordion-panel{
+      display: block;
+    }
+    
+    .publication-action-label {
+      display: inline;
+    }
+  }
+}

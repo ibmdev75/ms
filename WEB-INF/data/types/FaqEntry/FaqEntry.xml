@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="FaqEntry" reviewable="false" debatable="false" visible="true" superclass="com.jalios.jcms.Content" categoryRequired="false" categoryTab="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" customformhandler="custom.CustomEditFaqEntryHandler" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="answer" editor="textarea" wiki="true" required="false" ml="true" compactDisplay="false" type="String" searchable="true" rows="15" cols="80" abstract="true" />
+    <field name="faq" editor="link" required="false" ml="false" compactDisplay="false" type="generated.Faq" searchable="false" parent="true" />
+    <field name="order" editor="int" required="false" ml="false" compactDisplay="true" type="int" default="0" />
+  </fields>
+</type>
+

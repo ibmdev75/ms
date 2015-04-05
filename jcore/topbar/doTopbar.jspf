@@ -1,0 +1,199 @@
+<%  
+  if (!channel.getBooleanProperty("channel.topbar.enabled",false)){
+    return;
+  }
+  
+  if (jcmsContext.isPrintView()){
+    return;
+  }
+  
+  if (Util.toBoolean(request.getAttribute("jcms.topbar.display"),false)) {
+    return;
+	}
+  
+
+	boolean isSiteTopbar = Util.toBoolean(request.getAttribute("topbar-site"),false);
+	boolean isWorkTopbar = Util.toBoolean(request.getAttribute("topbar-work"),false);
+	boolean isAdminTopbar = Util.toBoolean(request.getAttribute("topbar-admin"),false);
+
+  
+  //Toolbar disabling
+  if (isSiteTopbar && !channel.getBooleanProperty("channel.topbar.site.enabled",false)){
+    return;
+  }  
+  
+  if (isWorkTopbar && !channel.getBooleanProperty("channel.topbar.work.enabled",false)){
+    return;
+  }  
+  
+  if (isAdminTopbar && !channel.getBooleanProperty("channel.topbar.admin.enabled",false)){
+    return;
+  }  
+  
+  //Custom toolbar management
+  if (Util.notEmpty(ResourceHelper.getTopbar())) {%>
+    <jalios:include jsp="<%= ResourceHelper.getTopbar() %>" />
+  <% 
+    return;
+  }  
+  if (isSiteTopbar && Util.notEmpty(ResourceHelper.getSiteTopbar())) {%>
+    <jalios:include jsp="<%= ResourceHelper.getSiteTopbar() %>" />
+  <% 
+    return;
+  }
+  
+  if (isAdminTopbar && Util.notEmpty(ResourceHelper.getAdminTopbar())) {%>
+    <jalios:include jsp="<%= ResourceHelper.getAdminTopbar() %>" />
+  <% 
+    return;
+  }  
+ 
+  if (isWorkTopbar && Util.notEmpty(ResourceHelper.getWorkTopbar())) {%>
+    <jalios:include jsp="<%= ResourceHelper.getWorkTopbar() %>" />
+  <% 
+    return;
+  }    
+  
+	String targetPrefix = "SITE_TOPBAR";
+	if (isWorkTopbar) {
+		targetPrefix = "WORK_TOPBAR";
+	} else if (isAdminTopbar) {
+		targetPrefix = "ADMIN_TOPBAR";
+	}
+	
+	//Work part
+	boolean allowWkspFilter = Util.toBoolean(request.getAttribute("allowWkspFilter"),false);
+	boolean wkspcFilter = getBooleanParameter("workspaceFilter",true);
+%>	
+<div class="topbar navbar navbar-default navbar-fixed-top" >
+	<div class="container-fluid">
+
+    <%-- HOME --%>
+    <div class="home topbar-item">
+      <% 
+      String homeUrl = "index.jsp";
+      if (isWorkTopbar) { 
+        homeUrl = workspace.getHomeUrl(userLocale);
+      }
+      %>
+      <a href="<%= homeUrl %>" title="<%= glp("ui.com.alt.home") %>"><jalios:icon src="topbar-home" /></a>      
+    </div>
+    
+
+    <%-- PHOTO --%>
+		<% if (isLogged) { %>
+		<% String memberPhotoHtmlAttributes = "data-jalios-target=\".site-sidebar\""; %>
+		<div class="member-photo-container<%= channel.getCurrentDelegateMember() != null ? " delegation" : "" %>">
+		  <jalios:memberphoto resource="memberphoto-topbar" css="member-photo sidebar-opener" member="<%= loggedMember %>" width="32" height="32" htmlAttributes="<%= memberPhotoHtmlAttributes %>" showStatus="false" link="<%= false %>"/>
+		</div>
+    <% } %>     
+	
+    <jalios:include target='<%= targetPrefix +"_MENU_LEFT" %>' targetContext="topbar"/>
+		
+    <%-- WORKSPACE --%>
+		<%@ include file='/jcore/topbar/doTopbarWorkspaceSelector.jspf' %>
+	
+		<jalios:include target='<%= targetPrefix +"_MENU_RIGHT" %>' targetContext="topbar" />
+		
+    <%-- MESSAGE --%>
+		<% if (isLogged) { %>
+			<%@ include file='/jcore/topbar/doTopbarMessage.jspf' %>
+	  <% } %>
+	  
+	  <jalios:include target='<%= targetPrefix +"_MENU_MIDDLE" %>' targetContext="topbar"/>
+         
+		<div class="right-group nav navbar-right">
+    
+      <%-- PUBLISH MENU --%>
+			<%@ include file='/jcore/topbar/doPublishMenuTopbar.jspf' %>
+			
+		  <jalios:include target='<%= targetPrefix +"_ICONS_LEFT"%>'  />
+	
+      <%
+      PortalInterface portalTopbar = (PortalInterface) request.getAttribute(PortalManager.PORTAL_PORTAL);
+      boolean showPortalIcon = isSiteTopbar && channel.isDataWriteEnabled() && (isAdmin || (isLogged && PortalManager.canWorkOnSome(portalTopbar, loggedMember)));
+      boolean showAdminIcon = checkAccess("admin/");
+      boolean showWorkIcon = isLogged && loggedMember.isWorker() && Util.notEmpty(loggedMember.getWorkspaceSet());
+      %>
+      
+  
+  		
+      <%-- CADDY --%>  
+		  <% if (isAdminTopbar || isWorkTopbar) { %>
+				<% if (workspace != null && !workspace.isClosed()) { %>
+				<div class="topbar-item hidden-xs hidden-sm">
+				  <a href="work/caddy/"><jalios:icon src="topbar-caddy" title='<%= glp("ui.com.alt.manage-caddy") %>'   /></a>
+				</div>
+				<% } %>		  
+		  <% } %>
+		  
+
+
+      <%-- Login --%>
+      <% if (isSiteTopbar && !isLogged) { %>
+      <div class="login topbar-item">
+      <jalios:login loginIcon="topbar-login"/>
+      </div>
+      <% } %>
+      
+      <%-- LANGUAGE --%>
+      <% if (channel.isMultilingual()) { %>
+      <div class="flag topbar-item dropdown">
+        <jalios:lang display='menu' ctxMenuCss="topbar-menu" useLocalizedLanguageList='<%= !jcmsContext.isInFrontOffice() %>'/>
+      </div>
+      <% } %> 
+      <jalios:include target='<%= targetPrefix +"_ICONS_RIGHT"%>' targetContext="topbar" />
+      
+      
+      <%-- Administration Menu : admin, access to workspace area, and advanced action --%>      
+      <jalios:buffer name="adminMenuBuffer1">
+        <% if (showAdminIcon) { %>
+        <li class="icon"><a href="admin/admin.jsp" ><jalios:icon src="admin"/> <%= glp("ui.com.alt.admin") %></a></li>
+        <% } %>
+        <% if (showWorkIcon) { %>
+        <li class="icon"><a href="work/pubBrowser.jsp?ws=<%= JcmsUtil.getId(loggedMember.getFavoriteWorkspace(workspace , null)) %>"><jalios:icon src="workspace"/> <%= glp("ui.com.lbl.workspace") %></a></li>
+        <% } %>      
+      </jalios:buffer>
+        
+      <jalios:buffer name="adminMenuBuffer2">
+        <% if (showPortalIcon) { %>
+        <li class="icon"><a title="<%= glp("ui.com.alt.portal") %>" class="portalModeIcon <%= isPortalMode ? "active" : "" %>" href="<%= PortalManager.sendAction(request,null,PortalManager.PORTAL_ACTION_MODE, isPortalMode ? PortalManager.PORTAL_ACTION_REMOVE : PortalManager.PORTAL_MODE_ENABLE) %>"><jalios:icon src='portal-editor' /> <%= glp("ui.com.alt.portal") %></a></li>
+        <% } %>        
+        <% if (checkAccess("admin/dev")) { %>
+        <li class="icon"><a href="admin/editDataId.jsp" class="modal"><jalios:icon src="inspect"/> <%= glp("ui.adm.mn.dev.edit-data") %></a></li>
+        <% } %>
+        <% if (checkAccess("admin-ws/right-info")) { %>
+        <li class="icon"><a href="admin/checkRights.jsp" class="modal"><jalios:icon src="report-key" /> <%= glp("right-info.checker.ctx-menu") %></a></li>
+        <% } %>
+        
+        <jalios:include target='<%= targetPrefix +"_ADMIN_MENU"%>' targetContext="ctxMenu" />
+   
+      </jalios:buffer>
+    
+      <% if (Util.notEmpty(adminMenuBuffer1) || Util.notEmpty(adminMenuBuffer2)) { %>
+      <div class="topbar-item">
+        <a href="#" class="ctxAdminMenu ctxmenu" onclick="return false;"  title='<%= glp("ui.work.form.tab.adv") %>'><jalios:icon css="ctx-caret" src="topbar-admin" /></a>
+      </div>
+      <ul class="ctxMenu click aligned topbar-menu overflow" id='ctxAdminMenu' style="display: none;">
+        <%= adminMenuBuffer1 %>
+        <% if (Util.notEmpty(adminMenuBuffer1) && Util.notEmpty(adminMenuBuffer2)) { %>
+        <li class="divider"></li>
+        <% } %>  
+        <%= adminMenuBuffer2 %>      
+      </ul>
+      <% } %>      
+
+			<!-- ALERT -->
+			<jalios:include jsp="/jcore/topbar/doAlertTopbar.jsp" targetContext="topbar"/>
+      
+      
+      <!-- SEARCH -->
+	    <% request.setAttribute("jcms.live-search.topbar",true); %>
+			<jalios:include pub="<%= PortalManager.getPortletSearchTopbar() %>" />
+			<% request.removeAttribute("jcms.live-search.topbar"); %>
+		</div><!-- .right-group -->
+
+         
+	</div><!-- EOF .container-fluid -->
+</div><!-- EOF .topbar -->
+<div class="topbar-placeholder"></div>

@@ -1,0 +1,66 @@
+  <div class="tab-page" id="rolesPage">
+    <h2 class="tab"><% /* %>Roles<% */ %><%= glp("ui.com.lbl.roles") %></h2>
+    <form method="post" action="admin/wfEditor.jsp" name="editRoleForm">
+    <input type='hidden' name='id' value="<%= formHandler.getAvailableId() %>" />
+      <p/>
+        <input type="hidden" name="editRole" value='<%= formHandler.getAvailableRole() != null ? formHandler.getAvailableRole().getId() : "" %>' />
+        <% int trCounter = 0; %>
+
+      <table class="table-data">
+      <%-- HEADER --%>
+        <tr>
+          <th>&nbsp;</th>
+          <th width='30%'><%= glp("ui.com.lbl.roles") %></th>
+          <th width='69%'><%= glp("ui.com.lbl.description") %></th>
+          <th width='1%'><%= glp("ui.com.lbl.id") %></th>
+          <th>&nbsp;</th>
+        </tr>
+        <jalios:foreach collection="<%= wf.getRoleSet() %>" name="itRole" type="WFRole" counter="itCounter2">
+        <tr>
+          <td> 
+            <a href="#" onclick="JCMS.wfeditor.WfEditorMgr.submitEditRoleForm('opEditRole', '<%= itRole.getId() %>'); return false;"><jalios:icon src="edit" title='<%= glp("ui.com.alt.edit") %>' alt='<%= glp("ui.com.alt.edit") %>'  /></a>  
+          </td>
+          <td>
+            <jalios:icon src='role'  />
+            <%= itRole.getName(userLang) %>
+          </td>
+          <td><%= itRole.getDescription(userLang)%></td>
+          <td>
+            <%= itRole.getRoleId() %>
+          </td>
+          <td>
+            <% if (!wf.isRoleInvolved(itRole)) { %>
+              <a href="#" onclick="JCMS.wfeditor.WfEditorMgr.submitEditRoleForm('opDeleteRole', '<%= itRole.getId() %>'); return false;"><jalios:icon src="trash-empty" title='<%= glp("ui.com.alt.remove") %>' alt='<%= glp("ui.com.alt.remove") %>'  /></a>
+            <% } %>
+          </td>
+        </tr>
+        </jalios:foreach>
+        <tr> 
+          <td></td>
+          <td nowrap="nowrap">
+            <jalios:field  name="roleName" required='true' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getAvailableRoleNameMap() %>' resource="field-vertical">
+              <jalios:control settings='<%= new TextFieldSettings().showLanguageChooser() %>' />
+            </jalios:field>
+          </td>
+          
+          <td nowrap="nowrap">
+            <jalios:field  name="roleDescription" ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getAvailableRoleDescriptionMap() %>' resource="field-vertical">
+              <jalios:control settings='<%= new TextFieldSettings().showLanguageChooser() %>' />
+            </jalios:field>
+          </td>
+          <td>
+            <% if (formHandler.getAvailableRole() != null) { %>
+            <input class='btn <%= canEdit ?"btn-primary" : "" %>' name='opUpdateRole' value='<%= glp("ui.com.btn.update") %>' type="submit" <%= !canEdit ? "disabled='disabled'": "" %> />
+            <% } else { %>
+            <input class='btn btn-default <%= canEdit ?"btn-primary" : "" %>' name='opAddRole' value='<%= glp("ui.com.btn.add") %>' type="submit" <%= !canEdit ? "disabled='disabled'": "" %> />
+            <% } %>
+          
+          </td>
+          <td></td>
+        </tr>
+      </table>
+      <input type="hidden" name="action" value="true"/>
+      <p>
+      </p>
+    </form>
+  </div>

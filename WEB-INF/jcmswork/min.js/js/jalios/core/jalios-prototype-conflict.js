@@ -1,0 +1,1 @@
+if(Prototype.BrowserFeatures.ElementExtensions){var disablePrototypeJS=function(c,b){var a=function(d){d.target[c]=undefined;setTimeout(function(){delete d.target[c]},0)};b.each(function(d){jQuery(window).on(c+".bs."+d,a)})},pluginsToDisable=["collapse","dropdown","modal","tooltip"];disablePrototypeJS("show",pluginsToDisable);disablePrototypeJS("hide",pluginsToDisable)};

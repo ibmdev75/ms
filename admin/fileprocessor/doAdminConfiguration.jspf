@@ -1,0 +1,186 @@
+<%
+  {
+    final boolean showEditConfiguration = false;
+%>
+<div class='tab-page'>
+  <h2 class="tab"><jalios:icon src='properties'  title='<%= glp("fileprocessor.adm.tab.configuration") %>'  /> <%= glp("fileprocessor.adm.tab.configuration") %></h2>
+  <div class='tabinfo configuration'>
+<% 
+String buttons = "";
+if (showEditConfiguration) { %>
+<form action='<%= action %>' method='post' name='editForm' id='editForm'>
+  <input type="hidden" name="redirect" value="<%= ServletUtil.getUrl(request) %>" />
+<%
+buttons = WidgetUtil.printSubmitFormButton(glp("fileprocessor.adm.editForm.update"), "opUpdate",  "editForm", userLang); 
+%>
+<%= buttons %>
+<% } %>
+         <dl class="dl-horizontal">
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.name") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.name.h") %>' alt='<%= glp("ui.com.lbl.hlp") %>' /> 
+             </dt>
+             <dd>
+             <% if (showEditConfiguration) { %> 
+               <input type="text" name="name" value="<%= formHandler.getAvailableName() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.name); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>' alt='<%= glp("ui.com.lbl.hlp") %>' /></a>
+              <% } else { %>
+              <strong><%= formHandler.getAvailableName() %></strong>
+              <% } %>
+             </dd>   
+           
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.baseDirectory") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.baseDirectory.h") %>'  alt='<%= glp("ui.com.lbl.hlp") %>' /> 
+             </dt>
+             <dd> 
+             <% if (showEditConfiguration) { %> 
+               <input type="text" name="baseDirectory" value="<%= formHandler.getAvailableBaseDirectory() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.baseDirectory); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>' /></a>
+              <% } else { %>
+              <%= formHandler.getAvailableBaseDirectory() %>
+              <% } %>
+             </dd>
+         </dl>
+                   
+        <%-- Scanning configuration --%>
+        <fieldset>
+         <legend class="formLabel"><%= glp("fileprocessor.adm.field.section.scan") %></legend>
+         <dl class="dl-horizontal">
+<%--
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.alarmMgrName") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.alarmMgrName.h") %>'  alt='<%= glp("ui.com.lbl.hlp") %>' /> 
+             </dt>
+             <dd> 
+             <% if (showEditConfiguration) { %> 
+              <input type="text" name="alarmMgrName" value="<%= formHandler.getAvailableAlarmMgrName() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.alarmMgrName); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>'  alt='<%= glp("ui.com.lbl.hlp") %>' /></a>
+              <% } else { %>
+              <%= formHandler.getAvailableAlarmMgrName() %>
+              <% } %>
+             </dd>
+           
+--%>
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.schedulePeriod") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.schedulePeriod.h") %>'  alt='<%= glp("ui.com.lbl.hlp") %>' /> 
+             </dt>
+             <dd> 
+             <% if (showEditConfiguration) { %> 
+               <input type="text" name="schedulePeriod" value="<%= formHandler.getAvailableSchedulePeriod() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.schedulePeriod); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>' /></a>
+              <% } else { %>
+              <jalios:duration time="<%= formHandler.getAvailableSchedulePeriod() * 60 * 1000 %>"/> 
+              <% } %>
+             </dd>
+           
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.scheduleCron") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.scheduleCron.h") %>' /> 
+             </dt>
+             <dd> 
+             <% if (showEditConfiguration) { %> 
+               <input type="text" name="scheduleCron" value="<%= formHandler.getAvailableScheduleCron() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.scheduleCron); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>' /></a>
+              <% } else { %>
+              <%= formHandler.getAvailableScheduleCron() %>
+              <% } %>
+             </dd>
+                 
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.excludedDirRegExp") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.excludedDirRegExp.h") %>'  alt='<%= glp("ui.com.lbl.hlp") %>' /> 
+             </dt>
+             <dd> 
+             <% if (showEditConfiguration) { %> 
+               <input type="text" name="excludedDirRegExp" value="<%= formHandler.getAvailableExcludedDirRegExp() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.excludedDirRegExp); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>' /></a>
+              <% } else { %>
+              <%= formHandler.getAvailableExcludedDirRegExp() %>
+              <% } %>
+             </dd>
+           
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.maxFilesPerScan") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.maxFilesPerScan.h") %>'  alt='<%= glp("ui.com.lbl.hlp") %>' /> 
+             </dt>
+             <dd> 
+              <%= repository.getMaxFilesPerScan() %>
+             </dd>
+          </dl>
+           
+        </fieldset>
+
+        <%-- Processing configuration --%>
+        <fieldset>
+         <legend class="formLabel"><%= glp("fileprocessor.adm.field.section.processing") %></legend>
+         <dl class="dl-horizontal">
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.processingLimitDuration") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.processingLimitDuration.h") %>'  alt='<%= glp("ui.com.lbl.hlp") %>' /> 
+             </dt>
+             <dd> 
+             <% if (showEditConfiguration) { %> 
+               <input type="text" name="processingLimitDuration" value="<%= formHandler.getAvailableProcessingLimitDuration() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.processingLimitDuration); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>' /></a>
+              <% } else { %>
+              <jalios:duration time="<%= formHandler.getAvailableProcessingLimitDuration() * 1000%>" />
+              <% } %>
+             </dd>
+                
+         </dl>
+        </fieldset>
+
+        <%-- Indexing configuration --%>
+        <fieldset>
+         <legend class="formLabel"><%= glp("fileprocessor.adm.field.section.parsing") %></legend>
+         <dl class="dl-horizontal">
+           
+           <% if (!RepositoryManager.JCMS_UPLOAD_REPOSITORY.equals(repository.getId())) { %>
+             <dt>
+              <%= glp("fileprocessor.adm.field.luceneIndex") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.luceneIndex.h") %>' /> 
+             </dt>
+             <dd> 
+             <% if (showEditConfiguration) { %> 
+               <input type="text" name="luceneIndex" value="<%= formHandler.getAvailableLuceneIndex() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.luceneIndex); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>' /></a>
+              <% } else { %>
+              <%= formHandler.getAvailableLuceneIndex() %>
+              <% } %>
+             </dd>
+           <% } %>
+           
+           
+             <dt>
+              <%= glp("fileprocessor.adm.field.indexerClass") %>
+               <jalios:icon src="help"  title='<%= glp("fileprocessor.adm.field.indexerClass.h") %>'  alt='<%= glp("ui.com.lbl.hlp") %>' /> 
+             </dt>
+             <dd> 
+             <% if (showEditConfiguration) { %> 
+               <input type="text" name="indexerClass" value="<%= formHandler.getAvailableIndexerClass() %>" class="formTextfield" size="80" />
+               <a href='#' onclick='blankField(document.editForm.indexerClass); return false;'><jalios:icon src="delete"  title='<%= glp("ui.com.alt.clear") %>' /></a>
+              <% } else { %>
+              <code><%= formHandler.getAvailableIndexerClass() %></code>
+              <% } %>
+             </dd>
+           
+         </dl>
+        </fieldset>
+        
+<% if (showEditConfiguration) { %>
+<%= buttons %>
+</form>
+<% } %>
+  </div>
+</div>
+<% } /* showConfigurationTab */ %>

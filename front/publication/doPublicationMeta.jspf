@@ -1,0 +1,56 @@
+<% boolean isMetaFileDocument = pub instanceof FileDocument; %>
+<jalios:include target="PUBLICATION_META_TOP_BEFORE" />
+<div class="publication-info">
+  <jalios:include target="PUBLICATION_META_TOP" />
+  <div class="publication-meta">
+    <% if (isMetaFileDocument) {
+      FileDocument metaDoc = (FileDocument) pub; 
+      boolean hasBeenUpdated = metaDoc.getOpAuthor() != null && metaDoc.getCdate() != null && Math.abs(metaDoc.getMdate().getTime() - metaDoc.getCdate().getTime()) > 2000 ;
+      %>
+      
+      <% if (hasBeenUpdated) { %>      
+      <div class="filedocument-update">
+        <jalios:memberphoto css="meta-photo" member="<%= metaDoc.getOpAuthor() %>" size="<%= PhotoSize.ICON %>" />
+        <%
+        String updatedBy;
+        if (metaDoc.getOpAuthor().equals(pub.getAuthor())) {
+          updatedBy = metaDoc.getOpAuthor().getDisplayLink(userLocale);
+        } else {
+          updatedBy = "<span itemprop='contributor'>"+metaDoc.getOpAuthor().getDisplayLink(userLocale)+"</span>";
+        }
+        %>
+        <%= glp("ui.filedocument.lbl.updated-by", updatedBy) %>
+        &middot;
+        <meta itemprop="dateModified" content="<%= DateUtil.formatIso8601Date(metaDoc.getMdate()) %>" />
+        <%= JcmsUtil.getFriendlyDate(metaDoc.getMdate(), DateFormat.SHORT, true, userLocale) %>
+        &middot; <%= glp("ui.com.lbl.version") %> <%= metaDoc.getVersionString() %>            
+        <a href="" onclick="return false;" data-jalios-action="toggle:hide toggle:dropup" data-jalios-target=".filedocument-create|this"><jalios:icon src="caret" /></a>
+      </div>
+      <% } %>
+                    
+      <div class="filedocument-create <%= hasBeenUpdated ? "hide" : "" %>">
+        <jalios:memberphoto css="meta-photo" member="<%= pub.getAuthor() %>" size="<%= PhotoSize.ICON %>" />
+        <%= glp("ui.filedocument.lbl.uploaded-by", "<span itemprop='author'>"+pub.getAuthor().getDisplayLink(userLocale)+"</span>") %>
+        &middot; 
+        <meta itemprop="dateCreated" content="<%= DateUtil.formatIso8601Date(pub.getCdate()) %>" />
+        <%= JcmsUtil.getFriendlyDate(pub.getCdate(), DateFormat.SHORT, true, userLocale) %> 
+      </div>
+
+    <% } else { %>
+      <jalios:memberphoto css="meta-photo" member="<%= pub.getAuthor() %>" size="<%= PhotoSize.ICON %>" />
+      <span itemprop="author"><jalios:link css="meta-author" data="<%= pub.getAuthor() %>" /></span>
+      &middot;
+      <meta itemprop="datePublished" content="<%= DateUtil.formatIso8601Date(pub.getPdate()) %>" />
+      <%= JcmsUtil.getFriendlyDate(pub.getPdate(), DateFormat.SHORT, true, userLocale) %>
+      <%@ include file='/front/publication/doPublicationCategories.jspf' %>
+    <% } %>
+  </div>
+  
+  <% if (isMetaFileDocument) { %>
+    <% FileDocument metaDoc = (FileDocument) pub; %>
+    <%@ include file='/front/publication/doFileDocumentMeta.jspf' %>
+    <%@ include file='/front/publication/doPublicationCategories.jspf' %>
+  <% } %>
+  <jalios:include target="PUBLICATION_META_BOTTOM" />
+</div>
+<jalios:include target="PUBLICATION_META_BOTTOM_AFTER" />

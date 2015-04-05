@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletRSS" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" superclass="generated.AbstractPortletSkinable" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="source" editor="url" required="true" compactDisplay="false" type="String" searchable="false" size="80" maxlength="500" ml="false" openWindow="false" descriptionType="tooltip" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" abstract="true" truncate="400" />
+    <field name="showTitle" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" ml="false" descriptionType="tooltip" tab="display" searchable="false" />
+    <field name="showDescription" editor="boolean" required="false" compactDisplay="false" tab="display" type="boolean" default="on" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="showImage" editor="boolean" required="false" compactDisplay="false" tab="display" type="boolean" default="on" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="showWebMastersEmail" editor="boolean" required="false" compactDisplay="false" tab="display" type="boolean" default="off" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="showItemsDescription" editor="boolean" required="false" compactDisplay="false" tab="display" type="boolean" default="on" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="openLinksInNewWindow" editor="boolean" required="false" compactDisplay="false" tab="display" type="boolean" default="off" />
+    <field name="trackingEnabled" editor="boolean" required="false" compactDisplay="false" tab="display" type="boolean" default="off" />
+    <field name="refresh" editor="duration" required="true" compactDisplay="false" type="long" ml="false" descriptionType="tooltip" tab="update" searchable="false" default="86400" />
+    <field name="maxItems" editor="int" required="false" compactDisplay="false" type="int" default="10" ml="false" descriptionType="tooltip" tab="items" searchable="false" unitPos="after" minValue="0" html="false" />
+    <field name="skipFirstItems" editor="int" required="false" compactDisplay="false" tab="items" type="int" default="0" ml="false" descriptionType="tooltip" searchable="false" minValue="0" unitPos="after" html="false" />
+    <field type="super" />
+  </fields>
+  <tabs>
+    <tab id="display" />
+    <tab id="update" />
+    <tab id="items" />
+  </tabs>
+</type>
+

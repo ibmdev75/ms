@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletSignUp" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" superclass="generated.AbstractPortletSkinable" unitFieldEdition="false" audienced="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="intro" editor="textfield" required="false" compactDisplay="true" type="String" searchable="false" size="80" ml="true" abstract="true" />
+    <field name="label" editor="textfield" required="true" compactDisplay="false" type="String" searchable="false" size="80" ml="true" html="false" checkHtml="true" descriptionType="tooltip" />
+    <field name="displayPortal" editor="link" required="false" compactDisplay="false" type="generated.PortletPortal" parent="false" ml="false" descriptionType="tooltip" searchable="false" />
+    <field type="super" />
+  </fields>
+</type>
+

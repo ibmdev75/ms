@@ -1,0 +1,1 @@
+!function(c){var b=/submit/i;var d=function(g){var e=c.jalios.Event.match(g,"broker",b,true);if(!e){return}var h=e.source.currentTarget;e.options._broked=true;var f=c(h).closest("FORM");if(f.exists()){f.submit()}};var a=function(){c(document).on("jalios:broker",d)};c(document).ready(function(e){a()})}(window.jQuery);

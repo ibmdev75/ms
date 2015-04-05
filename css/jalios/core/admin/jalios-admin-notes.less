@@ -1,0 +1,41 @@
+/* ----------------------------------------------- */
+/*  ADMIN NOTES                                    */
+/* ----------------------------------------------- */
+
+#admin-notes {
+  z-index: @zindexAdminNotes;
+  position: absolute;
+  top: 85px;
+  right: 10px;
+  
+  #admin-notes-title {
+    width: 500px;
+    background-color: #F9EE6A;
+    color: black;
+    padding: 4px;
+    font-size: @font-size-base - 1;
+    line-height: @baseline - 1;
+
+    A { float:right; color: red; }
+    #admin-notes-save {  
+      font-size: @font-size-base - 2;
+      line-height: @baseline - 2
+    }
+  }
+  
+  #admin-notes-content {
+    background-color: #FFFF99;
+    width: 500px;
+    FORM { margin: 0; }
+    TEXTAREA {
+      width: 500px;
+      height: 300px; 
+      .box-shadow(none);
+      border:0;
+      padding: 0;
+      background-color: #FFFF99;
+      color: black;
+      font-size: @font-size-base - 1;
+    }
+  }
+}

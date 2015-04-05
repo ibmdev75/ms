@@ -1,0 +1,50 @@
+<%-- *** FileDocument KIND FILTER ******************************************* --%>
+<% if (FileDocument.class.isAssignableFrom(formHandler.getCurrentClass()) ||
+       DBFileDocument.class.isAssignableFrom(formHandler.getCurrentClass())) { 
+  
+  EnumerateSettings documentSettings = new EnumerateSettings().select().onChange("submit");
+  
+%>
+<div class="form-group">
+<jalios:field required="true" resource="field-light" name="documentKinds" value="<%= formHandler.getQueryHandler().getDocumentKinds() %>" mv="-1">
+  <jalios:control settings="<%= documentSettings %>" >
+    <jalios:buffer name="SELECT_OPTIONS">
+      <option value="" <%= Util.isEmpty(fieldValue) ? "selected='selected'" : ""%>><%= glp("ui.work.pub.lbl.all-kinds") %></option>
+      <option value="" disabled="disabled">-----------------------</option>   
+      
+      <%
+        // Retrieve map of the "kind group name" to "document kind group label"
+        Map<String,String> kindGroupMap = com.jalios.jcms.handler.QueryHandler.getDocumentKindsGroupMap(userLang);
+        for (Map.Entry<String,String> groupEntry : kindGroupMap.entrySet()) {
+          String kindGroupName = groupEntry.getKey();
+          String kindGroupLabel = groupEntry.getValue();
+          boolean kindAlreadySelected = false;
+          %>
+          <optgroup label="<%= kindGroupLabel %>">
+          <% 
+          Map<String,String> kindMap = com.jalios.jcms.handler.QueryHandler.getDocumentKindsMap(userLang, kindGroupName);
+          for (Map.Entry<String,String> kindEntry : kindMap.entrySet()) {
+            String kindName = kindEntry.getKey();
+            String kindLabel = kindEntry.getValue();
+            String kindHelp = glp("file-document.kinds." + kindName + ".h");
+            boolean kindSelected = !kindAlreadySelected && Util.arrayContains(formHandler.getQueryHandler().getDocumentKinds(), kindName);
+            kindAlreadySelected |= kindSelected; 
+      %>
+        <option value="<%= kindName %>" title="<%= kindHelp %>" <%= kindSelected ? "selected=\"selected\"" : "" %>><%= kindLabel %></option>
+      <% } %>
+        </optgroup>
+     <% } %>      
+      
+    </jalios:buffer>
+    
+  </jalios:control>
+
+</jalios:field>
+
+<%-- FileDocumnet: add the media browser link --%>
+<% if (showDocumentFilter) { %>
+  <a href="work/mediaBrowser.jsp?workspaceFilter=<%= workspaceFilter %>&media=all" onclick="popupWindow(this.href, 'mediaBrowser', 930, 570, '', false, false); return false;" class="btn btn-default"><jalios:icon src="mediabrowser" title='<%= glp("ui.work.mediabrowser.title") %>' /></a>
+<% } %>
+
+</div>
+<% } %>

@@ -1,0 +1,75 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+.pqf-carousel .carousel-thumb IMG {
+  width: 100%;
+}
+.pqf-carousel .carousel-caption {
+  color: black;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 0;
+  padding-left: 15%;
+  padding-right: 15%;
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.8) 100%);
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.8) 100%);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.8) 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4dffffff', endColorstr='#ccffffff', GradientType=0);
+}
+.pqf-carousel .carousel-control {
+  z-index: 11;
+}
+.pqf-carousel .carousel-inner {
+  text-align: center;
+}
+.pqf-carousel .carousel-meta-data {
+  color: #555555;
+}
+.pqf-carousel .carousel-meta-data A,
+.pqf-carousel A.carousel-meta-data {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.pqf-carousel .carousel-meta-data {
+  margin-right: 5px;
+  display: inline-block;
+  text-shadow: none;
+}
+.pqf-carousel .carousel-data-categories {
+  color: #555555;
+  margin-right: 5px;
+  display: inline-block;
+  text-shadow: none;
+}
+.pqf-carousel .carousel-data-title {
+  font-size: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.pqf-carousel .carousel-indicators {
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  margin-left: 0;
+}
+.pqf-carousel .carousel-indicators LI {
+  border-color: #555555;
+  background-color: #FFFFFF;
+}
+.pqf-carousel .carousel-indicators LI.active {
+  border-color: #000000;
+  background-color: #555555;
+}
+.pqf-carousel-no-pager .pqf-carousel .carousel-indicators {
+  display: none;
+}
+.pqf-carousel-no-controls .pqf-carousel .pqf-carousel-controls {
+  display: none;
+}

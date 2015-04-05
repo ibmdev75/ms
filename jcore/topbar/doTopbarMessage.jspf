@@ -1,0 +1,39 @@
+<!-- Message -->
+<jalios:buffer name="topbarMessage">
+  <%-- WARNINGS --%>
+  <% QuotaElement quotaElt = QuotaManager.getInstance().getChannelQuotaAlert(); 
+  if(loggedMember == null || !loggedMember.isAdmin()){
+    quotaElt = null;
+  }
+  if(loggedMember != null && workspace != null && (loggedMember.isAdmin(workspace) || loggedMember.isWorker(workspace))){
+    QuotaElement workspaceQuotaElt = workspace.getQuotaAlert();
+    if(workspaceQuotaElt != null && quotaElt == null){
+      quotaElt = workspaceQuotaElt;
+    }
+  }
+  %>
+  <% if (!channel.isDataWriteEnabled()) { %>  
+  <li class="topbar-warning-datawrite">
+    <p><%= glp("msg.data-disabled") %></p>
+    <jalios:message title="" dismissable="" level="<%= MessageLevel.WARN  %>">
+      <%= glp("ui.adm.data-write.full-msg", Util.getString(channel.getProperty("channel.data-write.status"), glp("ui.adm.data-write.default-msg"))) %>
+    </jalios:message>
+  </li>
+  <% } 
+  if (quotaElt != null) { %>
+  <li class="topbar-warning-quota"><%= glp("quota-manager.warning", Util.formatFileSize(quotaElt.getQuota()),Util.formatFileSize(quotaElt.getQuotaMaxValue())) %></li>
+  <%  } %>
+  <jalios:include target="WORK_TOPBAR_WARNING" targetContext="li" />
+</jalios:buffer>
+<% if (Util.notEmpty(topbarMessage)) { %>
+<div class="topbar-item topbar-warning-wrapper">
+<div class="dropdown">
+  <a id="topbar-warning-trigger" class="topbar-warning-opener" data-toggle="dropdown" href="#">
+    <jalios:icon src="topbar-warning" css="ctx-caret-white ctx-caret" />
+  </a>
+  <ul class="dropdown-menu topbar-warning-menu" role="menu" aria-labelledby="topbar-warning-trigger">
+    <%= topbarMessage %>
+  </ul>
+</div>
+</div>
+<% } %>

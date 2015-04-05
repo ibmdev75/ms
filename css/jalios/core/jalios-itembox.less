@@ -1,0 +1,114 @@
+/* ---------------------------------------------- */
+/*  ITEM BOX                                      */
+/* ---------------------------------------------- */
+
+UL.item-box {
+  list-style:none;
+  padding:0;
+  margin-bottom: 0;
+}
+
+TABLE {
+  &.item-box {
+    width:100%;
+  }
+  &.items {
+    border-collapse: separate;
+  }
+}
+
+.panel .panel-body .item-box {
+  margin-left:  -@panel-body-padding;
+  margin-right: -@panel-body-padding;
+}
+
+.item-box {
+  
+  > LI { 
+    position: relative;
+    line-height: @baseline;
+    border-bottom: 1px solid transparent; /* IE7+ */
+    border-top:    1px solid transparent; /* IE7+ */
+    padding: @baseline /4 @baseline /2;
+  
+    &:hover{
+      border-top:0 none;
+      border-bottom:0 none;
+      .item-icons, .item-icons-large {
+        opacity:1;
+      } 
+    }
+    .item-icons, .item-icons-large {
+      float:right;
+      opacity: 0;
+    }
+          
+    &:hover{ 
+      background-color: @highlightBackground;
+      border-bottom: 1px solid @highlightBorder; /* IE7+ */
+      border-top:    1px solid @highlightBorder; /* IE7+ */
+    }
+  }
+  
+  TR.item {
+    TD{border-bottom: 1px solid white; /* IE7+ */
+      border-top:    1px solid white; /* IE7+ */       
+    }
+    TD {
+      padding: 2px;
+      .item-icons, .item-icons-large { float: right; }
+      &:first-child{padding-left:@boxPadding;}
+      &:last-child{padding-right:@boxPadding;}
+      vertical-align: top;
+    }
+  }
+      
+  INPUT[type="radio"], INPUT[type="checkbox"] { vertical-align: top; }
+  
+  TR.item:hover, > LI:hover {
+    .item-icons, 
+    .item-icons-large, 
+    .editArea {  
+      visibility: visible; 
+    }
+  }
+  
+  TR.item TD > .item-info {
+    vertical-align: initial;
+  }
+  
+  TR.item:hover {
+    background-color: @highlightBackground;
+    TD {
+      border-bottom: 1px solid @highlightBorder; /* IE7+ */
+      border-top:    1px solid @highlightBorder; /* IE7+ */    
+    }
+  }
+
+  .item-info { // FIXME: SHIM see badge
+    #JCMS > .badge();
+    display: inline;
+    vertical-align: top;
+  } 
+  .item-parent { 
+    color: #9E9E9E;
+    font-size:@font-size-small;
+  } 
+  
+  .item-date-new   { background-color: #BFE673; }
+  .item-date-today { background-color: #86CF00; }
+
+ 
+}
+
+.item-box-footer {
+  padding: 10px 15px;
+  background-color: @panel-footer-bg;
+  border-top: 1px solid @panel-inner-border;
+  .border-bottom-radius((@panel-border-radius - 1));
+}
+
+/* Reset panel padding to stick to panel sides*/
+.panel .item-box-footer {
+  margin: 0 -@panel-body-padding -@panel-body-padding;
+}

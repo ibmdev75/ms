@@ -1,0 +1,77 @@
+  <div class="tab-page" id="transitionsPage">
+    <h2 class="tab"><%= glp("ui.adm.wf-edit.tr.tab") %></h2>
+    <div>
+      <form method="post" action="admin/wfEditor.jsp" name="editTransitionsForm">
+      <input type='hidden' name='id' value="<%= formHandler.getAvailableId() %>" />
+      <jalios:message msg='<%= glp("ui.adm.wf-edit.tr.hlp", formHandler.getAvailableLabel(userLang)) %>' dismissable="true" />
+      <table class="table-data">
+        <%-- HEADER --%>
+        <tr>
+          <th><% /* %>Roles<% */ %><%= glp("ui.com.lbl.roles") %></th>
+          <jalios:foreach collection="<%= wf.getStateSet() %>" name="itState" type="WFState" counter="c2">
+          <% if (itState.getPstatus() != WorkflowManager.ARCHIVED_PSTATUS ) { %>
+          <th><% /* %>from state ...<% */ %><%= glp("ui.adm.wf-edit.tr.lbl.from", itState.getLabel(userLang)) %></th>
+          <% } %>
+          </jalios:foreach>
+        </tr>
+        <%-- ROLE LIST --%>
+        <% Set involvedRoleSet = formHandler.getInvolvedRoles(); %>
+        <jalios:foreach collection="<%= involvedRoleSet %>" name="itRole" type="WFRole">
+        <tr>
+          <td>
+          <jalios:icon src='role'  />
+          <font face="Arial, Helvetica, sans-serif"><b><%= itRole.getName(userLang) %></b></font></td>
+          <jalios:foreach collection="<%= wf.getStateSet() %>" name="itSource" type="WFState" counter="c2">
+          <% if (itSource.getPstatus() != WorkflowManager.ARCHIVED_PSTATUS ) { %>
+          <td nowrap="nowrap">
+            <jalios:foreach collection="<%= wf.getStateSet() %>" name="itTarget" type="WFState" counter="c3">
+              <% boolean checked = wf.canChangeState(itRole, itSource, itTarget); %>
+              <div class="checkbox">
+                <label>
+                  <input type='checkbox' name='trans.<%= itRole.getId() %>.<%= itSource.getPstatus() %>' value='<%= itTarget.getPstatus() %>' <%= checked ? "checked" : "" %>><% formElementCount++ ;%>
+                  <span class='<%= checked ? "highlight" : "" %>'><%= itTarget.getLabel(userLang) %></span>
+                </label>
+              </div>
+            </jalios:foreach>
+          </td>
+          <% } %>
+          </jalios:foreach> 
+        </tr>
+        </jalios:foreach>
+        <%-- NEW ROLE --%>
+        <% if (involvedRoleSet.size() != wf.getRoleSet().size() ) { %>
+        <tr>
+          <td>
+            <jalios:icon src='role'  />
+            <select class='form-control' name="transitRole">
+              <option value="" selected='selected'><% /* %>Select a role<% */ %><%= glp("ui.adm.wf-edit.tr.lbl.sel-role") %></option>
+              <option value="" >--------------</option>
+              <jalios:foreach collection="<%= Util.subSet(wf.getRoleSet(),involvedRoleSet) %>" name="itRole" type="WFRole">
+              <option value="<%= itRole.getId() %>"><%= itRole.getName(userLang)%></option>
+              </jalios:foreach>
+            </select><% formElementCount++ ;%>
+          </td> 
+          <jalios:foreach collection="<%= wf.getStateSet() %>" name="itSource" type="WFState" counter="c2">
+          <% if (itSource.getPstatus() != WorkflowManager.ARCHIVED_PSTATUS ) { %>
+          <td nowrap="nowrap">
+            <jalios:foreach collection="<%= wf.getStateSet() %>" name="itTarget" type="WFState" counter="c3">
+            <div class="checkbox">
+              <label>
+                <input type='checkbox' name='trans.new_rid.<%= itSource.getPstatus() %>' value='<%= itTarget.getPstatus() %>' /><% formElementCount++ ;%>
+                <%= itTarget.getLabel(userLang) %>
+              </label>
+            </div>
+            </jalios:foreach>      
+          </td>
+          <% } %>
+          </jalios:foreach>      
+        </tr>
+        <% } %>
+      </table>
+    <p> 
+      <input class='btn <%= canEdit ?"btn-primary" : "" %>' type="submit" name="opUpdateMatrix" value='<%= glp("ui.com.btn.update") %>' <%= !canEdit ? "disabled='disabled'": "" %> /><% formElementCount++ ;%>
+      <input class='btn btn-default' type="reset"  value='<%= glp("ui.com.btn.reset") %>' <%= !canEdit ? "disabled='disabled'": "" %> /> <% formElementCount++ ;%>
+    </p>
+    </form>
+    </div>
+  </div>

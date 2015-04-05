@@ -1,0 +1,11 @@
+<% if (!formHandler.isTemplateTabHidden()) { %>
+  <div class="tab-page">
+    <h2 class="tab">
+      <jalios:icon src="template" alt="T" title="ui.work.form.lbl.templates" />
+      <%= glp("ui.work.form.lbl.templates") %>
+    </h2>
+    <jalios:include target="EDIT_PUB_TEMPLATETAB_HEADER" />
+    <jsp:include page="/work/doEditCommonTemplates.jsp" flush="true" />
+    <jalios:include target="EDIT_PUB_TEMPLATETAB_FOOTER" />
+  </div><%-- End TEMPLATES 'tab-page' --%>
+<% } %>

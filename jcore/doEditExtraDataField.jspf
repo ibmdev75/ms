@@ -1,0 +1,60 @@
+<%@page import="com.jalios.jcms.taglib.settings.impl.BooleanSettings"%>
+<%
+String itKey = itEntry.getKey();
+if (!itKey.startsWith(prefix)) {
+  continue;
+}
+
+String    itDefault = itEntry.getValue();
+String    itEditor  = WidgetUtil.getPropertyEditor(itKey);
+String    itShortKey= WidgetUtil.getShortProperty(itKey,itEditor);
+String    itValue   = availableValuesMap.get(itShortKey);
+
+String    itLabel   = glp(itShortKey);
+if (itLabel.equals(itShortKey)){
+  continue;
+}
+
+String itDesc = glp(itShortKey+".help");
+if ((itShortKey+".help").equals(itDesc)){ itDesc = ""; }
+
+String itIcon = channel.getProperty(itShortKey+".icon", "");
+
+// --- Select the convenient editor ------------------------------
+if ("jsp".equals(itEditor)) {
+  request.setAttribute("itKey"     ,itKey);
+  request.setAttribute("itShortKey",itShortKey);
+  request.setAttribute("itDefault" ,itDefault);
+  request.setAttribute("itEditor"  ,itEditor);
+  request.setAttribute("itValue"   ,itValue);
+  request.setAttribute("itLabel"   ,itLabel);
+  request.setAttribute("itDesc"    ,itDesc);
+  request.setAttribute("itDescType",TypeFieldEntry.DescriptionType.TEXT);
+  request.setAttribute("itIcon"    ,itIcon);
+  %><jalios:include jsp='<%= itDefault.trim() %>' />
+  <% formHiddenCount = Util.toInt(request.getAttribute("formHiddenCount"),0);
+
+} else if ("number".equals(itEditor)) { %>
+  <input type="hidden" name="<%= extraKeyFieldName %>" value="<%= itShortKey %>" />
+  <jalios:field name="<%= extraValueFieldName %>" label="<%= itLabel %>" description="<%= itDesc %>" value="<%= itValue %>">
+    <jalios:control type="<%= ControlType.NUMBER %>" /> 
+  </jalios:field>
+<% } else if ("area".equals(itEditor)) { %>
+  <input type="hidden" name="<%= extraKeyFieldName %>" value="<%= itShortKey %>" />
+  <jalios:field name="<%= extraValueFieldName %>" label="<%= itLabel %>" description="<%= itDesc %>" value="<%= itValue %>">
+    <jalios:control type="<%= ControlType.TEXTAREA %>" /> 
+  </jalios:field>
+<% } else if ("boolean".equals(itEditor)) { %>
+  <input type="hidden" name="<%= extraKeyFieldName %>" value="<%= itShortKey %>" />
+  <jalios:field name="<%= extraValueFieldName %>" label="<%= itLabel %>" description="<%= itDesc %>" value="<%= itValue %>">
+    <jalios:control settings="<%= new BooleanSettings().select()%>" /> 
+  </jalios:field>
+<% } else if ("hidden".equals(itEditor)) { %>
+  <input type="hidden" name="<%= extraKeyFieldName %>"   value="<%= itShortKey %>" />
+  <input type="hidden" name="<%= extraValueFieldName %>" value="<%= itValue %>" />
+<% } else { %>
+  <input type="hidden" name="<%= extraKeyFieldName %>" value="<%= itShortKey %>" />
+  <jalios:field name="<%= extraValueFieldName %>" label="<%= itLabel %>" description="<%= itDesc %>" value="<%= itValue %>">
+    <jalios:control type="<%= ControlType.TEXTFIELD %>"/> 
+  </jalios:field>
+<% } %>

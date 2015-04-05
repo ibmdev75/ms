@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletLoggedMembers" superclass="generated.AbstractPortletSkinable" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="limitPortletAccess" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="displayNumbers" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="displayMembers" editor="enumerate" required="true" compactDisplay="false" type="String" chooser="listbox" valueList="none|all|currentWorkspace|loggedMemberWorkspace" ml="false" descriptionType="tooltip" searchable="false" abstract="true" truncate="400" html="false" />
+    <field name="displayLinkToMembersProfile" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" />
+    <field name="maximumMembers" editor="int" required="false" compactDisplay="false" type="int" default="10" />
+    <field type="super" />
+  </fields>
+</type>
+

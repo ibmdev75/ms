@@ -1,0 +1,54 @@
+<jalios:accordion-panel title="ui.adm.cleaner.g-rule.title">
+  <%-- --- RULES / REMOVE DELETED ------- --%>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="removeDeleted" value="true" checked="checked" />
+      <%= glp("ui.adm.cleaner.g-rule.rmv-d") %>
+    </label>
+  </div>
+  
+  <%-- --- RULES / MERGE MINOR UPDATE ------- --%>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="mergeMinorUpdate" value="true" checked="checked" />
+      <%= glp("ui.adm.cleaner.g-rule.mrg-u") %>
+    </label>
+  </div>
+
+  <%-- --- RULES / MERGE METADATA UPDATE ------- --%>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="mergeMetadataUpdate" value="true" />
+      <%= glp("ui.adm.cleaner.g-rule.rmv-u") %>
+    </label>
+  </div>
+
+  <%-- --- RULES / MERGE MAJOR UPDATE ------- --%>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="mergeMajorUpdate" value="true" />
+      <%= glp("ui.adm.cleaner.g-rule.mrg-m") %>
+    </label>
+  </div>
+
+  <%-- --- RULES / REMOVE MILESTONES ------- --%>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="removeMilestone" value="true" />
+      <%= glp("ui.adm.cleaner.g-rule.rmv-ms") %>
+    </label>
+  </div>
+
+    
+  <%-- ** CUSTOM RULES ********************** --%>
+  <% if (Util.notEmpty(channel.getCleanFilterList())) { %>
+  <jalios:foreach collection='<%= channel.getCleanFilterList() %>' name='itFilter' type='CustomCleanFilter'>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="<%= itFilter.getParameterName() %>" value="true" <%= itFilter.isChecked() ? "checked='checked'" : "" %> /> 
+      <%= itFilter.getLabel(userLang) %>
+    </label>
+  </div>
+  </jalios:foreach>
+  <% } %>
+</jalios:accordion-panel> 

@@ -1,0 +1,118 @@
+<%@page import="com.jalios.util.Util"%>
+<div class="tab-pane active" id="general">
+
+  <table class="table-data table-not-striped">
+    <tr>
+     <th><%= glp("ui.adm.data-inspector.lbl.attribute") %></th>
+     <th><%= glp("ui.adm.data-inspector.lbl.value") %></th>
+   </tr>  
+   
+    <tr>
+      <td class="fit nowrap"><%= glp("ui.com.lbl.title") %></td>
+      <td><jalios:edit data="<%= pub %>" /> <%= pub.getTitle() %></td>           
+    </tr>
+    
+   <tr>
+     <td class="fit nowrap"><%= glp("ui.adm.type-list.lbl.name") %></td>
+     <td><jalios:dataicon data="<%= pub %>" /> <%= channel.getTypeLabel(pub.getClass(), userLang) %></td>           
+   </tr> 
+ 
+    <tr>
+      <td class="fit nowrap"><%= glp("ui.com.lbl.workspace") %></td>
+      <td><jalios:link data="<%= pub.getWorkspace() %>" /></td>           
+    </tr>
+   
+    <tr>
+      <td class="fit nowrap"><%= glp("ui.com.lbl.author") %></td>
+      <td><jalios:memberphoto member="<%= pub.getAuthor() %>" size="<%= PhotoSize.ICON %>"/> <jalios:link data="<%= pub.getAuthor() %>" /></td>           
+    </tr>
+   
+    <% Category[] categories = pub.getCategories(loggedMember); %>
+    <% if (Util.notEmpty(categories)) { %>
+    <tr>
+      <td class="fit nowrap"><%= glp("ui.com.lbl.categories") %></td>
+      <td>
+      <%@ include file="/custom/jcms/doCategoryList.jspf"  %>      
+      </td>           
+    </tr>
+    <% } %>
+
+
+     <tr>
+       <td  class="fit nowrap"><%= glp("ui.work.form.lbl.track") %></td>
+       <td><%= glp("ui.com.lbl." + pub.isTracked()) %></td>           
+     </tr>
+    
+    <% if (pub.isTracked()) { %>
+     <tr>
+       <td  class="fit nowrap"><%= glp("ui.com.alt.readers") %></td>
+       <td><a class="modal" href="front/readerTracking/readerTrackingModal.jsp?trackedPubId=<%= pub.getId() %>"><%= pub.getReaderCount() %></a></td>           
+     </tr>
+     <% } %>
+ 
+
+
+   <% if (pub instanceof FileDocument) { %>
+   <%   FileDocument doc = (FileDocument)pub; %>
+   <tr>
+     <td class="fit nowrap"><%= glp("ui.filedocument.lbl.upload-date") %></td>
+     <td><jalios:date date="<%= doc.getUploadDate() %>" format="full" /> <jalios:time date="<%= doc.getUploadDate() %>" format="full" /></td>           
+   </tr> 
+   <tr>
+     <td class="fit nowrap"><%= glp("ui.filedocument.lbl.file-type") %></td>
+     <td><jalios:dataicon data="<%= doc %>" /> <%= doc.getTypeInfo(userLang) %></td>           
+   </tr> 
+    <tr>
+     <td class="fit nowrap"><%= glp("ui.filedocument.lbl.size") %></td>
+     <td><%= Util.formatFileSize(doc.getSize(), userLocale) %></td>           
+   </tr> 
+   <%   if (doc.isImage() && doc.getDimensions() != null) {  %>
+   <tr>
+     <td class="fit nowrap"><%= glp("ui.filedocument.lbl.dimensions") %></td>
+     <td><%= doc.getDimensions() %></td>           
+   </tr> 
+   <%   } %>
+   <%   if (doc.isAudio()) {  %>
+   <tr>
+     <td class="fit nowrap"><%= glp("ui.filedocument.lbl.dimensions") %></td>
+     <td><%= DateUtil.formatDuration(doc.getDuration(), userLocale) %></td>           
+   </tr> 
+   <%   } %>
+   <% } %>
+
+   <%-- READ RIGHTS --%>
+   <% if (Util.notEmpty(pub.getAuthorizedMemberSet()) || Util.notEmpty(pub.getAuthorizedGroupSet())) { %>
+   <tr>
+     <td class="fit nowrap"><%= glp("ui.work.form.lbl.read-rights") %></td>
+     <td>
+       <ul class="list-unstyled">
+         <jalios:foreach collection="<%= pub.getAuthorizedMemberSet() %>" name="itMember" type="Member">
+           <li><jalios:memberphoto member="<%= itMember %>" size="<%= PhotoSize.ICON %>"/> <jalios:link data="<%= itMember%>" /></li>
+         </jalios:foreach>
+         <jalios:foreach collection="<%= pub.getAuthorizedGroupSet() %>" name="itGroup" type="Group">
+           <li><jalios:dataicon data="<%= itGroup %>" /> <%= itGroup.getName(userLang) %></li>
+         </jalios:foreach>
+       </ul>
+     </td>           
+   </tr>
+   <% } %>
+  
+   <%-- UPDATE RIGHTS --%>
+   <% if (Util.notEmpty(pub.getUpdateMemberSet()) || Util.notEmpty(pub.getUpdateGroupSet())) { %>
+   <tr>
+     <td class="fit nowrap"><%= glp("ui.work.form.lbl.update-rights") %></td>
+     <td>
+       <ul class="list-unstyled">
+         <jalios:foreach collection="<%= pub.getUpdateMemberSet() %>" name="itMember" type="Member">
+           <li><jalios:memberphoto member="<%= itMember %>" size="<%= PhotoSize.ICON %>"/> <jalios:link data="<%= itMember%>" /></li>
+         </jalios:foreach>
+         <jalios:foreach collection="<%= pub.getUpdateGroupSet() %>" name="itGroup" type="Group">
+           <li><jalios:dataicon data="<%= itGroup %>" /> <%= itGroup.getName(userLang) %></li>
+         </jalios:foreach>
+       </ul>
+     </td>           
+   </tr>
+   <% } %>   
+   
+  </table>
+</div>

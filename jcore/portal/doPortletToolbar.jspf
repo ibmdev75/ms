@@ -1,0 +1,35 @@
+<%
+  if (!jcmsContext.isAjaxRequest()){
+    jcmsContext.addCSSHeader("css/jalios/portal.css");
+    jcmsContext.addJavaScript("js/jalios/portal/portal-toolbar.js");
+  }
+
+%><div class="Cache<%= portalElement.getCacheTypeInt() %> PortalModeHeader">
+
+<div style='float: left;'>
+<%-- ## EDIT THE BOX ## --%>
+<a href="#" class="ctxPortletMenu ID_<%= portalElement.getId() %>" data-jalios-action="ctxmenu" onclick="return false;"><jalios:icon src='edit' alt='E'/></a>
+</div>
+
+<div class='dnd-header'>
+<%-- ## Behavior copy marker ## --%>
+<%
+  if (!portalElement.isCopy()) { 
+    String behaviorCopy = portalElement.getBehaviorCopy();
+    String behaviorCopyShort = "copy";
+    if ("ws".equals(behaviorCopy)) {
+      behaviorCopyShort = "ws";
+    } else if ("true".equals(behaviorCopy)) {
+      behaviorCopyShort = "copy";
+    } else if ("false".equals(behaviorCopy)) {
+      behaviorCopyShort = "ref";
+    }
+    String behaviorCopyTitle = glp("ui.editportlet.behaviorcopy") + " : " + glp("ui.editportlet.behaviorcopy." + behaviorCopyShort);
+    %><span class='portlet-behavior-copy <%= behaviorCopyShort %> ctxTooltipMenu' title='<%= encodeForHTMLAttribute(behaviorCopyTitle) %>'><%= glp("ui.editportlet.behaviorcopy." + behaviorCopyShort + ".label") %></span><%
+  }
+%>
+<%-- ## TITLE ## --%>
+<a href="jcore/portal/ajaxHandlePortletAction.jsp?id=<%= portalElement.getId() %>&amp;opPreview=<%= !isPreview %>" class="<%= isPreviewClass %>" onclick="return JCMS.portal.PortalManager.Toolbar.preview(this);" >&nbsp;<%= portalElement.getTitle(userLang) %>&nbsp;</a>
+</div>
+
+</div>

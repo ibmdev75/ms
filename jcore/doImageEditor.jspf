@@ -1,0 +1,54 @@
+
+<div class="row-fluid">
+  <div class="col-md-8">
+   <div id="cropImgWrap" style="overflow: auto; height: 375px;">
+   <img id="cropImgArea" src="<%= fd.getFilename() %>?rd=<%= System.currentTimeMillis() %>" class="<%= formHandler.getCropCSS() %> ajax-lazy-chunk" style="width: auto; max-width: none;" alt="" />
+   </div>  
+  </div>
+  <div class="col-md-4">
+  
+    <jalios:field name="title" label="ui.com.lbl.title" value='<%= formHandler.getAvailableTitle() %>' resource="field-vertical">
+	    	<jalios:control type="<%= ControlType.TEXTFIELD %>" />
+	    </jalios:field> 
+	  
+    <jalios:field name="ratio" label="ui.filedocument.image-editor.zoom" resource="field-vertical">
+      <select name="ratio" class="ratio-controller form-control">
+        <option type="radio" name="ratio" value="2">   200%</option>
+        <option type="radio" name="ratio" value="1.5"> 150%</option>
+        <option type="radio" name="ratio" value="1" selected="selected">   100% </option>
+        <option type="radio" name="ratio" value="0.75"> 75%</option>
+        <option type="radio" name="ratio" value="0.5">  50%</option>
+        <option type="radio" name="ratio" value="0.25"> 25%</option>
+      </select>
+    </jalios:field> 
+
+	  
+    <jalios:field name="rotate" label="ui.filedocument.image-editor.rotate" resource="field-vertical">
+      <select name="rotate" class="rotate-controller form-control">
+  	    <option type="radio" name="rotate" id="r0"   value="0"  selected="selected"> None</option>
+  	    <option type="radio" name="rotate" id="r90"  value="90" > <%= glp("ui.filedocument.image-editor.rotate.90") %></option>
+  	    <option type="radio" name="rotate" id="r270" value="270"> <%= glp("ui.filedocument.image-editor.rotate.270") %></option>
+  	    <option type="radio" name="rotate" id="r180" value="180"> <%= glp("ui.filedocument.image-editor.rotate.180") %></option>
+      </select>
+    </jalios:field> 
+  
+    <div id="cropResults" class="form-horizontal hide">
+      <h4>Crop values:</h4>
+      <div class="row">
+        <label for="x1" class="control-label col-md-3">x1: </label> <div class="controls  col-md-3"><input type="text" name="x1" size="4" /></div>
+	      <label for="y1" class="control-label col-md-3">y1: </label> <div class="controls  col-md-3"><input type="text" name="y1" size="4" /></div>
+	    </div>
+	    
+	    <div class="row">
+        <label for="x2" class="control-label col-md-3">x2: </label> <div class="controls  col-md-3"><input type="text" name="x2" size="4" /></div>
+	      <label for="y2" class="control-label col-md-3">y2: </label> <div class="controls  col-md-3"><input type="text" name="y2" size="4" /></div>
+	    </div>
+	    
+	    <div class="row">
+	      <label for="width" class="control-label col-md-3">width: </label> <div class="controls  col-md-3"><input type="text" name="width" size="4" /></div>
+	      <label for="height" class="control-label col-md-3">height: </label> <div class="controls  col-md-3"><input type="text" name="height" size="4" /></div>
+	    </div>
+    </div>
+  
+  </div>
+</div>

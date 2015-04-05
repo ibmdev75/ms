@@ -1,0 +1,24 @@
+<%--
+  @Summary: Member CSV import : result modal Opener
+  @since: jcms-8
+  @author Sylvain Devaux <sylvain.devaux@jalios.com>
+--%><%@page import="com.jalios.jcms.handler.MembersCsvImportHandler"%><%
+
+boolean isImportResultMsg = Util.notEmpty(request.getSession().getAttribute(MembersCsvImportHandler.IMPORT_DONE_REQ_ATTR));
+if (isImportResultMsg) {
+ 
+ List<String> createdIds = (List<String>) request.getSession().getAttribute(MembersCsvImportHandler.CREATED_IDS_REQ_ATTR);
+ List<String> updatedIds = (List<String>) request.getSession().getAttribute(MembersCsvImportHandler.UPDATED_IDS_REQ_ATTR);
+
+ boolean anyCreatedMbr = createdIds != null && createdIds.size() > 0;
+ boolean anyUpdatedMbr = updatedIds != null && updatedIds.size() > 0;
+ 
+ if (anyCreatedMbr || anyUpdatedMbr) {
+   %>
+   <jalios:javascript>JCMS.window.Modal.showJSP("admin/import/showCsvImportResult.jsp");</jalios:javascript>
+   <% 
+ } else {
+   request.getSession().removeAttribute(MembersCsvImportHandler.IMPORT_DONE_REQ_ATTR);
+ }
+}
+%>

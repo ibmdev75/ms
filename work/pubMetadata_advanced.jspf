@@ -1,0 +1,115 @@
+<div class="tab-pane" id="advanced">
+
+<table class="table-data table-not-striped">
+  <tr>
+   <th><%= glp("ui.adm.data-inspector.lbl.attribute") %></th>
+   <th><%= glp("ui.adm.data-inspector.lbl.value") %></th>
+ </tr>       
+ 
+ 
+ <% if (pub.isStrongLocked()) { %>
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.locking") %></td>
+   <td><jalios:icon src="lock-strong" /> <%= pub.getStrongLockInfo(userLocale) %></td>           
+ </tr>
+ <% } %>
+ 
+
+ 
+ <% if (channel.isMultilingual() && pub.getMainLanguage() != null) { %>
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.work.form.lbl.main-language") %></td>
+   <td><jalios:lang lang="<%= pub.getMainLanguage() %>" /> <%= Channel.getChannel().getProperty(pub.getMainLanguage() + ".lang", pub.getMainLanguage()) %></td>           
+ </tr>
+ <% } %>
+ 
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.version") %></td>
+   <td><%= pub.getVersionString() %></td>           
+ </tr>
+ 
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.workflow") %></td>
+   <td><jalios:icon src="wf" />
+   <% Workflow workflow = pub.getWorkflow(); %>
+   <% if (workflow != WorkflowManager.getInstance().getDefaultWorkflow() && checkAccess("admin/work/workflow")) { %> 
+   <a href="admin/wfEditor.jsp?id=<%= workflow.getId() %>"><%= workflow.getLabel(userLang) %></a>
+   <% } else { %>
+   <%= workflow.getLabel(userLang) %>
+   <% } %>
+   </td>           
+ </tr>
+ 
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.adm.wf-edit.st.lbl.pstatus") %></td>
+   <td><%= pub.getWFStateLabelHtml(userLang) %> (<%= pub.getPstatus() %>)</td>           
+ </tr>
+ 
+  <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.cdate-long") %></td>
+   <td><jalios:date date="<%= pub.getCdate() %>" format="full" /> <jalios:time date="<%= pub.getCdate() %>" format="full" /></td>           
+  </tr>
+  
+  <tr>
+    <td class="fit nowrap"><%= glp("ui.com.lbl.mdate-long") %></td>
+   <td><jalios:date date="<%= pub.getMdate() %>" format="full" /> <jalios:time date="<%= pub.getMdate() %>" format="full" /></td>           
+  </tr>
+ 
+
+ <% if (pub.getPdate() != null) { %>
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.pdate-long") %></td>
+   <td><jalios:date date="<%= pub.getPdate() %>" format="full" /> <jalios:time date="<%= pub.getPdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getEdate() != null) { %>
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.edate-long") %></td>
+   <td><jalios:date date="<%= pub.getEdate() %>" format="full" /> <jalios:time date="<%= pub.getEdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getAdate() != null) { %>
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.adate-long") %></td>
+   <td><jalios:date date="<%= pub.getAdate() %>" format="full" /> <jalios:time date="<%= pub.getAdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getUdate() != null) { %>
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.udate-long") %></td>
+   <td><jalios:date date="<%= pub.getUdate() %>" format="full" /> <jalios:time date="<%= pub.getUdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getIndexingDate() != null) { %>
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.idx-date-long") %></td>
+   <td><jalios:date date="<%= pub.getIndexingDate() %>" format="full" /> <jalios:time date="<%= pub.getIndexingDate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (pub.getSdate() != null) { %>
+ <tr>
+   <td  class="fit nowrap"><%= glp("ui.com.lbl.sdate-long") %></td>
+   <td><jalios:date date="<%= pub.getUdate() %>" format="full" /> <jalios:time date="<%= pub.getUdate() %>" format="full" /></td>           
+ </tr>
+ <% } %>
+ 
+ 
+
+ <tr>   
+   <td class="fit nowrap"><%= glp("ui.adm.data-inspector.lbl.class") %></td>
+   <td><code><%= pub.getClass().getName() %></code></td>           
+ </tr> 
+
+ <tr>   
+   <td class="fit nowrap"><%= glp("ui.com.lbl.id") %></td>
+   <td><code><%= pub.getId() %></code></td>           
+ </tr> 
+  
+ 
+</table>
+</div>

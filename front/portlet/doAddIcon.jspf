@@ -1,0 +1,53 @@
+<%--
+  @Summary: Technical code to generate "Add" links, for a given portlet
+  @Category: Publication
+  @Author: Sylvain DEVAUX
+  @Customizable: True
+  @Requestable: False
+  @Since: jcms-9.0.1
+--%><%@ page contentType="text/html; charset=UTF-8" %><%
+
+PortalElement parent  = (PortalElement) portal.getTreeParent(portlet);
+String       layerId  = parent == null ? "" : (parent.getId()+"_"+((List)parent.getTreeChildren()).indexOf(portlet));
+String       refineQF = null;
+String[]     queries  = null;
+
+if (portlet instanceof PortletQueryForeach){
+  PortletQueryForeach pqf = (PortletQueryForeach) portlet;
+  refineQF = Util.getString(pqf.getRefineQueries(),"");
+  queries  = pqf.getQueries();
+}
+
+if (refineQF != null) {
+  // Parse refine queries
+  if ("Portal".equals(refineQF) || "PortalExact".equals(refineQF)){
+    refineQF = "&cids=" + portalCategory.getId();
+  } else if ("Current".equals(refineQF) || "CurrentExact".equals(refineQF)){
+    refineQF = "&cids=" + currentCategory.getId();
+  } else {
+    refineQF = null;
+  }
+
+  // Parse querystring
+  String[] pqfParams =  Util.split(Util.join(queries,"&"),"&");
+  String   pqfQuery  = "";
+  String   sep       = "";
+  if (Util.notEmpty(pqfParams)){
+    for (int x = 0 ; x < pqfParams.length; x++){
+      if (Util.isEmpty(pqfParams[x])){
+        continue;
+      }
+      if (pqfParams[x].startsWith("types=") || pqfParams[x].startsWith("cids=") || pqfParams[x].startsWith("exactType=")){
+        pqfQuery += sep + pqfParams[x];
+        sep = "&";
+      }
+    }
+  }
+%><jalios:edit querystring='<%= pqfQuery + Util.getString(refineQF,"") %>' 
+    params='<%= portal != null ? ("portal="+portal.getId()) : "" %>' 
+    redirectOnClosePopup='<%= true %>' 
+    redirect='<%= "$PREVIEW_URL$" %>' 
+    layerId='<%= layerId %>' 
+    popup='<%= true %>' 
+    css="hidden-print"><%= Util.getString(request.getAttribute("portletAddLabel"),"") %></jalios:edit><%
+} %>

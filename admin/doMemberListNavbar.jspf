@@ -1,0 +1,116 @@
+<%--
+  @Summary: Display the member list Navbar
+  @Category: Admin / Data
+  @Author: Sylvain Devaux
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: True
+  @Deprecated: False
+  @Since: jcms-9.0.0
+--%>
+
+<%--
+list of actions:
+- IMPORT CSV
+- EXPORT CSV
+- ADD AN EXISTING MEMBER TO SELECTED GROUP
+- SYNC LDAP
+--%>
+<%
+String confirm = encodeForJavaScript(glp("msg.js.confirm"));
+%>
+
+<div class="navbar navbar-default navbar-table-header">
+  <div class="collapse navbar-collapse">
+
+    <%-- Create new Member --%>
+    <% if (guiShowAddMember) { %>
+      <form action='admin/editMember.jsp' method='post' name='addMemberForm' class="navbar-form navbar-left" role="navigation">
+        <button class='btn btn-primary' type='submit'><%= encodeForHTML(glp("ui.adm.mbr-list.btn.add")) %></button>
+        <input type='hidden' name='db' value='<%= isDBMemberList %>' />
+        <% if (group != null && canAddOrRemoveMemberToGroup) { %>
+          <input type='hidden' name='gids' value='<%= group.getId() %>' />
+        <% } %>
+        <% if (mbrWorkspace != null && mbrWorkspace.getDefaultGroup() != null) { %>
+          <input type='hidden' name='gids' value='<%= mbrWorkspace.getDefaultGroup().getId() %>' />
+        <% } %>
+        <input type='hidden' name='redirect' value='<%= redirect %>' />
+        <%= printHiddenParams(request) %>
+      </form>
+    <% } %>
+  
+    <%-- DROPDOW ACTIONS MENU --%>
+    <%
+    boolean displayDropdown = showEditGroup || showAddMemberLink || guiShowImportCsv || guiShowExportCsv || showSyncLDAP;
+    %>
+    <% if (displayDropdown) { %>
+      <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><jalios:icon src="wrench" /> <%= encodeForHTML(glp("ui.com.lbl.actions")) %> <jalios:icon src="caret" /></a>
+          <ul class="dropdown-menu" role="menu">
+            <%-- EDIT GROUP --%>
+            <% if (showEditGroup) { %>
+              <% String editGroupLbl = glp("ui.com.alt.edit"); %>
+              <li><jalios:edit data='<%= group %>' target='<%= target %>' redirect='<%= redirectRefresh %>'><jalios:icon src="edit" /> <%= /* do not encode */ editGroupLbl %></jalios:edit></li>
+            <% } %>
+
+            <%-- ADD A MEMBER --%>
+            <% if (showAddMemberLink) { %>
+              <% 
+              String addMemberLbl = glp("ui.adm.mbr-list.insert-member");
+              String addMemberLink = "admin/memberChooser.jsp?";
+              addMemberLink += "jstore=" + !isDBMemberList;
+              addMemberLink += "&amp;targetParam=insertMember";
+              addMemberLink += "&amp;targetValue=";
+              addMemberLink += "&amp;targetUrl=" + ServletUtil.encodeURL(ServletUtil.getUrl(request, false));
+              addMemberLink += "&amp;jstore=" + !isDBMemberList;
+              addMemberLink += "&amp;jcmsdb=" + isDBMemberList;
+              %>
+              <li><a href="<%= addMemberLink %>" title='<%= encodeForHTMLAttribute(addMemberLbl) %>' onclick="popupWindow(this.href, 'MemberChooser', 900, 500); return false;"><jalios:icon src="user-add" /> <%= encodeForHTML(addMemberLbl) %></a></li>
+            <% } %>
+      
+            <%-- CSV IMPORT --%>
+            <% if (guiShowImportCsv) { %>
+              <% String importGroupLbl = glp("ui.adm.mbr-list.btn.import"); %>
+              <li><a href='<%= guiImportCSV %>' class='modal' title='<%= encodeForHTMLAttribute(importGroupLbl) %>'><jalios:icon src="csv" /> <%= encodeForHTML(importGroupLbl) %></a></li>
+            <% } %> 
+
+            <%-- CSV EXPORT --%>
+            <% if (guiShowExportCsv) { %>
+              <li><a href="<%= guiExportCSV %>" title='<%= encodeForHTMLAttribute(glp("ui.com.btn.csv")) %>'><jalios:icon src="csv" /> <%= encodeForHTML(glp("ui.adm.mbr-list.btn.export")) %></a></li>
+            <% } %>
+
+            <%-- LDAP SYNC --%>
+            <% if (showSyncLDAP) { %>
+              <li class="divider"></li>
+              <li>
+                <% if (group != null) { %>
+                  <a href="#" name="opSyncGroup" onclick='confirmAction("<%= confirm %>", "<%= contextPath %>/admin/syncLdap.jsp?opSyncGroup=true&amp;gid=<%= group.getId() %>&amp;redirect=<%= encodeForURL(redirect) %>")' /><jalios:icon src="ldap" /> <%= encodeForHTML(glp("ui.adm.mbr-list.btn.sync-group")) %></a>
+                <% } else { %>
+                  <a href="#" name="opSyncAll" onclick='confirmAction("<%= confirm %>", "<%= contextPath %>/admin/syncLdap.jsp?opSyncAll=true&amp;redirect=<%= encodeForURL(redirect) %>")'><jalios:icon src="ldap" /> <%= encodeForHTML(glp("ui.adm.mbr-list.btn.sync-all")) %></a>
+                <% } %>
+              </li>
+            <% } %>
+          </ul>
+        </li>
+      </ul>
+    <% } %>
+
+    <%-- SEARCH--%>
+    <% if (guiShowSearch) { %>
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <jalios:field name='text' value="<%= text %>" resource="field-light">
+            <jalios:control settings='<%= new TextFieldSettings().placeholder("ui.com.placeholder.search") %>' />
+            <span class="input-group-btn">
+              <button class="btn btn-default" name="opSearch" type="submit"><jalios:icon src="search" /></button>
+            </span>               
+          </jalios:field>
+        </div>
+        <% List removedParams = new ArrayList(); removedParams.add("text"); %>
+        <%= printHiddenParams(request, removedParams, true) %>
+      </form>       
+    <% } %>
+  </div>
+
+</div>

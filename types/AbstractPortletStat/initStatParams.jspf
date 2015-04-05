@@ -1,0 +1,23 @@
+<%
+
+	// Are we in generating mode ?
+	boolean generating = Util.toBoolean(request.getSession().getAttribute("generating"),false);
+	
+	// Get the StatHandler
+	StatHandler handler = (StatHandler) request.getSession().getAttribute("StatHandler");
+	if (handler == null){
+		return;
+	}
+		
+		
+	// Check Listener
+	AbstractStatFieldListener listener = (AbstractStatFieldListener) handler.getStatListener(box.getId());
+	if (listener == null){
+		return;
+	}
+	String   zone = listener instanceof AbstractStatMultiListener ? Util.getString(((AbstractStatMultiListener)listener).getZone(),"All") : "All";
+	boolean  all  = getBooleanParameter("allws",false);
+	         all  = Util.toBoolean(request.getSession().getAttribute("allWorkspace"),all);
+	
+	Map  wsMap  = (Map) (all ? listener.getWorkspaceMap().get(StatListener.ALL_WORKSPACE) : listener.getWorkspaceMap().get(workspace));
+%>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/90"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.bea.com/ns/weblogic/90 http://www.bea.com/ns/weblogic/920/weblogic-web-app.xsd">
+
+  <!--
+    See WebLogic Server documentation for possible elements/value.
+    weblogic.xml Deployment Descriptor Elements :
+    http://download.oracle.com/docs/cd/E12840_01/wls/docs103/webapp/weblogic_xml.html
+  -->
+
+  <!--
+    Uncomment the following if you need to debug jsp.
+  <jsp-descriptor>
+      <keepgenerated>true</keepgenerated>
+      <debug>true</debug>
+  </jsp-descriptor>
+  -->
+
+  <container-descriptor>
+      <prefer-web-inf-classes>false</prefer-web-inf-classes>
+  </container-descriptor>
+  
+</weblogic-web-app>

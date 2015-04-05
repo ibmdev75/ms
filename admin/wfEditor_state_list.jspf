@@ -1,0 +1,70 @@
+          <table id='fieldTable' class='table-data'>
+            <thead>
+            <tr> 
+              <th class="fit">&nbsp;</th>
+              <th><%= glp("ui.com.lbl.label") %></th>
+              <th class="fit"><%= glp("ui.adm.wf-edit.st.lbl.pstatus") %></th>
+              <th class="fit"><%= glp("ui.adm.wf-edit.st.lbl.visible") %></th>
+              <th class="wrap"><%= glp("ui.adm.wf-edit.st.lbl.in-act") %></th>
+              <th class="wrap"><%= glp("ui.adm.wf-edit.st.lbl.out-act") %></th>
+              <th class="fit">&nbsp;</th>
+            </tr>
+            </thead>
+            
+            <jalios:foreach collection="<%= wf.getStateSet() %>" name="itState" type="WFState">
+            <% String labelClass = itState.isNew() ? "wfLabelNew" : (itState.isUpdated() ? "wfLabelUpdated" : "wfLabelNormal"); %>
+            <% String confirmDeleteState = encodeForJavaScript(glp("ui.adm.wf-edit.st.lbl.delete", itState.getLabel(userLang))); %>
+            <tr> 
+              <td class="text-right text-overflow">
+                <% if (wf.getInitState() == itState ) { %><jalios:icon src="init-wf" /><% } %>
+                <a href="admin/wfEditor.jsp?id=<%= formHandler.getAvailableId() %>&amp;pstatus=<%= itState.getPstatus() %>" title="<%= glp("ui.com.alt.edit") %>" ><jalios:icon src="edit" alt='<%= glp("ui.com.alt.edit") %>' /></a>
+              </td>
+              <td class="text-overflow">
+                <%= itState.getLabelHtml(userLang) %>
+                <% if (itState.hasReminder() ) { %>
+                  <% String reminder = DateUtil.formatDuration(itState.getReminder() * JcmsConstants.MILLIS_IN_ONE_MINUTE, userLocale); %>
+                  <jalios:icon src='bell'  title='<%= glp("ui.adm.wf-edit.st.alt.reminder", reminder) %>' alt='<%= glp("ui.adm.wf-edit.st.alt.reminder", reminder) %>' />
+                <% } %>
+                <% if (itState.isExpress() ) { %>
+                  <% String wfeDuration = DateUtil.formatDuration(itState.getDuration() * JcmsConstants.MILLIS_IN_ONE_MINUTE, userLocale); %>
+                  <% String wfeTarget = wf.getStateLabel(itState.getTargetPstatus(), userLang); %>
+                  <jalios:icon src='timer'  title='<%= glp("ui.adm.wf-edit.st.alt.wfe", wfeDuration, wfeTarget) %>' alt='<%= glp("ui.adm.wf-edit.st.alt.wfe", wfeDuration, wfeTarget) %>' />
+                <% } %>
+              </td>
+            <td class="numeric"><%= itState.getPstatus() %></td>
+            <td class="text-center">
+              <% if (itState.isVisible()) { %>
+              <span class="label label-success"><%= glp("ui.com.lbl.yes") %></span>
+              <% } else { %>
+              <span class="label label-warning"><%= glp("ui.com.lbl.no") %></span>
+              <% } %>
+            </td>
+            
+          <td class='vTop text-left'>
+            <% if (Util.notEmpty(itState.getActionInSet())) { %>
+            <ul>
+            <jalios:foreach collection="<%= itState.getActionInSet() %>" name="itAction" type="WFAction" counter="itCounter2">
+            <li><%= itAction.toString(userLang) %></li>
+            </jalios:foreach>  
+            </ul>
+            <% } %>
+          </td>
+          <td class="text-overflow">
+            <% if (Util.notEmpty(itState.getActionOutSet())) { %>
+            <ul>
+            <jalios:foreach collection="<%= itState.getActionOutSet() %>" name="itAction" type="WFAction" counter="itCounter2">
+            <li><%= itAction.toString(userLang) %></li>
+            </jalios:foreach>  
+            </ul>
+            <% } %>
+          </td>
+          <td class="text-overflow">
+            <% if (!itState.isSpecialState() ) { %>
+            <a href='admin/wfEditor.jsp?id=<%= formHandler.getAvailableId() %>&amp;pstatus=<%= itState.getPstatus() %>&amp;opDeleteState=true&amp;confirm=true' onclick='confirmAction("<%= confirmDeleteState %>", this.href); return false;' title="<%= glp("ui.com.alt.remove") %>" ><jalios:icon src="trash-empty" alt='<%= glp("ui.com.alt.remove") %>'  /></a>
+            <% } %>
+          </td>
+          </tr>
+          </jalios:foreach>
+          </table>
+          <br />
+          <span class='formInfo'><jalios:icon src="init-wf" /> <% /* %>Initial State ...<% */ %><%= glp("ui.adm.wf-edit.st.txt.init-st") %></span>

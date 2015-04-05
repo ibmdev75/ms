@@ -1,0 +1,7 @@
+<%--
+ How to use:
+ <% Member photoMember = itMember; int photoSize = JcmsConstants.PHOTO_TINY; %>
+ <%@ include file="/jcore/doMemberPhoto.jspf" %>
+--%>
+<%@page import="com.jalios.jcms.PhotoSize"%>
+<jalios:memberphoto member="<%= photoMember %>" size="<%= PhotoSize.getPhotoSize(photoSize) %>" />

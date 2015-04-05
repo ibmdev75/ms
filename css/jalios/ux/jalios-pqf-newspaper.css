@@ -1,0 +1,74 @@
+/* --------------------------------------------------------------------------- */
+/*  This file has been automatically generated from jalios-pqf-newspaper.less  */
+/* --------------------------------------------------------------------------- */
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+.newspaper-results .newspaper-result-wrapper {
+  margin-bottom: 20px;
+}
+.newspaper-results .publish-action .ctx-caret:after {
+  color: #ffffff;
+}
+.newspaper-results .jcms-message.no-result {
+  margin-top: 10px;
+}
+.newspaper-result-display {
+  background-color: white;
+  border: 1px solid #dddddd;
+  overflow: hidden;
+  border-radius: 5px;
+}
+.newspaper-result-display .thumbnail-wrapper {
+  max-width: 50%;
+  position: relative;
+  z-index: 10;
+}
+.newspaper-result-display .thumbnail-wrapper IMG.img-thumbnail {
+  width: 100% \9;
+  display: block;
+  width: auto \9;
+  max-width: 100%;
+  height: auto;
+  max-height: 200px;
+  margin: 0;
+}
+.newspaper-result-display .thumbnail-wrapper.orientation-portrait {
+  float: left;
+  margin-right: 16px;
+}
+.newspaper-result-display .thumbnail-wrapper.orientation-default {
+  float: right;
+  margin-left: 16px;
+}
+.newspaper-result-display .thumbnail-wrapper.orientation-landscape {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  max-width: 100%;
+}
+.newspaper-result-display .thumbnail-wrapper.orientation-portrait,
+.newspaper-result-display .thumbnail-wrapper.orientation-default {
+  margin-bottom: 10px;
+}
+.newspaper-result-display .newspaper-result-body {
+  padding: 15px 16px 10px;
+  overflow: hidden;
+}
+.newspaper-result-display .newspaper-result-title {
+  margin-bottom: 10px;
+}
+.newspaper-result-display .newspaper-result-title A {
+  color: black;
+  font-size: 24px;
+}
+.newspaper-result-display .newspaper-result-abstract {
+  margin-bottom: 20px;
+}
+.newspaper-result-display .newspaper-result-pdate {
+  color: #999999;
+  text-align: right;
+}
+.newspaper-result-display .newspaper-result-footer {
+  clear: both;
+}

@@ -1,0 +1,26 @@
+//
+// Text Editor
+// --------------------------------------------------
+
+// Common rules for all editors 
+DIV.wiki, 
+DIV.wysiwyg {
+  /* Handle large images */
+  IMG {
+    .img-responsive(inline-block);
+  } 
+  
+  //TODO : handle break word maybe only for links
+  /* Handle long text and long links */
+  /* -ms-word-break: break-all; */
+  /* Be VERY careful with this, breaks normal words wh_erever */
+  /* word-break: break-all; */
+  /* Non standard for webkit */
+  word-break: break-word;  
+}
+
+// Specific rules for wiki editor
+@import "jalios-wiki.less";
+
+// Specific rules for wysiwyg editor
+@import "jalios-wysiwyg.less";

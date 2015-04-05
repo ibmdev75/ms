@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Jalios Plugin Test Suite</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <!-- jquery -->
+  <script src="../../vendor/jquery.js"></script>
+
+  <!-- qunit -->
+  <link   href="../../vendor/qunit.css" rel="stylesheet"  type="text/css" media="screen" />
+  <script  src="../../vendor/qunit.js"></script>
+
+  <!--  lib -->
+  <script src="../../../lib/json2.js"></script>
+  <script src="../../../lib/rsh.js"></script>
+  <script src="../../../lib/jquery.console.js"></script>
+  <script src="../../../lib/jquery.idle-timer.js"></script>
+  
+  <!-- jalios -->
+  <script src="../../../jalios/core/jalios-common.js"></script>
+  <script src="../../../jalios/languages/en.js"></script>
+  
+  <!--  sources -->
+  <script src="../../../jalios/core/jalios-data-broker.js"></script>
+
+  <!-- unit tests -->
+  <script src="unit/jalios-data-broker.js"></script>
+
+</head>
+<body>
+  <div>
+    <h1  id="qunit-header">Jalios Plugin Test Suite</h1>
+    <h2  id="qunit-banner"></h2>
+    <h2  id="qunit-userAgent"></h2>
+    <ol  id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </div>
+  
+  <div style='display: none;'>
+  
+    <a id="link1" onclick="return false;" data-jalios-action="unit-action">
+      <img id="img1" src="assets/s.gif" /> Click Me !
+    </a>
+    
+    <form>
+      <button id="btn1" type="button" name="btn1" data-jalios-action="unit-action">Click Me!</button>
+      <input  id="btn2" type="button" name="btn2" data-jalios-action="unit-action" />
+      <input  id="btn3" type="submit" name="btn3" data-jalios-action="unit-action" onclick="return false;" />
+    </form>
+    
+    <div id="div1" data-jalios-action="unit-action"></div>
+    
+    <form>
+      <input    id="input1" name="input1" data-jalios-action="unit-action" type="text" />
+      <textarea id="input2" name="input2" data-jalios-action="unit-action"> </textarea>
+      <select   id="input3" name="input3" data-jalios-action="unit-action">
+        <option>Label 1</option>
+        <option>Label 2</option>
+      </select>
+      <input    id="check1" name="check1" data-jalios-action="unit-action" type="checkbox" /> Check 1
+      <input    id="radio1" name="radio1" data-jalios-action="unit-action" type="radio" /> Radio 1
+    </form>
+    
+    
+    <a id="link2" onclick="return false;" data-jalios-action="unit-action" data-jalios-target='A#link2' data-jalios-target-position='html'>Click Me !</a>
+    
+  </div>
+
+</body>
+</html>

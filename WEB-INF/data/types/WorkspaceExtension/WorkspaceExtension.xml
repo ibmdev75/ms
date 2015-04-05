@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="com.jalios.jcms.workspace.Workspace" name="WorkspaceExtension" version="4.0">
+  <fields />
+</extension>
+

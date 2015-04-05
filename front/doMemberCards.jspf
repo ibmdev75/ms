@@ -1,0 +1,22 @@
+<% jcmsContext.addCSSHeader("css/jalios/core/jalios-member-card.css"); %>
+<jalios:pager name='memberCardPagerHandler' 
+              declare='true' 
+              action='init' 
+              pageSize='<%= memberPageSize %>' 
+              size='<%= memberSet.size() %>'/>
+
+<div class="row">
+<jalios:foreach collection="<%= memberSet %>" 
+                type="Member" 
+                name="itMember"
+                max="<%= memberCardPagerHandler.getPageSize() %>"
+                skip="<%= memberCardPagerHandler.getStart() %>">
+  <% if (itMember.isContact() || !itMember.isDisabled()) { %>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+    <%@ include file="/front/doMemberCard.jspf" %>
+    </div>
+  <% } %>
+</jalios:foreach>
+</div><%-- EOF .row --%>
+
+<jalios:pager name='memberCardPagerHandler' />

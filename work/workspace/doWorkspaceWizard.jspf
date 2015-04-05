@@ -1,0 +1,232 @@
+<%@page import="com.jalios.jcms.taglib.settings.impl.TextFieldSettings"%>
+<div class="page-header"><h1><%= glp("ui.adm.wrkspc-list.lbl.wizard") %><%= Util.notEmpty(formHandler.getAvailableTitle(userLang)) ? (" - " + formHandler.getAvailableTitle(userLang)) : "" %></h1></div>
+<%@ include file='/jcore/doMessageBox.jspf' %>
+
+<form action="<%= contextPath %>/<%= ResourceHelper.getWorkspaceWizard() %>" method="post" name="editForm" class='form-horizontal'>
+
+<%
+//---------------------------------------------------------------
+//  TAB General
+//---------------------------------------------------------------
+%>
+<div class="tab-pane" id="wizard-tab">
+<div class="tab-page">
+  <h2 class="tab"><% /* %>General<% */ %><%= glp("ui.wrkspc-edit.lbl.main-tab") %></h2>
+  <div class='row'>
+    <%-- TITLE ------------------------------------------------------------ --%>
+    <jalios:field name='title' label='ui.wrkspc-edit.lbl.title' description='ui.wrkspc-edit.lbl.title.h' required='<%= true %>' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getAllAvailableTitleML() %>'>
+  	  <jalios:control settings='<%= new TextFieldSettings().showLanguageChooser() %>' />
+    </jalios:field>
+  </div>
+  
+  <div class='row'>
+    <%-- PREFIX ------------------------------------------------------------ --%>
+    <jalios:field name='prefix' label='ui.wrkspc-edit.lbl.prefix' description='ui.wrkspc-edit.lbl.prefix.h' required='<%= true %>' value='<%= formHandler.getAvailablePrefix() %>'>
+  	  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+    </jalios:field>
+  </div>
+
+  <div class='row'>
+    <%-- ADMIN ------------------------------------------------------------ --%>
+    <jalios:field name='administrator' label='ui.wrkspc-edit.lbl.admin' required='<%= true %>' value='<%= formHandler.getAvailableAdministrator() %>'>
+      <jalios:control settings="<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>" />
+    </jalios:field>
+  </div>
+</div>
+
+<%
+//---------------------------------------------------------------
+//  TAB Metadatas
+//---------------------------------------------------------------
+%>
+<div class="tab-page">
+<h2 class="tab"><%= glp("ui.wrkspc-edit.lbl.metadata-tab") %></h2>
+  <div class='row'>
+    <%-- CATEGORIES ------------------------------------------------------- --%>
+    <% Set catSet = formHandler.getWorkspace().getCatSet(); %>
+    <% if (Util.notEmpty(catSet)) { %>
+      <% String[] catLabels = JcmsUtil.dataArrayToNameArray((Data[])catSet.toArray(new Data[0]),userLang); %>
+      <% String[] catIds= JcmsUtil.dataArrayToStringArray((Data[])catSet.toArray(new Data[0])); %>
+      <jalios:field name='cidsNames' label='ui.wrkspc-edit.lbl.cat' value='<%= formHandler.getAvailableCidsNames() %>'>
+        <jalios:control settings='<%= new EnumerateSettings().checkbox().multiple().enumValues(catIds).enumLabels(catLabels) %>' />
+      </jalios:field>  
+    <% } %>
+  </div>
+  
+  <div class='row'>
+    <%-- GROUPS ---------------------------------------------------------- --%>
+    <% Set groupSet = formHandler.getWorkspace().getGroupSet(); %>
+    <% if (Util.notEmpty(groupSet)) { %>
+      <% String[] groupLabels = JcmsUtil.dataArrayToNameArray((Data[])groupSet.toArray(new Data[0]),userLang); %>
+      <% String[] groupIds = JcmsUtil.dataArrayToStringArray((Data[])groupSet.toArray(new Data[0])); %>
+      <jalios:field name='groups' label='ui.wrkspc-edit.wkrolegroups' value='<%= formHandler.getAvailableGroups() %>'>
+        <jalios:control settings='<%= new EnumerateSettings().checkbox().multiple().enumValues(groupIds).enumLabels(groupLabels) %>' />
+      </jalios:field>  
+    <% } %>
+  </div>
+  
+  <div class='row'>
+    <%-- PORTALS ---------------------------------------------------------- --%>
+    <% Set portalSet = formHandler.getWorkspace().getPublicationSet(PortalInterface.class); %>
+    <% if (Util.notEmpty(portalSet)) { %>
+      <% String[] portalLabels = JcmsUtil.dataArrayToNameArray((Data[])portalSet.toArray(new Data[0]),userLang); %>
+      <% String[] portalIds= JcmsUtil.dataArrayToStringArray((Data[])portalSet.toArray(new Data[0])); %>
+      <jalios:field name='portals' label='ui.wrkspc-edit.lbl.portals' value='<%= formHandler.getAvailablePortals() %>'>
+        <jalios:control settings='<%= new EnumerateSettings().checkbox().multiple().enumValues(portalIds).enumLabels(portalLabels) %>' />
+      </jalios:field>
+    <% } %>
+  </div>
+</div>
+
+<%
+//---------------------------------------------------------------
+//  TAB Types
+//---------------------------------------------------------------
+%>
+<div class="tab-page">
+<h2 class="tab"><%= glp("ui.wrkspc-edit.lbl.types-tab") %></h2>
+  <div class='row'>
+    <%-- TYPES ------------------------------------------------------------ --%>
+    <div class="control-label col-sm-12">
+      <jalios:icon src='required' />
+      <label><%= glp("ui.wrkspc-edit.types") %></label>
+    </div>
+  </div>
+
+<table class='layout'>
+    <tr>
+      <td>
+  <% int counter = 0; %>
+  <div class="tab-pane" id="wizard-types-tab">
+          <%-- --- CONTENT ------------------------------------------- --%>
+  <div class="tab-page">
+  <h2 class="tab"><%= channel.getTypeLabel(Content.class, userLang) %></h2>
+  <table class="table-data table-condensed">
+    <tr>
+      <th><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithId(document.editForm, "types", this, "content")' /><%= channel.getTypeLabel(Content.class, userLang) %></th>
+    </tr>  
+    <tr class='listOddRow'>
+       <td class='vTop'>
+         <jalios:foreach collection='<%= formHandler.getWorkspace().getTypeSet() %>'  type='Class' name='itClass'>
+             <jalios:if predicate='<%= itClass != null && Content.class.isAssignableFrom(itClass) && (itClass != Content.class) && (itClass != FileDocument.class)%>'>
+                      <% String typeId = "content" + counter++; %>
+               <label for="<%= typeId %>" class="formLabelbox">
+                      <input type="checkbox" name="types" id='<%= typeId %>' value="<%= itClass.getName() %>" <%= formHandler.getAvailableTypes().contains(itClass) ? "checked" : ""%> /> 
+                 <span><%= channel.getTypeLabel(itClass, userLang) %></span>
+                      </label>
+                      <br />
+             </jalios:if>
+             <jalios:if predicate='<%= (itClass == Content.class) || (itClass == FileDocument.class)%>'>
+                      <input type="hidden" name="types" value="<%= itClass.getName() %>" />
+             </jalios:if>
+         </jalios:foreach>
+       </td>
+      </tr>
+   </table>
+   </div>
+   
+          <%-- --- USERCONTENT ------------------------------------------- --%>
+  <div class="tab-page">
+  <h2 class="tab"><%= channel.getTypeLabel(UserContent.class, userLang) %></h2>
+  <table class="table-data table-condensed">
+    <tr>
+      <th><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithId(document.editForm, "types", this, "usercontent")' /><%= channel.getTypeLabel(UserContent.class, userLang) %></th>
+    </tr>
+    <tr class='listOddRow'>
+       <td class='vTop'>
+         <jalios:foreach collection='<%= formHandler.getWorkspace().getTypeSet() %>'  type='Class' name='itClass'>
+           <jalios:if predicate='<%= itClass != null && UserContent.class.isAssignableFrom(itClass) && (itClass != UserContent.class) %>'>
+                      <% String typeId = "usercontent" + counter++; %>
+               <label for="<%= typeId %>" class="formLabelbox">
+                      <input type="checkbox" name="types" id='<%= typeId %>' value="<%= itClass.getName() %>" <%= formHandler.getAvailableTypes().contains(itClass) ? "checked" : ""%> /> 
+                 <span><%= channel.getTypeLabel(itClass, userLang) %></span>
+                      </label>
+                      <br />
+           </jalios:if>
+         </jalios:foreach>
+       </td>
+      </tr>
+   </table>
+   </div>
+   
+          <%-- --- PORTALELEMENT ------------------------------------------- --%>
+   <div class="tab-page">
+   <h2 class="tab"><%= channel.getTypeLabel(PortalElement.class, userLang) %></h2>
+    <table class="table-data table-condensed">
+      <tr>
+        <th><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithId(document.editForm, "types", this, "portalelement")' /><%= channel.getTypeLabel(PortalElement.class, userLang) %></th>
+      </tr>  
+      <tr class='listOddRow'>
+        <td class='vTop'>
+          <jalios:foreach collection='<%= formHandler.getWorkspace().getTypeSet() %>'  type='Class' name='itClass'>
+            <jalios:if predicate='<%= itClass != null && PortalElement.class.isAssignableFrom(itClass) && (itClass != PortalElement.class) %>'>
+                      <% String typeId = "portalelement" + counter++; %>
+              <label for="<%= typeId %>" class="formLabelbox">
+                      <input type="checkbox" name="types" id='<%= typeId %>' value="<%= itClass.getName() %>" <%= formHandler.getAvailableTypes().contains(itClass) ? "checked" : ""%> /> 
+                <span><%= channel.getTypeLabel(itClass, userLang) %></span>
+                      </label>
+                      <br />
+            </jalios:if>
+            <jalios:if predicate='<%= (itClass == PortalElement.class) %>'>
+                      <input type="hidden" name="types" value="<%= itClass.getName() %>" />
+            </jalios:if>
+          </jalios:foreach>
+        </td>
+       </tr>  
+     </table>
+     </div>
+          <%-- --- FORM ------------------------------------------- --%>
+     <div class="tab-page">
+     <h2 class="tab"><%= channel.getTypeLabel(Form.class, userLang) %></h2>
+     <table class="table-data table-condensed">
+       <tr>
+         <th><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithId(document.editForm, "types", this, "form")' /><%= channel.getTypeLabel(Form.class, userLang) %></th>
+       </tr>  
+       <tr class='listOddRow'>
+         <td class='vTop'>
+            <jalios:foreach collection='<%= formHandler.getWorkspace().getTypeSet() %>'  type='Class' name='itClass'>
+              <jalios:if predicate='<%= itClass != null && Form.class.isAssignableFrom(itClass) && (itClass != Form.class) %>'>
+                      <% String typeId = "form" + counter++; %>
+                <label for="<%= typeId %>" class="formLabelbox">
+                      <input type="checkbox" name="types" id='<%= typeId %>' value="<%= itClass.getName() %>" <%= formHandler.getAvailableTypes().contains(itClass) ? "checked" : "" %> /> 
+                  <span><%= channel.getTypeLabel(itClass, userLang) %></span>
+                      </label>
+                      <br />
+              </jalios:if>
+              <jalios:if predicate='<%= (itClass == Form.class) %>'>
+                      <input type="hidden" name="types" value="<%= itClass.getName() %>" />
+              </jalios:if>
+            </jalios:foreach>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  </td>
+ </tr>
+</table>
+</div>
+<% 
+  String parentWsId = getDataIdParameter(Workspace.PARENT_WORKSPACE_PARAMNAME);
+  if (Util.notEmpty(parentWsId)) { 
+    %><input type="hidden" name="<%= Workspace.PARENT_WORKSPACE_PARAMNAME %>" value="<%= parentWsId %>" /><%
+  } 
+  
+  String redirect = getValidHttpUrl("redirect");
+  if (Util.notEmpty(redirect)) { 
+    %><input type="hidden" name="redirect" value="<%= encodeForHTMLAttribute(redirect) %>" /><%
+  }
+request.setAttribute("formHandler", formHandler);
+%>
+<jalios:include target="WORKSPACE_WIZARD_END" targetContext="tab-page" />
+</div><%-- .tab-pane --%>
+
+<%-- BUTTONS -------------------------------------------------------------------- --%> 
+
+<p> 
+  <input type='hidden' name='id' value='<%= formHandler.getWorkspace().getId() %>' />
+  <input class='btn btn-primary' type='submit' name='opCreate' value='<%= glp("ui.com.btn.create") %>' />
+  <input class='btn btn-default' type='submit' name='opCancel' value='<%= glp("ui.com.btn.cancel") %>' />
+</p>
+<p><span class='formInfo'><%= glp("ui.com.txt.required") %></span></p>
+</form>

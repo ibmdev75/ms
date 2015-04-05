@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Jalios Plugin Test Suite</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <!-- jquery -->
+  <script src="../../vendor/jquery.js"></script>
+
+  <!-- qunit -->
+  <!--
+  <link   href="../../vendor/qunit.css" rel="stylesheet"  type="text/css" media="screen" />
+  <script  src="../../vendor/qunit.js"></script>
+   -->
+ 
+  <!-- bootstrap -->
+  <link   href="../../../../css/jalios/core/core.css" rel="stylesheet"  type="text/css" media="all" />
+  
+  <!--  lib -->
+  <script src="../../../lib/json2.js"></script>
+  <script src="../../../lib/rsh.js"></script>
+  <script src="../../../lib/jquery.console.js"></script>
+  <script src="../../../lib/jquery.idle-timer.js"></script>
+  
+  <!-- jalios -->
+  <script src="../../../jalios/core/jalios-common.js"></script>
+  <script src="../../../jalios/languages/en.js"></script>
+  <script src="../../../jalios/core/jalios-data-broker.js"></script>
+  <script src="../../../jalios/core/jalios-ajax-refresh.js"></script>
+  
+  <!--  sources -->
+  <script src="../../../lib/bootstrap/modal.js"></script>
+  <script src="../../../jalios/core/jalios-modal.js"></script>
+
+
+  <!-- unit tests -->
+  <script src="unit/jalios-modal.js"></script>
+  
+</head>
+<body>
+
+<!-- 
+  <div>
+    <h1  id="qunit-header">Jalios Plugin Test Suite</h1>
+    <h2  id="qunit-banner"></h2>
+    <h2  id="qunit-userAgent"></h2>
+    <ol  id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </div>
+ -->
+ 
+<div>
+
+  <h2>Jalios: Ajax</h2>
+  
+  <a href="assets/jalios-modal-fragment.html" role="button" class="btn" data-jalios-action="modal">Launch jcms ajax</a>
+  
+  <h2>Jalios: MsgBox</h2>
+  
+  <ul>
+	  <li><a href="#1" class="modal alert">Alert</a></li>
+	  <li><a href="#1" class="modal confirm">Confirm</a></li>
+	  <li><a href="#1" class="modal prompt">Prompt</a></li>
+	  <li><a href="#1" class="modal warning">Warning</a></li>
+  </ul>
+  
+  <h2>Jalios: Default</h2>
+  
+  <a role="button" class="btn" data-toggle="modal" data-target="#myModal1" href="#myModal1" >Launch jcms default</a>
+  <div id="myModal1" class="modal hide fade">
+    <div class="modal-header">
+      <h1>
+        <img class="icon visual" src="assets/visual32.gif">
+        Modal Heading
+      </h1>
+    </div>
+    <div class="modal-body">
+    
+    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. </p>
+    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p> 
+    
+    </div>
+    <div class="modal-footer">
+      <input type="button" value="No"  onclick="return JCMS.window.Modal.close(false);" class="btn"                  name="Cancel">
+      <input type="button" value="Yes" onclick="return JCMS.window.Modal.close(true);"  class="btn btn-primary focus" name="Ok">
+      <input type="button" value="Yes" data-dismiss="modal"  class="btn btn-primary" name="Ok">
+    </div>
+  </div>
+  
+  
+  
+  <h2>Bootstrap</h2>
+  
+  <a href="#myModa" role="button" class="btn" data-toggle="modal" data-target="#myModal">Launch bootstrap modal</a>
+  <div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3 id="myModalLabel">Modal header</h3>
+    </div>
+    <div class="modal-body">
+
+      <h4>Text in a modal</h4>
+      <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem.</p>
+
+      <h4>Popover in a modal</h4>
+      <p>This <a data-original-title="A Title" href="#" role="button" class="btn popover-test" data-content="And here's some amazing content. It's very engaging. right?">button</a> should trigger a popover on hover.</p>
+
+      <h4>Tooltips in a modal</h4>
+      <p><a data-original-title="Tooltip" href="#" class="tooltip-test">This link</a> and <a data-original-title="Tooltip" href="#" class="tooltip-test">that link</a> should have tooltips on hover.</p>
+
+      <hr/>
+
+      <h4>Overflowing text to show optional scrollbar</h4>
+      <p>We set a fixed <code>max-height</code> on the <code>.modal-body</code>. Watch it overflow with all this extra lorem ipsum text we've included.</p>
+      <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+      <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+      <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+      <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+      <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+      <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
+      <a href="#" class="btn btn-primary">Save changes</a>
+    </div>
+  </div>
+
+
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+  <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+  <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+
+
+</div>
+
+</body>
+</html>

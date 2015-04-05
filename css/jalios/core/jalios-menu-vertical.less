@@ -1,0 +1,24 @@
+// Include variables and mixins
+@import "init-mixins.less";
+
+.list-group-item-variant(submenu; @state-info-bg; @state-info-text);
+
+.jalios-menu-vertical {
+  
+  .list-group-submenu {
+    margin-left: 10px;
+    
+    > .list-group-item {
+      &.title {
+        font-weight: bold;
+        background: #EEE;      
+      }
+  	  &:first-child{
+        .border-top-radius(0);  
+  	  }
+  	  &:last-child {
+        .border-bottom-radius(0);  
+  	  }
+    }
+  }
+}

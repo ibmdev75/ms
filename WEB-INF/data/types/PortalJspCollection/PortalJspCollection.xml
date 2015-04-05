@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortalJspCollection" superclass="generated.PortletJspCollection" reviewable="false" debatable="false" unitFieldEdition="false" audienced="false" categoryTab="true" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" titleML="true" hbm="true" authgroups="||||||" interfaces="com.jalios.jcms.portlet.PortalInterface">
+  <title ml="true" />
+  <fields>
+    <field name="description" editor="textarea" wiki="true" required="false" compactDisplay="false" type="String" searchable="true" rows="5" cols="80" ml="true" abstract="true" />
+    <field name="exactCategory" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" descriptionType="tooltip" searchable="false" html="false" />
+    <field type="super" />
+  </fields>
+</type>
+

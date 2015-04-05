@@ -1,0 +1,144 @@
+<%@ page import='com.jalios.jcms.alert.*' %>
+<% AlertManager alertMgr = AlertManager.getInstance(); 
+List<AlertChannel> alertChannelList = alertMgr.getAlertChannelList(memberFH.getMember()); 
+
+Set<String> defaultAlertChannelLabelSet = new TreeSet<String>();
+for(AlertChannel alertChannel: alertMgr.getDefaultAlertChannelSet()) {
+  defaultAlertChannelLabelSet.add(alertChannel.getLabel(userLang));
+}
+Set<AlertRule> alertRuleSet = memberFH.getAvailableAlertRuleSet();
+
+String tableCSS = "alert-rule-list table-data table-condensed" + (Util.isEmpty(alertRuleSet) ?  " hide" : "");
+
+
+jcmsContext.addJavaScript("js/jalios/ux/jalios-alert-rule-editor.js");
+%>
+<jalios:buffer name="alertChannelDescription">
+<dl>
+  <jalios:foreach collection="<%= alertChannelList %>" name="itAlertChannel" type="AlertChannel">
+    <dt><jalios:icon src="<%= itAlertChannel.getIcon() %>" /> <%= itAlertChannel.getLabel(userLang)  %></dt>
+    <dd><%= itAlertChannel.getDescription(userLang) %></dd>
+  </jalios:foreach> 
+</dl>
+</jalios:buffer>
+
+<div id="alert-rule-editor" class="br">
+  <jalios:message dismissable="true" title="">
+    <p><a href="#" onclick="return false;" data-jalios-action="toggle:hide" data-jalios-target="DIV#alert-rule-help" class="<%= Util.isEmpty(alertRuleSet) ? "hide" : "" %>"><%= glp("alert.rule-editor.lbl.help") %></a></p>
+    <div id="alert-rule-help" class="<%= Util.isEmpty(alertRuleSet) ? "" : "hide" %>">
+      <%= glp("alert.rule-editor.lbl.intro", Util.join(defaultAlertChannelLabelSet, ", "), alertChannelDescription) %>
+    </div>
+  </jalios:message>
+  
+  
+  <table class="<%= tableCSS %>">
+    <%-- HEADER --%>  
+    <tr>
+      <th class="text-overflow"><%= glp("alert.rule-editor.lbl.alert-level") %></th>
+      <th><%= glp("alert.rule-editor.lbl.alert-name") %></th>
+      <jalios:foreach name="itAlertChannel" collection="<%= alertChannelList %>" type="AlertChannel" > 
+      <th class="text-overflow"><jalios:icon  src="<%= itAlertChannel.getIcon() %>" alt="" /> <%= itAlertChannel.getLabel(userLang) %></th>
+      </jalios:foreach>
+      <th></th>
+    </tr>
+    
+    <%-- CURRENT RULES --%>  
+    <jalios:foreach name="itAlertRule" type="AlertRule" collection="<%= alertRuleSet %>" counter="c1" >
+    <tr>
+      <td>
+        <% if (itAlertRule.getLevel() != null) { %> 
+        <span class="badge alert-level alert-level-<%= itAlertRule.getLevel().getKey() %>"><%= itAlertRule.getLevel().getLabel(userLang) %></span><input type="hidden" name="alertLevels" value="<%= itAlertRule.getLevel().getKey() %>"/>
+        <% } else { %>
+        <span class="badge alert-level alert-level-any"><%= glp("alert.level.any") %></span><input type="hidden" name="alertLevels" value=""/>
+        <% } %>
+      </td>
+      <td style="width:100%;">
+        <% if (itAlertRule.getDomain() != null) { %>
+        <span class="alert-type"><%= itAlertRule.getAlertLabel(userLang) %></span><input type="hidden" name="alertDomainNames" value="<%= itAlertRule.getAlertFullName() %>"/>
+        <% } else { %>
+        <span class="any-alert-type"><%= glp("alert.rule-editor.lbl.alert-name.all") %></span><input type="hidden" name="alertDomainNames" value=""/>
+        <% } %>
+        <input type="hidden" name="alertChannels" value="<%= (c1.intValue() - 1) + "_" + com.jalios.jcms.handler.EditMemberHandler.NOALERTCHANNEL_MARK %>" />
+      </td>
+      <jalios:foreach name="itAlertChannel" collection="<%= alertChannelList %>" type="AlertChannel" counter="c2" >
+      <td><input type="checkbox" name="alertChannels" value="<%= (c1.intValue() - 1) + "_" + itAlertChannel.getName() %>" <%= itAlertRule.containsAlertChannel(itAlertChannel) ? "checked='checked'" : "" %>/></td>
+      </jalios:foreach>
+      <td>
+        <% if (channel.isDataWriteEnabled()) { %>
+        <a href="#" class="alert-rule-delete" onclick="return false;" title='<%= glp("ui.com.btn.delete") %>'><jalios:icon src="trash-empty"/></a>
+        <% } %>
+      </td>
+      </jalios:foreach>
+      
+    
+    <%-- NEW RULE --%>  
+    <tr id="alert-rule-model">
+      <%-- level select --%>
+      <td>
+        <%
+          List enumLevelValues = new ArrayList();
+          enumLevelValues.add("");
+          
+          List enumLevelLabels = new ArrayList();
+          enumLevelLabels.add("alert.rule-editor.lbl.level.all");
+          
+          for (Iterator it = alertMgr.getAlertLevelList().iterator() ; it.hasNext() ; ){
+            Alert.Level itLevel = (Alert.Level) it.next();
+            enumLevelValues.add(itLevel.getKey());
+            enumLevelLabels.add(itLevel.getLabel(userLang));
+          }
+        %>
+        <jalios:field  name='alertLevels' resource='field-inline'>
+          <jalios:control settings='<%= new EnumerateSettings().select().enumValues(enumLevelValues).enumLabels(enumLevelLabels) %>' />
+        </jalios:field>       
+      </td>
+      
+      <%-- domain / select --%>
+      <td>
+      
+			<div class="form-group field-inline responsive widget " max-width="480px">
+			  <div class="col-sm-12 col-lg-12">
+			    <div class="input-group tab-pane  jalios-input-group">
+      
+      
+        <select name="alertDomainNames" class="form-control">
+          <option value=""><%= glp("alert.rule-editor.lbl.alert-name.all") %></option>
+        
+          <% Map<String,Object>  map = channel.getChannelProperties().getSubProperties(userLang + "." + AlertConstants.NAME_PREFIX_PROP); %>
+          <jalios:foreach name="itEntry1" type="Map.Entry" collection="<%= map.entrySet() %>" counter="c1" >
+            <%
+            String domainName = (String)itEntry1.getKey();
+            String domainLabel = glp(AlertConstants.NAME_PREFIX_PROP + domainName); 
+            %>
+            <option class="title" value="<%= domainName %>"><%= domainLabel %></option>
+            <% JProperties prop = (JProperties)itEntry1.getValue(); %>
+            <jalios:foreach name="itEntry2" type="Map.Entry" collection="<%= prop.entrySet() %>" counter="c2" >
+              <%
+              String alertName = (String)itEntry2.getKey();
+              String alertLabel = (String)itEntry2.getValue();
+              %>
+              <option value="<%= domainName + "." + alertName %>" >&nbsp;&nbsp;&nbsp;<%= alertLabel %></option>
+            </jalios:foreach>
+          </jalios:foreach>
+        </select>    
+        
+        
+          </div>
+        </div>
+      </div>
+                  
+      </td>
+      
+      <%-- alertChannel checkboxes --%>
+      <jalios:foreach name="itAlertChannel" collection="<%= alertChannelList %>" type="AlertChannel">
+      <td><input type="checkbox" name="alertChannels" class="alert-channel-checkbox" value="<%= itAlertChannel.getName() %>" /></td>
+      </jalios:foreach>   
+      
+      <td></td>   
+    </tr>
+    
+  </table>
+  <% if (channel.isDataWriteEnabled()) { %>
+  <a href="#" onclick="return false;" class="alert-rule-add btn btn-default"><jalios:icon src="add"  /> <%= glp("alert.rule-editor.lbl.add-rule") %></a>
+  <% } %>
+</div>

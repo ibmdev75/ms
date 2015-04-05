@@ -1,0 +1,64 @@
+/* ----------------------------------------------- */
+/*  SPLITER                                        */
+/* ----------------------------------------------- */
+
+.spliter {
+  height: 100%;
+
+    padding: 0px 8px @baseline*1.5 8px; 
+    vertical-align: top;
+    border: 1px solid #CCCCCC;
+    border-width: 0px;
+    
+    .split {
+      text-align: center;
+      width: @baseline;
+      background-color: #EFF0F1;
+      border-width: 1px;
+      padding: @baseline 0px;
+      border: 1px solid #DDD;
+      A { 
+        display:block;
+      }
+    }
+    
+    .sidebar {
+      background-color: #FAFAFA;
+      width: 20%;
+      min-width:   210px;
+      padding: 8px 8px 20px 8px;
+      vertical-align:top;
+      // WSTree
+      UL { 
+        /*#JCMS > .style-type-none(); */ 
+        LI { white-space: nowrap; }
+        &.TreeCat, &.TreeCat UL { margin-left: 0; }
+      }
+            A { color: @grayDark; }
+            
+            .separator {
+              margin:  0px -8px;
+              padding-left: @baseline/2;
+              line-height: @baseline*1.5;
+              font-weight: bold;
+              cursor: pointer;
+              border-top:    1px solid #CCCCCC;
+              border-bottom: 1px solid #CCCCCC;
+              #gradient > .vertical-three-colors(#ffffff, #ffffff, 25%, darken(#ffffff, 10%));
+              
+              IMG.toggle {
+                width: 16px;  height: 16px;
+                background-image: url('../../../images/jalios/assets/16x16/expand.gif');
+              }
+            }
+
+            .open {
+        IMG.toggle { background-image: url('../../../images/jalios/assets/16x16/minus.gif'); }
+      }
+      
+	    .wsgroupset { // FIXME: use generic name !
+	      .panel { display: none; }
+	      &.open .panel { display: block; }  
+	    }
+    }
+}

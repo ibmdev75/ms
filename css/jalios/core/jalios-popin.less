@@ -1,0 +1,56 @@
+
+/* ----------------------------------------------- */
+/*  POPIN                                          */
+/* ----------------------------------------------- */
+
+.popin {
+  position: fixed;
+  z-index: @zindexPopin;
+  
+  &.top-right {
+    right: @baseline;
+    top:   50px;
+  }
+  
+  &.top-left {
+    left: @baseline;
+    top:  50px;
+  }
+  
+  &.bottom-left {
+    left:   @baseline;
+    bottom: 0px;
+  }
+  
+  &.bottom-right {
+    right:  @baseline;
+    bottom: 0px;
+  }
+  
+  > div {
+      position: relative;
+      z-index: @zindexPopin + 1;
+      margin: 5px 0px;
+    }
+}
+
+.popin {
+  .alert-popin{
+    position: relative;
+    
+    .close {
+	    position: absolute;
+	    top:   6px;
+	    right: 9px;
+	    z-index: 1;
+	  }
+  }
+  .caddy {
+    border: 3px solid @brand-primary;
+    padding: @baseline/2 @baseline/2 @baseline/2 @baseline*3;
+    background: white url("../../../images/jalios/icons/caddy-32x32.gif") no-repeat 10px 20px;
+    border-radius: @border-radius-base;
+    margin-bottom: @baseline;
+    p { padding-bottom: @baseline; }
+  }
+}

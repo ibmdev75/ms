@@ -1,0 +1,516 @@
+# ----------------------------------------------------------------------
+# This file uses the UTF-8 encoding.
+# ----------------------------------------------------------------------
+
+channel.name: JCMS 9
+channel.url: http://127.0.0.1:80/
+channel.default-email:
+channel.sign-up: false
+channel.sign-up-validation-required: false
+channel.sign-up-create-dbmember: true
+channel.sign.form:
+channel.charter: false
+channel.is-authentication-required: false
+channel.ssl.enabled: false
+channel.ssl.port: 443
+channel.urid: c
+channel.default-group: j_36
+channel.default-admin: j_2
+channel.default-author:
+channel.java-compiler: internal
+channel.lock-timeout: 60
+channel.keywords:
+channel.description:
+channel.default-show-adminicon: true
+channel.login-casesensitive: true
+channel.login-accentsensitive: true
+channel.devadmin:
+channel.devadmin.enabled: false
+channel.admin-ip:
+channel.workspaces-ip:
+channel.data-write.enabled: true
+channel.data-write.msg:
+channel.gzip-filter.enabled: false
+channel.dev-mode.enabled: true
+channel.dev-tools.enabled: true
+channel.webdav.enabled: true
+channel.webdav.ip-filter:
+channel.webdav.custom-protocol.enabled: false
+channel.webdav.use-http-digest-auth: false
+channel.headless: true
+channel.check-file-exists: true
+channel.js-packer.enabled: true
+channel.js-packer.compressor.enabled: true
+channel.js-packer.compressor.line-break: -1
+channel.js-packer.compressor.munge: true
+channel.js-packer.compressor.preserve-semi: false
+channel.js-packer.compressor.disable-optimizations: false
+channel.js-packer.compressor.verbose: false
+channel.css-packer.enabled: true
+channel.css-packer.compressor.enabled: true
+channel.css-packer.compressor.line-break: -1
+channel.packer.cache-expiration: 10
+channel.chromeframe.enabled: false
+channel.main-plugin:
+channel.main-plugin.check-at-startup: true
+$channel.tag-root:
+
+bug-report.email: jcms-report@jalios.com
+review.default-rating: 1
+file-document.remove-file: true
+major-update.default: false
+jx.rss.enabled: true
+
+# ----------------------------------------------------------------------
+# Member profile
+# ----------------------------------------------------------------------
+
+member.photo.upload: true
+member.email.visible: true
+
+# ----------------------------------------------------------------------
+# Database
+# ----------------------------------------------------------------------
+channel.jcmsdb: derby
+
+channel.jcmsdb.disable-data-write-if-no-connection: false
+
+# -1 means to find a free port
+derby.port: -1
+
+# Derby backup
+derby.backup.enabled: true
+derby.backup.schedule: 00 03 * * * *
+derby.backup.max: 10
+derby.network-enabled: false
+
+hibernate.cfg.mysql.prop.hibernate.connection.url: jdbc:mysql://localhost:3306/jcmsdb?jdbcCompliantTruncation=false&useUnicode=true&characterEncoding=UTF-8
+hibernate.cfg.mysql.prop.hibernate.connection.username: jcms
+hibernate.cfg.mysql.prop.hibernate.connection.password: jcms
+hibernate.cfg.mysql.prop.hibernate.connection.datasource:
+
+hibernate.cfg.oracle-xe.prop.hibernate.connection.url: jdbc:oracle:thin:@localhost:1521:XE
+hibernate.cfg.oracle-xe.prop.hibernate.connection.username: jcms
+hibernate.cfg.oracle-xe.prop.hibernate.connection.password: jcms
+hibernate.cfg.oracle-xe.prop.hibernate.connection.datasource:
+
+hibernate.cfg.oracle.prop.hibernate.connection.url: jdbc:oracle:thin:@host:port:SID
+hibernate.cfg.oracle.prop.hibernate.connection.username: jcms
+hibernate.cfg.oracle.prop.hibernate.connection.password: jcms
+hibernate.cfg.oracle.prop.hibernate.connection.datasource:
+
+# Caching Properties
+hibernate.cfg.common.prop.hibernate.cache.use_second_level_cache: true
+hibernate.cfg.common.prop.hibernate.cache.use_query_cache: true
+
+# Connection Pooling (c3p0) properties
+hibernate.cfg.common.prop.hibernate.connection.provider_class: org.hibernate.connection.C3P0ConnectionProvider
+hibernate.cfg.common.prop.hibernate.c3p0.max_size: 98
+hibernate.cfg.common.prop.hibernate.c3p0.min_size: 10
+hibernate.cfg.common.prop.hibernate.c3p0.acquire_increment: 1
+hibernate.cfg.common.prop.hibernate.c3p0.max_statements: 0
+hibernate.cfg.common.prop.hibernate.c3p0.idle_test_period: 60
+hibernate.cfg.common.prop.hibernate.c3p0.timeout: 60
+# Use those two properties for debugging of database connexion leak only - see bug JCMS-3377
+#hibernate.cfg.common.prop.hibernate.c3p0.unreturnedConnectionTimeout: 300
+#hibernate.cfg.common.prop.hibernate.c3p0.debugUnreturnedConnectionStackTraces: true
+
+# ----------------------------------------------------------------------
+# Languages & Country
+# ----------------------------------------------------------------------
+
+# The default language should not be changed. Nevertheless, if it must
+# be changed, the store, the types and the workflows must be updated.
+channel.default-lang: fr
+
+# The country must be an ISO 3166 country code supported by the Java Locale implementation
+channel.default-country: FR
+
+channel.languages: fr, en
+
+channel.lang.use-advanced-i18n: true
+channel.lang.rtl-languages: ar,fa,iw,ur
+
+# ----------------------------------------------------------------------
+# Deploy Manager
+# ----------------------------------------------------------------------
+
+deploy-mgr.enabled: false
+
+# Should sibbling webapps (in same directory than the DM) be managed
+deploy-mgr.sibling-webapps: true
+
+# Other webapps to be managed (a list of absolute path)
+# deploy-mgr.webapps: \
+# /my/path/for/webapp1 \
+# /my/path/for/webapp2
+
+# Custom regexp to ignore directories/files when downloading work copy
+# e.g: (my_webapp_directory_to_ignore.*)|(some_dir/myfile_to_ignore\.dat)
+deploy-mgr.copy-ignore:
+
+
+# ----------------------------------------------------------------------
+# Query
+# ----------------------------------------------------------------------
+
+# Search / Refine / Advanced Refine root categories (a space-separated list of category id)
+query.refine-roots:
+query.adv-refine-roots:
+query.search-roots:
+query.default.types-off:
+query.default.types-facet-off:
+query.sort.fo: relevance
+query.sort.bo: mdate
+query.facets.ugcs: false
+
+# Facet box states (0=no, 1=yes, 2=closed)
+query.facets.categories: 2
+query.facets.tags: 2
+query.facets.date: 2
+query.facets.docs: 2
+query.facets.types: 2
+query.facets.lang: 2
+query.facets.pstatus: 0
+query.facets.author: 2
+
+query.facets.visible: true
+query.facets.advanced: false
+query.facets.ajax: false
+query.facets.text.cat: true
+query.facets.text.file: false
+
+# ----------------------------------------------------------------------
+# SMTP Server
+# ----------------------------------------------------------------------
+
+mail.enabled: false
+mail.smtp.host:
+mail.smtp.port:
+mail.smtp.login:
+mail.smtp.password:
+
+# ----------------------------------------------------------------------
+# Forward Proxy
+# ----------------------------------------------------------------------
+
+http.proxy.enabled:
+http.proxyHost:
+http.proxyPort:
+http.nonProxyHosts:
+http.proxy.login:
+http.proxy.password:
+
+# ----------------------------------------------------------------------
+# LDAP Configuration
+# ----------------------------------------------------------------------
+
+# Defines the default configuration to access the LDAP Server
+
+ldap.enabled: false
+ldap.synchronize.enable: true
+ldap.synchronize-groups.enable: false
+ldap.periodic-sync.enable: false
+ldap.periodic-sync.schedule: 30 2 * * 1 *
+ldap.server.ssl: false
+ldap.server.hostname: ldap.example.com
+ldap.server.port: 389
+ldap.server.login: uid=jcms,ou=People,dc=example,dc=com
+ldap.server.password: jcms
+ldap.server.sizelimit: 100
+ldap.server.timelimit: 0
+ldap.server.version: 3
+ldap.server.suffix: ou=People,dc=example,dc=com
+ldap.server.userfilter: (&(objectClass=posixAccount)(uid={0}))
+ldap.server.userobjectclass: posixAccount
+ldap.server.groupsuffix: ou=Groups,dc=example,dc=com
+ldap.server.groupfilter: (&(objectClass=posixGroup)(memberUid={0}))
+ldap.server.groupobjectclass: posixGroup
+ldap.mapping.login: uid
+ldap.mapping.name: sn
+ldap.mapping.f-name: givenName
+ldap.mapping.salut:
+ldap.mapping.organization: organizationName
+ldap.mapping.department: department
+ldap.mapping.job: title
+ldap.mapping.mail: mail
+ldap.mapping.phone: telephoneNumber
+ldap.mapping.mobile: mobile
+ldap.mapping.street: street
+ldap.mapping.postalCode: postalCode
+ldap.mapping.postOfficeBox: postOfficeBox
+ldap.mapping.region: st
+ldap.mapping.locality: l
+ldap.mapping.country: c
+ldap.mapping.address: postalAddress
+ldap.mapping.info: description
+ldap.grp-mapping.name: cn
+ldap.grp-mapping.member: memberUid
+
+# ----------------------------------------------------------------------
+# Cache Manager
+# ----------------------------------------------------------------------
+
+cache-mgr.enabled: true
+cache-mgr.max-servers-cache-nbr: 1000
+
+# ----------------------------------------------------------------------
+# Notification
+# ----------------------------------------------------------------------
+
+notification.enabled: true
+
+# ----------------------------------------------------------------------
+# Workspace
+# ----------------------------------------------------------------------
+
+channel.default-workspace: j_4
+
+# Forum bound to publication are created in the workspace of the publication.
+# Use this property, to force a dedicated workspace for those forums.
+#$id.pub-forum.default-workspace:
+
+# ----------------------------------------------------------------------
+# Portal
+# ----------------------------------------------------------------------
+
+channel.default-index: j_6
+channel.default-portal: j_206
+channel.default-printportal: j_55
+display.navigate-root:
+
+# ----------------------------------------------------------------------
+# Reverse Proxy
+# ----------------------------------------------------------------------
+
+channel.reverse-proxy.enabled: false
+channel.reverse-proxy.conf1.ip-addresses: 192.168.0.1, 192.168.0.2
+channel.reverse-proxy.conf1.context-path: /cms
+channel.reverse-proxy.conf1.base-url: http://intranet.example.com/
+channel.reverse-proxy.conf1.ssl-base-url: https://intranet.example.com/
+channel.reverse-proxy.conf2.ip-addresses:
+channel.reverse-proxy.conf2.context-path:
+channel.reverse-proxy.conf2.base-url:
+channel.reverse-proxy.conf2.ssl-base-url:
+
+# ----------------------------------------------------------------------
+# JSync
+# ----------------------------------------------------------------------
+jsync.enabled: false
+jsync.replica-url:
+jsync.leader-url:
+jsync.startup-join: 5
+jsync.can-be-joined: true
+jsync.can-leader-join: true
+jsync.update-mode: auto
+jsync.stab-delay: 10
+jsync.sync-files: false
+jsync.max-op: 100
+jsync.max-delay: 1000
+jsync.ip:
+jsync.explicit-replica-list:
+jsync.replica-startup-join: 0
+
+# ----------------------------------------------------------------------
+# Authentication Cookie
+# ----------------------------------------------------------------------
+
+cookie.max-age: 31536000
+auth-mgr.allow-admin-cookie: true
+auth-mgr.persistent.show-option: true
+auth-mgr.persistent.default-value: false
+
+# ----------------------------------------------------------------------
+# Audience Rights
+# ----------------------------------------------------------------------
+
+audience-rigths.enabled: false
+audience-rigths.axes:
+
+# ----------------------------------------------------------------------
+# Store backup
+# ----------------------------------------------------------------------
+
+store.backup.enabled: true
+
+# A cron-like schedule
+# Examples:
+# 30 04 * * * * : Every days at 04h30 AM
+# 30 04 * * 1 * : Every sunday at 04h30 AM
+# 30 04 1 * * * : The first of the month at 04h30 AM
+store.backup.schedule: 00 03 * * * *
+
+# How many backups are kept
+store.backup.max: 10
+
+# By default, backups are saved in WEB-INF/data/backup. You can specify
+# a custom backup directory with an absolute path
+# store.backup.dir:
+
+# ----------------------------------------------------------------------
+# Import Manager
+# ----------------------------------------------------------------------
+import-mgr.enabled: false
+
+# The author for the imported publication (default is admin)
+$id.import-mgr.import-author:
+
+# The workspace for the imported publication (default is Default Workspace)
+$id.import-mgr.import-ws:
+
+# The root category for imported categories (default is "Import")
+$id.import-mgr.import-root:
+
+# Connection timeout (in seconds)
+import-mgr.connection.timeout: 5
+
+# ----------------------------------------------------------------------
+# Export Manager
+# ----------------------------------------------------------------------
+export-mgr.enabled: false
+
+# Authorized IPs
+export-mgr.ipfilter: 127.0.0.1 0:0:0:0:0:0:0:1 192.168.*
+
+# Export Source URL (defaut is channel's URL)
+# export-mgr.source-url:
+
+# Max exported data (default is MAX_INTEGER (2^31 - 1))
+# export-mgr.max-data:
+
+# ----------------------------------------------------------------------
+# Export Raw Data Properties
+# ----------------------------------------------------------------------
+exportRawData.clean-schedule: 0 0 * * * *
+exportRawData.retention-period: 3600
+
+# ----------------------------------------------------------------------
+# Templates
+# ----------------------------------------------------------------------
+
+# Default templates used when no templates found for given usage
+# Before this step JCMS test template declared un Type.xml
+
+# jcms.resource.default-template:        custom/jcms/doDisplay.jsp
+# jcms.resource.default-template.full:   custom/jcms/doFullDisplay.jsp
+# jcms.resource.default-template.box:    custom/jcms/doBoxDisplay.jsp
+# jcms.resource.default-template.query:  custom/jcms/doQueryDisplay.jsp
+
+# ----------------------------------------------------------------------
+# SmallDevices
+# ----------------------------------------------------------------------
+
+# small-device.home:        custom/jcms/indexPDA.jsp
+# small-device.home.IPhone: custom/jcms/indexIPhone.jsp
+
+
+# ----------------------------------------------------------------------
+# REST Open API
+# ----------------------------------------------------------------------
+
+rest.enabled: false
+rest.readaccess.enabled: true
+rest.readaccess.ipfilter: 127.0.0.1 0:0:0:0:0:0:0:1 192.168.*
+rest.writeaccess.enabled: false
+rest.writeaccess.ipfilter: 127.0.0.1 0:0:0:0:0:0:0:1 192.168.*
+# rest.stats.enabled: false
+
+# ----------------------------------------------------------------------
+# INCOMING Email
+# ----------------------------------------------------------------------
+
+# Inboud Suffix
+mail.incoming.enabled: false
+mail.incoming.label: JCMS 9
+mail.incoming.suffix: @jcms.example.com
+
+mail.incoming.rule.default: jcms.+@jcms.example.com
+mail.incoming.rule.default.check: authkey
+
+# Label
+mail.account.label.default: Default account
+
+# Properties
+mail.account.default.host: pop.example.com
+mail.account.default.port: 110
+mail.account.default.protocol: pop3
+mail.account.default.login:
+mail.account.default.password:
+mail.account.default.mbox: INBOX
+mail.account.default.schedule: 10
+mail.account.default.author:
+mail.account.default.ws:
+mail.account.default.expunge: true
+mail.account.default.enabled: true
+mail.account.default.imapssl: true
+
+# ----------------------------------------------------------------------
+# Autocomplete
+# ----------------------------------------------------------------------
+
+# To force the number of proposed results (default is 5)
+autocomplete.proposedresults:
+autocomplete.proposedresults.publication:
+autocomplete.proposedresults.category:
+autocomplete.proposedresults.group:
+autocomplete.proposedresults.workspace:
+autocomplete.proposedresults.member:
+
+
+# ----------------------------------------------------------------------
+# File Management (associated files and quota)
+# ----------------------------------------------------------------------
+
+migration-associated-files-done: true
+admin.quota.maximum-site-quota: 10737418240
+admin.quota.default-workspace-quota: 1073741824
+admin.quota.site-alert-threshold: 80
+admin.quota.default-workspace-alert-threshold: 80
+channel.quota-management.enabled: true
+channel.quota.reject-upload-over-quota: false
+
+# ----------------------------------------------------------------------
+# Upload permission
+# ----------------------------------------------------------------------
+
+# This property define the default max size for upload
+#upload.permission.size.default:
+
+# Max size can also be defined for each mime-type
+#upload.permission.size.image:
+
+# ----------------------------------------------------------------------
+# Notification
+# ----------------------------------------------------------------------
+# for day-of-week, set 1 for SUNDAY, 2 for MONDAY, ...
+
+notification.send-really: true
+notification.send-all-to-admin: false
+notification.period.minute.enabled: false
+notification.period.hour.start.minutes: 0
+notification.period.day.start.time: 9:00
+notification.period.week.start.time: 9:00
+notification.period.month.start.time: 9:00
+notification.period.week.start.day-of-week: 2
+notification.period.month.start.day-of-month: 1
+
+notification.followed-types:
+
+# ----------------------------------------------------------------------
+# External Data Source
+# ----------------------------------------------------------------------
+# Data sources found by JCMS at startup, can be included or excluded.
+# For each property, you can declare a space-separated list of DataSource name (eg. jdbc/myExternalDataSource)
+
+channel.external-data-source.included:
+channel.external-data-source.excluded: jdbc/jcmsdb
+
+# ----------------------------------------------------------------------
+# Other properties
+# ----------------------------------------------------------------------
+
+channel.less-compile.startup: false
+workflow.unprefixed-role.writers: basic-writers
+workflow.unprefixed-role.validators: basic-validators
+workflow.unprefixed-role.writer: wfdraft-writer
+workflow.unprefixed-role.moderators: wfmoderation-moderators

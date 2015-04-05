@@ -1,0 +1,44 @@
+<% if (data instanceof Workspace) { %>
+<% Workspace ws = (Workspace)data; %>
+
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.name") %></td>
+   <td><%= ws.getTitle(userLang) %></td>           
+ </tr>
+ 
+ <% if (ws.getParent() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.wrkspc-edit.parent-workspace") %></td>
+   <td><%= ws.getParent() %></td>           
+ </tr>
+ <% } %>
+<% } %>
+
+<%--
+  Not Yet Displayed 
+
+  public static final String LAST_QUOTA_NOTIFICATION_DATE = "wk.quota.lastQuotaNotificationDate";
+  protected String                   title          = null;
+  protected HashMap<String,String>   titleML        = new HashMap<String,String>();
+  protected int                      order          = 0;
+  protected ArrayList<Member>        administrators = null;
+  protected HashMap<Class<?>,Object> typeMap        = new HashMap<Class<?>,Object>(); // "Object" value can be a String or a WSTypeEntry (backward compatibility)
+  protected HashMap<Class<?>,Boolean> wfByInstanceMap= new HashMap<Class<?>, Boolean>();
+  protected HashMap<Class<?>,Set<String>> instanceWorkflowIdMap = new  HashMap<Class<?>,Set<String>>();
+  protected HashMap<Class<?>,Set<String>> instanceWorkflowGroupMap = new  HashMap<Class<?>,Set<String>>();
+  protected HashMap<String,WKRole>   roleMap        = new HashMap<String,WKRole>();
+  protected HashSet<Category>        catSet         = new HashSet<Category>();
+  protected String                   email          = "";
+  protected boolean                  isModel        = false;
+  protected boolean                  isClosed       = false;
+  protected String[]                 globalCSS      = null;
+  protected String                   language       = null;
+  protected Category                 tagRoot        = null;
+  protected Workspace                parent         = null;
+  protected Group                    defaultGroup;
+  
+  //quota  management
+  protected int alertThreshold = 0;
+  protected long quota = 0L;
+  protected boolean useDefaultQuota = true;
+ --%>

@@ -1,0 +1,85 @@
+<%-- *** PORTAL FILTER ******************************************* --%>
+<% if (showPortletPortalFilter) {
+      
+  List pListValues = new ArrayList();
+  List pListLabels = new ArrayList();
+  if (!formHandler.isMineMode()) { 
+    pListValues.add("mine");                      pListValues.add("");
+    pListLabels.add("ui.work.pub.lbl.my-portal"); pListLabels.add("--------------------");
+  }
+  
+  Set portalSet = new TreeSet(Publication.getTitleComparator(userLang));
+  Set tmpPortalSet = workspaceFilter ? workspace.getPublicationSet(Portal.class) : channel.getAllDataSet(Portal.class);
+  if (tmpPortalSet != null) {
+    portalSet.addAll(tmpPortalSet);                 
+  }               
+  if (formHandler.isMineMode()){
+    portalSet = Util.interSet(portalSet , loggedMember.getPublicationSet());
+  }
+  
+  for (Iterator it  = portalSet.iterator() ; it.hasNext() ; ){
+    Portal itPortal = (Portal) it.next();
+    if (itPortal == null || !itPortal.canBeReadBy(loggedMember)) { continue; }
+    pListValues.add(itPortal.getId());
+    pListLabels.add(itPortal.getTitle(userLang));
+  }
+  
+  EnumerateSettings portalSettings = new EnumerateSettings().select().onChange("submit");
+  
+%>
+<div class="form-group">
+<jalios:field resource="field-light" required="true" label="ui.work.pub.lbl.filter.portal" name="portalId" value='<%= HttpUtil.getAlphaNumParameter(request, "portalId", "") %>'>
+  <jalios:control settings="<%= portalSettings %>" >
+    <jalios:buffer name="SELECT_OPTIONS">
+      <option value="" <%= Util.isEmpty(fieldValue) ? "selected='selected'" : ""%>><%= glp("ui.work.portlet.all-portals") %></option>
+      <% if (!formHandler.isMineMode()) { %>
+      <option value="mine" <%= "mine".equals(fieldValue) ? "selected='selected'" : ""%>><%= glp("ui.work.pub.lbl.my-portal") %></option>
+      <option value="" disabled="disabled">-----------------------</option>   
+      <% } %>
+      <% for (Iterator it  = portalSet.iterator() ; it.hasNext() ; ){
+           Portal itPortal = (Portal) it.next();
+           if (itPortal == null || !itPortal.canBeReadBy(loggedMember)) { 
+             continue; 
+           }
+           String portalValue = Util.getString(fieldValue,"");
+           String selected = portalValue.equals(itPortal.getId()) ? "selected='selected'" : ""; 
+      %>
+        <option value="<%= itPortal.getId() %>" <%= selected %>><%= itPortal.getTitle(userLang) %></option>
+      <% } %>
+    </jalios:buffer>
+  </jalios:control>
+</jalios:field>
+</div>
+<% } %> 
+
+
+<%-- *** PORTLET ABILITIES ************************************* --%>
+<% 
+  if (showPortletAbilitiesFilter) {
+    EnumerateSettings abilitiesSettings = new EnumerateSettings().select().onChange("submit");
+%>
+<div class="form-group">
+<jalios:field required="true" resource="field-light" name="ability" value='<%= formHandler.getAbility() %>'>
+  <jalios:control  type="<%= ControlType.ENUMERATE %>" settings="<%= abilitiesSettings %>" >
+    <jalios:buffer name="SELECT_OPTIONS">
+      <% String abilityValue = Util.getString(fieldValue,""); %>
+      <option value="" <%= Util.isEmpty(abilityValue) ? "selected='selected'" : ""%>><%= glp("ui.work.pub.lbl.all-abilities") %></option>
+      <option value="noabilities" <%= abilityValue.equals("noabilities") ? "selected='selected'" : "" %>><%= glp("ui.work.pub.lbl.no-abilities") %></option>
+      <option value="" disabled="disabled">-----------------------</option>
+    
+      <% for (Map.Entry<String,List<String>> parentAbilityEntry : PortalElement.getAllAbilityMapUI().entrySet()) {
+        String itParentAbility = parentAbilityEntry.getKey();
+        List<String> itChildrenAbilities = parentAbilityEntry.getValue();%>
+        <optgroup label="<%= glp(itParentAbility) %>"><%
+        for (String itAbilityShortKey : itChildrenAbilities) {
+          String itAbilityFullKey = itParentAbility + "." + itAbilityShortKey;%>
+          <option value='<%= itAbilityFullKey %>' <%= abilityValue.equals(itAbilityFullKey) ? "selected='selected'" : "" %>><%= glp(itAbilityFullKey) %></option>
+        <% } %>
+        </optgroup>
+      <% } %>            
+    
+    </jalios:buffer>
+  </jalios:control>
+</jalios:field>
+</div>
+<% } %>

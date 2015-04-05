@@ -1,0 +1,28 @@
+<jalios:include target="EDIT_MBR_CATUSEHRIGHTTAB_HEADER" />
+
+<jalios:message msg="ui.adm.mbr-edit.cat-use-r.hlp" dismissable="true" />
+
+<select name="useCatMode" class="form-control br">
+  <option value="grpmbr" <%= formHandler.getAvailableUseCatMode() == Member.USE_CATEGORY_GROUP_AND_MEMBER ? "selected=\"selected\"" : "" %>/><%= glp("ui.adm.mbr-edit.cat-r.grpmbr") %>
+  <option value="mbr" <%= formHandler.getAvailableUseCatMode() == Member.USE_CATEGORY_MEMBER_ONLY ? "selected=\"selected\"" : "" %>/><%= glp("ui.adm.mbr-edit.cat-r.mbr") %>
+  <option value="grp" <%= formHandler.getAvailableUseCatMode() == Member.USE_CATEGORY_GROUP_ONLY ? "selected=\"selected\"" : "" %>/><%= glp("ui.adm.mbr-edit.cat-r.grp") %>
+</select>
+
+<% Set useCatSet = formHandler.getCategorySet("usecids"); %>
+<jalios:treecatview prefix="usecids" 
+                    input="usecids" 
+                    type="checkbox"
+                    
+                    opened="<%= useCatSet %>" 
+                    checked="<%= useCatSet %>" 
+                    highlighted="<%= useCatSet %>" 
+                    level="1"
+                    collection="<%= Util.getHashSet(channel.getRootCategory()) %>"
+                    selectable="true" 
+                    dragdrop="true"
+                    showCtxMenu="true"
+                    css="autocomplete" />  
+
+<input type='hidden' name='usecids' value='' />
+
+<jalios:include target="EDIT_MBR_CATUSEHRIGHTTAB_FOOTER" />

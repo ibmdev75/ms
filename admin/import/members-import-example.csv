@@ -1,0 +1,5 @@
+Name;Firstname;Email;Login;Organization;Department;Job title;Phone;Mobile
+# Use '#' character at start of a line for a comment
+Smith;John;john.smith@example.com;johnsmith;ACME;Sales;Sales director;01 23 45 67 89;06 07 08 09 10
+Bigman;Steve;steve.bigman@example.com;;ACME;Sales; Sales engineer; ;06 05 04 03 02
+Hills;Barbara;barbara.hills@example.com;;ACME;;;01 02 03 04 05; ;

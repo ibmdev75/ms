@@ -1,0 +1,50 @@
+<%@page import="com.jalios.util.Util"%><%
+%><%@page import="com.jalios.jcms.HttpUtil"%><%
+%><%@page import="com.jalios.jcms.JcmsUtil"%><%
+%><%@page import="com.jalios.jcms.taglib.ControlType"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.BasicSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.AbstractAreaSettings"%><%
+%><%
+String placeholder = getOption(BasicSettings.PLACEHOLDER, "");
+String prepend = getIncludeString("PREPEND", getOption(BasicSettings.PREPEND, ""));
+String append = getIncludeString("APPEND", getOption(BasicSettings.APPEND, ""));
+String textAreaPrepend = getIncludeString("TEXTAREA_PREPEND", "");
+String textAreaAppend = getIncludeString("TEXTAREA_APPEND", "");
+Integer rows = getOption(AbstractAreaSettings.ROWS, 4);
+String required = fieldRequired.booleanValue() ? "aria-required='true'" : "";   
+String css = getOption(BasicSettings.CSS, "");
+css = "form-control resizable" + (Util.notEmpty(css) ? " " + css : "");
+String htmlAttributes = getOption(BasicSettings.HTML_ATTRIBUTES, "");
+String dataAttributes = formatDataAttributes(getOption(BasicSettings.DATA_ATTRIBUTES, (Map<String, Object>) null));
+String dataEvent = formatAttribute("data-jalios-event='%s'", getOption(BasicSettings.TRIGGER_EVENT, ""));
+String dataAction = formatAttribute("data-jalios-action='%s'", getOption(BasicSettings.TRIGGER_ACTION, ""));
+
+String title = getOption("title", null);
+title = Util.notEmpty(title) ? "title='" + HttpUtil.encodeForHTMLAttribute(title) + "'" : "";
+
+String contentValue = resolveValue(fieldValue);
+
+boolean isEmptyPrepend = Util.isEmpty(prepend);
+boolean isEmptyAppend = Util.isEmpty(append);
+
+setIncludeString("isTab", "true");
+setIncludeString("isArea", String.valueOf(isEmptyPrepend && isEmptyAppend));
+%>
+<% if (!isEmptyPrepend) { %><span class="input-group-addon"><%= prepend %></span><% } %>
+
+<% if (Util.notEmpty(textAreaPrepend)) { %><%= textAreaPrepend %><% } %>
+<textarea id="<%= HttpUtil.encodeForHTMLAttribute(fieldId) %>"
+          name="<%= HttpUtil.encodeForHTMLAttribute(fieldName) %>"
+          rows="<%=  HttpUtil.encodeForHTMLAttribute(String.valueOf(rows)) %>"
+          class="<%= css %>"
+          placeholder="<%= HttpUtil.encodeForHTMLAttribute(glp(placeholder)) %>"
+          <%= JcmsUtil.getLangAttributes(cptLang) %>
+          <%= required %>
+          <%= title %>
+          <%= dataEvent %>
+          <%= dataAction %>
+          <%= dataAttributes %>
+          <%= htmlAttributes %>><%= HttpUtil.encodeForHTML(contentValue) %></textarea>
+<% if (Util.notEmpty(textAreaAppend)) { %><%= textAreaAppend %><% } %>
+
+<% if (!isEmptyAppend) { %><span class="input-group-addon"><%= append %></span><% } %>

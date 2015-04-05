@@ -1,0 +1,566 @@
+<%@page import="com.jalios.jcms.search.LuceneMemberSearchEngine"%>
+<%@ page import="com.jalios.jcms.db.HibernateUtil" %><%
+%><%@ page import="com.jalios.jcms.db.DBData" %><%
+%><%@ page import="com.jalios.jcms.db.DBConstants" %><%--
+  @Summary: Display the member list
+  @Category: Admin / Data
+  @Author: Oliver Dedieu
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: True
+  @Deprecated: False
+  @Since: jcms-3.0.0
+--%>
+<% 
+boolean showTree = getBooleanParameter("showTree", guiShowTree);
+// The group that member List has been filtered on:
+final Group group = memberHandler.getAvailableSelectedGroup();
+boolean showEditGroup = !isAllMemberList && group != null;
+boolean guiShowExportCsv = Util.notEmpty(guiExportCSV);
+
+Group wsGroup = getDataParameter("gid", Group.class);
+Set hlGroup = Util.getHashSet(wsGroup);
+
+// Find workspace group
+Set rootWorkspaces = null;
+if (Util.notEmpty(mbrWorkspace)) {
+  rootWorkspaces = new TreeSet();
+  rootWorkspaces.add(mbrWorkspace);
+} else {
+  rootWorkspaces = Workspace.getRootWorkspaces(Workspace.getOrderComparator(userLang), loggedMember);
+}
+
+// Open all or current
+Set openedWorkspaces = rootWorkspaces;
+Set hlWorkspaces = null;
+Workspace wsParent = getDataParameter("wid", Workspace.class);
+if (wsParent != null) {
+  openedWorkspaces = Util.getTreeSet(wsParent);
+  hlWorkspaces = openedWorkspaces;
+}
+
+// Memo
+Map memo = Util.getHashMap("groupLink", ServletUtil.getUrlWithUpdatedParams(request, new String[]{ "showTree", "gid" } , new String[]{ "true", "_NODE_ID_" }));
+if (hlGroup != null) {
+  memo.put("groupHL", hlGroup);
+}
+
+boolean activePanelCommonGroup = mbrWorkspace == null || (wsGroup != null && wsGroup.isGlobalGroup());
+boolean activePanelWsGroup = mbrWorkspace != null || hlWorkspaces != null || (wsGroup != null && wsGroup.getWorkspace() != null);
+%>
+<table class="layout spliter">
+  <tr>
+    <%-- *** TREE ******************************************* --%>
+    <td class="sidebar animated slideInLeft sidebar-toggler<%= showTree ? "" : " hide"%>">
+      <jalios:accordion multiOpen="true">
+        <jalios:accordion-panel title="ui.adm.grp-list.lbl.grpglobal" active="<%= activePanelCommonGroup %>">
+         <div class="overflowing-panel">
+          <jalios:treeview prefix="treegrp"
+                           collection="<%= Group.getRootGroupSet(null) %>" 
+                           opened="<%= hlGroup %>"
+                           highlighted="<%= hlGroup %>"
+                           link='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[]{ "showTree", "gid" } , new String[]{ "true", "_NODE_ID_" }) %>' />
+         </div>
+        </jalios:accordion-panel>
+        <jalios:accordion-panel title="ui.adm.grp-list.lbl.grplocal" active="<%= activePanelWsGroup %>">
+         <div class="overflowing-panel">
+          <jalios:treeview prefix="treews"
+                           collection="<%= rootWorkspaces %>"
+                           level="2"
+                           opened="<%= hlWorkspaces %>"
+                           highlighted="<%= hlWorkspaces %>"
+                           link='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[]{ "showTree", "wid" } , new String[]{ "true", "_NODE_ID_" }) %>'
+                           memo='<%= memo %>' />
+         </div>
+        </jalios:accordion-panel>
+      </jalios:accordion>
+    </td>
+    
+    <%-- *** VERTICAL SEPARATOR ******************************************* --%>
+    <td class="split">
+      <%
+        String hidePanelCss = showTree ? "sidebar-toggler" : "sidebar-toggler hide";
+        String showPanelCss = showTree ? "sidebar-toggler hide" : "sidebar-toggler";
+      %>    
+      <a href='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[] {"showTree"}, new String[] {"false"}) %>' data-jalios-action="toggle:hide" data-jalios-target=".sidebar-toggler"><jalios:icon css="<%= hidePanelCss %>" src='chevron-left'  /> <jalios:icon css="<%= showPanelCss %>" src='chevron-right'  /></a>
+    </td>
+    
+    <%-- *** MEMBER LIST ******************************************* --%>
+    <td class='vTop'>
+<div class="AdminArea WorkArea">
+<jalios:pager name='mlPagerHandler' declare='true' action='init' />
+<%
+  int totalSize;
+  Collection collection;
+  String text;
+  String queryString;
+  String queryDescription;
+  // Boolean used for All member list
+  boolean missingCriteria = false; // indicate that user has not yet specified any search criteria (e.g : no group or text)
+  boolean tooManyResults = false; // indicate that the search was not performed because too many results were found
+  boolean displayResultNbr = true;
+
+  if (isAllMemberList) { %>
+    <jsp:useBean id="allMemberQueryHandler" scope="page" class="com.jalios.jcms.handler.AllMemberQueryHandler">
+      <jsp:setProperty name="allMemberQueryHandler" property="request" value="<%= request %>"/>
+      <jsp:setProperty name="allMemberQueryHandler" property="*" />
+    </jsp:useBean><%
+
+    missingCriteria = allMemberQueryHandler.isMissingCriteria();
+    PageResult<Member> pageResult = allMemberQueryHandler.getPageResult();
+    if (pageResult == null) {
+      pageResult = new PageResult<Member>();
+    }
+    if (allMemberQueryHandler.getAttribute(LuceneMemberSearchEngine.MAXIMUM_RESULTS_NUMBER_REACHED) != null) {
+      tooManyResults = true;      
+    }
+    
+    displayResultNbr = !missingCriteria && !tooManyResults;
+
+    totalSize = pageResult.getTotalSize();
+    collection = pageResult.getResultList();
+    text = allMemberQueryHandler.getText();
+    queryString = allMemberQueryHandler.getQueryString();
+    queryDescription = allMemberQueryHandler.getDescription();
+    
+  } else if (!isDBMemberList) { %>
+    <jsp:useBean id="memberQueryHandler" scope="page" class="com.jalios.jcms.handler.MemberQueryHandler">
+      <jsp:setProperty name="memberQueryHandler" property="request" value="<%= request %>"/>
+      <jsp:setProperty name="memberQueryHandler" property="*" />
+    </jsp:useBean><%
+  
+    if (mbrWorkspace != null) {
+      memberQueryHandler.setWorkspace(mbrWorkspace);
+    }
+  
+    Comparator<? super Member> memberComparator = ComparatorManager.getComparator(Member.class, mlPagerHandler.getSort(), mlPagerHandler.isReverse());
+    Set memberSet = memberQueryHandler.getResultSet(memberComparator);
+  
+    totalSize = memberSet.size();
+    collection = memberSet;
+    text = memberQueryHandler.getText();
+    queryString = memberQueryHandler.getQueryString();
+    queryDescription = "";
+  }
+  // DBMember
+  else { %>
+    <jsp:useBean id="dbMemberQueryHandler" scope="page" class="com.jalios.jcms.handler.DBMemberQueryHandler">
+      <jsp:setProperty name="dbMemberQueryHandler" property="request" value="<%= request %>"/>
+      <jsp:setProperty name="dbMemberQueryHandler" property="*" />
+    </jsp:useBean> <%
+    if (mbrWorkspace != null) {
+      dbMemberQueryHandler.setWorkspace(mbrWorkspace);
+    }
+  
+    PageResult<DBMember> pageResult = dbMemberQueryHandler.getPageResult();
+  
+    totalSize = pageResult.getTotalSize();
+    collection = pageResult.getResultList();
+    text = dbMemberQueryHandler.getText();
+    queryString = dbMemberQueryHandler.getQueryString();
+    queryDescription = "";
+  }
+  
+  %><jalios:pager name='mlPagerHandler' action='compute' size='<%= totalSize %>'/><%
+
+  final Set allPubSet = workspace.getPublicationSet(Publication.class); // Publication of the workspace
+  final String propPrefix = isDBMemberList ? "dbmbr" : "mbr";
+
+  
+  // Fix bug JCMS-2928 : Button "Create new account in the group ..." and links "Add a Member", "Remove Member" are 
+  // proposed to workspace administrator even though action will be forbidden on save
+  boolean memberInsertAndRemoveAuthorized = channel.getBooleanProperty("member.rights.allow-insert-remove", true); 
+  boolean canAddOrRemoveMemberToGroup = memberInsertAndRemoveAuthorized && group != null && Member.checkMemberGroupModification(loggedMember, group, null, true).isOK();
+  boolean showAddMemberLink = !isAllMemberList && group != null && channel.isDataWriteEnabled() && canAddOrRemoveMemberToGroup;
+  boolean showRemoveMemberLink = guiUnGroupMember && group != null && channel.isDataWriteEnabled() && canAddOrRemoveMemberToGroup;
+  
+  // Build a list of members of this page for selection
+  ArrayList membersOnPage = new ArrayList();
+
+  // Print information message
+  if (isAllMemberList) { 
+    if (missingCriteria) { %><jalios:message msg='<%= glp("ui.adm.allmbr-list.search", showRadioInsert ? 1 : 2) %>' title="" /><% }
+    else {
+      %><jalios:message title="">
+        <p><%= queryDescription %></p><% 
+        if (tooManyResults) { %><p><%= glp("ui.adm.allmbr-list.toomany") %></p><% }
+        else if (totalSize == 0) { %><p><%= glp("ui.com.lbl.no-result") %></p><% } %>
+      </jalios:message><%
+    }
+  }
+  
+  // Compute CSV Import link:
+  String guiImportCSV = "";
+  {
+    String groupParamName = "";
+    if (wsGroup != null) {
+      if (wsGroup.getWorkspace() != null && wsGroup.getWorkspace().isCollaborativeSpace()) {
+        groupParamName = MembersCsvImportHandler.CS_GROUP_ID_PARAM;
+      } else {
+        groupParamName = MembersCsvImportHandler.WS_GROUP_ID_PARAM;
+      }
+    }
+    guiImportCSV = "admin/import/importCSVMember.jsp?" + MembersCsvImportHandler.DBMEMBER_PARAM + "=" + (isDBMemberList ? "true" : "false") + (wsGroup != null ? "&amp;"+groupParamName+"="+wsGroup.getId():"");
+  }
+%>
+
+<%@ include file='/jcore/doMessageBox.jspf' %>
+
+  <%
+  // Fix JCMS-2741 : Action "Synchronize all LDAP members..." is not working for DBMembers
+  // "opSyncAll" Action MUST ONLY be proposed when working with JStore Member list 
+  boolean showSyncLDAP = channel.isLdapEnabled() && guiShowSyncLDAP && (!isAllMemberList && !isDBMemberList); 
+  %>
+  <div class="page-header">
+  
+    <h1><jalios:icon src='member-big'/>
+    <%
+    if (isAllMemberList) {%><%= glp("ui.adm.allmbr-list.title", showRadioInsert ? 1 : 2) %><% }
+    else if (group != null) { %><%= glp("ui.adm."+propPrefix+"-list.title2", group.getName(userLang)) %><% }
+    else { %><%= glp("ui.adm."+propPrefix+"-list.title") %><% }
+    %>
+    <% if (displayResultNbr) { %>(<%= totalSize %>)<% } %></h1>
+  </div>
+  <%@ include file="/admin/import/importCSVMemberResult.jspf" %>
+
+  <%-- NAVBAR --%>
+  <%@ include file="/admin/doMemberListNavbar.jspf" %>
+
+<form name='editForm'>
+<table id='membersTable' class="table-data table-condensed">
+  <tr> 
+    <%-- --- HEADER / WIDGET --------------------------- --%>
+    <% if (showRadioInsert ) { %>
+      <th width='1%'>&nbsp;</th>
+    <% } %>
+    <% if (showCheckInsert ) { %>
+      <th>
+        <input type='checkbox' id="selectAllCheckbox" title="<%= glp("ui.adm.mbr-list.btn.select-all") %>"
+               onclick='checkAll(document.editForm, "members", this); selectAllMembersOnPage(this); disableAllCheckbox();' checked />
+      </th>
+    <% } %>
+    <%-- --- HEADER / DETAILLED VIEW ICON - CSV EXPORT --------------------------- --%>
+    <th class="nowrap" width='1%'>
+      <% if (showDetailView) { %>
+        <% if (isDetailView) { %>
+        <a href='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[] {"detail"}, new String[] {"false"}) %>'><jalios:icon src='simple-list' title='<%= glp("ui.work.pub.txt.s-view") %>' /></a>
+        <% } else { %>
+        <a href='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[] {"detail"}, new String[] {"true"}) %>'><jalios:icon src='detailled-list' title='<%= glp("ui.work.pub.txt.d-view") %>' /></a>
+        <% } %>
+      <% } %>
+      <% if (!isDBMemberList) { %>
+      <jalios:caddy action='add' memberQueryString='<%= Util.getString(queryString, "all=true") %>'/>
+      <% } else { %>
+      <jalios:caddy action='add' dbMemberQueryString='<%= Util.getString(queryString, "all=true") %>'/>
+      <% } %>
+      <% if (guiShowExportCsv) { %>
+       <a href="<%= guiExportCSV %>" title='<%= encodeForHTMLAttribute(glp("ui.com.btn.csv")) %>'><jalios:icon src="csv" /></a>
+      <% } %>
+    </th>
+    <%-- --- HEADER / NAME --------------------------- --%>
+    <% if (guiShowName ) { %>
+    <th class="nowrap">
+      <% /* %>Name<% */ %><%= glp("ui.com.lbl.name") %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='name'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / #PUB --------------------------- --%>
+    <% if (guiShowPub ) { %>
+    <th>
+      <% /* %>#Pub.<% */ %><%= glp("ui.com.lbl.pub-cnt") %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='pubCount'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / GROUPS --------------------------- --%>
+    <% if (guiShowGroups ) { %>
+    <th class="nowrap">
+      <% /* %>Group<% */ %><%= glp("ui.com.lbl.groups") %>
+      <% if (!isAllMemberList && !isDBMemberList) { %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='group'/>
+      <% } %>
+    </th>
+    <% } %>
+    <%-- --- HEADER / WORKSPACE --------------------------- --%>
+    <% if (guiShowWorkspace ) { %>
+      <th class="nowrap">
+        <% /* %>Workspace<% */ %><%= glp("ui.com.lbl.workspaces") %>
+      </th>
+    <% } %>
+    <%-- --- HEADER / READ CAT (AUDIENCEMENT) --------------------------- --%>
+    <% if (guiShowReadCat ) { %>
+      <th class="nowrap">
+        <% /* %>Read Profile<% */ %><%= glp("ui.adm.mbr-edit.pub-read-r.title") %>
+      </th>
+    <% } %>
+    <%-- --- HEADER / LOGIN --------------------------- --%>
+    <% if (guiShowLogin ) { %>
+    <th class="nowrap">
+      <% /* %>Login<% */ %><%= glp("ui.com.lbl.login") %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='login'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / READ RIGHTS --------------------------- --%>
+    <% if (guiShowRights ) { %>
+    <th class="nowrap">
+      <% /* %>Rights<% */ %><%= glp("ui.com.lbl.rights") %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='right'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / WEBDAV --------------------------- --%>
+    <% if (guiShowWebdav ) { %>
+    <th class="nowrap">
+      <% /* %>Webdav<% */ %><%= glp("ui.com.lbl.webdav") %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='webdav'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / EMAIL --------------------------- --%>
+    <% if (guiShowEmail ) { %>
+    <th class="nowrap" ><% /* %>Email<% */ %><%= glp("ui.adm.mbr-edit.lbl.mail") %></th>
+    <% } %>
+    <%-- --- HEADER / LANG --------------------------- --%>
+    <% if (guiShowLang ) { %>
+    <th class="nowrap"><% /* %>Lang<% */ %><%= glp("ui.adm.mbr-list.lbl.lang") %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='lang'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / SESSION --------------------------- --%>
+    <% if (guiShowSession ) { %>
+    <th class="nowrap">
+      <% /* %>Session<% */ %><%= glp("ui.adm.mbr-list.lbl.session") %>
+      <% if (!isAllMemberList && !isDBMemberList) { %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='session'/>
+      <% } %>
+    </th>
+    <% } %>
+    <%-- --- HEADER / CDATE --------------------------- --%>
+    <% if (guiShowCreated ) { %>
+    <th class="nowrap">
+      <% /* %>CDate<% */ %><%= glp("ui.com.lbl.cdate") %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='date'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / LAST LOGIN DATE --------------------------- --%>
+    <% if (guiShowLastLogin ) { %>
+    <th class="nowrap">
+      <% /* %>Last login date<% */ %><%= glp("ui.adm.mbr-edit.last-login-date") %>
+      <jalios:pager name='mlPagerHandler' action='showSort' sort='lastLoginDate'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / EXTENSION --------------------------- --%>
+    <% if (guiShowExt ) { %>
+    <th class="nowrap">
+     <% /* %> Ext.<% */ %><%= glp("ui.com.lbl.ext") %>
+    </th>
+    <% } %>
+    <%-- --- HEADER / LDAP SYNC --------------------------- --%>
+    <% if (channel.isLdapEnabled() && guiLastLDAPSync ) { %>
+    <th class="nowrap">
+     <% /* %> LDAP Sync.<% */ %><%= glp("ui.com.lbl.ldap-sync") %>
+    </th>
+    <% } %>
+    <%-- --- HEADER / LDAP LAST SYNCHRO --------------------------- --%>
+    <% if (channel.isLdapEnabled() && guiLastLDAPSync ) { %>
+    <th class="nowrap">
+     <% /* %> LDAP Sync.<% */ %><%= glp("ui.com.lbl.ldap-sync") %>
+     <jalios:pager name='mlPagerHandler' action='showSort' sort='lastLdapSync'/>
+    </th>
+    <% } %>
+    <%-- --- HEADER / ID --------------------------- --%>
+    <% if (guiShowId ) { %>
+    <th class="nowrap">
+      <% /* %>ID<% */ %><%= glp("ui.com.lbl.id") %>
+    </th>
+    <% } %>
+    <th width='1%'>&nbsp;</th>
+  </tr>
+  <jalios:foreach name="itMember" 
+                  type="Member"
+                  collection="<%= collection %>"
+                  max="<%= mlPagerHandler.getPageSize() %>"
+                  skip="<%= (!isDBMemberList) ? mlPagerHandler.getStart() : 0 %>"> 
+  <% 
+  membersOnPage.add(itMember); 
+  String rights = memberHandler.getRights(itMember);
+  %>
+  <tr <%= itMember.isDisabled() ? "class='disableAccount'":"" %>> 
+    <%-- --- MBR / WIDGET --------------------------- --%>
+    <% if (showRadioInsert ) { %>
+      <% String label = HttpUtil.encodeForJavaScript(itMember.getFullName()); %>
+      <td class="text-right" nowrap="nowrap"><input type="radio" onclick="javascript:insertLink('<%= itMember.getId() %>', '<%= label %>')" /></td>
+    <% } %>
+    <% if (showCheckInsert ) { %>
+      <td class="text-right" nowrap="nowrap">
+        <%
+          Set workingSet = new TreeSet(selectedMembers);
+          if (selectedMembers.contains(itMember)) { workingSet.remove(itMember); }
+          else { workingSet.add(itMember); }
+          String newMembersValue = JcmsUtil.dataListToString(workingSet, ",");
+        %>
+        <input type="checkbox" name="members" <%= selectedMembers.contains(itMember) ? "checked" : "" %>
+               onclick="disableAllCheckbox(); document.location='<%= ServletUtil.getAbsUrlWithUpdatedParam(request, "members", newMembersValue)%>'">
+      </td>
+    <% } %>
+    <%-- --- MBR / COUNTER / EDIT ICON --------------------------- --%>
+    <td class="text-right" nowrap="nowrap">
+      <%= mlPagerHandler.getStart() + itCounter.intValue() %>.
+      <jalios:edit data='<%= itMember %>' target='<%= target %>' redirect='<%= redirectRefresh %>'/>
+    </td>
+    <% if (guiShowName ) { %>
+    <%-- --- MBR / NAME --------------------------- --%>
+    <td class="nowrap">
+      <% if (guiShowPhoto) { %>
+        <jalios:memberphoto size="<%= PhotoSize.ICON %>" member="<%= itMember %>" />
+      <% } %>
+      <% if (itMember.isDisabled()) { %>
+       <% if (!itMember.isLdapAccount()) { %>
+        <jalios:tooltip icon='disable-account' property='<%= "ui.adm.mbr-list.disabled.hlp" %>'/>
+       <% } else {  %>
+        <jalios:tooltip icon='disable-account-ldap' property='<%= "ui.adm.mbr-list.disabled-ldap.hlp" %>'/>
+       <% } %>
+      <% } %>
+      <%= (mbrWorkspace == null) ? itMember.getHtmlIcon(userLang) : itMember.getHtmlIcon(mbrWorkspace,userLang) %>
+      
+      <% if (guiShowNameLink ) { %><a href='front/memberProfile.jsp?id=<%= itMember.getId() %>' class="ID_<%= itMember.getId() %> ctxTooltipCard"><% } %>
+        <%= itMember.getFullName() %>
+      <% if (guiShowNameLink ) { %></a><% } %>
+      
+      <jalios:checkIntegrity data='<%= itMember %>' />
+      <% if (isAdmin && itMember.hasAcl()) { %>
+      <a href="admin/accessManager.jsp?mid=<%= itMember.getId() %>" title="<%= glp("ui.adm.mbr-list.mbr-has-acl") %>"><jalios:icon src="acl"  alt="acl"/></a>
+      <% } %>
+    </td>
+    <% } %>
+    <%-- --- MBR / #PUB --------------------------- --%>
+    <% if (guiShowPub ) { %>
+    <td class="text-right">  
+      <% Set pubSet = guiPubFilter ? Util.interSet(itMember.getPublicationSet(),allPubSet) : itMember.getPublicationSet(); %>
+      <% int dbPubCount = guiPubFilter ?  HibernateUtil.queryCount(Publication.class, new String[]{DBConstants.AUTHOR_ID_FIELD, DBConstants.WORKSPACE_ID_FIELD},
+                                                                                      new String[]{itMember.getId(), workspace.getId()}) :
+                                          HibernateUtil.queryCount(Publication.class, DBConstants.AUTHOR_ID_FIELD, itMember.getId()); %>
+      <% String wrkspc = guiPubFilter ? "&amp;wrkspc="+workspace.getId() : ""; %>
+      <%= ( Util.isEmpty(pubSet) && dbPubCount == 0 ) ? Integer.toString(pubSet.size() + dbPubCount) : ("<a href='work/queryWork.jsp?mids="+ itMember.getId() +"&amp;types=com.jalios.jcms.Publication"+wrkspc+"'>"+ (pubSet.size() + dbPubCount) +"</a>") %>
+     </td>
+    <% } %>
+    <%-- --- MBR / GROUPS --------------------------- --%>
+    <% if (guiShowGroups ) { %>
+    <td class='vTop nowrap'>
+      <ul>
+      <jalios:foreach array="<%= itMember.getDeclaredGroups() %>" name="itGroup" type="Group" counter="gCounter">
+        <% if (itGroup.canBeReadBy(loggedMember)) { %>
+          <% if (mbrWorkspace == null || itGroup.getWorkspace() == null || itGroup.getWorkspace() == mbrWorkspace) { %>
+          <li><a href="<%= ServletUtil.getUrlWithUpdatedParam(request,"gid",itGroup.getId()) %>" class="ID_<%= itGroup.getId() %> ctxTooltipCard"><%= itGroup.getName(userLang) %></a>
+          <% if (guiShowSubGroups && itGroup.isSubGroup()) { %>
+          <ul>
+          <jalios:foreach collection='<%= itGroup.getAncestorSet(false) %>' name='itAncestor' type='Group' counter='ancestorCounter'>
+          <li><a href="<%= ServletUtil.getUrlWithUpdatedParam(request,"gid",itAncestor.getId()) %>" class="ID_<%= itAncestor.getId() %> ctxTooltipCard"><%= itAncestor.getName(userLang) %></a></li>
+          </jalios:foreach>
+          </ul>
+          <% } %>
+          </li>
+          <% } %>
+        <% } %>
+      </jalios:foreach>
+      </ul>
+    </td>
+    <% } %>
+    <%-- --- MBR / WORKSPACE --------------------------- --%>
+    <% if (guiShowWorkspace ) { %>
+    <td class='vTop nowrap'>
+      <ul>
+      <jalios:foreach collection="<%= Workspace.getAllWorkspaceSet(itMember) %>" name="itWorkspace" type="Workspace" counter="wCounter">
+      <li><%= itWorkspace.getTitle(userLang) %>
+      </jalios:foreach>
+      </ul>
+    </td>
+    <% } %>
+    <%-- --- MBR / READCAT (AUDIENCEMENT) --------------------------- --%>
+    <% if (guiShowReadCat ) { %>
+    <td class='vTop nowrap'>
+      <ul>
+      <jalios:foreach collection="<%= itMember.getReadCategorySet() %>" name="itCat" type="Category" counter="rcCounter">
+      <li><%= itCat.getName(userLang) %>
+      </jalios:foreach>
+      </ul>
+    </td>
+    <% } %>
+    <%-- --- MBR / LOGIN --------------------------- --%>
+    <% if (guiShowLogin ) { %>
+      <td><%= itMember.getLogin() %></td>
+    <% } %>
+    <%-- --- MBR / READRIGHTS --------------------------- --%>
+    <% if (guiShowRights ) { %>
+      <td class="text-center"><%= rights %></td>
+    <% } %>
+    <%-- --- MBR / WEBDAV --------------------------- --%>
+    <% if (guiShowWebdav ) { %>
+      <td class="text-center"><%= itMember.hasWebdavAccess() ? channel.getProperty("list.boolean.on", "X") : channel.getProperty("list.boolean.off", "&nbsp;") %></td>
+    <% } %>
+    <%-- --- MBR / EMAIL --------------------------- --%>
+    <% if (guiShowEmail ) { %>
+      <td><%= itMember.getEmail() == null || itMember.getEmail().equals("") ? "&nbsp;" : itMember.getEmail() %></td>
+    <% } %>
+    <%-- --- MBR / LANG --------------------------- --%>
+    <% if (guiShowLang ) { %>
+      <td class='text-center'><jalios:lang lang='<%= itMember.getLanguage() %>' /></td>
+    <% } %>
+    <%-- --- MBR / SESSION --------------------------- --%>
+    <% if (guiShowSession ) { %>
+      <td class="text-center"><%= JcmsSessionTracker.getMemberSessionCount(itMember) > 0 ? "" + JcmsSessionTracker.getMemberSessionCount(itMember) : "&nbsp;"%></td>
+    <% } %>
+    <%-- --- MBR / CDATE --------------------------- --%>
+    <% if (guiShowCreated ) { %>
+      <td class="text-right"><jalios:date date='<%= itMember.getCdate() %>' format='<%= "short" %>'/></td>
+    <% } %>
+    <%-- --- MBR / LAST LOGIN DATE --------------------------- --%>
+    <% if (guiShowLastLogin) { %>
+      <td class="text-right">
+      <% 
+         Date lastLoginDate = itMember.getLastLoginDate();
+         if (lastLoginDate != null) { %>
+           <jalios:date date='<%= lastLoginDate %>' format='<%= "short" %>' />
+           <jalios:time date='<%= lastLoginDate %>' format='<%= "short" %>' /> 
+      <% } %>
+      </td>
+    <% } %>
+    
+    <%-- --- MBR / EXTENSION --------------------------- --%>
+    <% if (guiShowExt ) { %>
+      <td class="text-center"><%= itMember.getExtension() != null ? channel.getProperty("list.boolean.on", "X") : channel.getProperty("list.boolean.off", "&nbsp;") %></td>
+    <% } %>
+    <%-- --- MBR / LDAP SYNC --------------------------- --%>
+    <% if (channel.isLdapEnabled() && guiLastLDAPSync ) { %>
+      <td class="text-center"><%= /*itMember.isLdapAccount() &&*/ itMember.getLdapSync()  ? channel.getProperty("list.boolean.on", "X") : channel.getProperty("list.boolean.off", "&nbsp;") %></td>
+    <% } %>    
+    <%-- --- MBR / LDAP LAST SYNCHRO --------------------------- --%>
+    <% if (channel.isLdapEnabled() && guiLastLDAPSync ) { %>
+      <td class="text-right"><jalios:date date='<%= itMember.getLastLdapSynchro() %>' format='<%= "short" %>'/></td>
+    <% } %>
+    <%-- --- MBR / ID --------------------------- --%>
+    <% if (guiShowId ) { %>
+      <td><%= itMember.getId() %></td>
+    <% } %>
+    <%-- --- MBR / ACTIONS --------------------------- --%>
+    <td class='nowrap'>
+      <jalios:caddy data='<%= itMember %>'/>
+      <% if (showRemoveMemberLink && itMember.isDeclaredGroup(group)) { %>
+        <a href='<%= ServletUtil.getUrlWithUpdatedParam(request , "removeMember" , itMember.getId()) %>'><jalios:icon src='group-out'   title='<%= glp("ui.adm.mbr-list.remove-member") %>' /></a>
+      <% } %>
+    </td>
+  </tr>
+</jalios:foreach>
+</table>
+</form>
+
+
+<% if (guiShowPager ) { %>
+  <jalios:pager name='mlPagerHandler'/>
+<% } %>
+<% if (showCheckInsert) { %>
+  <%@ include file="/admin/doSelectedMemberList.jspf" %>
+<% } %>
+  </div>
+
+</div>
+</td>
+</tr>
+</table>

@@ -1,0 +1,81 @@
+<jalios:if predicate="<%= isAdmin && JcmsSessionTracker.getMaxTraceNbr() != 0 %>">
+<br />
+
+<style type="text/css">
+ .trace        { border: 1px solid black; border-collapse: collapse; width:100%; }
+ .trace td     {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  padding: 5px; 
+  margin: 0;
+ }
+ .traceHeader  { border: 1px solid black; background-color: #f0f0f0; }
+ .traceRow     { border-top: 0; }
+ .traceEvenRow { background-color: #fdfdfd; }
+ .traceOddRow  { background-color: #f9f9f9; }
+ .traceOverRow { background-color: #ffffff; }
+ .traceUnknown   {  }
+ .tracePublic    {  }
+ .traceWorkArea  { background-color: #ffddaa; }
+ .traceAdminArea { background-color: #ffcccc; }
+</style>
+
+ <table class="trace">
+  <%-- TRACE ------------------------------------------------------- --%> 
+ <%
+    HashMap sessionToTraceMap = JcmsSessionTracker.getMemberSessionIdTraceMap(member); 
+    int sessionCounter = 1;
+    for (Iterator itEntry = sessionToTraceMap.entrySet().iterator(); itEntry.hasNext(); sessionCounter++) {
+      Map.Entry entry = (Map.Entry) itEntry.next();
+      String     sessionId  = (String) entry.getKey();
+      LinkedList traceList = (LinkedList) entry.getValue();
+ %>
+  <tr class="traceHeader"> 
+    <td>
+      <b><%= glp("ui.adm.mbr-edit.trace.session", sessionCounter) %></b><br />
+      <span style="font-size: 80%">(<%= sessionId %>)</span>
+     </td>
+  </tr>
+ <%
+  int traceCounter = 1;
+  for (Iterator itTrace = traceList.iterator(); itTrace.hasNext(); traceCounter++) {
+    HashMap curTrace = (HashMap) ((HashMap) itTrace.next()).clone();
+    if (Util.isEmpty(curTrace)) {
+      continue;
+    }
+    Date curTraceDate = (Date) curTrace.get("date");                     curTrace.remove("date");
+    String curZone       = Util.getString(curTrace.get("zone"), "Unknown"); curTrace.remove("zone");
+    String curTitle      = Util.getString(curTrace.get("title"), "");       curTrace.remove("title");
+    String trClass = (traceCounter % 2 == 0) ? "traceEvenRow" : "traceOddRow";
+ %>
+  <tr class="traceRow <%= trClass %> trace<%= curZone %>"> 
+    <td> 
+       <jalios:time date="<%= curTraceDate %>" format='<%= "HH:mm:ss" %>'/>
+       <ul style="margin-top: 0; margin-bottom: 0; font-size: 90%">
+           <% if (Util.notEmpty(curTitle)) { %>
+             <li><b><%= glp("ui.adm.mbr-edit.trace.zone." + curZone.toLowerCase()) %> > <%= curTitle %></b></li>
+           <% } %>
+ <%
+        for (Iterator itTraceEntry = curTrace.entrySet().iterator(); itTraceEntry.hasNext(); ) {
+          Map.Entry traceEntry = (Map.Entry) itTraceEntry.next();
+          String key = (String) traceEntry.getKey();
+          Object value = traceEntry.getValue();
+          if ("publication".equals(key) || "document".equals(key) ) {
+            Publication pub = channel.getPublication((String) value);
+            %><li><%= glp("ui.adm.mbr-edit.trace." + key) %> : <jalios:link data='<%= pub %>'/> (<%= pub.getId()%>)</li><%
+          } else if ("url".equals(key)) {
+            %><li><%= glp("ui.adm.mbr-edit.trace." + key) %> : <a href="<%= value %>"><%= Util.truncate((String) value, 70, "...") %></a></li><%
+          } else {
+            %><li><%= glp("ui.adm.mbr-edit.trace." + key) %> : <%= value %></li><%
+          }
+        }
+ %>
+      </ul>
+    </td>
+  </tr>
+ <%
+      }
+    }
+ %>
+ </table> 
+</jalios:if>

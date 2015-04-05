@@ -1,0 +1,19 @@
+<%
+  String rssItemTitle = rssItem.getTitle(); 
+  String rssItemDescription = rssItem.getDescription();
+  
+  if (channel.getBooleanProperty("channel.security.clean-rss", true)) {
+    final Map<String,Object> titleHtmlCleaningCtxMap = new HashMap<String,Object>();
+    titleHtmlCleaningCtxMap.put("PortletRSS", Boolean.TRUE);
+    titleHtmlCleaningCtxMap.put("RssChannel", rssChannel);
+    titleHtmlCleaningCtxMap.put("RssItem", rssItem);
+    titleHtmlCleaningCtxMap.put(WysiwygManager.CLEANHTML_CTXT_FIELDNAME, "title");
+    
+    final Map<String,Object> descrHtmlCleaningCtxMap = Util.getHashMap(titleHtmlCleaningCtxMap);
+    descrHtmlCleaningCtxMap.put(WysiwygManager.CLEANHTML_CTXT_FIELDNAME, "description");
+  
+    rssItemTitle = WysiwygManager.cleanHtml(rssItemTitle, titleHtmlCleaningCtxMap);
+    rssItemDescription = WysiwygManager.cleanHtml(rssItemDescription, descrHtmlCleaningCtxMap);
+  }
+  
+%>

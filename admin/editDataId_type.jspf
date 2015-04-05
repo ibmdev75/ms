@@ -1,0 +1,23 @@
+<h4><%= glp("ui.adm.data-inspector.lbl.type") %></h4>
+<table class="<%= tableCSS %>">
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.type-list.lbl.name") %></td>
+   <td><jalios:dataicon data="<%= data %>" /> <%= channel.getTypeLabel(data.getClass(), userLang) %></td>           
+ </tr> 
+ <tr>   
+   <td class="fit nowrap"><%= glp("ui.adm.data-inspector.lbl.class") %></td>
+   <td><code><%= data.getClass().getName() %></code></td>           
+ </tr>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.type-list.lbl.storage") %></td>
+   <td>
+   <% if (data instanceof DBData ) { %>
+   <jalios:icon src="db"  /> <%= glp("ui.adm.type-list.lbl.storage.db") %>
+   <% } else { %>
+   <jalios:icon src="store"  /> <%= glp("ui.adm.type-list.lbl.storage.jstore") %>
+   <% } %>
+   </td>           
+ </tr>
+</table>
+
+

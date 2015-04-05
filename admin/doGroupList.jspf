@@ -1,0 +1,173 @@
+<%-- 
+  @Summary: Group editor
+  @Category: Admin / Data
+  @Author: Oliver Dedieu
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: True
+  @Deprecated: False
+  @Since: jcms-4.1.0
+--%>
+<%
+boolean showTree = getBooleanParameter("showTree", guiShowTree);
+Group wsGroup = getDataParameter("gid", Group.class);
+Set hlGroup = Util.getHashSet(wsGroup);
+
+// Find workspace group
+Set rootWorkspaces = null;
+if (Util.notEmpty(mbrWorkspace)) {
+  rootWorkspaces = new TreeSet();
+  rootWorkspaces.add(mbrWorkspace);
+} else {
+  rootWorkspaces = Workspace.getRootWorkspaces(Workspace.getOrderComparator(userLang), loggedMember);
+}
+
+// Open all or current
+Set openedWorkspaces = rootWorkspaces;
+Set hlWorkspaces = null;
+Workspace wsParent = getDataParameter("wid", Workspace.class);
+if (wsParent != null) {
+  openedWorkspaces = Util.getTreeSet(wsParent);
+  hlWorkspaces = openedWorkspaces;
+}
+
+// Memo
+Map memo = Util.getHashMap("groupLink", ServletUtil.getUrlWithUpdatedParams(request, new String[]{ "showTree", "gid" } , new String[]{ "true", "_NODE_ID_" }));
+if (hlGroup != null) {
+  memo.put("groupHL", hlGroup);
+}
+
+boolean activePanelCommonGroup = mbrWorkspace == null || (wsGroup != null && wsGroup.isGlobalGroup());
+boolean activePanelWsGroup = mbrWorkspace != null || hlWorkspaces != null || (wsGroup != null && wsGroup.getWorkspace() != null);
+%>
+<table class="layout spliter">
+  <tr>
+    <%-- *** TREE ******************************************* --%>
+    <td class="sidebar animated slideInLeft sidebar-toggler<%= showTree ? "" : " hide"%>">
+    
+      <jalios:accordion multiOpen="true">
+        <jalios:accordion-panel title="ui.adm.grp-list.lbl.grpglobal" active="<%= activePanelCommonGroup %>">
+         <div class="overflowing-panel">
+          <jalios:treeview prefix="treegrp"
+                           collection="<%= Group.getRootGroupSet(null) %>" 
+                           opened="<%= hlGroup %>"
+                           highlighted="<%= hlGroup %>"
+                           link='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[]{ "showTree", "gid" } , new String[]{ "true", "_NODE_ID_" }) %>' />
+         </div>
+        </jalios:accordion-panel>
+        <jalios:accordion-panel title="ui.adm.grp-list.lbl.grplocal" active="<%= activePanelWsGroup %>">
+         <div class="overflowing-panel">
+          <jalios:treeview prefix="treews"
+                           collection="<%= rootWorkspaces %>"
+                           level="2"
+                           opened="<%= hlWorkspaces %>"
+                           highlighted="<%= hlWorkspaces %>"
+                           link='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[]{ "showTree", "wid" } , new String[]{ "true", "_NODE_ID_" }) %>'
+                           memo='<%= memo %>' />
+         </div>
+        </jalios:accordion-panel>
+      </jalios:accordion>
+    </td>
+    
+    <%-- *** VERTICAL SEPARATOR ******************************************* --%>
+    <td class="split">
+      <%
+        String hidePanelCss = showTree ? "sidebar-toggler" : "sidebar-toggler hide";
+        String showPanelCss = showTree ? "sidebar-toggler hide" : "sidebar-toggler";
+      %>    
+      <a href='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[] {"showTree"}, new String[] {"false"}) %>' data-jalios-action="toggle:hide" data-jalios-target=".sidebar-toggler"><jalios:icon css="<%= hidePanelCss %>" src='chevron-left'  /> <jalios:icon css="<%= showPanelCss %>" src='chevron-right'  /></a>
+    </td>
+    
+    <%-- *** GROUP LIST ******************************************* --%>
+    <td class='vTop'>
+<div class="AdminArea WorkArea">
+<jalios:pager name='glPagerHandler' declare='true' action='init' sort='name'/>
+<jsp:useBean id="groupQueryHandler" scope="page" class="com.jalios.jcms.handler.GroupQueryHandler">
+  <jsp:setProperty name="groupQueryHandler" property="request" value="<%= request %>"/>
+  <jsp:setProperty name="groupQueryHandler" property="*" />
+  <jsp:setProperty name="groupQueryHandler" property="dataSet" value="<%= groupSet %>"/>
+</jsp:useBean>
+<%
+
+  if (grpWorkspace != null) {
+    groupQueryHandler.setWorkspace(grpWorkspace);
+  }
+
+  Comparator<? super Group> groupComparator = ComparatorManager.getComparator(Group.class, glPagerHandler.getSort(), glPagerHandler.isReverse());
+  groupSet = groupQueryHandler.getResultSet(groupComparator);
+
+  String       groupText       = Util.getString(groupQueryHandler.getGroupText(), "");
+  Group        parentGroup     = groupQueryHandler.getParentGroup();  
+
+  if (parentGroup != null) {
+    guiMainTitle = glp("ui.adm.grp-list.title2", parentGroup.getName(userLang));
+  } 
+  if (groupQueryHandler.getRefinedWorkspace() != null) {
+    guiShowWorkspace = false;
+    guiMainTitle = glp("ui.adm.grp-list.title3", groupQueryHandler.getRefinedWorkspace().getTitle(userLang));
+  }
+  
+%>
+
+<div class="page-header">
+  <h1>
+    <%= guiMainTitle %> (<%= groupSet.size() %>)
+    <% if (showRadioInsert && parentGroup != null) { %>
+      <% String label = HttpUtil.encodeForJavaScript(parentGroup.getName(userLang)); %>
+      <input type="radio" onclick="javascript:insertLink('<%= parentGroup.getId() %>', '<%= label %>')" />
+    <% } %>
+    </h1>
+</div>
+
+<jsp:include page="/admin/ldapGroupSyncInfo.jsp"/>
+<% Group ldapGroupBeingSync = com.jalios.jcms.ldap.SyncLdapHandler.getLdapGroupBeingSync(session); %>
+
+
+<%@ include file='/jcore/doMessageBox.jspf' %>
+<%
+  jcmsContext.setAjaxRequestAttribute("groupSet", groupSet);
+  
+  jcmsContext.setAjaxRequestAttribute("formElementCount",       formElementCount);
+  jcmsContext.setAjaxRequestAttribute("groupQueryHandler",      groupQueryHandler); 
+  jcmsContext.setAjaxRequestAttribute("groupText",              groupText);
+  jcmsContext.setAjaxRequestAttribute("grpWorkspace",           grpWorkspace);
+  jcmsContext.setAjaxRequestAttribute("guiExportCSV",           guiExportCSV);
+  jcmsContext.setAjaxRequestAttribute("guiLastLDAPSync",        guiLastLDAPSync);
+  jcmsContext.setAjaxRequestAttribute("guiRemoveGroup",         guiRemoveGroup);
+  jcmsContext.setAjaxRequestAttribute("guiShowAllGroups",       guiShowAllGroups);
+  jcmsContext.setAjaxRequestAttribute("guiShowAddGroup",        guiShowAddGroup);
+  jcmsContext.setAjaxRequestAttribute("guiShowCdate",           guiShowCdate);
+  jcmsContext.setAjaxRequestAttribute("guiShowCookie",          guiShowCookie);
+  jcmsContext.setAjaxRequestAttribute("guiShowExt",             guiShowExt);
+  jcmsContext.setAjaxRequestAttribute("guiShowId",              guiShowId);
+  jcmsContext.setAjaxRequestAttribute("guiShowMembers",         guiShowMembers);
+  jcmsContext.setAjaxRequestAttribute("guiShowName",            guiShowName);
+  jcmsContext.setAjaxRequestAttribute("guiShowAcl",             guiShowAcl);
+  jcmsContext.setAjaxRequestAttribute("guiShowOrder",           guiShowOrder);
+  jcmsContext.setAjaxRequestAttribute("guiShowPager",           guiShowPager);
+  jcmsContext.setAjaxRequestAttribute("guiShowParent",          guiShowParent);
+  jcmsContext.setAjaxRequestAttribute("guiShowSearchGroup",     guiShowSearchGroup);
+  jcmsContext.setAjaxRequestAttribute("guiShowWebdav",          guiShowWebdav);
+  jcmsContext.setAjaxRequestAttribute("guiShowWorkspace",       guiShowWorkspace);
+  jcmsContext.setAjaxRequestAttribute("guiShowVisibility",      guiShowVisibility);  
+  jcmsContext.setAjaxRequestAttribute("isDetailView",           isDetailView);
+  jcmsContext.setAjaxRequestAttribute("ldapGroupBeingSync",     ldapGroupBeingSync);
+  jcmsContext.setAjaxRequestAttribute("alertUrl",               alertUrl);
+  jcmsContext.setAjaxRequestAttribute("memberListUrl",          memberListUrl);
+  jcmsContext.setAjaxRequestAttribute("dbmemberListUrl",        dbmemberListUrl);
+  jcmsContext.setAjaxRequestAttribute("parentGroup",            parentGroup);
+  jcmsContext.setAjaxRequestAttribute("redirect",               redirect);
+  jcmsContext.setAjaxRequestAttribute("redirectRefresh",        redirectRefresh);
+  jcmsContext.setAjaxRequestAttribute("selectedGroups",         selectedGroups);
+  jcmsContext.setAjaxRequestAttribute("showCheckInsert",        showCheckInsert);
+  jcmsContext.setAjaxRequestAttribute("showDetailView",         showDetailView);
+  jcmsContext.setAjaxRequestAttribute("showRadioInsert",        showRadioInsert);
+  jcmsContext.setAjaxRequestAttribute("target",                 target);
+  jcmsContext.setAjaxRequestAttribute("sort",                   glPagerHandler.getSort());
+  jcmsContext.setAjaxRequestAttribute("reverse",                Boolean.toString(glPagerHandler.isReverse()));
+%>
+  <jsp:include flush="true" page="/admin/doAjaxGroupList.jsp" />
+</div>
+</td>
+</tr>
+</table>

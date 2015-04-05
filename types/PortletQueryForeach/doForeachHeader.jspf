@@ -1,0 +1,116 @@
+<%--
+  @Summary: Iterate on the collection of the PortletQueryForeach
+            jsp included after doQuery.jsp and doSort.jsp
+            This is were we manage first publications, skip first, max publication, and pager
+--%><%
+  if (Util.notEmpty(box.getFirstPublications())) {
+    int firstPublicationsNbr = 0;
+    final ArrayList foreachList = new ArrayList();
+    for (int i = 0 ; i < box.getFirstPublications().length ; i++) {
+      Publication tmpPub = box.getFirstPublications()[i];
+      if ((tmpPub != null) && tmpPub.canBeReadBy(loggedMember) && tmpPub.isInVisibleState()) {
+        foreachList.add(tmpPub);
+        firstPublicationsNbr++;
+      }
+    }
+    if (Util.notEmpty(collection)) {
+      collection.removeAll(foreachList); // Fix bug JCMS-2025, first publications appears twice in results
+      foreachList.addAll(collection);
+    }
+    collection = foreachList;
+    
+    // modify the forced pager param "start" to take into account first publication numbers
+    if (firstPublicationsNbr != 0) {
+      String pagerForcedParamAttrName = com.jalios.jcms.handler.PagerHandler.FORCED_PARAM_PREFIX + PortalManager.getActionParam(box, "start");
+      int pagerForcedStart = Util.toInt(request.getAttribute(pagerForcedParamAttrName), -1);
+      if (pagerForcedStart != -1) {
+        request.setAttribute(pagerForcedParamAttrName, String.valueOf(pagerForcedStart + firstPublicationsNbr));
+      }
+    }
+  }
+
+  if (HttpUtil.hasParameter(request, "historyRevertToInitialState")) {
+    PortalManager.removeAction(request, box, "start");
+    PortalManager.removeAction(request, box, "pageSize");
+    PortalManager.removeAction(request, box, "pagerAll");
+    PortalManager.removeAction(request, box, "sort");
+    PortalManager.removeAction(request, box, "reverse");
+  }
+
+  int size = resultSize - box.getSkipFirstResults();
+  size = ( size > 0 ) ? size : 0;
+  
+  int pagerMaxResults = Util.toInt(request.getAttribute("pager.maxResults"),box.getIntFieldValue(jcmsContext, "maxResults"));
+%>
+<jalios:pager name='pagerHandler' declare='true' action='init'
+              size='<%= size %>'
+              paramPrefix='<%= PortalManager.PORTAL_ACTION+"_"+box.getId()+"_" %>'
+              sort='<%= sort %>' pageSize='<%= pagerMaxResults %>'
+              pageSizes='<%= Util.join(box.getPageSizes(), ",") %>'
+              pagerAllLimit='<%= box.getPagerAllLimit() %>'/>
+<%
+  ServletUtil.backupAttribute(pageContext , PortalManager.PORTAL_PUBLICATION);
+  ServletUtil.backupAttribute(pageContext , "counter");
+  ServletUtil.backupAttribute(pageContext , "isNew");
+  ServletUtil.backupAttribute(pageContext , "showInCurrentPortal");
+  ServletUtil.backupAttribute(pageContext , "showWithContextCategory");
+  ServletUtil.backupAttribute(pageContext , "displayURLparams");
+
+  if (box.getHideWhenNoResults() &&
+      (Util.isEmpty(collection) || resultSize <= box.getSkipFirstResults())) {
+    request.setAttribute("ShowPortalElement" , Boolean.FALSE);
+  }
+
+  int startIdx = pagerHandler.getStart() + box.getSkipFirstResults();
+  
+
+  // SUPER KLUDGE Implementation of THE ugly and weird "results" reverseOrder options
+  //   With page size (==maxresults) of 5
+  //   Given results : 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 
+  //   present them this way :  5 4 3 2 1, 10 9 8 7 6, 15 14 13 12 11  
+  // This option was previously handled in in doSort.jsp, but to make it work with pager
+  // we need to move it here to use pagerhandler value
+  boolean resultsReverseOrder = "results".equals(box.getReverseOrder());
+  if (resultsReverseOrder) {
+    ArrayList tmpList = new ArrayList(collection); // Create an ArrayList to benefit from subList method
+    ArrayList tmpListResults = new ArrayList(); // fill this ArrayList with the reorderd results
+    // Results prior current page
+    if (startIdx > 0) {
+      tmpListResults.addAll(tmpList.subList(skipResults, startIdx));
+    }
+    // Results of current page *in reverse order*
+    int idxOfCurrentPageEnd = Math.min(startIdx + pagerHandler.getPageSize(), tmpList.size());
+    List currentPageList = tmpList.subList(startIdx, idxOfCurrentPageEnd);
+    Collections.reverse(currentPageList);
+    tmpListResults.addAll(currentPageList);
+    // Results after current page
+    if (idxOfCurrentPageEnd < tmpList.size()) {
+      tmpListResults.addAll(tmpList.subList(idxOfCurrentPageEnd, tmpList.size()));      
+    }
+    collection = tmpListResults;
+  }
+
+  int qfeIdx = 0;
+  for (Iterator it = collection.iterator() ; it.hasNext() ; qfeIdx++) {
+    Publication itPub =  (Publication) it.next();
+    { // skip items before start of pager
+      // skip items after end of pager
+      // that's where we take into account the "skip n result" value of portlet
+	    if (qfeIdx < startIdx) {
+        continue;
+	    }
+	    if (qfeIdx >= startIdx + pagerHandler.getPageSize()) {
+	      break;
+	    }
+    }
+    Integer itPublicationCounter = new Integer(qfeIdx + 1);
+       
+    request.setAttribute(PortalManager.PORTAL_PUBLICATION, itPub); 
+    request.setAttribute("counter", "" + itPublicationCounter);
+    request.setAttribute("isNew", Boolean.FALSE);
+    request.setAttribute("showInCurrentPortal", ""+box.getShowInCurrentPortal());
+    request.setAttribute("showWithContextCategory", ""+box.getContextCategory());
+    String displayURLparams = (box.getContextCategory() ? "&amp;cid="+currentCategory.getId() : "") +
+                              (box.getShowInCurrentPortal() ? "&amp;portal="+portal.getId() : "");
+    request.setAttribute("displayURLparams", displayURLparams);
+%>

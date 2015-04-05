@@ -1,0 +1,76 @@
+<%-- INT / INT[] / DOUBLE / DOUBLE[] =============================================== --%>
+<% if ((fieldType.equals("int") || 
+     fieldType.equals("double") || 
+     fieldType.equals("int[]") || 
+     fieldType.equals("double[]")) && 
+     !fieldEditor.equals("counter")) { %>
+     
+<%-- MIN. VALUE ------------------------------------------------------- --%> 
+<jalios:field name="minValue" label="ui.adm.type-edit.lbl.min-val" value='<%= Util.getString(fieldElt.getAttributeValue("minValue"), "") %>' >
+  <jalios:control settings="<%= new NumberSettings().numberType(double.class) %>" />
+</jalios:field>
+
+<%-- MAX. VALUE ------------------------------------------------------- --%> 
+<jalios:field name="maxValue" label="ui.adm.type-edit.lbl.max-val" value='<%= Util.getString(fieldElt.getAttributeValue("maxValue"), "") %>' >
+  <jalios:control settings="<%= new NumberSettings().numberType(double.class) %>" />
+</jalios:field>
+
+<%-- #DECIMALS ------------------------------------------------------- --%> 
+<%   if (fieldType.equals("double") || fieldType.equals("double[]")) { %>
+<jalios:field name="decimals" label="ui.adm.type-edit.lbl.nb-dec" value='<%= Util.getString(fieldElt.getAttributeValue("decimals"), "") %>' >
+  <jalios:control type="<%= ControlType.NUMBER %>" />
+</jalios:field>
+<%   } %>
+
+<%-- UNIT ------------------------------------------------------- --%>
+<jalios:field name="unit" label="ui.adm.type-edit.lbl.unit" tooltip="ui.adm.type-edit.lbl.unit.h" value='<%= Util.getString(fieldElt.getAttributeValue("unit"), "") %>' >
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>
+
+<%-- UNIT POSITION ----------------------------------------------- --%> 
+<jalios:field name="unitPos" label="ui.adm.type-edit.lbl.unit-p"  >
+  <div class="radio">
+    <label><input type="radio" name="unitPos" value="before" <%= formHandler.getFieldUnitPos().equals("before") ? "checked" : "" %>> <% /* %>before the number (e.g. $ 1234)<% */ %><%= glp("ui.adm.type-edit.lbl.unit-p.b") %></label>
+  </div>
+  <div class="radio">
+    <label><input type="radio" name="unitPos" value="after"  <%= formHandler.getFieldUnitPos().equals("after") || formHandler.getFieldUnitPos().equals("") ? "checked" : "" %>> <% /* %>after the number (e.g. 1234 %)<% */ %><%= glp("ui.adm.type-edit.lbl.unit-p.a") %></label>
+  </div> 
+</jalios:field>
+
+<%-- DEFAULT VALUE ------------------------------------------------------- --%> 
+<jalios:field name="default" label="ui.adm.type-edit.lbl.def-value" tooltip="ui.adm.type-edit.lbl.def-value.h" value='<%= formHandler.getFieldDefault() %>' >
+  <jalios:control settings="<%= new NumberSettings().numberType(double.class) %>" />
+</jalios:field>
+<% } %>
+
+
+  
+  
+<%-- BOOLEAN =============================================== --%>
+<% if (fieldType.equals("boolean") || fieldType.equals("boolean[]")) { %>
+<%-- ON LABEL ------------------------------------------------------- --%> 
+<jalios:field name="onLabels" label="ui.adm.type-edit.lbl.on-label" tooltip="ui.adm.type-edit.lbl.on-label.h" required='true' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getFieldOnLabelMap() %>'>
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>
+
+<%-- OFF LABEL ------------------------------------------------------- --%> 
+<jalios:field name="offLabels" label="ui.adm.type-edit.lbl.off-label" tooltip="ui.adm.type-edit.lbl.off-label.h" required='true' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getFieldOffLabelMap() %>'>
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>
+
+<%-- DEFAULT VALUE ------------------------------------------------------- --%> 
+<jalios:field name="default" label="ui.adm.type-edit.lbl.def-value" tooltip="ui.adm.type-edit.lbl.def-value.h" value='<%= "on".equals(formHandler.getFieldDefault()) %>'>
+  <jalios:control type="<%= ControlType.BOOLEAN %>" />
+</jalios:field>
+<% } %>
+
+
+<%-- DURATION / DURATION[] =============================================== --%>
+<% if (fieldEditor.equals("duration") || fieldEditor.equals("duration[]")) { %>
+<%-- DEFAULT VALUE ------------------------------------------------------- --%>
+<jalios:field name="default" label="ui.adm.type-edit.lbl.def-value" tooltip="ui.adm.type-edit.lbl.def-value.h" value='<%= formHandler.getFieldDefault() %>' >
+  <jalios:control settings="<%= new NumberSettings().numberType(double.class) %>" />
+</jalios:field>       
+<% } %>
+
+

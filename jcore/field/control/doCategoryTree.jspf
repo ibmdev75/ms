@@ -1,0 +1,79 @@
+<%@page import="java.util.Map"%><%
+%><%@page import="java.util.Arrays"%><%
+%><%@page import="java.util.Collection"%><%
+%><%@page import="com.jalios.util.Util"%><%
+%><%@page import="com.jalios.jcms.JcmsUtil"%><%
+%><%@page import="com.jalios.jcms.Category"%><%
+%><%@page import="com.jalios.jcms.taglib.TreeViewTag"%><%
+%><%@page import="com.jalios.jcms.taglib.CategoryFilter"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.BasicSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.SelectorSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.impl.CategorySettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.impl.CategoryTreeSettings"%><%
+%><%
+String[] rootCategoryIds = (String[]) getOption(CategoryTreeSettings.ROOT_CATEGORIES, null);
+if (rootCategoryIds == null) {
+  Object[] optionValues = (Object[]) getOption(SelectorSettings.ENUM_VALUES, null);
+  rootCategoryIds = optionValues != null ? resolveValues(optionValues) : JcmsUtil.dataArrayToStringArray(channel.getRootCategory().getChildrenSet().toArray(new Category[] {}));
+}
+Category[] rootCategories = JcmsUtil.stringArrayToDataArray(Category.class, rootCategoryIds);
+
+Category[] disabledCategories = fieldDisabled.booleanValue() ? rootCategories : null;
+
+Category[] openedCategories = JcmsUtil.stringArrayToDataArray(Category.class, (String[]) getOption(CategoryTreeSettings.OPENED_CATEGORIES, fieldValuesArray));
+Category[] checkedCategories = JcmsUtil.stringArrayToDataArray(Category.class, (String[]) getOption(CategoryTreeSettings.CHECKED_CATEGORIES, fieldValuesArray));
+Category[] highlightedCategories = JcmsUtil.stringArrayToDataArray(Category.class, (String[]) getOption(CategoryTreeSettings.HIGHLIGHTED_CATEGORIES, fieldValuesArray));
+Category[] removedCat = JcmsUtil.stringArrayToDataArray(Category.class, (String[]) getOption(CategoryTreeSettings.REMOVED_CATEGORIES, null));
+Collection<?> removedCategories = removedCat != null ? Arrays.asList(removedCat): (Collection<?>) request.getAttribute("removedCatSet");
+Category[] retainedCat = JcmsUtil.stringArrayToDataArray(Category.class, (String[]) getOption(CategoryTreeSettings.RETAINED_CATEGORIES, null));
+Collection<?> retainedCategories = retainedCat != null ? Arrays.asList(retainedCat): null;
+
+String type = getOption(SelectorSettings.MULTIPLE, false) ? "checkbox" : "radio";
+boolean search = getOption(CategoryTreeSettings.SEARCH, false);
+String css = getOption(BasicSettings.CSS, "");
+css = (search ? "autocomplete" : "") + (Util.notEmpty(css) ? " " + css : "");
+
+int level = getOption(CategoryTreeSettings.LEVEL, -1);
+CategoryFilter categoryFilter = getOption(CategoryTreeSettings.CATEGORY_FILTER, CategoryFilter.USE);
+boolean selectable = getOption(CategoryTreeSettings.SELECTABLE, true);
+boolean dragdrop = getOption(CategoryTreeSettings.DRAGDROP, true);
+boolean ctxMenu = getOption(CategoryTreeSettings.CTXMENU, true);
+boolean rightsIcon = getOption(CategoryTreeSettings.RIGHTS_ICON, false);
+boolean workspaceIcon = getOption(CategoryTreeSettings.WORKSPACE_ICON, false);
+boolean portalIcon = getOption(CategoryTreeSettings.PORTAL_ICON, false);
+
+Category root = (Category) getOption(CategoryTreeSettings.ORIGINAL_ROOT_CATEGORY, null);
+Map memo = loggedMember != null && loggedMember.isWorker() && rootCategories.length == 0 ? Util.getHashMap("originalCategoryRoot", root) : null;
+%>
+<jalios:treecatview
+    prefix="<%= fieldId %>"
+    input="<%= fieldName %>"
+    type="<%= type %>"
+    
+    collection="<%= Arrays.asList(rootCategories) %>"
+    
+    opened="<%= openedCategories != null ? Arrays.asList(openedCategories) : null %>"
+    checked="<%= checkedCategories != null ? Arrays.asList(checkedCategories) : null %>"
+    highlighted="<%= highlightedCategories != null ? Arrays.asList(highlightedCategories) : null %>"
+    removed="<%= removedCategories %>"
+    retains="<%= retainedCategories %>"
+
+    disabled="<%= disabledCategories != null ? Arrays.asList(disabledCategories) : null %>"
+    disable="<%= TreeViewTag.DESCENDANT %>"
+
+    level="<%= level %>"
+    filter="<%= categoryFilter %>"
+
+    selectable="<%= selectable %>"
+    dragdrop="<%= dragdrop %>"
+    showCtxMenu="<%= ctxMenu %>"
+    showRights="<%= rightsIcon %>"
+    showWorkspaceIcon="<%= workspaceIcon %>"
+    showPortal="<%= portalIcon %>"
+    css="<%= css %>"
+    
+    memo="<%= memo %>"
+/>
+<%= getIncludeString("CONTROL_APPEND", "") %>
+
+<% setIncludeString("isMulti", "false"); // Set isMulti to 'false' to prevent the parent tag to loop multiple times on this tag %>

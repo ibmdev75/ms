@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="AbstractPortletStatReport" superclass="generated.AbstractCollection" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" interfaces="com.jalios.jcms.stat.StatReport" abstract="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="scheduleDate" editor="date" required="true" compactDisplay="false" type="java.util.Date" future="true" past="true" dateOnly="false" dateFormat="short" ml="false" descriptionType="text" searchable="false" />
+    <field name="startingDate" editor="date" required="true" compactDisplay="false" type="java.util.Date" future="true" past="true" dateOnly="false" dateFormat="short" ml="false" descriptionType="text" searchable="false" />
+    <field name="endingDate" editor="date" required="true" compactDisplay="false" type="java.util.Date" future="true" past="true" dateOnly="false" dateFormat="short" ml="false" descriptionType="text" searchable="false" />
+    <field name="schedule" editor="duration" required="true" compactDisplay="false" type="long" default="0" ml="false" descriptionType="text" searchable="false" />
+    <field type="super" />
+  </fields>
+</type>
+

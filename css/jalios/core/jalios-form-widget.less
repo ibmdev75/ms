@@ -1,0 +1,209 @@
+
+/* ----------------------------------------------- */
+/*  FORM                                           */
+/* ----------------------------------------------- */
+
+// See doEditPubHeader.jsp
+.editPublicationForm {
+  .jalios-tab-template {
+    padding-top: 15px;
+  }
+  .field-title { max-width: 850px; margin-bottom: 15px; }
+}
+.widget-content { max-width: @screen-md-min; }
+#popupEdition   { overflow: hidden; }
+
+// See PubBrowser Forms
+.form-inline {
+  DIV[class*="col-"] {
+    padding-left:  2px;
+    padding-right: 2px;
+  }
+  .row {
+    margin-left:  -4px;
+    margin-right: -4px;
+  }
+}
+
+.input-group .form-control-inline, .form-control-inline { // Add to form-control to put in flow
+  width: auto;
+  display: inline-block;
+}
+
+.form-horizontal {
+  .control-label[max-width~="90%"]{ text-align: right; }
+  .control-label[min-width~="90%"]{ text-align: left;  .jalios-label-addon{ float: right; } }
+}
+
+// Only right align form labels here when the columns stop stacking
+.form-horizontal {
+  @media (min-width: @screen-sm-min) { .control-label { text-align: left; }}
+  @media (min-width: @screen-md-min) { .control-label { text-align: right; }}
+}
+
+
+/* Reset negative margin for field-vertical in form-horizontal */
+.form-horizontal {
+  .field-vertical.form-group,
+  .navbar .form-group {
+    margin-left:0;
+    margin-right:0;
+  }
+  
+}
+
+.container-fluid {
+  .row > .form-group {
+    margin-right:  auto;
+    margin-left:   auto;
+    padding-right: 0;
+    padding-left:  0;
+  }
+}
+
+.field-inline {
+  margin-bottom: 0;
+}
+
+.input-group-btn {
+  SPAN.jalios-icon  {
+    color: @gray;
+  }
+      
+  BUTTON.btn-remove SPAN.jalios-icon {
+    color: #CCC;
+  }
+}
+
+.widget {
+
+  &.field-boolean, &.field-color, &.field-date, &.field-duration, &.field-number {
+
+    .jalios-input-group {
+      max-width: @short-field-max-width;
+    }
+  }
+  
+  &.field-wikiarea {
+    .wikiarea {
+      .border-bottom-radius(0);
+    }
+  }
+
+  .jalios-input-group {
+    width: 100%;
+  }
+  
+  .tab-content.input-group-list {
+    overflow: visible;
+    
+    > .active {
+      display: table;
+    }
+  }
+  
+  .checkbox-inline, .radio-inline {
+    padding-bottom: 7px;
+  }
+  
+  // Break field flow
+  // .jalios-label-addon { margin-bottom: 5px; }
+  
+  .nav.jalios-nav-pills { 
+    margin-top:    6px;
+    margin-bottom: 4px;
+    
+    > LI > A { 
+      font-size: @font-size-small;
+      padding: 3px 8px 3px 8px;
+    }
+  }
+  
+  .input-group-btn {
+    SPAN.icon {
+      color: @gray;
+    }
+    BUTTON:hover {
+      SPAN.icon {
+        color: @btn-default-color;
+      }
+    }
+  }
+  
+  .grip { // see .add-on
+    display: none;
+    border: 1px solid #ccc;
+    height: 100%;
+    width:  @baseline * 0.75;
+    margin-left: -10px; 
+    position: absolute; left: -@baseline * 0.25; top: 0px;
+    cursor: move;
+    z-index: 1;
+    .border-radius(3px 0 0 3px);
+    
+    background-image:    url('../../../images/jalios/assets/forms/widget-grip.gif');
+    background-repeat:   repeat-x;
+    background-position: center center;
+  }
+  &.focus-widget .grip { display: block; }
+  &.nodnd        .grip { display: none;  }
+  
+  [aria-required], :required {
+    border-color: @alert-danger-border;
+  }
+}
+
+.datetimepicker {
+  .datetimepicker-days {
+    TH, TD { padding: 2px 8px; }
+  }
+  .datetimepicker-hours,
+  .datetimepicker-minutes {
+    TH, TD { padding: 0px 5px; 
+      SPAN { margin:  0%  1%; }
+    }
+    
+  }
+}
+
+.form-control.numeric {
+  text-align: right;
+}
+
+INPUT,TEXTAREA,SELECT {
+  &.error {
+  	border-color: @alert-danger-border;
+  }
+}
+
+LABEL.error {
+  color: @alert-danger-text;
+}
+
+/* Prevent CODE and PRE tags to take only one line in form .help-block */
+.help-block PRE,
+.help-block CODE{
+	white-space: normal;
+	display: inline-block;
+	word-break: break-all;
+}
+
+/* Fix for firefox */
+.browser-Firefox {
+  input[type="file"].form-control {
+    height: auto;
+    padding-bottom: 4px;
+    padding-top: 4px;
+  }
+}
+
+.field-publication .plupload-single {
+  padding: 0px 6px;
+}
+
+/* Force width to 100% for textarea as field-light resource */
+.widget-light.field-richtextarea,
+.widget-light.field-wikiarea,
+.widget-light.field-textarea {
+  width: 100%;
+}

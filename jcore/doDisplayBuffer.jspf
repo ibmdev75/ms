@@ -1,0 +1,57 @@
+<%-- 
+  @Summary: doDisplayBuffer.jsp: called before displaying buffer (display.jsp, displayWork.jsp)
+            If asked, perform redirect and/or set cookie even when response has been commited.
+  @Category: Internal
+  @Deprecated: False
+  @Customizable: False
+  @Requestable: True
+  @Since: jcms-4.0
+--%><%
+ 
+  // :NOTE: On WAS 5 we cannot perform a true redirect
+  // (i.e. sendRedirect()) because the
+  // response has been committed (isCommitted == true) and it throws
+  // an IllegalStateException.
+  // The work-around is to return an HTML which will perform the
+  // redirection. It can be performed either with the http-equiv or
+  // with javascript script.
+  // Same workaround is used to fix bug JCMS-2070 where redirect do not work in websphere
+  // (because JSP 2.0 spec does not allow header change in dynamic included file)
+
+if (true) {
+  String redirect = (String) request.getAttribute("redirect");
+  ArrayList cookieList = (ArrayList) request.getAttribute("cookieList");
+
+  if (redirect != null || cookieList != null) { 
+    if (!response.isCommitted()) {
+      logger.debug("response not committed: using sendRedirect(), response.addCookie()");
+      if (cookieList != null) {
+        for (Iterator itCookie = cookieList.iterator(); itCookie.hasNext();) {
+          Cookie cookie = (Cookie) itCookie.next();
+          response.addCookie(cookie);
+        }
+      }
+      if (redirect != null) {
+        sendRedirect(redirect, request, response);
+        return;
+      }
+    } else {
+      logger.debug("response already committed: using html (meta tag 'refresh', 'set-cookie')");
+      %><html><head><%
+      if (cookieList != null) {
+        for (Iterator itCookie = cookieList.iterator(); itCookie.hasNext();) {
+          Cookie cookie = (Cookie) itCookie.next();
+          %><meta http-equiv="Set-Cookie" content="<%= cookie.getName() %>=<%= cookie.getValue() %>;"><%
+        }
+      }
+      if (redirect != null) {
+        %><meta http-equiv="refresh" content="0;URL=<%= redirect %>"><%
+      } else {
+        %><meta http-equiv="refresh" content="0;"><%
+      }
+      %></head></html><%@ include file='/admin/stat/doStat.jspf' %><%
+      return;
+    }
+  }
+}
+%>

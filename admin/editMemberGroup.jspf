@@ -1,0 +1,5 @@
+<jalios:include target="EDIT_MBR_GROUPTAB_HEADER" />
+<jalios:field name='gids' label='ui.adm.mbr-edit.tab.group' value='<%= formHandler.getAvailableGroups() %>' mv='3' resource="field-vertical">
+  <jalios:control type="<%= ControlType.GROUP %>" />
+</jalios:field>
+<jalios:include target="EDIT_MBR_GROUPTAB_FOOTER" />

@@ -1,0 +1,1 @@
+!function(b){var a=function(){b.validator.setDefaults({debug:true});b("*[data-jalios-validation]").each(function(){var d=b(this).attr("name");var c=b(this).data("jalios-validation");b(this).closest("FORM").validate({onkeyup:false});b(this).rules("add",c)})};b(document).ready(function(c){a()})}(window.jQuery);

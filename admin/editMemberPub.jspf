@@ -1,0 +1,59 @@
+<jalios:include target="EDIT_MBR_PUBLISHRIGHTTAB_HEADER" />
+
+<ul class="nav nav-tabs br">
+  <jalios:foreach array='<%= channel.getPublicationSuperTypes() %>' type='java.lang.Class' name='itSuperClass'>
+    <% String itSuperClassName = Util.getClassShortName(itSuperClass); %>
+    <li <%= itCounter.intValue() <= 1 ? "class='active'" : "" %>><a href="#editMember-pub-<%= itSuperClassName %>" onclick="return false;"><%= channel.getTypeLabel(itSuperClass, userLang) %></a></li>
+  </jalios:foreach>
+</ul>
+
+<div class="tab-content responsive">
+<jalios:foreach array='<%= channel.getPublicationSuperTypes() %>' type='java.lang.Class' name='itSuperClass'>
+<% 
+  String itSuperClassName = Util.getClassShortName(itSuperClass);
+  List   typeList         = channel.getSubTypeList(itSuperClass, userLang);
+  boolean displayCanPublishRights = !itSuperClass.equals(UserContent.class) && !itSuperClass.equals(Form.class);
+%>
+<div class='tab-pane fade <%= itCounter.intValue() <= 1 ? "in active" : "" %>' id="editMember-pub-<%= itSuperClassName %>">
+<table id='rightTable<%= itSuperClassName %>' class='auto table-data table-condensed' >
+	<tr>
+	  <th class='nowrap'><%= glp("ui.com.lbl.type") %></th>
+	  <th class='nowrap'><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithId(document.editForm, "groupRight", this, "<%= itSuperClassName %>")' /> <%= glp("ui.adm.mbr-edit.pub-r.group") %></th>
+	  <% if (displayCanPublishRights) { %>
+	  <th class='nowrap'><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithId(document.editForm, "canPublish", this, "<%= itSuperClassName %>")' /> <%= glp("ui.adm.grp-edit.pub-r.publish") %></th>
+    <% } %>
+    <th class="nowrap"><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithId(document.editForm, "canUpdate" , this, "<%= itSuperClassName %>")' /> <%= glp("ui.adm.grp-edit.pub-r.update") %></th>
+    <th class="nowrap"><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithId(document.editForm, "canDelete" , this, "<%= itSuperClassName %>")' /> <%= glp("ui.adm.grp-edit.pub-r.delete") %></th>
+	</tr>
+	
+	<jalios:foreach name="itClass" type="Class" collection="<%= typeList %>" counter="c2">
+	<tr>
+	  <% String name = Util.getClassShortName(itClass); %>
+	  <% String idPrefix = itSuperClassName + name ; %>
+	  <td><strong><%= channel.getTypeLabel(itClass, userLang) %></strong></td>
+	  <td class="text-center"><input type="checkbox" name="groupRight" id="<%= idPrefix %>GroupRight" value="<%= name %>" <%= formHandler.isGroupRight(itClass) ? "checked=\"checked\"" : "" %> onclick="$('<%= idPrefix %>CanPublish', '<%= idPrefix %>CanUpdate', '<%= idPrefix %>CanDelete').each(function(elm){elm.checked=false;});"  /></td>
+	  <% if (displayCanPublishRights) { %>
+	  <td class="text-center"><input type="checkbox" name="canPublish" id="<%= idPrefix %>CanPublish" value="<%= name %>" <%= formHandler.canPublish(itClass) ? "checked=\"checked\"" : "" %> onclick="$('<%= idPrefix %>GroupRight').checked=false;" /></td>
+	  <% } %>
+	  <td class="text-center"><input type="checkbox" name="canUpdate"  id="<%= idPrefix %>CanUpdate" value="<%= name %>" <%= formHandler.canUpdate(itClass) ? "checked=\"checked\"" : "" %> onclick="$('<%= idPrefix %>GroupRight').checked=false;" /></td>
+	  <td class="text-center"><input type="checkbox" name="canDelete"  id="<%= idPrefix %>CanDelete" value="<%= name %>" <%= formHandler.canDelete(itClass) ? "checked=\"checked\"" : "" %> onclick="$('<%= idPrefix %>GroupRight').checked=false;" /></td>
+	</tr>
+	</jalios:foreach>
+</table>
+</div>
+</jalios:foreach>
+</div>
+
+<input type="hidden" name="groupRight" value="" />
+<input type="hidden" name="canPublish" value="" />
+<input type="hidden" name="canUpdate"  value="" />
+<input type="hidden" name="canDelete"  value="" />
+
+<ul>
+  <li><%= glp("ui.adm.mbr-edit.pub-r.txt.group") %></li>
+  <li><%= glp("ui.adm.grp-edit.pub-r.txt.publish") %></li>
+  <li><%= glp("ui.adm.grp-edit.pub-r.txt.update") %></li>
+  <li><%= glp("ui.adm.grp-edit.pub-r.txt.delete") %></li>
+</ul>
+
+<jalios:include target="EDIT_MBR_PUBLISHRIGHTTAB_FOOTER" />

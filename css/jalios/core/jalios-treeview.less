@@ -1,0 +1,108 @@
+UL.treeview {
+  list-style-type: none;
+  padding-left: 0px;
+  display: table;
+  
+  margin-left: 0px;
+  UL { margin-left: 19px; }
+  
+  A.tree-arrow {
+    // position: absolute;
+    // right: 5px;
+    text-align: center;
+    margin-left: 10px;
+  }
+  
+  .sortable-active, &.sortable-active {
+    background: @highlight;
+  }
+  
+  LI {
+    color: @text-color;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    
+    A     { color: @text-color; }
+    INPUT { padding: 0; vertical-align: top; }
+    
+    &.ui-draggable .treeview-item-icon { cursor: move; }
+  }
+  
+  .treeview-item-icon, .icon-treeview {
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 16px; height: 16px;
+  }
+  
+  A.treeview-hl, SPAN.treeview-hl, LABEL.treeview-hl {
+    background-color: #FFFF70;
+  }
+  
+  LI.treeview-ws .treeview-name {
+    font-weight: bold;
+  }
+  
+  // ------------------------------------------
+  //  ICONS open/close
+  // ------------------------------------------
+  
+  .icon-treeview { 
+    background-image: url('../../../s.gif'); 
+    vertical-align: middle; 
+  }
+  
+  .treeview-item-closed {
+    display: inline-block;
+  }
+  .treeview-item-opened {
+    display: none;
+  }
+  
+  LI.treeview-open {
+    > UL.treeview {
+      display: block;
+    }
+    
+    > .icon-treeview { 
+      cursor: pointer; 
+      background-image: url('../../../images/jalios/icons/minus.gif');
+    }
+    
+    > .treeview-item-closed {
+      display: none;
+    }
+    > .treeview-item-opened {
+      display: inline-block;
+    }
+  }
+  
+  LI.treeview-close {
+    > UL.treeview {
+      display: none;
+    }
+    
+    > .icon-treeview { 
+      cursor: pointer; 
+      background-image: url('../../../images/jalios/icons/plus.gif');
+    }
+    
+    > .treeview-item-closed {
+      display: inline-block;
+    }
+    > .treeview-item-opened {
+      display: none;
+    }
+  }
+
+}
+
+// ------------------------------------------
+//  Treecat message to add new categories
+// ------------------------------------------
+
+.treecat-msg .treecat-alert-msg {
+  cursor: pointer;
+  padding: 5px;
+  margin: 10px 0 0 0;
+}

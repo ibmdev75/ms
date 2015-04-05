@@ -1,0 +1,188 @@
+<% if (isString) { %>
+
+<%-- STRING / ENUMERATE =============================================== --%>
+
+<% if (showEnum) { %>
+<%-- ENUMERATE CHOOSER ------------------------------------------------------- --%>
+<jalios:field name="enumChooser" label="ui.adm.type-edit.lbl.enum-ch" tooltip="ui.adm.type-edit.lbl.enum-ch.h">
+  <select name="enumChooser" class="form-control">
+    <option value='listbox' <%= formHandler.getFieldEnumChooser().equals("listbox") ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.listbox") %></option>
+    <option value='checkbox' <%= formHandler.getFieldEnumChooser().equals("checkbox") ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.checkbox") %></option>
+    <option value='multilistbox' <%= formHandler.getFieldEnumChooser().equals("multilistbox") ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.multilistbox") %></option>
+  </select>
+</jalios:field>
+
+<%-- LABEL LIST ------------------------------------------------------- --%> 
+<jalios:field name="labelList" label="ui.adm.type-edit.lbl.label-list" tooltip="ui.adm.type-edit.lbl.label-list.h">
+  <div class="input-group">
+    <% String mainLangLabel = Util.getString(fieldElt.getAttributeValue("labelList_" +  channel.getLanguage()), Util.getString(fieldElt.getAttributeValue("labelList"), "")); %>
+    <% if (channel.isMultilingual()) { %>
+    <span class="input-group-addon">
+    <jalios:lang lang='<%= channel.getLanguage() %>' />
+    </span>
+    <% } %>
+    <input type="text" class="form-control" name="labelList" size="80" maxlength="5000" value="<%= encodeForHTMLAttribute(mainLangLabel) %>" />
+  </div>
+  
+  <jalios:foreach collection='<%= channel.getOtherLanguageList() %>' name='itLang' type='String'>
+  <div class="input-group">
+    <% if (channel.isMultilingual()) { %>
+    <span class="input-group-addon">
+    <jalios:lang lang='<%= itLang %>' />
+    </span>
+    <input type="text" class="form-control" name="labelList" size="80" maxlength="5000" value="<%= encodeForHTMLAttribute(Util.getString(fieldElt.getAttributeValue("labelList_" + itLang), "")) %>" />
+    <% } %>
+  </div>
+  </jalios:foreach>
+</jalios:field>
+
+<%-- VALUE LIST ------------------------------------------------------- --%> 
+<jalios:field name="valueList" label="ui.adm.type-edit.lbl.value-list" tooltip="ui.adm.type-edit.lbl.value-list.h" value="">
+  <input type="text" name="valueList" class="form-control" size="80" maxlength="5000" value="<%= Util.getString(fieldElt.getAttributeValue("valueList"), "") %>" />
+</jalios:field>        
+
+<%-- STRING / OTHER-------------------------------------- --%>
+<% } else { %>  
+     
+<%-- EDITOR ------------------------------------------------------- --%>
+<% if (isText) { %>
+<jalios:field name="editor" label="ui.adm.type-edit.lbl.editor" tooltip="ui.adm.type-edit.lbl.editor.h" required="true">
+  <select class='form-control' name="editor" onchange='dispEditOptions2(this.options[this.selectedIndex].value);'>
+    <option value="textfield" <%= fieldEditor.equals("textfield") ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.textfield") %></option>
+    <option value="textarea" <%= fieldEditor.equals("textarea") ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.textarea") %></option>
+    <option value="wysiwyg" <%= fieldEditor.equals("wysiwyg") ? "selected" : "" %>><%= glp("ui.adm.type-edit.lbl.ed.wysiwyg") %></option>
+  </select>
+</jalios:field>    
+<% } %>
+
+<%-- SIZE ------------------------------------------------------- --%> 
+<div id='size'>
+<jalios:field name="size" label="ui.adm.type-edit.lbl.size" tooltip="ui.adm.type-edit.lbl.size.h" value='<%= Util.getString(fieldElt.getAttributeValue("size"), "") %>' >
+  <jalios:control type="<%= ControlType.NUMBER %>" />
+</jalios:field>    
+</div>
+
+<%-- ROWS ------------------------------------------------------- --%> 
+<div id='rows'>
+<jalios:field name="rows" label="ui.adm.type-edit.lbl.rows" tooltip="ui.adm.type-edit.lbl.rows.h" value='<%= Util.getString(fieldElt.getAttributeValue("rows"), "") %>' >
+  <jalios:control type="<%= ControlType.NUMBER %>" />
+</jalios:field>    
+</div>
+
+<%-- COLS ------------------------------------------------------- --%> 
+<div id='cols'>
+<jalios:field name="cols" label="ui.adm.type-edit.lbl.cols" tooltip="ui.adm.type-edit.lbl.cols.h" value='<%= Util.getString(fieldElt.getAttributeValue("cols"), "") %>' >
+  <jalios:control type="<%= ControlType.NUMBER %>" />
+</jalios:field>    
+</div>
+
+<%-- WIKI ------------------------------------------------------- --%> 
+<div id='wiki'>
+<jalios:field name="wiki" label="ui.adm.type-edit.lbl.wiki" tooltip="ui.adm.type-edit.lbl.wiki.h" >
+    <label class="radio-inline" dir="ltr"><input type="radio" name="wiki" value="true" <%= formHandler.isFieldWiki() ? "checked" : "" %> onclick='toggleEltVisibility("wikiwyg", true)'> <%= glp("ui.com.lbl.yes") %></label>
+    <label class="radio-inline" dir="ltr"><input type="radio" name="wiki" value="false" <%= !formHandler.isFieldWiki() ? "checked" : "" %> onclick='toggleEltVisibility("wikiwyg", false)'/> <%= glp("ui.com.lbl.no") %></label>
+</jalios:field>   
+</div>
+
+<%-- WIKIWYG ---------------------------------------------------- --%> 
+<div id='wikiwyg' style='<%= formHandler.isFieldWiki() ? "" : "display: none;" %>'>
+<jalios:field name="wikiwyg" label="ui.adm.type-edit.lbl.wikiwyg" tooltip="ui.adm.type-edit.lbl.wikiwyg.h" value="<%= formHandler.isFieldWikiwyg() %>" >
+  <jalios:control type="<%= ControlType.BOOLEAN %>" />
+</jalios:field>    
+</div>
+
+<%-- HTML ------------------------------------------------------- --%>
+<div id="html"> 
+<jalios:field name="html" label="ui.adm.type-edit.lbl.html" tooltip="ui.adm.type-edit.lbl.html.h" value="<%= formHandler.isFieldHtml() %>" >
+  <jalios:control type="<%= ControlType.BOOLEAN %>" />
+</jalios:field>          
+</div>
+
+<%-- CHECK HTML ------------------------------------------------------- --%>
+<div id="checkHtml">
+<jalios:field name="checkHtml" label="ui.adm.type-edit.lbl.checkhtml" tooltip="ui.adm.type-edit.lbl.checkhtml.h" value="<%= formHandler.isFieldCheckHtml() %>" >
+  <jalios:control type="<%= ControlType.BOOLEAN %>" />
+</jalios:field>          
+</div>
+ 
+ 
+<%-- MAXLENGTH ------------------------------------------------------- --%>
+<div id="maxlength">
+<jalios:field name="maxlength" label="ui.adm.type-edit.lbl.maxlg" tooltip="ui.adm.type-edit.lbl.maxlg.h" value='<%= Util.getString(fieldElt.getAttributeValue("maxlength"), "") %>' >
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>   
+</div>
+
+<%-- TOOLBARS ------------------------------------------------------- --%>
+<div id='toolbars'> 
+<jalios:field name="toolbars" label="ui.adm.type-edit.lbl.bars" tooltip="ui.adm.type-edit.lbl.bars.h">
+  <table  style="background-color: #f0f0f0;">
+    <% 
+       String[] toolbarsFeatures = new String[] { "basic", "format", "style", "font", "table" };
+       String toolbars = Util.getString(fieldElt.getAttributeValue("toolbars"), "none");
+    %>
+    <% for (int i = 0; i < toolbarsFeatures.length; i++) {
+        boolean curFeatureEnabled = toolbars.indexOf(toolbarsFeatures[i]) != -1 || toolbars.indexOf("all") != -1;
+    %>
+    <tr>
+      <td align='left'>
+        <input type="checkbox" name="toolbars" value="<%= toolbarsFeatures[i] %>" <% if (curFeatureEnabled) { %>checked="checked"<% } %> />
+        <%= glp("ui.adm.type-edit.lbl.bar-"+toolbarsFeatures[i]) %>
+      </td>
+      <td>
+        <img src="images/jalios/icons/wysiwygbar-<%= toolbarsFeatures[i] %>.gif" align="absmiddle" />
+      </td>
+    </tr>
+    <% } %>
+  </table>
+</jalios:field>
+</div>
+
+<%-- INLINE ------------------------------------------------------- --%>
+<div id='inline'> 
+<jalios:field name="inline" label="ui.adm.type-edit.lbl.inline" tooltip="ui.adm.type-edit.lbl.inline.h" value="<%= formHandler.isFieldInline() %>" >
+  <jalios:control type="<%= ControlType.BOOLEAN %>" />
+</jalios:field>   
+</div> 
+
+<%-- PATTERN ------------------------------------------------------- --%> 
+<div id='pattern'> 
+<jalios:field name="pattern" label="ui.adm.type-edit.lbl.pattern" tooltip="ui.adm.type-edit.lbl.pattern.h" value='<%= Util.getString(fieldElt.getAttributeValue("pattern"), "") %>' >
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+  <span class="input-group-addon">
+    <a href="javascript:win=window.open('<%= contextPath %>/admin/helpPattern.jsp', 'PatternHelp', 'width=500,height=600,toolbar=no,status=no,scrollbars=yes,resizable=yes,location=no,menubar=no,directories=no');win.focus();"><jalios:icon src='rubber-ring' title='<%= glp("ui.com.lbl.hlp") %>'  /></a>
+  </span>
+</jalios:field>   
+</div> 
+
+<%-- DEFAULT VALUE ------------------------------------------------------- --%>
+<% if (!isFieldMV) { %> 
+
+<jalios:field name="def-value" label="ui.adm.type-edit.lbl.def-value" tooltip="ui.adm.type-edit.lbl.def-value.h" >
+  <% if (!isEnumerate && "String".equals(fieldType)) {%>
+  <jalios:field name="defaultTexts" required='true' ml='<%= channel.isMultilingual() && formHandler.isFieldML() %>' value='<%= formHandler.getFieldDefaultTextMap() %>' resource="field-inline">
+    <jalios:control settings='<%= new TextAreaSettings().rows(2) %>' />
+  </jalios:field>
+  <% } else { %>
+  <textarea class='form-control' name="default" cols="50" rows="2" wrap="virtual"><%= encodeForHTML(formHandler.getFieldDefault()) %></textarea>
+  <% } %>  
+</jalios:field>
+
+ <% } /* !isFieldMV */ %>
+<% } /* else */  %>
+<% } /* isString */ %>
+
+
+
+<%-- TEXTFIELD & EMAIL =============================================== --%>
+<% boolean isTFKeyword = fieldEditor.equals("email") || fieldEditor.equals("email[]") || fieldEditor.equals("textfield") || fieldEditor.equals("textfield[]"); %>
+<% if (isTFKeyword) { %>
+<jalios:field label="ui.adm.type-edit.lbl.tf-ch" tooltip="ui.adm.type-edit.lbl.tf-ch.h">
+  <div class="radio">
+    <label><input type="radio" name="tfChooser" value=""        <%= !formHandler.getFieldTfChooser().equals("keyword") ? "checked" : "" %>><% /* %>Textfield<% */ %><%= glp("ui.adm.type-edit.lbl.textfield") %></label>
+  </div>
+  <div class="radio">  
+    <label><input type="radio" name="tfChooser" value="keyword" <%=  formHandler.getFieldTfChooser().equals("keyword") ? "checked" : "" %>><% /* %>Keyword<% */ %><%= glp("ui.adm.type-edit.lbl.keyword") %></label>
+  </div>
+</jalios:field>
+ <% } %>

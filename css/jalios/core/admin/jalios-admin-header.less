@@ -1,0 +1,62 @@
+/* ----------------------------------------------- */
+/*  HEADER                                         */
+/* ----------------------------------------------- */
+
+@admin-h1-font-size: @font-size-h3;
+@admin-h2-font-size: @font-size-h4;
+
+.bo-title-spacing() {
+  margin-bottom:  @baseline;
+  padding-top:    10px;
+}
+
+.WorkArea, .AdminArea, .EditArea {
+  padding: @baseline;
+  margin: 0px;
+  text-align: left;
+  background-color: #FFFFFF; 
+
+  .page-header {
+    padding: 0;
+    margin: 0 0 @baseline;
+    H1,H2 {
+      margin:0;
+      padding-bottom: @baseline/4;
+      // boTitle within a Bootstrap .page-header
+      &.boTitle {
+        .bo-title-spacing();
+        margin-top: 0;
+        margin-bottom: 0;
+        border-bottom: 0;
+      }
+    }
+  }
+  H1, H2 {
+    &, &.boTitle {
+      margin-top: 0;
+    }
+  }
+  H1, .page-header H1 { font-size: @admin-h1-font-size; }
+  H2, .page-header H2 { font-size: @admin-h2-font-size; }
+}
+
+H1.boTitle { font-size: @admin-h1-font-size; }
+H2.boTitle { font-size: @admin-h2-font-size; }
+
+// boTitle alone
+H1, H2 {
+  &.boTitle {
+    .bo-title-spacing();
+    padding-bottom: @baseline/4;
+    border-bottom: 1px dotted #DDDDDD;
+    &.icon {
+      padding-left: 55px;
+      background-repeat: no-repeat;
+    }
+    .formInfo {
+      // FIXME: should use .small ?
+      font-size: @font-size-base; 
+      vertical-align: baseline;
+    }
+  }
+}

@@ -1,0 +1,109 @@
+<fieldset>
+  <legend><%= glp("ui.com.lbl.status") %></legend>
+       
+  <%-- WF / WARNING ------------------------------------------------------------ --%> 
+  <% if (hasAlreadyVoted) { %>
+  <jalios:message level="<%= MessageLevel.WARN %>" msg="ui.work.form.lbl.wf.voted" />
+  <% } %>  
+
+<%-- WF / WORKFLOW ------------------------------------------------------------ --%>   
+<jalios:field label="ui.com.lbl.workflow">
+
+<%
+// display workflow combobox if it can be changed
+boolean isInstanceWFGroupValidation = false;
+if(loggedMember != null){
+  HashMap<Class<?>,Set<String>> instanceGroupMap = formHandler.getWorkspace().getInstanceWorkflowGroupMap();
+  Set<String> instanceGroupSet = instanceGroupMap.get(formHandler.getPublicationClass());
+  if(Util.notEmpty(instanceGroupSet)){
+    isInstanceWFGroupValidation = false;
+    for(String grpId : instanceGroupSet){
+      Group  grp = channel.getData(Group.class, grpId);
+      if(loggedMember.belongsToGroup(grp)){
+        isInstanceWFGroupValidation = true;
+        break;
+      }
+    }
+  }
+}
+
+if(((loggedMember != null && (loggedMember.isAdmin() || formHandler.getWorkspace().isAdmin(loggedMember) || isInstanceWFGroupValidation))) && channel.getWSTypeEntry(formHandler.getPublicationClass(),formHandler.getWorkspace()).getInstanceWorkflowEnabled()){
+   HashMap<Class<?>,Set<String>> workflowIdMap = formHandler.getWorkspace().getInstanceWorkflowIdMap();
+   Set<String> workflowIdSet = workflowIdMap.get(formHandler.getPublicationClass());
+   if (Util.notEmpty(workflowIdSet)){
+     WSTypeEntry wste       = channel.getWSTypeEntry(formHandler.getPublicationClass(),formHandler.getWorkspace());
+     Workflow defaultWF = wste.getWorkflow(false);
+%>
+  
+
+  
+  <select class="form-control form-control-inline" id="internalWf" name="internalWf" onchange="this.form.workflowChangeEvent.value='true';simpleSubmitForm(window, window.document.editForm,'opRefresh','Veuillez patienter, la page n\'est pas encore compl?tement charg?e.', 3);">
+    <option value=""><%=defaultWF == null?glp("ui.wf.none.label"):defaultWF.getLabel(userLang) %></option> 
+    <%                 
+      WorkflowManager wfMgr = WorkflowManager.getInstance();
+      for(String wfId : workflowIdSet){
+          Workflow tmpWF = wfMgr.getWorkflow(wfId);
+          if (tmpWF == null){ continue; }
+          String isSelected = (tmpWF != null && tmpWF.equals(internalWf))?"selected=\"selected\"":"";
+    %>
+    <option value="<%=wfId%>" <%=isSelected %>><%=tmpWF.getLabel(userLang)%></option>
+    <% } %>  
+  </select>
+  <input type="hidden" name="workflowChangeEvent" value="" />
+    
+<% if (getBooleanParameter("workflowChangeEvent", false)){ %>
+<jalios:javascript>
+    setSelectedTab('mainTab', <%=currentTabIndex %>);
+</jalios:javascript>
+<% } } %>
+<% } else { %>
+    <p class="form-control-static">
+    <%= wf.getLabel(userLang) %>
+    </p>
+<% } %>
+</jalios:field> 
+
+<%-- WF / PSTATUS ------------------------------------------------------------ --%> 
+<jalios:field label="ui.com.lbl.status">
+  <% if (wf != null) { %>
+  <select id="pstatus" name="pstatus" class="form-control">
+    <% 
+    Set stateSet = wf.getNextStateSet(pub, loggedMember); 
+    WFState state = pub!= null ? pub.getWFState() : null;
+    if (pub != null && state != null) { 
+      stateSet.add(state); 
+    } else {
+      stateSet = wf.getNextStateSet(null, loggedMember, wf.getInitState(), workspace); 
+      stateSet.add(wf.getInitState()); 
+    }  
+    if (workspace.isAdmin(loggedMember)) { stateSet = wf.getStateSet(); }
+    // Make sure the state set only contains valid states and make it valid if it is empty
+    stateSet = (Set) Util.cleanCollection(stateSet);
+    if (Util.isEmpty(stateSet)) {
+      stateSet.add(wf.getInitState()); 
+    }
+    %>
+    <jalios:foreach collection="<%= stateSet %>" name="itTarget" type="WFState">
+    <option value="<%= itTarget.getPstatus() %>" 
+            <% if (itTarget.getPstatus() == WorkflowManager.ARCHIVED_PSTATUS && ((pub != null && !pub.canBeArchived(loggedMember)) || !loggedMember.canArchive(pub))) { %>disabled="disabled"<% } %> 
+            <%= (itTarget.getPstatus() == formHandler.getAvailablePstatus()) ? "selected='selected'" : "" %>> <%= itTarget.getLabel(userLang) %>
+    </option>
+    </jalios:foreach>
+  </select>
+  <span class="input-group-addon">
+  <a href="admin/helpWorkflow.jsp?<%= pub == null ? "type=" + formHandler.getPublicationClass().getName() : "id=" + pub.getId() %>"
+                 onclick="popupWindow(this.href, 'WorkflowHelp', 700, 600, '', true, true); return false;"><jalios:icon src='rubber-ring' title='<%= glp("ui.work.dpl.foot.txt.help") %>'   /></a>
+  </span>
+  <% } else { %>
+  <input type='text' name='pstatus' value='<%= formHandler.getAvailablePstatus() %>' size='5' class='formTextfield' /> <span class='formInfo'>(Caution: the workflow of this publication is empty)</span>
+  <% } %>
+</jalios:field>
+
+<%-- WF / NOTE ------------------------------------------------------------ --%> 
+<% if (pub != null) { %>
+  <jalios:field label="ui.work.dpl.foot.wfn.note" name="wfNote">
+    <jalios:control settings='<%= new WikiAreaSettings().rows(2) %>' />
+  </jalios:field>
+<% } %>
+
+</fieldset>

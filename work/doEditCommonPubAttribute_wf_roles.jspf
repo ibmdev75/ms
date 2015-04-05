@@ -1,0 +1,57 @@
+<%@page import="com.jalios.jcms.taglib.settings.impl.MemberSettings"%>
+<%@page import="com.jalios.jcms.taglib.ControlType"%>
+<% if (formHandler.showWFRole()) { %>
+<fieldset>
+  <legend><%= glp("ui.work.form.tab.wf-role") %></legend>
+  
+  <jalios:foreach collection="<%= wf.getRoleSet() %>" name='wfRole' type='WFRole'>
+  <% WKRole wkRole = pub != null ? pub.getWorkspace().getRole(wfRole) : workspace.getRole(wfRole); %>
+  <% if (wkRole != null) { 
+                 Set<WFState> wfStateSet = wf.getWorkStateSet(wfRole);
+                 if (Util.notEmpty(wfStateSet)) { 
+                   int wfStateIdx = 0;
+  %>
+  <jalios:javascript>
+    !function ($) {
+        $(':input[name=pstatus]').on('change', function(){
+          var value = $(this).val();
+          var show  = <% for (WFState wfState : wfStateSet) { %>value == '<%= wfState.getPstatus() %>' || <% } %> false;
+          $('#role_choice_<%= wfRole.getId() %>').toggle(show);
+        });
+    }(window.jQuery);
+    </jalios:javascript>
+  <% } %>
+  
+    
+      <%-- NOT OPEN ROLE --%>
+      <% if (!WKRole.isOpen(wkRole)) { %>
+      <jalios:field label="<%= wfRole.getName(userLang) %>">
+        <p class='form-control-static'><%= glp("ui.work.form.lbl.wf.role-closed") %></p>
+      </jalios:field>
+      
+      <%-- OPEN ROLE --%>
+      <% } else { %>
+      <% 
+      Set allWorkerSet = JcmsUtil.select(wkRole.getWorkerSet(pub, true, formHandler.getPublicationClass()), null, new Member.NameComparator());
+      String openRoleDescription = null;
+      int groupWeight = wkRole.getWeightForGroup(0);
+      if (Util.getSize(wkRole.getGroupList()) == 1 && !wkRole.isPercentageForGroup(0)) {
+        if (wkRole.isOpenAndRequired(wkRole)) {
+          openRoleDescription = glp("ui.publication-edit.open-role.min-weight-required", groupWeight);
+        } else {
+          openRoleDescription = glp("ui.publication-edit.open-role.min-weight", groupWeight);          
+        }
+      }
+      %>
+      <input type="hidden" name="roleId" value="<%= wfRole.getId() %>" />
+      
+      <jalios:field name='<%= "roleMbr_" + wfRole.getId() %>' label="<%= wfRole.getName(userLang) %>" mv="<%= groupWeight > 1 ? 1 : -1 %>" required="<%= WKRole.OPEN_MODE_REQUIRED.equals(wkRole.getOpenMode()) %>" description='<%= openRoleDescription %>' value="<%= formHandler.getMemberSetAssignedToRole(wfRole.getId()) %>">
+        <jalios:control settings='<%= new EnumerateSettings().select().enumValues(allWorkerSet) %>' />
+      </jalios:field>
+      <% } %>
+      
+      
+  <% } %>
+  </jalios:foreach>
+</fieldset>
+<% } %>

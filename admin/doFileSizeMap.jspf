@@ -1,0 +1,40 @@
+    <table class='table-data auto'>
+      <tr>
+        <th><%= glp("ui.filedocument.lbl.file-type") %></th>
+        <th class="wrap"><%= glp("ui.filedocument.lbl.size") %>  <a href="<%= fileSizeMapRefreshUrl %>"><span class="pull-right">&nbsp;<jalios:icon src="refresh"  title='<%= glp("ui.com.btn.refresh") %>'/></a></span></th>
+        <th class="wrap"><%= glp("ui.filedocument.lbl.size-with-satellites") %>  <span class="pull-right"> <a href="<%= fileSizeMapRefreshUrl %>">&nbsp;<jalios:icon src="refresh"  title='<%= glp("ui.com.btn.refresh") %>' /></a></span></th>
+      </tr>
+      <% if (Util.notEmpty(fileSizeMap)) { %>
+      <%   
+      Set<Map.Entry> entrySet = ObjectLongTreeMap.getSortedMapEntrySet(fileSizeMap, new ObjectLongTreeMap.GreaterComparator());
+      long total = 0;
+      long totalWithSatellite = 0;
+      %>
+      <jalios:foreach collection="<%= entrySet %>" name="itEntry" type="Map.Entry">
+      <% 
+      String contentType = (String)(itEntry.getKey());
+      long size = fileSizeMap.getLong(contentType, 0);
+      long sizeWithSatellite = fileSizeMapWithSatellite.getLong(contentType, 0);
+      
+      String icon = channel.getProperty("file-document.icon." + contentType, "images/jalios/icons/files/unknown.gif");
+
+      total += size;
+      totalWithSatellite += sizeWithSatellite;
+      String link = fileSizeMapLinkPrefix + ServletUtil.encodeURL(com.jalios.jcms.search.LucenePublicationSearchEngine.FILEDOCUMENT_CONTENT_TYPE_FIELD + ":" + contentType + "*");
+      %>
+      <tr>
+        <td><jalios:icon src="<%= icon %>"   /> <a href="<%= link %>" ><%= glp("file-document.typeinfo." + contentType) %></a></td>
+        <td class='numeric'><jalios:filesize size="<%= size %>" /></td>
+        <td class='numeric'><jalios:filesize size="<%= sizeWithSatellite %>" /></td>
+      </tr>
+      </jalios:foreach>
+      <tr>
+        <td><%= glp("ui.adm.data-report.doc.size.total") %></td>
+        <td class='numeric'><b><jalios:filesize size="<%= total %>" /></b></td>
+        <td class='numeric'><b><jalios:filesize size="<%= totalWithSatellite %>" /></b></td>
+      </tr>
+    <% }
+      else{
+        %><tr><td colspan="3"><%=glp("ui.com.lbl.no-result") %></td></tr>
+      <%}%>
+    </table>

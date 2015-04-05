@@ -1,0 +1,68 @@
+<%!
+  public String getPortlet(final Map bufferMap, final String bind){
+    return getPortlets(bufferMap, bind, "");
+  }
+  public String getPortlets(final Map bufferMap, final String bind, final String join){
+    return Util.join(Util.getChildrenListMap(bufferMap,bind),join);
+  }
+  public String[] getPortlets(final Map bufferMap, final String bind){
+    List list = Util.getChildrenListMap(bufferMap, bind);
+    return (list == null) ? new String[0] : (String[]) list.toArray(new String[0]);
+  }
+%><jalios:include jsp='/jcore/portal/doAjaxHandleSortable.jsp' /><%
+  // Init generated vars
+  LinkedHashMap bufferMap  = new LinkedHashMap();
+  ArrayList     bufferList = new ArrayList();
+
+{ 
+  PortletCollection parent = (PortletCollection) request.getAttribute("PortalElement");
+  
+  // Check Portlet Collection children
+  PortalElement[] peChildren = (PortalElement[]) request.getAttribute("children");
+  PortalElement[] evChildren = (PortalElement[]) request.getAttribute("evict");
+  request.removeAttribute("children");
+  request.removeAttribute("evict");
+  
+  if (peChildren == null) {
+    peChildren = (PortalElement[]) parent.getChildren();
+  }
+  
+  if (Util.isEmpty(peChildren) && !isPortletMode){
+     request.setAttribute("ShowPortalElement",Boolean.FALSE);
+     return;
+	}
+	if (peChildren == null){
+	  peChildren = new PortalElement[0];
+	}
+	
+	// Retrieve Portlets' Buffer from doIncludePortlet
+	bufferList.ensureCapacity(peChildren.length);
+  for (int childIdx = 0; childIdx < peChildren.length; childIdx++) {
+    Portlet itChild = (Portlet) peChildren[childIdx];
+    if (evChildren != null && Arrays.binarySearch(evChildren, 0, evChildren.length, itChild) >= 0){ 
+      continue; 
+    };
+    final String collectionBuffer;
+    if (itChild != null) {
+	    displayPortlet = itChild;
+	    request.setAttribute("ShowChildPortalElement", Boolean.TRUE);
+	    request.setAttribute("storeBufferForContainer", Boolean.TRUE); // prevent use of a buffer, as doIncludePortlet already use one
+	    %><%@ include file='/jcore/portal/doIncludePortlet.jspf' %><%
+	    boolean bShowChildPortalElement = Util.toBoolean(request.getAttribute("ShowChildPortalElement"), true);
+	    collectionBuffer = bShowChildPortalElement ? Util.getString(request.getAttribute("storeBufferForContainer"), "") : "";
+	    request.removeAttribute("storeBufferForContainer");
+      
+    } else {
+      collectionBuffer = "<div>&nbsp;</div>";
+    }
+    bufferList.add(collectionBuffer);
+    Util.updateListMap(bufferMap , Util.getString(parent.getBinding(itChild), "Empty-"+childIdx) , collectionBuffer, true);
+  }
+	  
+  // Check if all buffer are empty
+  if (Util.isEmpty(bufferList,true) && !isPortletMode) {
+    request.setAttribute("ShowPortalElement",Boolean.FALSE);
+    return;
+  }
+}
+%>

@@ -1,0 +1,13 @@
+/* ***************************** *\
+    Menu de navigation vertical
+\* ***************************** */
+
+@import url("verticalMenuCommon.css");
+
+.verticalMenu a.level0					{ background-color: #49B449; }
+.verticalMenu a.level1					{ background-color: #91D291; }
+.verticalMenu a.level2					{ background-color: #B5E1B5; }
+										  
+.verticalMenu a.level0:hover			{ background-color: #33CC33; }
+.verticalMenu a.level1:hover			{ background-color: #33CC33; }
+.verticalMenu a.level2:hover			{ background-color: #33CC33; }

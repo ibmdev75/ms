@@ -1,0 +1,18 @@
+<%
+boolean exactCat = Util.toBoolean(request.getAttribute("dscExactCat"), false); 
+String catMode = Util.getString((String)request.getAttribute("dscCatMode"), "and"); 
+Set catSet = (Set)request.getAttribute("dscCatSet"); 
+Set<Category> rootSet = (Set<Category>)request.getAttribute("dscRootSet");
+%>
+      
+<jalios:field name="exactCat" label="ui.work.search.cat.exact" value='<%= exactCat %>' description="ui.work.search.cat.exact.h">
+  <jalios:control type="<%= ControlType.BOOLEAN %>" />
+</jalios:field>
+
+<jalios:field name="catMode" label="ui.work.search.cat.mode" value='<%= catMode %>' description="ui.work.search.cat.mode.h">    
+  <jalios:control settings='<%= new EnumerateSettings().enumValues("and", "or").enumLabels("ui.work.search.cat.mode.and", "ui.work.search.cat.mode.or") %>' />
+</jalios:field>
+
+<jalios:field name="cids" label="ui.com.lbl.categories" value='<%= catSet %>'>
+  <jalios:control settings='<%= new CategorySettings().tree().multiple().root(rootSet).filter(CategoryFilter.READ) %>' />
+</jalios:field>

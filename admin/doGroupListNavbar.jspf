@@ -1,0 +1,94 @@
+<%--
+  @Summary: Display the member list Navbar
+  @Category: Admin / Data
+  @Author: Sylvain Devaux
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: True
+  @Deprecated: False
+  @Since: jcms-9.0.0
+--%>
+<%
+boolean guiShowListAccess = !(showCheckInsert || showRadioInsert) && parentGroup != null;
+final boolean canAccessMemberList;
+if (grpWorkspace != null) {
+  canAccessMemberList = isAdmin || isWSAdmin || checkAccess("admin/users/member") || checkAccess("admin-ws/users/member");
+} else {
+  canAccessMemberList = isAdmin || checkAccess("admin/users/member");
+}
+boolean showMenu = guiShowAllGroups || (showRadioInsert && parentGroup != null) || parentGroup != null || (guiShowListAccess && canAccessMemberList);
+%>
+
+<%-- test: guiShowAllGroups --%>
+
+<div class="navbar navbar-default navbar-table-header">
+  <div class="collapse navbar-collapse">
+
+    <%-- Create new Member --%>
+    <% if (guiShowAddGroup ) { %>
+      <% String addGroupLbl = parentGroup == null ? glp("ui.adm.grp-list.btn.add") : glp("ui.adm.grp-list.btn.add-sub"); %>
+      <form action='admin/editGroup.jsp' class="navbar-form navbar-left" role="navigation">
+        <button class='btn btn-primary' type='submit'><%= encodeForHTML(addGroupLbl) %></button>
+        <input type='hidden' name='parentIds' value='<%= parentGroup != null ? parentGroup.getId() : "" %>' />
+        <input type='hidden' name='groupWorkspace' value='<%= grpWorkspace != null ? grpWorkspace.getId() : "x" %>' />
+        <% if (Util.notEmpty(redirect) ) { %><input type='hidden' name='redirect'  value='<%= redirect %>' /><% } %>
+      </form>
+    <% } %>
+
+    <% if (showSyncLDAP) { %>
+      <% String syncLdapLbl = glp("ui.adm.grp-list.btn.sync-ldap"); %>
+      <form action='<%= contextPath %>/admin/syncLdap.jsp' name="syncForm" method="post" class="navbar-form navbar-left">
+        <input type='hidden' name='opSyncLdapGroup' value='true' />
+        <input type='hidden' name='ldapGid' value='<%= parentGroup == null ? "" : parentGroup.getId() %>' />
+        <input type='hidden' name='redirect' value='<%= ServletUtil.getUrl(request) %>' />
+        <button class='btn btn-default' type="button" onclick='javascript:confirmSubmitForm(window,document.syncForm,"opSyncLdapGroup","<%= glp("msg.js.confirm") %>")'>
+           <jalios:icon src="ldap" /> <%= encodeForHTML(syncLdapLbl) %>
+        </button>
+      </form>
+    <% } %>
+
+    <%-- DROPDOW ACTIONS MENU --%>
+    <% if (showMenu) { %>
+      <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><jalios:icon src="wrench" /> <%= encodeForHTML(glp("ui.com.lbl.actions")) %> <jalios:icon src="caret" /></a>
+          <ul class="dropdown-menu" role="menu">
+            <%-- Show all Groups --%>
+            <% if (guiShowAllGroups) { %>
+              <% String allGroupLbl = glp("ui.adm.grp-list.lbl.grpall"); %>
+              <li><a href="<%= ServletUtil.getUrlWithRemovedParams(request, new String[] {"ws"}, true) %>" title='<%= encodeForHTMLAttribute(allGroupLbl) %>'><%= encodeForHTML(allGroupLbl) %></a></li>
+            <% } %>
+  
+            <%-- Edit parent --%>
+            <% if (parentGroup != null) { %>
+              <% String editGroupLbl = glp("ui.com.alt.edit"); %>
+              <li><jalios:edit data='<%= parentGroup %>'><jalios:icon src="edit" /> <%= /* do not encode */ editGroupLbl %></jalios:edit></li>
+            <% } %>
+  
+            <%-- List links --%>
+            <% if (guiShowListAccess && canAccessMemberList) { %>
+              <% String mbrListLbl = glp("ui.adm.mbr-list.title"); %>
+              <% String dbmbrListLbl = glp("ui.adm.db-mbr-list.title"); %>
+              <li><a href='<%= memberListUrl %>?gid=<%= parentGroup.getId() %>' title='<%= encodeForHTMLAttribute(mbrListLbl) %>'><jalios:icon src='mbr-default' /> <%= encodeForHTML(mbrListLbl) %></a></li>
+              <li><a href='<%= dbmemberListUrl %>?gid=<%= parentGroup.getId() %>' title='<%= encodeForHTMLAttribute(dbmbrListLbl) %>'><jalios:icon src='dbmbr-default' /> <%= encodeForHTML(dbmbrListLbl) %></a></li>
+            <% } %>
+          </ul>
+        </li>
+      </ul>
+    <% } %>
+
+    <% if (guiShowSearchGroup ) { %>
+      <form class="navbar-form navbar-right" name='refineGroup' role="search">
+        <div class="form-group">
+          <jalios:field name='groupText' value="<%= groupText %>" resource="field-light">
+            <jalios:control settings='<%= new TextFieldSettings().placeholder("ui.com.placeholder.search") %>' />
+            <span class="input-group-btn">
+              <button class="btn btn-default" name="opSearch" type="submit"><jalios:icon src="search" /></button>
+            </span>
+          </jalios:field>
+          <%= printDisabledHiddenParams(request,Arrays.asList(new String[]{"skip", "groupText"})) %>
+        </div>
+      </form> 
+    <% } %>
+  </div>
+</div>

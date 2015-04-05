@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates type="PortletPortal" version="5.0">
+  <template name="default" file="doPortletPortalFullDisplay.jsp" usage="box" />
+  <template name="print" file="doPortletPortalPrintDisplay.jsp" usage="box" />
+</templates>
+

@@ -1,0 +1,27 @@
+BODY{
+  background-color: #FFFFFF;
+}
+
+DIV.imgmap IMG.preview {
+  border: 4px solid #AAAAAA;
+}
+DIV.imgmap DIV{
+  position: absolute;
+  cursor: pointer;
+	cursor: hand;
+}
+DIV.imgmap DIV.rect {
+  border: 1px solid #FF0000;
+  background-image: url('../../../images/jalios/layout/rect.gif');
+}
+DIV.imgmap BUTTON{
+  position: absolute; 
+  top:  4px; 
+  left: 4px;
+  z-index: 5000;
+}
+
+
+DIV.imgmap.previewImageMap img.preview {
+  margin-top: 40px;
+}

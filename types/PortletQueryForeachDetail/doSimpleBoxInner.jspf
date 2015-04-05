@@ -1,0 +1,19 @@
+<% 
+String orderBy = box.getOrderBy();
+boolean showDate = true;
+String orderDate = orderBy;  
+if (box instanceof PortletQueryForeachDetail) {
+  orderDate = ((PortletQueryForeachDetail)box).getShowDate();
+  showDate = Util.notEmpty(orderDate);
+}
+%>
+<li class="item">
+  <% if (showDate) { %> 
+    <% Date itemDate = itPub.getDate(orderDate); %>
+    <%@ include file="/jcore/doItemBoxDate.jspf" %>  
+  <% } %>
+  <div class="item-icons-large">
+    <jalios:edit data="<%= itPub %>" popup="true"/>
+  </div>
+  <jalios:dataicon data="<%= itPub %>" /> <jalios:link data="<%= itPub %>" params="<%= displayURLparams %>"/>
+</li>

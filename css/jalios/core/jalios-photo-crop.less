@@ -1,0 +1,27 @@
+// Include variables and mixins
+@import "init-mixins.less";
+
+/* ----------------------------------------------- */
+/*  Jalios crop member photo modal                 */
+/* ----------------------------------------------- */
+
+.photo-crop-modal {
+  .cropper {
+	  border-right: 1px solid @grayLight;
+    max-height: 360px;
+  }
+  .cropper-result {
+    text-align:center;
+  }
+  .photo-preview-container {
+  	display:inline-block;
+  	margin: 0 auto;
+    .photo-preview-wrapper {
+	    overflow:hidden;
+	    border-radius: 50%;
+    }
+  }
+  .jcrop-keymgr {
+    display: none !important;
+  }
+}

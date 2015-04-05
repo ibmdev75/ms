@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "classpath://org/hibernate/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="generated.DBMailMessage" table="G_DBMAILMESSAGE">
+    <cache usage="read-write" />  
+    <id name="rowId" column="rowId">
+      <generator class="native"/>
+    </id>
+    <property name="cdate" not-null="true" />
+    <property name="mdate" not-null="true" index="IG_DBMAILMESSAGE_MDATE" />
+    <property name="authorId" length="32" index="IG_DBMAILMESSAGE_AUTHORID" />
+    
+    <property name="pstatus" not-null="true" index="IG_DBMAILMESSAGE_PSTATUS" />
+    <property name="workspaceId" not-null="true" length="32" index="IG_DBMAILMESSAGE_WSID" />
+    
+    <property name="pdate"  index="IG_DBMAILMESSAGE_PDATE" />
+    <property name="edate" />
+    <property name="adate" />
+    <property name="title" />
+    <property name="workflowId" not-null="false" length="32" index="IG_DBMAILMESSAGE_WFID" />
+    <property name="udate" />
+    <property name="majorVersion" />
+    <property name="minorVersion" />
+    <property name="hasNoReadRights" index="IG_DBMAILMESSAGE_HASNOREADRIGH" />
+    <property name="tracked" />
+    <property name="readerCount" index="IG_DBMAILMESSAGE_READERCOUNT" />
+    <property name="voteCount" not-null="false" index="IG_DBMAILMESSAGE_VOTECOUNT" />
+    <property name="voteScore" not-null="false" index="IG_DBMAILMESSAGE_VOTESCORE" />
+    
+    
+    <property name="from" />
+    
+    <set name="to" table="G_DBMAILMESSAGE_TO">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_TO_I"/>
+      </key>      
+      <element type="string">
+        <column name="VALUE"/>
+      </element>      
+    </set>
+    <set name="cc" table="G_DBMAILMESSAGE_CC">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_CC_I"/>
+      </key>      
+      <element type="string">
+        <column name="VALUE"/>
+      </element>      
+    </set>
+    <set name="bcc" table="G_DBMAILMESSAGE_BCC">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_BCC_I"/>
+      </key>      
+      <element type="string">
+        <column name="VALUE"/>
+      </element>      
+    </set>
+    <property name="replyTo" />
+    
+    <property name="fromMemberId" length="64" index="IG_DBMAILMESSAGE_FROMMEMBER" />
+    
+    <set name="toMemberId" table="G_DBMAILMESSAGE_TOMEMBER">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_TOMEMBER_I"/>
+      </key>      
+      <element type="string">
+        <column name="VALUE" length="64" index="IG_DBMAILMESSAGE_TOMEMBER"/>
+      </element>      
+    </set>
+    <set name="ccMemberId" table="G_DBMAILMESSAGE_CCMEMBER">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_CCMEMBER_I"/>
+      </key>      
+      <element type="string">
+        <column name="VALUE" length="64" index="IG_DBMAILMESSAGE_CCMEMBER"/>
+      </element>      
+    </set>
+    <set name="bccMemberId" table="G_DBMAILMESSAGE_BCCMEMBER">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_BCCMEMBER_I"/>
+      </key>      
+      <element type="string">
+        <column name="VALUE" length="64" index="IG_DBMAILMESSAGE_BCCMEMBER"/>
+      </element>      
+    </set>
+    <property name="replyToMemberId" length="64" index="IG_DBMAILMESSAGE_REPLYTOMEMBER" />
+    
+    <property name="contentText" type="text" length="65536" />
+    
+    <property name="contentHtml" type="text" length="65536" />
+    
+    <set name="attachementsId" table="G_DBMAILMESSAGE_ATTACHEMENTS">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_ATTACHEMENT_I"/>
+      </key>      
+      <element type="string">
+        <column name="VALUE" length="64" index="IG_DBMAILMESSAGE_ATTACHEMENTS"/>
+      </element>      
+    </set>
+    <property name="sentDate" />
+    
+    <property name="receivedDate" />
+    
+    <property name="priority" />
+    
+    <property name="account" />
+    
+    <property name="inReplyTo" />
+    
+    <set name="references" table="G_DBMAILMESSAGE_REFERENCES">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_REFERENCES_I"/>
+      </key>      
+      <element type="string">
+        <column name="VALUE"/>
+      </element>      
+    </set>
+    <property name="messageId" />
+    
+    <property name="thread" />
+    
+    
+    <!--  COLLECTIONS FOR CATEGORIES -->
+    <set name="catIdSet" table="G_DBMAILMESSAGE_CATSET" lazy="true">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_CATSET_I"/>
+      </key>
+      <element type="string">
+        <column name="VALUE" length="64" index="IG_DBMAILMESSAGE_CATSET"/>
+      </element>      
+    </set>
+    
+    <set name="allCatIdSet" table="G_DBMAILMESSAGE_ALLCATSET"  lazy="true">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_ALLCATSET_I"/>
+      </key>
+      <element type="string">
+        <column name="VALUE" length="64" index="IG_DBMAILMESSAGE_ALLCATSET"/>
+      </element>      
+    </set>
+    
+    <!--  COLLECTIONS FOR READ-RIGHTS -->
+    <set name="authGrpIdSet" table="G_DBMAILMESSAGE_AUTHGRPSET" lazy="true">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_AUTHGRPSET_I"/>
+      </key>
+      <element type="string">
+        <column name="VALUE" length="64" index="IG_DBMAILMESSAGE_AUTHGRPSET"/>
+      </element>      
+    </set>    
+    
+    <set name="authMbrIdSet" table="G_DBMAILMESSAGE_AUTHMBRSET" lazy="true">
+      <cache usage="read-write" />
+      <key>
+        <column name="ITEM_ID" index="IG_DBMAILMESSAGE_AUTHMBRSET_I"/>
+      </key>
+      <element type="string">
+        <column name="VALUE" length="64" index="IG_DBMAILMESSAGE_AUTHMBRSET"/>
+      </element>      
+    </set>
+  </class>
+</hibernate-mapping>
+<!-- **********4A616C696F73204A434D53 *** SIGNATURE BOUNDARY * DO NOT EDIT ANYTHING BELOW THIS LINE *** -->
+<!-- 8K2avjIudWmXAUzRis1CuQ== -->

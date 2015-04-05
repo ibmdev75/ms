@@ -1,0 +1,10 @@
+<%! // DECLARE PORTLET ACTION //////////////////////////////////////////////
+	public static final String PORTAL_ACTION_EXPAND = "Expand";
+%>
+<%
+	boolean isPopup     = "Popup".equals(portletSkinable.getPopupState());
+	boolean canPopup    = ("Enable".equals(portletSkinable.getPopupState()) || isPopup) && jcmsContext.isInFrontOffice();
+	boolean isMinimized = "Minimized".equals(portletSkinable.getExpandState());
+	boolean canExpand   = ("Enable".equals(portletSkinable.getExpandState()) || isMinimized) && jcmsContext.isInFrontOffice();
+	boolean isExpand = !canExpand || Util.toBoolean(Util.getString(PortalManager.receiveAction(request,portletSkinable,PORTAL_ACTION_EXPAND),"") ,!isMinimized);
+%>

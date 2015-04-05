@@ -1,0 +1,155 @@
+/* ----------------------------------------------- */
+/*  JCMS Sidebar                                   */
+/* ----------------------------------------------- */
+HTML,
+BODY {
+  height: 100%; //Takes the full height 
+}
+
+
+/* The backdrop displayed when the sidebar is opened */
+.sidebar-backdrop {
+	&.full{
+	  position: fixed;
+	  top: 0;
+	  right: 0;
+	  bottom: 0;
+	  left: 0;
+	  z-index: @zindex-modal-background;
+	  background-color: @modal-backdrop-bg;
+  }
+  // Fade for backdrop
+  &.fade { .opacity(0); }
+  &.in { .opacity(@modal-backdrop-opacity); }
+}
+
+/* The website sidebar */
+.site-sidebar {
+	position: fixed;
+	top: 0;
+	left: -(@sb-width + 30);
+	z-index: @z-index-sidebar;
+	
+	padding: @sb-padding;
+	height: 100%;
+	width: @sb-width;
+	overflow-y: auto;
+
+	background-color: @sb-bg-color;
+	.box-shadow(@sb-box-shadow);
+   
+   /* Header */
+	.sidebar-header{   
+    padding: @sb-padding;
+    margin: -@sb-padding -@sb-padding 0 -@sb-padding;
+    border-bottom: 1px solid #DDD;
+      
+    background-color: #F8F8F8;
+      
+    .sidebar-header-buttons .jalios-icon {
+      font-size: 18px;
+      line-height: 18px; // fix for icomoon icons
+    }       
+    
+    .sidebar-header-member-name {
+      margin-bottom: 10px;
+      A{
+        color: @sb-color;
+        text-decoration: underline;
+        &:hover{
+           color: @sb-color-hover;
+        }
+      }
+    }
+  }/* End Sidebar Header */
+
+  .sidebar-reconnect-as{
+    margin-top: 20px;
+  }
+
+
+  .sidebar-menu {
+    margin: 0 -@sb-padding;
+  
+    .sidebar-menu-item {
+      cursor: pointer;
+      .transition(border-left 0.2s ease);
+      &:hover,
+      &:focus {
+        border-left: 5px solid @sb-color-hover;
+      }       
+    }
+    .sidebar-menu-item-sub {
+      background-color: darken(@list-group-bg,5%);
+      // Hover state
+      &:hover,
+      &:focus {
+        text-decoration: none;
+        background-color: darken(@list-group-hover-bg,5%);
+      }   
+    }
+  }
+
+  .sidebar-close{
+    position: absolute;
+    top:5px;
+    right: 10px;
+  }
+  
+}
+
+.sidebar-events {
+
+  .event-info{
+    color: @sb-color-semi-light;
+    font-weight: bold;
+    
+    A {
+      color: @sb-color-semi-light;
+      text-decoration: underline;
+      &:hover{
+        color: @sb-color-hover;
+        text-decoration: none;
+      }
+    }
+  }      
+  
+	.event-item {
+		margin-bottom: 5px;
+    border-left: 5px solid #FFF;
+		padding: 5px 10px;
+		
+    background-color: hsl(0,0,100%);
+		
+		cursor: pointer;
+		
+		.transition(border-left 0.2s ease);
+		
+		&:focus, &:hover, &.event-item-today:hover{
+      border-left: 5px solid @brand-danger;
+      background-color: #F5F5F5;
+		}
+		
+		&.event-item-today  {
+      border-left: 5px solid @brand-info;
+		}
+		
+		
+		
+		.event-date{
+			color: @sb-color-light;
+			font-size: @sb-events-date-font-size;
+			margin: 0;
+		}
+		
+		.event-title{
+			color: @sb-color;
+			font-size: @sb-events-title-font-size;
+			margin-bottom: 0;
+		}
+	}
+}
+
+.sidebar-events-items {
+  padding: 0;
+}

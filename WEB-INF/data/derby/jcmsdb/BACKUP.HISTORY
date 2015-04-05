@@ -1,0 +1,5 @@
+Sat Apr 04 03:00:00 CEST 2015:Backup started for database located at D:\programmation\workspaces\smabtp\minisite\ms\WEB-INF\data\derby\jcmsdb to C:\Users\Karim\AppData\Local\Temp\derby\jcmsdb.
+Sat Apr 04 03:00:05 CEST 2015:Backup of data segment to C:\Users\Karim\AppData\Local\Temp\derby\jcmsdb\seg0 completed. 
+Sat Apr 04 03:00:05 CEST 2015:copied log directory from D:\programmation\workspaces\smabtp\minisite\ms\WEB-INF\data\derby\jcmsdb\log to C:\Users\Karim\AppData\Local\Temp\derby\jcmsdb\log
+Sat Apr 04 03:00:05 CEST 2015:Backup completed, log instant at (2,3813) 
+

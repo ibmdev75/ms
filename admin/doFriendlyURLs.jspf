@@ -1,0 +1,147 @@
+<%@ include file='/jcore/doMessageBox.jspf' %>
+<div class="page-header">
+	<h1><%= glp("ui.com.lbl.friendly-urls") %> (<%= formHandler.isWorkspaceFilter() ? workspace.getTitle(userLang) : glp("ui.work.mn.allworkspace") %>)</h1>
+</div>
+
+	<div class="navbar navbar-default navbar-table-header">
+		<form action='<%= ServletUtil.getResourcePath(request) %>' method='get' class="navbar-form navbar-left" name="friendlyURLsForm">
+			<select class='form-control' name='viewMode' onchange='javascript:document.friendlyURLsForm.submit()'>
+			  <option value='1' <%= formHandler.isViewModeDataToFriendlyURLs() ? "selected": "" %>><%= glp("ui.com.lbl.datas") %> ==> <%= glp("ui.com.lbl.friendly-urls") %></option>
+			  <option value='2' <%= formHandler.isViewModeFriendlyURLsToData() ? "selected": "" %>><%= glp("ui.com.lbl.friendly-urls") %> ==> <%= glp("ui.com.lbl.datas") %></option>
+			</select>
+		</form>
+		<form action='<%= ServletUtil.getResourcePath(request) %>' method='get' class="navbar-form navbar-right">
+			<jalios:field name='searchText' value="<%= formHandler.getSearchText() %>" resource="field-light">
+			  <jalios:control settings='<%= new TextFieldSettings().placeholder("ui.com.placeholder.search") %>' />
+				<span class="input-group-btn">
+	        <button class="btn btn-default" name="opSearch" type="submit"><jalios:icon src="search"/></button>
+	      </span>	              
+	    </jalios:field>			
+		
+		</form>
+	</div>
+
+  <%-- ------------------------------------------------------------ --%>
+  <%-- --- MODE 1 : Data to Friendly URLs ------------------------- --%>
+  <% if (formHandler.isViewModeDataToFriendlyURLs()) { %>
+    <jalios:pager name="furl1PagerHandler" declare="true" action="init"
+                  size="<%= formHandler.getDataToFriendlyURLSetMap().size() %>"/>
+		<table class="table-data table-condensed">
+		  <tr>
+        <th colspan="2" width="1%">&nbsp;</th>
+		    <th width="<%= formHandler.isWorkspaceFilter() ? "50%" : "33%" %>"><%= glp("ui.com.lbl.datas") %> (<%= furl1PagerHandler.getItemsNbr() %>)</th>
+		    <th width="<%= formHandler.isWorkspaceFilter() ? "50%" : "33%" %>"><%= glp("ui.com.lbl.friendly-urls") %></th>
+       <% if (!formHandler.isWorkspaceFilter()) { %> 
+        <td class='listHeader'><%= glp("ui.com.lbl.workspace") %></td>
+       <% } %>
+		  </tr>
+    <jalios:foreach name='entry' type='Map.Entry' counter='furl1Counter'
+                    collection="<%= formHandler.getDataToFriendlyURLSetMap().entrySet() %>"
+                    max='<%= furl1PagerHandler.getPageSize() %>' skip='<%= furl1PagerHandler.getStart() %>'>
+		<%
+      Data data = (Data) entry.getKey();
+      Set  friendlyURLSet = (Set) entry.getValue();
+		  %>
+		  <tr>
+        <%-- Column 0 : counter and edit icon --%>
+        <td align='right'><%= furl1PagerHandler.getStart() + furl1Counter.intValue() %>.</td>
+        <td class="nowrap"><jalios:edit id='<%= data.getId() %>'/></td>
+        <%-- Column 1 : Data --%>
+		    <td>
+          <% if (data instanceof Publication) { %>
+            <jalios:icon src='txt'  />
+          <% } else if (data instanceof Category) {%>
+            <jalios:icon src='folder'  />
+          <% } %>
+          
+		       <%= data.getDataName(userLang) %>
+          
+		    </td>
+        <%-- Column 2 : Friendly URLs --%>
+		    <td nowrap='nowrap'>
+		  <%
+      // Iterate on friendly URLs of current data
+		  for (Iterator itURL = friendlyURLSet.iterator(); itURL.hasNext(); ) {
+		    String friendlyURL = (String) itURL.next();
+		    %>
+		      <jalios:icon src='www'  />
+          
+          <a href="<%= contextPath %><%= friendlyURL %>"><%= friendlyURL%></a>
+          
+          <br /><%
+		  }
+		  %>
+		    </td>
+        <%-- Column 3 : Workspace (optionnal) --%>
+        <% if (!formHandler.isWorkspaceFilter()) { %> 
+        <td>
+          <% if (data instanceof Publication) { %>
+            <jalios:icon src="work"  />
+            <%= ((Publication) data).getWorkspace().getTitle(userLang) %>
+          <% } %>
+        </td>
+        <% } %>
+      </tr>
+		  </tr>
+    </jalios:foreach>
+		</table>
+    <jalios:pager name="furl1PagerHandler" />
+  <% } // view mode 1 %>
+  
+  <%-- ------------------------------------------------------------ --%>
+  <%-- ---- MODE 2 : Friendly URLs to Data ------------------------ --%>
+  <% if (formHandler.isViewModeFriendlyURLsToData()) { %>
+    <jalios:pager name="furl2PagerHandler" declare="true" action="init" pageSize="<%= 20 %>"
+                  size="<%= formHandler.getFriendlyURLToDataMap().size() %>"/>
+		<table class='table-data table-condensed' style="margin-top:8px">
+		  <tr>
+        <th colspan="2" width='1%'></th>
+		    <th width="<%= formHandler.isWorkspaceFilter() ? "50%" : "33%" %>"><%= glp("ui.com.lbl.friendly-urls") %> (<%= furl2PagerHandler.getItemsNbr() %>)</th>
+		    <th width="<%= formHandler.isWorkspaceFilter() ? "50%" : "33%" %>"><%= glp("ui.com.lbl.datas") %></th>
+       <% if (!formHandler.isWorkspaceFilter()) { %> 
+        <td class='listHeader'><%= glp("ui.com.lbl.workspace") %></td>
+       <% } %>
+		  </tr>
+    <jalios:foreach name='entry' type='Map.Entry' counter='furl2Counter'
+                    collection="<%= formHandler.getFriendlyURLToDataMap().entrySet() %>"
+                    max='<%= furl2PagerHandler.getPageSize() %>' skip='<%= furl2PagerHandler.getStart() %>'>
+
+    <%
+		  String    friendlyURL = (String) entry.getKey();
+		  Data      data        = (Data) entry.getValue();
+		  %>
+		  <tr>
+        <%-- Column 1 : Friendly URL --%>
+        <td align='right'><%= furl2PagerHandler.getStart() + furl2Counter.intValue() %>.</td>
+        <td class="nowrap"><jalios:edit id='<%= data.getId() %>'/></td>
+		    <td nowrap='nowrap'>
+		      <jalios:icon src='www'  />
+		      
+          <a href="<%= contextPath %><%= friendlyURL %>"><%= friendlyURL%></a>
+          
+        </td>
+        <%-- Column 2 : Data --%>
+		    <td>
+          <% if (data instanceof Publication) { %>
+            <jalios:icon src='txt'  />
+          <% } else if (data instanceof Category) {%>
+            <jalios:icon src='folder'  />
+          <% } %>
+          
+           <%= data.getDataName(userLang) %>
+          
+        </td>
+        <%-- Column 3 : Workspace (optionnal) --%>
+        <% if (!formHandler.isWorkspaceFilter()) { %> 
+        <td>
+          <% if (data instanceof Publication) { %>
+            <jalios:icon src="work"  />
+            <%= ((Publication) data).getWorkspace().getTitle(userLang) %>
+          <% } %>
+        </td>
+        <% } %>
+		  </tr>
+    </jalios:foreach>
+    </table>
+    <jalios:pager name="furl2PagerHandler" />
+  <% } // view mode 2 %>

@@ -1,0 +1,119 @@
+<%
+  Set<AccessControlList> aclSet = channel.getDataSet(AccessControlList.class);
+  TreeSet<AccessControlList> tmpSet = new TreeSet<AccessControlList>(AccessControlList.getNameComparator());
+  if (aclSet != null) {
+    tmpSet.addAll(aclSet);
+  }
+  aclSet = tmpSet;
+  if (showWorkspaceAclOnly) {
+    JcmsUtil.applyDataSelector(aclSet, AccessControlList.getWorkspaceAclSelector());
+  }
+  
+  String acmJsp = isAdmin && showEditAcl ? "admin/accessManager.jsp" : "work/workAccessAudit.jsp";
+%>
+   <%-- --- Title --------------------------- --%>
+   <% if (showTitle) { %>
+    <div class="page-header"><h1><%= glp("acl.acl-chooser.title") %> (<%= aclSet.size() %>)</h1></div>
+   <% } %>
+
+   <%-- --- Add ACL Form --------------------------- --%>
+   <% if (showEditAcl) { %>
+    <div class="navbar navbar-default navbar-table-header">
+    <form action='admin/editAcl.jsp' method='get' name='addAclForm' class="navbar-form navbar-left">
+      <input type="hidden" name="redirect" value="<%= ServletUtil.getUrl(request) %>" />
+      <input class='btn btn-primary' type='submit' value='<%= glp("accesscontrol.acl-list.btn.add") %>' />
+    </form>
+    </div>
+   <% } %>
+    
+    <%-- --- ACL LIST --------------------------- --%>
+    <jalios:pager name='aclPagerHandler' declare="true" action='init' size='<%= aclSet.size() %>' />
+     <form name='editForm' action="<%= ServletUtil.getResourcePath(request) %>">
+     <table id='aclTable'  class="table-data table-condensed">
+       <thead>
+        <tr>      
+         <% if (showRadioInsert ) { %>
+          <th>&nbsp;</th>
+         <% } %>
+          <th colspan="<%= showEditAcl ? 2 : 1 %>">&nbsp;</th>
+          <th class="nowrap"><%= glp("ui.com.lbl.name") %></th>
+         <% if (showWorkspaceAclState) { %>
+          <th class="nowrap"><%= glp("accesscontrol.acl-list.ws") %></th>
+         <% } %>
+         <% if (showGroupCount) { %>
+          <th class="nowrap"><%= glp("accesscontrol.acl-list.grp-nbr") %></th>
+         <% } %>
+         <% if (showMemberCount) { %>
+          <th class="nowrap"><%= glp("accesscontrol.acl-list.mbr-nbr") %></th>
+         <% } %>
+         <% if (showDelete) { %>
+          <th class="nowrap">&nbsp;</th>
+         <% } %>
+        </tr>
+       </thead>
+       
+       <tbody>
+       <% if (Util.isEmpty(aclSet)) { %>
+        <tr>
+         <td class="empty" colspan="7"><%= glp("accesscontrol.acl-list.empty-list") %></td>
+        </tr>
+       <% } %>
+        <jalios:foreach name='acl' type='AccessControlList' collection='<%= aclSet %>' counter='aclCounter'
+                        max='<%= aclPagerHandler.getPageSize() %>' skip='<%= aclPagerHandler.getStart() %>'>
+        <tr> 
+         <%-- --- ACL / Radio Button Chooser --------------------- --%>
+         <% if (showRadioInsert ) { %>
+          <td class="nowrap fit">
+            <% String label = HttpUtil.encodeForJavaScript(acl.getName()); %>
+            <input type="radio" onclick="javascript:insertLink('<%= acl.getId() %>', '<%= label %>')" />
+          </td>
+         <% } %>
+         <%-- --- ACL / Edit & Counter --------------------------- --%>
+         <% if (showEditAcl) { %>
+          <td class="nowrap fit">
+            <jalios:edit data='<%= acl %>' />
+          </td>
+         <% } %>
+          <td class="nowrap fit numeric">
+            <%= aclPagerHandler.getStart() + aclCounter.intValue() %>.
+          </td> 
+         <%-- --- ACL / Name --------------------------- --%>
+          <td class="nowrap">
+            <a href="<%= acmJsp %>?id=<%= acl.getId()%>"><%= acl.getName() %></a>
+          </td>
+         <%-- --- ACL / Workspace ACL --------------------------- --%>
+         <% if (showWorkspaceAclState) { %>
+          <td class="nowrap fit">
+            <%= glp("ui.com.lbl." + (acl.isWorkspaceACL() ? "true" : "false")) %>
+          </td>
+         <% } %>
+         <%-- --- ACL / Group Count --------------------------- --%>
+         <% if (showGroupCount) { %>
+          <td class="nowrap fit numeric">
+            <a href="<%= acmJsp %>?id=<%= acl.getId()%>"><%= acl.getGroupSet().size() %></a>
+          </td>
+         <% } %>
+         <%-- --- ACL / Member Count --------------------------- --%>
+         <% if (showMemberCount) { %>
+          <td class="nowrap fit numeric">
+            <%
+            Set<Member> mbrSet = new TreeSet<Member>(); 
+            for (Group group : acl.getGroupSet()) {
+              mbrSet.addAll(group.getMemberSet());
+            }
+            %>
+            <a href="<%= acmJsp %>?id=<%= acl.getId()%>"><%= mbrSet.size() %></a>
+          </td>
+         <% } %>
+         <%-- --- ACL / Delete --------------------------- --%>
+         <% if (showDelete) { %>
+          <td class="nowrap fit">
+           <jalios:delete data='<%= acl %>' />
+          </td>
+         <% } %>
+         </tr>         
+        </jalios:foreach>
+       </tbody>
+      </table>
+     </form>
+    <jalios:pager name='aclPagerHandler'/>

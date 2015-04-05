@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletColumn" reviewable="false" debatable="false" categoryTab="false" categoryRequired="false" visible="true" superclass="generated.AbstractCollection" unitFieldEdition="false" audienced="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="colSpacing" editor="int" required="false" compactDisplay="true" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="500" unit="px" unitPos="after" />
+    <field name="alignHorizontal" editor="enumerate" required="false" compactDisplay="false" tab="align_horizontal" type="String[]" searchable="false" ml="false" valueList="center | left | right" descriptionType="tooltip" chooser="multilistbox" />
+    <field name="alignVertical" editor="enumerate" required="false" compactDisplay="false" tab="align_vertical" type="String[]" searchable="false" ml="false" valueList="middle | top | bottom | baseline" descriptionType="tooltip" chooser="multilistbox" />
+    <field name="backgroundColor" editor="color" required="false" compactDisplay="false" type="String[]" tab="background_color" ml="false" searchable="false" descriptionType="tooltip" />
+    <field name="backgroundImage" editor="image" required="false" compactDisplay="false" type="String[]" searchable="false" size="80" maxlength="500" ml="false" tab="background_image" descriptionType="tooltip" />
+    <field name="backgroundRepeat" editor="enumerate" required="false" compactDisplay="false" type="String[]" chooser="multilistbox" valueList="repeat-x|repeat-y|no-repeat" ml="false" descriptionType="tooltip" tab="background_repeat" searchable="false" html="false" />
+    <field type="super" />
+  </fields>
+  <tabs>
+    <tab id="align_vertical" />
+    <tab id="background_color" />
+    <tab id="align_horizontal" />
+    <tab id="background_repeat" />
+    <tab id="background_image" />
+  </tabs>
+</type>
+

@@ -1,0 +1,17 @@
+<%--
+How to use:
+<% Date itemDate = itDate; %>
+<%@ include file="/jcore/doItemBoxDate.jspf" %>  
+--%>
+<% if (itemDate != null) { 
+String itemDateCSS = "";
+boolean isToday = DateUtil.isToday(itemDate);
+if (isToday) {
+  itemDateCSS = "item-date-today";
+} 
+else if ((System.currentTimeMillis() - itemDate.getTime()) < JaliosConstants.MILLIS_IN_ONE_WEEK) {
+  itemDateCSS = "item-date-new";
+}
+%>
+<span class="item-info <%= itemDateCSS %>"><% if (isToday) { %><jalios:time format="short" date="<%= itemDate %>" /><% } else { %><jalios:date format="dd/MM" date="<%= itemDate %>" /><% } %></span>
+<% } %>

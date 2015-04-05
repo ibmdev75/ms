@@ -1,0 +1,59 @@
+<%@page import="com.jalios.util.Util"%><%
+%><%@page import="com.jalios.jcms.HttpUtil"%><%
+%><%@page import="com.jalios.jcms.JcmsUtil"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.BasicSettings"%><%
+%><%
+String inputFieldName = fieldName;
+String inputFieldValue = fieldValue;
+
+boolean hiddenField = Util.toBoolean(getIncludeObject("hiddenField", false), false);
+
+if(hiddenField) {
+  inputFieldName = fieldName + "Display";
+  
+  String fieldValueDisplay = getIncludeString("fieldValueDisplay", null); // Use when we add the field value in a hidden field
+  if(fieldValueDisplay != null) {
+    inputFieldValue = fieldValueDisplay;
+  }
+}
+
+String placeholder = formatAttribute("placeholder=\"%s\"", getOption(BasicSettings.PLACEHOLDER, ""));
+String prepend = getIncludeString("PREPEND", getOption(BasicSettings.PREPEND, ""));
+String append = getIncludeString("APPEND", getOption(BasicSettings.APPEND, ""));
+String required = Util.toBoolean(fieldRequired, false) ? "aria-required='true'" : "";
+String disabled = Util.toBoolean(fieldDisabled, false) ? "disabled='disabled'" : "";
+String css = getOption(BasicSettings.CSS, "");
+css = "form-control" + (Util.notEmpty(css) ? " " + css : "") + (!hiddenField ? " form-control-value" : " form-control-display");
+String autofocus = Util.toBoolean(getOption(BasicSettings.AUTOFOCUS, false), false) ? "autofocus=\"autofocus\"" : "";
+String htmlAttributes = getOption(BasicSettings.HTML_ATTRIBUTES, "");
+String dataAttributes = formatDataAttributes(getOption(BasicSettings.DATA_ATTRIBUTES, (Map<String, Object>) null));
+String dataEvent = formatAttribute("data-jalios-event='%s'", getOption(BasicSettings.TRIGGER_EVENT, ""));
+String dataAction = formatAttribute("data-jalios-action='%s'", getOption(BasicSettings.TRIGGER_ACTION, ""));
+%><%
+%><% if (Util.notEmpty(prepend)) { %><span class="input-group-addon"><%= prepend %></span><% } %>
+<input id="<%= encodeForHTMLAttribute(fieldId) %>"
+      name="<%= HttpUtil.encodeForHTMLAttribute(inputFieldName) %>"
+      type="text"
+      class="<%= css %>"
+      value="<%= encodeForHTMLAttribute(inputFieldValue) %>"
+      <%= JcmsUtil.getLangAttributes(cptLang) %>
+      <%= placeholder %>
+      <%= autofocus %>
+      <%= disabled %>
+      <%= required %>
+      <%= !hiddenField ? dataEvent : "" %>
+      <%= !hiddenField ? dataAction : "" %>
+      <%= !hiddenField ? dataAttributes : "" %>
+      <%= htmlAttributes %> />
+<% if(hiddenField) { %>
+<input name="<%= encodeForHTMLAttribute(fieldName) %>"
+      type="text"
+      class="form-control form-control-value hide"
+      value="<%= encodeForHTMLAttribute(resolveValue(fieldValue)) %>"
+      <%= hiddenField ? dataEvent : "" %>
+      <%= hiddenField ? dataAction : "" %>
+      <%= hiddenField ? dataAttributes : "" %> />
+<% } %><%
+%><% if (Util.notEmpty(append)) { %><span class="input-group-addon"><%= append %></span><% } %><%
+%><%= getIncludeString("CONTROL_APPEND", "") %><%
+%><%@ include file='/jcore/field/control/doTextButtonAction.jspf' %>

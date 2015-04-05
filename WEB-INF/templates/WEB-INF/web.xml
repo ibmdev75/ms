@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app>
+  <display-name>TemplateEngine</display-name>
+
+  <taglib>
+    <taglib-uri>
+      jcms.tld
+    </taglib-uri>
+    <taglib-location>
+       /WEB-INF/jcms.tld
+    </taglib-location>
+  </taglib>
+
+</web-app>

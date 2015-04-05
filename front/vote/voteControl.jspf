@@ -1,0 +1,49 @@
+<%  
+    VoteManager voteMgr = VoteManager.getInstance();
+    Publication pub = (Publication) request.getAttribute("jcms.vote.pub");
+    
+    if (pub == null) {
+        pub = getPublicationParameter("pubId");
+    }
+    
+    if (pub == null || !pub.canBeReadBy(loggedMember)) {
+        return;
+    }  
+    
+    boolean canVote = voteMgr.canVote(pub,loggedMember);
+    boolean isPointMode = voteMgr.isPointMode();
+    
+    request.removeAttribute("jcms.vote.pub");
+    Vote existingVote = voteMgr.getVote(pub,loggedMember);
+    
+    boolean hasVoted = existingVote != null;
+    boolean vote = getBooleanParameter("vote",false);
+    boolean positiveVote = getBooleanParameter("positiveVote",true);
+    
+    
+    if (vote && existingVote != null && (existingVote.isPositive() == positiveVote || !existingVote.isPositive() == !positiveVote)) {
+        //Cancel if it is the same vote
+        hasVoted = false;
+        pub = VoteManager.getInstance().cancelVote(pub,loggedMember);
+        existingVote = null;
+    } else if (vote) {
+        Object[] voteResult = VoteManager.getInstance().performVote(pub,loggedMember,positiveVote);
+        if (Util.isEmpty(voteResult)) {
+            return;
+        }
+        hasVoted = true;
+        pub = (Publication) voteResult[0];
+        existingVote = (Vote) voteResult[1];
+        if (Util.toBoolean(request.getAttribute("jcms.vote.reopenTransaction"), false)) {
+          HibernateUtil.commitTransaction();
+          HibernateUtil.beginTransaction();
+        }
+    }
+    if (pub == null) {
+        return;
+    }
+    
+    if (existingVote == null && hasVoted) {
+        return;
+    }
+%>

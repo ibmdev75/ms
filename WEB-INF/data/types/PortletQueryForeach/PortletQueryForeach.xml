@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletQueryForeach" reviewable="false" debatable="false" categoryTab="false" categoryRequired="false" visible="true" superclass="generated.AbstractPortletSkinable" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="searchInDB" editor="boolean" required="false" compactDisplay="false" tab="query" type="boolean" default="off" ml="false" descriptionType="tooltip" />
+    <field name="queries" editor="query" required="false" compactDisplay="false" type="String[]" tab="query" ml="false" searchable="false" descriptionType="tooltip" />
+    <field name="refineQueries" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" tab="query" valueList="Portal | Current | PortalExact | CurrentExact | CurrentWS | CurrentWSCat" chooser="listbox" descriptionType="tooltip" html="false" />
+    <field name="refineWithContextualCategories" editor="boolean" required="false" compactDisplay="false" tab="query" type="boolean" default="off" descriptionType="tooltip" />
+    <field name="orderBy" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" tab="sort" valueList="cdate | udate | mdate | pdate | edate | sdate | title | random | reader" descriptionType="tooltip" chooser="listbox" default="udate" />
+    <field name="reverseOrder" editor="enumerate" required="false" compactDisplay="false" tab="sort" type="String" valueList="results|request" ml="false" searchable="false" descriptionType="tooltip" chooser="listbox" html="false" />
+    <field name="maxResults" editor="int" required="false" compactDisplay="false" type="int" default="5" tab="foreach" ml="false" searchable="false" minValue="0" maxValue="500" unitPos="after" descriptionType="tooltip" html="false" />
+    <field name="skipFirstResults" editor="int" required="false" compactDisplay="false" tab="foreach" type="int" default="0" ml="false" searchable="false" minValue="0" maxValue="500" unitPos="after" descriptionType="tooltip" html="false" />
+    <field name="showPager" editor="enumerate" required="false" compactDisplay="false" tab="pager" type="String" searchable="false" ml="false" valueList="Link | Yes" descriptionType="tooltip" chooser="listbox" html="false" />
+    <field name="pagerLabel" editor="textfield" required="false" compactDisplay="false" tab="pager" type="String" searchable="false" size="80" ml="true" descriptionType="tooltip" />
+    <field name="pageSizes" editor="int[]" required="false" compactDisplay="false" tab="pager" type="int[]" default="0" ml="false" descriptionType="tooltip" searchable="false" html="false" minValue="1" maxValue="500" unitPos="after" />
+    <field name="pagerAllLimit" editor="int" required="false" compactDisplay="false" tab="pager" type="int" default="-1" descriptionType="tooltip" />
+    <field name="hideWhenNoResults" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" tab="advanced" searchable="false" descriptionType="tooltip" />
+    <field name="firstPublications" editor="link[]" required="false" compactDisplay="false" tab="advanced" type="com.jalios.jcms.Content[]" ml="false" searchable="false" descriptionType="tooltip" />
+    <field name="showInCurrentPortal" editor="boolean" required="false" compactDisplay="true" type="boolean" default="off" ml="false" searchable="false" tab="advanced" />
+    <field name="contextCategory" editor="boolean" required="false" compactDisplay="false" tab="advanced" type="boolean" default="off" ml="false" descriptionType="tooltip" searchable="false" />
+    <field type="super" />
+  </fields>
+  <tabs>
+    <tab id="pager" />
+    <tab id="query" />
+    <tab id="sort" />
+    <tab id="advanced" />
+    <tab id="foreach" />
+  </tabs>
+</type>
+

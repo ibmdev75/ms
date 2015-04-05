@@ -1,0 +1,313 @@
+/* ------------------------------------------------------------------------------------ */
+/*  JCMS LANGUAGE FLAGS                                                                          */
+/*
+    DOCUMENTATION
+    
+    Default flag declaration in all languages
+    
+    FIXME: QUID monolanguage site ?
+*/
+/* ------------------------------------------------------------------------------------ */
+
+.iso639flag,
+.iso3166flag {
+
+  border: 0;
+  vertical-align: middle; /* not the same than .icon */
+  
+  width:  16px;
+  height: 16px;
+  
+  background-image: url("../../../images/jalios/icons/country/unknown.png"); 
+  background-position: 0 2px;
+  background-repeat: no-repeat;
+}
+
+.ctxLangMenu .ctx-arrow { margin-left: 2px; zoom:1; } /* Add nudge between flag and arrow */ 
+
+.iso639flagSelect {
+
+  border: 0;
+  vertical-align: middle; /* not the same than .icon */
+  
+  padding-left: 21px;
+  background-image: url("../../../images/jalios/icons/country/unknown.png"); 
+  background-position: 2px 2px;
+  background-repeat: no-repeat;
+}
+
+.ar-flag { background-image: url("../../../images/jalios/icons/arab-league-flag.gif"); }
+.bg-flag { background-image: url("../../../images/jalios/icons/country/bg.png") !important; } 
+.cs-flag { background-image: url("../../../images/jalios/icons/country/cz.png") !important; }
+.da-flag { background-image: url("../../../images/jalios/icons/country/dk.png") !important; }
+.de-flag { background-image: url("../../../images/jalios/icons/country/de.png") !important; }
+.et-flag { background-image: url("../../../images/jalios/icons/country/ee.png") !important; }
+.el-flag { background-image: url("../../../images/jalios/icons/country/gr.png") !important; }
+.en-flag { background-image: url("../../../images/jalios/icons/country/gb.png") !important; }
+.es-flag { background-image: url("../../../images/jalios/icons/country/es.png") !important; }
+.fr-flag { background-image: url("../../../images/jalios/icons/country/fr.png") !important; }
+.ga-flag { background-image: url("../../../images/jalios/icons/country/ie.png") !important; }
+.he-flag { background-image: url("../../../images/jalios/icons/country/il.png") !important; }
+.it-flag { background-image: url("../../../images/jalios/icons/country/it.png") !important; }
+.ja-flag { background-image: url("../../../images/jalios/icons/country/jp.png") !important; }
+.ko-flag { background-image: url("../../../images/jalios/icons/country/kr.png") !important; }
+.lv-flag { background-image: url("../../../images/jalios/icons/country/lv.png") !important; }
+.lt-flag { background-image: url("../../../images/jalios/icons/country/lt.png") !important; }
+.hu-flag { background-image: url("../../../images/jalios/icons/country/hu.png") !important; }
+.mt-flag { background-image: url("../../../images/jalios/icons/country/mt.png") !important; }
+.nl-flag { background-image: url("../../../images/jalios/icons/country/nl.png") !important; }
+.pl-flag { background-image: url("../../../images/jalios/icons/country/pl.png") !important; }
+.pt-flag { background-image: url("../../../images/jalios/icons/country/pt.png") !important; }
+.ro-flag { background-image: url("../../../images/jalios/icons/country/ro.png") !important; }
+.ru-flag { background-image: url("../../../images/jalios/icons/country/ru.png") !important; }
+.sk-flag { background-image: url("../../../images/jalios/icons/country/sk.png") !important; }
+.sl-flag { background-image: url("../../../images/jalios/icons/country/si.png") !important; }
+.fi-flag { background-image: url("../../../images/jalios/icons/country/fi.png") !important; }
+.sv-flag { background-image: url("../../../images/jalios/icons/country/se.png") !important; }
+.tlh-flag { background-image: url("../../../images/jalios/icons/klingon-flag.gif"); }
+.zh-flag { background-image: url("../../../images/jalios/icons/country/cn.png") !important; }
+.zh-Hant-flag { background-image: url("../../../images/jalios/icons/country/tw.png") !important; }
+
+
+/* ISO-3166 country code icons/flags */
+
+.iso3166chooser {
+  vertical-align: middle;
+  background-image: url("../../../images/jalios/icons/country/unknown.png") !important; 
+  background-position: 0 2px;
+  background-repeat: no-repeat;
+}
+
+.AD-flag { background-image: url("../../../images/jalios/icons/country/ad.png") !important; }
+.AE-flag { background-image: url("../../../images/jalios/icons/country/ae.png") !important; }
+.AF-flag { background-image: url("../../../images/jalios/icons/country/af.png") !important; }
+.AG-flag { background-image: url("../../../images/jalios/icons/country/ag.png") !important; }
+.AI-flag { background-image: url("../../../images/jalios/icons/country/ai.png") !important; }
+.AL-flag { background-image: url("../../../images/jalios/icons/country/al.png") !important; }
+.AM-flag { background-image: url("../../../images/jalios/icons/country/am.png") !important; }
+.AO-flag { background-image: url("../../../images/jalios/icons/country/ao.png") !important; }
+.AR-flag { background-image: url("../../../images/jalios/icons/country/ar.png") !important; }
+.AS-flag { background-image: url("../../../images/jalios/icons/country/as.png") !important; }
+.AT-flag { background-image: url("../../../images/jalios/icons/country/at.png") !important; }
+.AU-flag { background-image: url("../../../images/jalios/icons/country/au.png") !important; }
+.AW-flag { background-image: url("../../../images/jalios/icons/country/aw.png") !important; }
+.AX-flag { background-image: url("../../../images/jalios/icons/country/ax.png") !important; }
+.AZ-flag { background-image: url("../../../images/jalios/icons/country/az.png") !important; }
+.BA-flag { background-image: url("../../../images/jalios/icons/country/ba.png") !important; }
+.BB-flag { background-image: url("../../../images/jalios/icons/country/bb.png") !important; }
+.BD-flag { background-image: url("../../../images/jalios/icons/country/bd.png") !important; }
+.BE-flag { background-image: url("../../../images/jalios/icons/country/be.png") !important; }
+.BF-flag { background-image: url("../../../images/jalios/icons/country/bf.png") !important; }
+.BG-flag { background-image: url("../../../images/jalios/icons/country/bg.png") !important; }
+.BH-flag { background-image: url("../../../images/jalios/icons/country/bh.png") !important; }
+.BI-flag { background-image: url("../../../images/jalios/icons/country/bi.png") !important; }
+.BJ-flag { background-image: url("../../../images/jalios/icons/country/bj.png") !important; }
+.BM-flag { background-image: url("../../../images/jalios/icons/country/bm.png") !important; }
+.BN-flag { background-image: url("../../../images/jalios/icons/country/bn.png") !important; }
+.BO-flag { background-image: url("../../../images/jalios/icons/country/bo.png") !important; }
+.BR-flag { background-image: url("../../../images/jalios/icons/country/br.png") !important; }
+.BS-flag { background-image: url("../../../images/jalios/icons/country/bs.png") !important; }
+.BT-flag { background-image: url("../../../images/jalios/icons/country/bt.png") !important; }
+.BV-flag { background-image: url("../../../images/jalios/icons/country/bv.png") !important; }
+.BW-flag { background-image: url("../../../images/jalios/icons/country/bw.png") !important; }
+.BY-flag { background-image: url("../../../images/jalios/icons/country/by.png") !important; }
+.BZ-flag { background-image: url("../../../images/jalios/icons/country/bz.png") !important; }
+.CA-flag { background-image: url("../../../images/jalios/icons/country/ca.png") !important; }
+.CC-flag { background-image: url("../../../images/jalios/icons/country/cc.png") !important; }
+.CD-flag { background-image: url("../../../images/jalios/icons/country/cd.png") !important; }
+.CF-flag { background-image: url("../../../images/jalios/icons/country/cf.png") !important; }
+.CG-flag { background-image: url("../../../images/jalios/icons/country/cg.png") !important; }
+.CH-flag { background-image: url("../../../images/jalios/icons/country/ch.png") !important; }
+.CI-flag { background-image: url("../../../images/jalios/icons/country/ci.png") !important; }
+.CK-flag { background-image: url("../../../images/jalios/icons/country/ck.png") !important; }
+.CL-flag { background-image: url("../../../images/jalios/icons/country/cl.png") !important; }
+.CM-flag { background-image: url("../../../images/jalios/icons/country/cm.png") !important; }
+.CN-flag { background-image: url("../../../images/jalios/icons/country/cn.png") !important; }
+.CO-flag { background-image: url("../../../images/jalios/icons/country/co.png") !important; }
+.CR-flag { background-image: url("../../../images/jalios/icons/country/cr.png") !important; }
+.CU-flag { background-image: url("../../../images/jalios/icons/country/cu.png") !important; }
+.CV-flag { background-image: url("../../../images/jalios/icons/country/cv.png") !important; }
+.CX-flag { background-image: url("../../../images/jalios/icons/country/cx.png") !important; }
+.CY-flag { background-image: url("../../../images/jalios/icons/country/cy.png") !important; }
+.CZ-flag { background-image: url("../../../images/jalios/icons/country/cz.png") !important; }
+.DE-flag { background-image: url("../../../images/jalios/icons/country/de.png") !important; }
+.DJ-flag { background-image: url("../../../images/jalios/icons/country/dj.png") !important; }
+.DK-flag { background-image: url("../../../images/jalios/icons/country/dk.png") !important; }
+.DM-flag { background-image: url("../../../images/jalios/icons/country/dm.png") !important; }
+.DO-flag { background-image: url("../../../images/jalios/icons/country/do.png") !important; }
+.DZ-flag { background-image: url("../../../images/jalios/icons/country/dz.png") !important; }
+.EC-flag { background-image: url("../../../images/jalios/icons/country/ec.png") !important; }
+.EE-flag { background-image: url("../../../images/jalios/icons/country/ee.png") !important; }
+.EG-flag { background-image: url("../../../images/jalios/icons/country/eg.png") !important; }
+.EH-flag { background-image: url("../../../images/jalios/icons/country/eh.png") !important; }
+.ER-flag { background-image: url("../../../images/jalios/icons/country/er.png") !important; }
+.ES-flag { background-image: url("../../../images/jalios/icons/country/es.png") !important; }
+.ET-flag { background-image: url("../../../images/jalios/icons/country/et.png") !important; }
+.FI-flag { background-image: url("../../../images/jalios/icons/country/fi.png") !important; }
+.FJ-flag { background-image: url("../../../images/jalios/icons/country/fj.png") !important; }
+.FK-flag { background-image: url("../../../images/jalios/icons/country/fk.png") !important; }
+.FM-flag { background-image: url("../../../images/jalios/icons/country/fm.png") !important; }
+.FO-flag { background-image: url("../../../images/jalios/icons/country/fo.png") !important; }
+.FR-flag { background-image: url("../../../images/jalios/icons/country/fr.png") !important; }
+.GA-flag { background-image: url("../../../images/jalios/icons/country/ga.png") !important; }
+.GB-flag { background-image: url("../../../images/jalios/icons/country/gb.png") !important; }
+.GD-flag { background-image: url("../../../images/jalios/icons/country/gd.png") !important; }
+.GE-flag { background-image: url("../../../images/jalios/icons/country/ge.png") !important; }
+.GH-flag { background-image: url("../../../images/jalios/icons/country/gh.png") !important; }
+.GI-flag { background-image: url("../../../images/jalios/icons/country/gi.png") !important; }
+.GL-flag { background-image: url("../../../images/jalios/icons/country/gl.png") !important; }
+.GM-flag { background-image: url("../../../images/jalios/icons/country/gm.png") !important; }
+.GN-flag { background-image: url("../../../images/jalios/icons/country/gn.png") !important; }
+.GP-flag { background-image: url("../../../images/jalios/icons/country/gp.png") !important; }
+.GQ-flag { background-image: url("../../../images/jalios/icons/country/gq.png") !important; }
+.GR-flag { background-image: url("../../../images/jalios/icons/country/gr.png") !important; }
+.GS-flag { background-image: url("../../../images/jalios/icons/country/gs.png") !important; }
+.GT-flag { background-image: url("../../../images/jalios/icons/country/gt.png") !important; }
+.GU-flag { background-image: url("../../../images/jalios/icons/country/gu.png") !important; }
+.GW-flag { background-image: url("../../../images/jalios/icons/country/gw.png") !important; }
+.GY-flag { background-image: url("../../../images/jalios/icons/country/gy.png") !important; }
+.HK-flag { background-image: url("../../../images/jalios/icons/country/hk.png") !important; }
+.HN-flag { background-image: url("../../../images/jalios/icons/country/hn.png") !important; }
+.HR-flag { background-image: url("../../../images/jalios/icons/country/hr.png") !important; }
+.HT-flag { background-image: url("../../../images/jalios/icons/country/ht.png") !important; }
+.HU-flag { background-image: url("../../../images/jalios/icons/country/hu.png") !important; }
+.ID-flag { background-image: url("../../../images/jalios/icons/country/id.png") !important; }
+.IE-flag { background-image: url("../../../images/jalios/icons/country/ie.png") !important; }
+.IL-flag { background-image: url("../../../images/jalios/icons/country/il.png") !important; }
+.IN-flag { background-image: url("../../../images/jalios/icons/country/in.png") !important; }
+.IO-flag { background-image: url("../../../images/jalios/icons/country/io.png") !important; }
+.IQ-flag { background-image: url("../../../images/jalios/icons/country/iq.png") !important; }
+.IR-flag { background-image: url("../../../images/jalios/icons/country/ir.png") !important; }
+.IS-flag { background-image: url("../../../images/jalios/icons/country/is.png") !important; }
+.IT-flag { background-image: url("../../../images/jalios/icons/country/it.png") !important; }
+.JM-flag { background-image: url("../../../images/jalios/icons/country/jm.png") !important; }
+.JO-flag { background-image: url("../../../images/jalios/icons/country/jo.png") !important; }
+.JP-flag { background-image: url("../../../images/jalios/icons/country/jp.png") !important; }
+.KE-flag { background-image: url("../../../images/jalios/icons/country/ke.png") !important; }
+.KG-flag { background-image: url("../../../images/jalios/icons/country/kg.png") !important; }
+.KH-flag { background-image: url("../../../images/jalios/icons/country/kh.png") !important; }
+.KI-flag { background-image: url("../../../images/jalios/icons/country/ki.png") !important; }
+.KM-flag { background-image: url("../../../images/jalios/icons/country/km.png") !important; }
+.KN-flag { background-image: url("../../../images/jalios/icons/country/kn.png") !important; }
+.KP-flag { background-image: url("../../../images/jalios/icons/country/kp.png") !important; }
+.KR-flag { background-image: url("../../../images/jalios/icons/country/kr.png") !important; }
+.KW-flag { background-image: url("../../../images/jalios/icons/country/kw.png") !important; }
+.KY-flag { background-image: url("../../../images/jalios/icons/country/ky.png") !important; }
+.KZ-flag { background-image: url("../../../images/jalios/icons/country/kz.png") !important; }
+.LA-flag { background-image: url("../../../images/jalios/icons/country/la.png") !important; }
+.LB-flag { background-image: url("../../../images/jalios/icons/country/lb.png") !important; }
+.LC-flag { background-image: url("../../../images/jalios/icons/country/lc.png") !important; }
+.LI-flag { background-image: url("../../../images/jalios/icons/country/li.png") !important; }
+.LK-flag { background-image: url("../../../images/jalios/icons/country/lk.png") !important; }
+.LR-flag { background-image: url("../../../images/jalios/icons/country/lr.png") !important; }
+.LS-flag { background-image: url("../../../images/jalios/icons/country/ls.png") !important; }
+.LT-flag { background-image: url("../../../images/jalios/icons/country/lt.png") !important; }
+.LU-flag { background-image: url("../../../images/jalios/icons/country/lu.png") !important; }
+.LV-flag { background-image: url("../../../images/jalios/icons/country/lv.png") !important; }
+.LY-flag { background-image: url("../../../images/jalios/icons/country/ly.png") !important; }
+.MA-flag { background-image: url("../../../images/jalios/icons/country/ma.png") !important; }
+.MC-flag { background-image: url("../../../images/jalios/icons/country/mc.png") !important; }
+.MD-flag { background-image: url("../../../images/jalios/icons/country/md.png") !important; }
+.MG-flag { background-image: url("../../../images/jalios/icons/country/mg.png") !important; }
+.MH-flag { background-image: url("../../../images/jalios/icons/country/mh.png") !important; }
+.MK-flag { background-image: url("../../../images/jalios/icons/country/mk.png") !important; }
+.ML-flag { background-image: url("../../../images/jalios/icons/country/ml.png") !important; }
+.MM-flag { background-image: url("../../../images/jalios/icons/country/mm.png") !important; }
+.MN-flag { background-image: url("../../../images/jalios/icons/country/mn.png") !important; }
+.MO-flag { background-image: url("../../../images/jalios/icons/country/mo.png") !important; }
+.MP-flag { background-image: url("../../../images/jalios/icons/country/mp.png") !important; }
+.MQ-flag { background-image: url("../../../images/jalios/icons/country/mq.png") !important; }
+.MR-flag { background-image: url("../../../images/jalios/icons/country/mr.png") !important; }
+.MS-flag { background-image: url("../../../images/jalios/icons/country/ms.png") !important; }
+.MT-flag { background-image: url("../../../images/jalios/icons/country/mt.png") !important; }
+.MU-flag { background-image: url("../../../images/jalios/icons/country/mu.png") !important; }
+.MV-flag { background-image: url("../../../images/jalios/icons/country/mv.png") !important; }
+.MW-flag { background-image: url("../../../images/jalios/icons/country/mw.png") !important; }
+.MX-flag { background-image: url("../../../images/jalios/icons/country/mx.png") !important; }
+.MY-flag { background-image: url("../../../images/jalios/icons/country/my.png") !important; }
+.MZ-flag { background-image: url("../../../images/jalios/icons/country/mz.png") !important; }
+.NA-flag { background-image: url("../../../images/jalios/icons/country/na.png") !important; }
+.NC-flag { background-image: url("../../../images/jalios/icons/country/nc.png") !important; }
+.NE-flag { background-image: url("../../../images/jalios/icons/country/ne.png") !important; }
+.NF-flag { background-image: url("../../../images/jalios/icons/country/nf.png") !important; }
+.NG-flag { background-image: url("../../../images/jalios/icons/country/ng.png") !important; }
+.NI-flag { background-image: url("../../../images/jalios/icons/country/ni.png") !important; }
+.NL-flag { background-image: url("../../../images/jalios/icons/country/nl.png") !important; }
+.NO-flag { background-image: url("../../../images/jalios/icons/country/no.png") !important; }
+.NP-flag { background-image: url("../../../images/jalios/icons/country/np.png") !important; }
+.NR-flag { background-image: url("../../../images/jalios/icons/country/nr.png") !important; }
+.NU-flag { background-image: url("../../../images/jalios/icons/country/nu.png") !important; }
+.NZ-flag { background-image: url("../../../images/jalios/icons/country/nz.png") !important; }
+.OM-flag { background-image: url("../../../images/jalios/icons/country/om.png") !important; }
+.PA-flag { background-image: url("../../../images/jalios/icons/country/pa.png") !important; }
+.PE-flag { background-image: url("../../../images/jalios/icons/country/pe.png") !important; }
+.PF-flag { background-image: url("../../../images/jalios/icons/country/pf.png") !important; }
+.PG-flag { background-image: url("../../../images/jalios/icons/country/pg.png") !important; }
+.PH-flag { background-image: url("../../../images/jalios/icons/country/ph.png") !important; }
+.PK-flag { background-image: url("../../../images/jalios/icons/country/pk.png") !important; }
+.PL-flag { background-image: url("../../../images/jalios/icons/country/pl.png") !important; }
+.PM-flag { background-image: url("../../../images/jalios/icons/country/pm.png") !important; }
+.PN-flag { background-image: url("../../../images/jalios/icons/country/pn.png") !important; }
+.PR-flag { background-image: url("../../../images/jalios/icons/country/pr.png") !important; }
+.PS-flag { background-image: url("../../../images/jalios/icons/country/ps.png") !important; }
+.PT-flag { background-image: url("../../../images/jalios/icons/country/pt.png") !important; }
+.PW-flag { background-image: url("../../../images/jalios/icons/country/pw.png") !important; }
+.PY-flag { background-image: url("../../../images/jalios/icons/country/py.png") !important; }
+.QA-flag { background-image: url("../../../images/jalios/icons/country/qa.png") !important; }
+.RO-flag { background-image: url("../../../images/jalios/icons/country/ro.png") !important; }
+.RU-flag { background-image: url("../../../images/jalios/icons/country/ru.png") !important; }
+.RW-flag { background-image: url("../../../images/jalios/icons/country/rw.png") !important; }
+.SA-flag { background-image: url("../../../images/jalios/icons/country/sa.png") !important; }
+.SB-flag { background-image: url("../../../images/jalios/icons/country/sb.png") !important; }
+.SC-flag { background-image: url("../../../images/jalios/icons/country/sc.png") !important; }
+.SD-flag { background-image: url("../../../images/jalios/icons/country/sd.png") !important; }
+.SE-flag { background-image: url("../../../images/jalios/icons/country/se.png") !important; }
+.SG-flag { background-image: url("../../../images/jalios/icons/country/sg.png") !important; }
+.SH-flag { background-image: url("../../../images/jalios/icons/country/sh.png") !important; }
+.SI-flag { background-image: url("../../../images/jalios/icons/country/si.png") !important; }
+.SK-flag { background-image: url("../../../images/jalios/icons/country/sk.png") !important; }
+.SL-flag { background-image: url("../../../images/jalios/icons/country/sl.png") !important; }
+.SM-flag { background-image: url("../../../images/jalios/icons/country/sm.png") !important; }
+.SN-flag { background-image: url("../../../images/jalios/icons/country/sn.png") !important; }
+.SO-flag { background-image: url("../../../images/jalios/icons/country/so.png") !important; }
+.SR-flag { background-image: url("../../../images/jalios/icons/country/sr.png") !important; }
+.ST-flag { background-image: url("../../../images/jalios/icons/country/st.png") !important; }
+.SV-flag { background-image: url("../../../images/jalios/icons/country/sv.png") !important; }
+.SY-flag { background-image: url("../../../images/jalios/icons/country/sy.png") !important; }
+.SZ-flag { background-image: url("../../../images/jalios/icons/country/sz.png") !important; }
+.TC-flag { background-image: url("../../../images/jalios/icons/country/tc.png") !important; }
+.TD-flag { background-image: url("../../../images/jalios/icons/country/td.png") !important; }
+.TF-flag { background-image: url("../../../images/jalios/icons/country/tf.png") !important; }
+.TG-flag { background-image: url("../../../images/jalios/icons/country/tg.png") !important; }
+.TH-flag { background-image: url("../../../images/jalios/icons/country/th.png") !important; }
+.TJ-flag { background-image: url("../../../images/jalios/icons/country/tj.png") !important; }
+.TK-flag { background-image: url("../../../images/jalios/icons/country/tk.png") !important; }
+.TL-flag { background-image: url("../../../images/jalios/icons/country/tl.png") !important; }
+.TM-flag { background-image: url("../../../images/jalios/icons/country/tm.png") !important; }
+.TN-flag { background-image: url("../../../images/jalios/icons/country/tn.png") !important; }
+.TO-flag { background-image: url("../../../images/jalios/icons/country/to.png") !important; }
+.TR-flag { background-image: url("../../../images/jalios/icons/country/tr.png") !important; }
+.TT-flag { background-image: url("../../../images/jalios/icons/country/tt.png") !important; }
+.TV-flag { background-image: url("../../../images/jalios/icons/country/tv.png") !important; }
+.TW-flag { background-image: url("../../../images/jalios/icons/country/tw.png") !important; }
+.TZ-flag { background-image: url("../../../images/jalios/icons/country/tz.png") !important; }
+.UA-flag { background-image: url("../../../images/jalios/icons/country/ua.png") !important; }
+.UG-flag { background-image: url("../../../images/jalios/icons/country/ug.png") !important; }
+.UM-flag { background-image: url("../../../images/jalios/icons/country/um.png") !important; }
+.US-flag { background-image: url("../../../images/jalios/icons/country/us.png") !important; }
+.UY-flag { background-image: url("../../../images/jalios/icons/country/uy.png") !important; }
+.UZ-flag { background-image: url("../../../images/jalios/icons/country/uz.png") !important; }
+.VA-flag { background-image: url("../../../images/jalios/icons/country/va.png") !important; }
+.VC-flag { background-image: url("../../../images/jalios/icons/country/vc.png") !important; }
+.VE-flag { background-image: url("../../../images/jalios/icons/country/ve.png") !important; }
+.VG-flag { background-image: url("../../../images/jalios/icons/country/vg.png") !important; }
+.VI-flag { background-image: url("../../../images/jalios/icons/country/vi.png") !important; }
+.VN-flag { background-image: url("../../../images/jalios/icons/country/vn.png") !important; }
+.VU-flag { background-image: url("../../../images/jalios/icons/country/vu.png") !important; }
+.WF-flag { background-image: url("../../../images/jalios/icons/country/wf.png") !important; }
+.WS-flag { background-image: url("../../../images/jalios/icons/country/ws.png") !important; }
+.YE-flag { background-image: url("../../../images/jalios/icons/country/ye.png") !important; }
+.YT-flag { background-image: url("../../../images/jalios/icons/country/yt.png") !important; }
+.ZA-flag { background-image: url("../../../images/jalios/icons/country/za.png") !important; }
+.ZM-flag { background-image: url("../../../images/jalios/icons/country/zm.png") !important; }
+.ZW-flag { background-image: url("../../../images/jalios/icons/country/zw.png") !important; }

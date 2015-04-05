@@ -1,0 +1,29 @@
+<% 
+Set<Data> referrerSet = formHandler.getReferrerSet();
+%>
+<% if (Util.notEmpty(referrerSet)) { %>
+
+<h4><%= glp("ui.work.form.lbl.link-ref") %> (<%= Util.getSize(referrerSet) %>)</h4>
+
+<table class="<%= tableCSS %>">
+  <tr>
+    <th>#</th>    
+    <th><%= glp("ui.adm.data-inspector.lbl.class") %></th>    
+    <th><%= glp("ui.adm.data-inspector.lbl.referrer") %></th>
+  </tr>
+
+  <jalios:pager name="pagerHandlerLinkReferrers" declare="true" action="init" size="<%= referrerSet.size() %>" paramPrefix="inspector_linkReferrers_" />
+  <jalios:foreach collection="<%= referrerSet %>" 
+                  name="itReferrer" 
+                  type="Data" 
+                  max="<%= pagerHandlerLinkReferrers.getPageSize() %>"
+                  skip="<%= pagerHandlerLinkReferrers.getStart() %>"> 
+    <tr>
+      <td class="fit numeric"><%= itCounter.intValue() + pagerHandlerLinkReferrers.getStart() %></td>
+      <td class="fit norwrap"><code title="<%= itReferrer.getClass().getName() %>"><%= itReferrer.getClass().getSimpleName() %></code></td>
+      <td><jalios:edit data="<%= itReferrer %>" /> <jalios:link data="<%= itReferrer %>"/></td>
+    </tr>
+  </jalios:foreach>
+</table>
+<jalios:pager name="pagerHandlerLinkReferrers" />
+<% } %>

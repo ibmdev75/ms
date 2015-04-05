@@ -1,0 +1,90 @@
+<%
+  {
+    List<ProcessingEvent> eventList = repository.getEventList();
+%>
+<div class='tab-page'>
+  <h2 class="tab"><jalios:icon src='<%= FileProcessorUIUtil.ICON_EVENTS %>' /> <%= glp("fileprocessor.adm.tab.events") %></h2>
+  <div class='tabinfo displayevents'>
+
+   <%
+     Collections.reverse(eventList);
+     Map eventsPagerParameterMap = new HashMap();
+     eventsPagerParameterMap.put("mainTab", String.valueOf(FileProcessorAdminHandler.TABINDEX_PROCESSING_EVENT));
+   %>
+   <jalios:pager name='fpEventsPagerHandler'  
+                 declare='true' action='init' paramPrefix='ac'
+                 pageSize='<%= 20 %>'
+                 size='<%= eventList.size() %>'
+                 parameterMap="<%= eventsPagerParameterMap %>"
+   />
+  <table class="table-data table-condensed">
+    <thead>
+      <tr>
+        <th class="left fixed" scope="col"><%= glp("fileprocessor.adm.events.start-date") %></th>
+        <th class="left fixed" scope="col"><%= glp("fileprocessor.adm.events.file") %></th>
+        <th class="left fixed" scope="col"><%= glp("fileprocessor.adm.events.component") %></th>
+        <th class="left fixed" scope="col"><%= glp("fileprocessor.adm.events.type") %></th>
+        <th class="left fixed" scope="col"><%= glp("fileprocessor.adm.events.status") %></th>
+        <th class="left fixed" scope="col"><%= glp("fileprocessor.adm.events.context") %></th>
+    </thead>
+  <% if (Util.isEmpty(eventList)) { %>
+    <tr>
+      <td colspan="6"><%= glp("fileprocessor.adm.events.empty") %></td>
+    </tr>
+  <% } else { %>
+   <jalios:foreach name="itEvent" type="ProcessingEvent" 
+                   collection='<%= eventList %>'
+                   skip='<%= fpEventsPagerHandler.getStart() %>'
+                   max='<%= fpEventsPagerHandler.getPageSize() %>'
+                   >
+    <tr>
+      <td>
+         <jalios:date date="<%= itEvent.getStartDate() %>" format="short" />
+         <jalios:time date="<%= itEvent.getStartDate() %>" format='<%= "HH:mm:ss" %>' />
+      </td>
+      <td>
+        <%
+         File file = itEvent.getFile();
+         String filename = itEvent.getRepository().getFilenameRelativeToBaseDirectory(file);
+         // Display FileDocument edit icon for JCMS_UPLOAD repository
+         if (RepositoryManager.JCMS_UPLOAD_REPOSITORY.equals(itEvent.getRepository().getId())) {
+           FileDocument fd = FileDocument.getFileDocumentFromFile(file);
+           %><jalios:edit pub="<%= fd %>" /><% 
+         }
+        %>
+        <%= getFileTypeIcon(filename) %>
+        <span title="<%= filename %>">
+         <%= itEvent.getFile().getName() %>
+        </span>
+      </td>
+      <td>
+       <% if (itEvent.getComponent() != null) { %>
+        <span title="<%= itEvent.getComponent().getClass().getName() %>">
+         <%= itEvent.getComponent().getName() %>
+        </span>
+       <% } %>
+      </td>
+      <td>
+       <% if (itEvent.getType() != null) { %>
+        <%= glp("fileprocessor.processing-type." + itEvent.getType()) %>
+       <% } %>
+      </td>
+      <td>
+       <% if (itEvent.getStatus() != null) { %>
+        <%= glp("fileprocessor.processing-status." + itEvent.getStatus()) %>
+       <% } %>
+      </td>
+      <td>
+       <% if (itEvent.getProcessingDataType() != null) { %>
+        <%= glp("fileprocessor.adm.processingdatatype." + itEvent.getProcessingDataType()) %>
+       <% } %>
+      </td>
+    </tr>
+   </jalios:foreach>
+ <% } /* notEmpty(eventList) */ %>
+  </table>
+  <jalios:pager name='fpEventsPagerHandler'/><br />
+ 
+  </div>
+</div>
+<% } /* showDisplayActionsTab */ %>

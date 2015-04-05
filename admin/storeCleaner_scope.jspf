@@ -1,0 +1,223 @@
+<jalios:accordion-panel title="ui.adm.cleaner.scope.title" active="true">
+      <table>
+        <tr>
+          <%-- *** SCOPE / BEGIN ******************************************** --%>
+          <td width='45%'>
+            <h4><%= glp("ui.adm.cleaner.scope.b") %></h4>
+            <table class='peer'>
+              <%-- --- SCOPE / BEGIN / STORE ------- --%>
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='beginMode' value='<%= formHandler.SCOPE_STORE %>' <%= formHandler.getAvailableBeginMode() == formHandler.SCOPE_STORE ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.b.bs") %></label>
+                </td>
+                <td>
+                  <p class="form-control-classic">&nbsp;</p>
+                </td>
+              </tr>
+              <%-- --- SCOPE / BEGIN / DATE ------- --%>
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='beginMode' value='<%= formHandler.SCOPE_DATE %>' <%= formHandler.getAvailableBeginMode() == formHandler.SCOPE_DATE ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.b.da") %></label>
+                </td>
+                <td nowrap="nowrap">
+                 <jalios:field  name='<%= "beginDate" %>' value='<%= formHandler.getAvailableBeginDate() %>' resource="field-vertical">
+                   <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+                 </jalios:field>
+                  <script type="text/javascript">
+                  <!--
+                  document.editForm.beginDate.onfocus = function(event) {
+                    document.editForm.beginMode[<%= formHandler.SCOPE_DATE %>].checked=true;
+                  };
+                  //-->
+                  </script>           
+                </td>
+              </tr>
+              <%-- --- SCOPE / BEGIN / MILESTONE ------- --%>
+              <% if (Util.notEmpty(formHandler.getMilestoneValueList())) { %>
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='beginMode' value='<%= formHandler.SCOPE_MILESTONE %>' <%= formHandler.getAvailableBeginMode() == formHandler.SCOPE_MILESTONE ? "checked" : "" %> /><%= glp("ui.adm.cleaner.scope.b.ms") %> <jalios:tooltip property="ui.adm.cleaner.scope.ms.h" /></label>
+                </td>
+                <td nowrap="nowrap">
+                  <jalios:field  name='<%= "beginMilestone" %>' value='<%= formHandler.getAvailableBeginMilestone() == null ? "" : formHandler.getAvailableBeginMilestone().toString() %>' resource="field-vertical">
+                    <jalios:control settings='<%= new EnumerateSettings().select().enumValues(formHandler.getMilestoneValueList()).enumLabels(formHandler.getMilestoneLabelList()) %>' />
+                  </jalios:field>
+                          
+
+                  <script type="text/javascript">
+                  <!--
+                  document.editForm.beginMilestone.onchange = function(event) {
+                    document.editForm.beginMode[<%= formHandler.SCOPE_MILESTONE %>].checked=true;
+                  };
+                  //-->
+                  </script>
+                </td>
+              </tr>
+              <% } %>
+              <%-- --- SCOPE / BEGIN / STAMP ------- --%>
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='beginMode' value='<%= formHandler.SCOPE_STAMP %>' <%= formHandler.getAvailableBeginMode() == formHandler.SCOPE_STAMP ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.b.st") %> <jalios:tooltip property="ui.adm.cleaner.scope.st.h" /></label>
+                </td>
+                <td>
+                  <jalios:field  name='<%= "beginStamp" %>' value='<%= formHandler.getAvailableBeginStamp() == null ? "" : formHandler.getAvailableBeginStamp().toString() %>' resource="field-vertical">
+                    <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+                  </jalios:field>
+                          
+                  <script type="text/javascript">
+                  <!--
+                  document.editForm.beginStamp.onfocus = function(event) {
+                    document.editForm.beginMode[<%= formHandler.SCOPE_STAMP %>].checked=true;
+                  };
+                  //-->
+                  </script>
+                </td>
+              </tr>
+               <%-- --- SCOPE / BEGIN / SYNC ------- --%>
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='beginMode' value='<%= formHandler.SCOPE_SYNC %>' <%= formHandler.getLastSyncDate() != null ? "" : "disabled='disabled'"%> <%= formHandler.getAvailableBeginMode() == formHandler.SCOPE_SYNC ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.b.sy") %> (<jalios:date date='<%= formHandler.getLastSyncDate() %>' /> <jalios:time date='<%= formHandler.getLastSyncDate() %>' />) <jalios:tooltip property="ui.adm.cleaner.scope.sy.h" /></label>
+                </td>
+              </tr>
+            </table>
+          </td>
+          
+          
+          <%-- *** GUTTER ******************************************** --%>
+          <td width='10%'>
+          </td>
+          
+          <%-- *** SCOPE / END ******************************************** --%>
+          <td width='45%'>
+            <h4><%= glp("ui.adm.cleaner.scope.e") %></h4>
+            <table class='peer'>
+              <%-- --- SCOPE / END / STORE ------- --%>
+              <tr>
+                <td class="fit nowrap radio">
+                <label><input type='radio' name='endMode' value='<%= formHandler.SCOPE_STORE %>' <%= formHandler.getAvailableEndMode() == formHandler.SCOPE_STORE ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.e.es") %></label>
+                </td>
+                <td>
+                  <p class="form-control-classic">&nbsp;</p>
+                </td>                
+              </tr>
+              <%-- --- SCOPE / END / DATE ------- --%>
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='endMode' value='<%= formHandler.SCOPE_DATE %>' <%= formHandler.getAvailableEndMode() == formHandler.SCOPE_DATE ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.e.da") %></label>
+                </td>
+                <td nowrap="nowrap">
+                 <jalios:field  name='<%= "endDate" %>' required='<%= false %>' value='<%= formHandler.getAvailableEndDate() %>' resource="field-vertical">
+                   <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+                 </jalios:field>
+
+                  <script type="text/javascript">
+                  <!--
+                  document.editForm.endDate.onfocus = function(event) {
+                    document.editForm.endMode[<%= formHandler.SCOPE_DATE %>].checked=true;
+                  };
+                  //-->
+                  </script>           
+                </td>
+              </tr>
+              <%-- --- SCOPE / END / MILESTONE ------- --%>
+              <% if (Util.notEmpty(formHandler.getMilestoneValueList())) { %>              
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='endMode' value='<%= formHandler.SCOPE_MILESTONE %>' <%= formHandler.getAvailableEndMode() == formHandler.SCOPE_MILESTONE ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.e.ms") %> <jalios:tooltip property="ui.adm.cleaner.scope.ms.h" /></label>
+                </td>
+                <td nowrap="nowrap">
+                  <jalios:field name='<%= "endMilestone" %>' value='<%= formHandler.getAvailableEndMilestone() == null ? "" : formHandler.getAvailableEndMilestone().toString() %>'  resource="field-vertical">
+                    <jalios:control settings='<%= new EnumerateSettings().select().enumValues(formHandler.getMilestoneValueList()).enumLabels(formHandler.getMilestoneLabelList()) %>' />
+                  </jalios:field>
+                          
+
+                  <script type="text/javascript">
+                  <!--
+                  document.editForm.endMilestone.onchange = function(event) {
+                    document.editForm.endMode[<%= formHandler.SCOPE_MILESTONE %>].checked=true;
+                  };
+                  //-->
+                  </script>
+                </td>
+              </tr>
+              <% } %>
+              <%-- --- SCOPE / END / STAMP ------- --%>
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='endMode' value='<%= formHandler.SCOPE_STAMP %>' <%= formHandler.getAvailableEndMode() == formHandler.SCOPE_STAMP ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.e.st") %> <jalios:tooltip property="ui.adm.cleaner.scope.st.h" /></label>
+                </td>
+                <td nowrap="nowrap">            
+                  <jalios:field  name='<%= "endStamp" %>' value='<%= formHandler.getAvailableEndStamp() == null ? "" : formHandler.getAvailableEndStamp().toString() %>' resource="field-vertical">
+                    <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+                  </jalios:field>
+                          
+                  <script type="text/javascript">
+                  <!--
+                  document.editForm.endStamp.onfocus = function(event) {
+                    document.editForm.endMode[<%= formHandler.SCOPE_STAMP %>].checked=true;
+                  };
+                  //-->
+                  </script>
+                </td>
+              </tr>
+              <%-- --- SCOPE / END / SYNC ------- --%>
+              <tr>
+                <td class="fit nowrap radio">
+                  <label><input type='radio' name='endMode' value='<%= formHandler.SCOPE_SYNC %>' <%= formHandler.getLastSyncDate() != null ? "" : "disabled='disabled'"%> <%= formHandler.getAvailableEndMode() == formHandler.SCOPE_SYNC ? "checked" : "" %> /> <%= glp("ui.adm.cleaner.scope.e.sy") %> (<jalios:date date='<%= formHandler.getLastSyncDate() %>' /> <jalios:time date='<%= formHandler.getLastSyncDate() %>' />) <jalios:tooltip property="ui.adm.cleaner.scope.sy.h" /></label>
+                </td>
+              </tr>
+            </table>
+          </td>          
+        </tr>
+      </table>
+</jalios:accordion-panel>
+<jalios:accordion-panel title="ui.com.lbl.workspaces">
+      <table>        
+        <%-- --- SCOPE / WORKSPACES ------- --%>
+        <tr>
+          <td colspan='2'>
+            <jalios:message title="" msg="ui.adm.cleaner.scope.ws" />
+            <% 
+            TreeSet workspaceSet = new TreeSet(Workspace.getOrderComparator(userLang));
+            workspaceSet.addAll(Workspace.getAllWorkspaceSet(loggedMember)); 
+            %>
+            <table class='shim'>
+              <% int cols = workspaceSet.size() < 6 ? 1 : 4; %>
+              <tr class='vTop'>
+                <td colspan='<%= cols %>' class="checkbox">
+                  <label><input type='checkbox' onclick='javascript:checkAll(document.editForm, "wsids", this)' /> <%= glp("ui.com.alt.check-all") %></label>
+                </td>
+              </tr>
+            <jalios:foreach collection='<%= workspaceSet %>' name='itWS' type='Workspace'>
+              <% if ((itCounter.intValue() - 1) % cols == 0) { %>
+              <tr class='vTop'>
+              <% } %>
+                <td width='<%= 100 / cols %>%'>
+                  <div class="checkbox">
+                   <label>
+                   <input type='checkbox' name='wsids' value='<%= itWS.getId() %>' /> 
+                   <jalios:icon src='<%= itWS.getIcon() %>'  alt='W' /> 
+                   <%= itWS.getTitle(userLang) %>
+                   </label>
+                  </div>
+                 </td>
+              <% if (itCounter.intValue() % cols == 0) { %>
+              </tr>
+              <% } %>
+            </jalios:foreach>
+            </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </jalios:accordion-panel>
+    
+    
+<jalios:accordion-panel title="ui.com.lbl.urid">
+  <div class="form-vertical">
+    <jalios:field  name='<%= "urids" %>' label="ui.adm.cleaner.scope.urid" tooltip="ui.adm.cleaner.scope.urid.h" value='<%= formHandler.getAvailableUrids() == null ? "" : Util.join(formHandler.getAvailableUrids(), " ") %>' resource="field-vertical">
+      <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+    </jalios:field>           
+  </div>
+</jalios:accordion-panel>
+

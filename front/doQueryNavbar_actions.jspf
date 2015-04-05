@@ -1,0 +1,21 @@
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><jalios:icon src="actions" /> <%= glp("ui.com.lbl.actions") %> <jalios:icon src="caret" /></a>
+  <ul class="dropdown-menu" role="menu">
+    <% if (!inFO) { %>
+    <%
+    String queryFrontUrl = (ResourceHelper.getQuery() + "?" + ServletUtil.getQueryString(request, true)).replaceFirst("&amp;ws=[_\\w]+", "");
+    %>
+    <li class="icon"><a href="<%= queryFrontUrl %>"><jalios:icon src="search-fo"/> <%= glp("ui.fo.search.fo") %></a>    
+    <% } %>
+    <li class="icon"><a href="<%= inFO ? ResourceHelper.getSearch() : ResourceHelper.getSearchWork() %>"><jalios:icon src="search-adv"/> <%= glp("ui.fo.adv-search.title") %></a>
+    <% if (isAdmin) {
+    if (ExportManager.getInstance().isEnabled()) {
+    String queryXMLparams = ServletUtil.getUpdatedParams(request, new String[] {"sort"}, new String[] { plPagerHandler.getSort() } ); %>
+    <li class="icon"><a href="<%= ResourceHelper.getQueryXml() %><%= queryXMLparams %>"><jalios:icon src="xml"/> <%= glp("ui.com.alt.export-xml") %></a></li>
+    <% } %>
+    <li class="icon"><a href="<%= ResourceHelper.getQueryCsv() %>?<%= escapedQueryString %>"><jalios:icon src="csv"/> <%= glp("ui.com.alt.export-csv") %></a></li>
+    <% } %>
+    <li class="icon"><jalios:caddy action='add' queryString='<%= ServletUtil.getQueryString(request, false) %>' checkPstatus='<%= false %>' displayLinkText='<%= true %>' css='<%= "" %>'/></li>
+    <jalios:include target="QUERY_ACTION" />  
+  </ul>
+</li>

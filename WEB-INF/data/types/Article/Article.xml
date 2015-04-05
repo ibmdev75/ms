@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type expirable="false" name="Article" reviewable="true" visible="true" debatable="false" superclass="com.jalios.jcms.Content" categoryRequired="true" categoryTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="summary" required="true" editor="textarea" wiki="true" compactDisplay="false" maxlength="5000" rows="5" cols="80" searchable="true" type="String" ml="true" descriptionType="text" abstract="true" truncate="400" html="false" checkHtml="false" />
+    <field name="intro" required="false" editor="textarea" wiki="true" compactDisplay="false" maxlength="5000" rows="3" cols="80" searchable="true" type="String" ml="true" descriptionType="text" html="false" checkHtml="true" />
+    <field name="picture" required="false" editor="image" dataimage="true" compactDisplay="false" maxlength="500" size="80" searchable="false" type="String" ml="true" descriptionType="text" imageMap="false" html="false" checkHtml="true" resize="true" resizeWidth="300" resizeHeight="200" />
+    <field name="content" required="true" editor="wysiwyg" wiki="true" compactDisplay="false" rows="20" cols="80" searchable="true" type="String" ml="true" descriptionType="tooltip" html="false" toolbars="all" />
+    <field name="relatedContents" required="false" editor="link[]" compactDisplay="false" type="com.jalios.jcms.Content[]" ml="false" searchable="false" descriptionType="tooltip" />
+  </fields>
+</type>
+

@@ -1,0 +1,60 @@
+<%@page import="com.jalios.jcms.taglib.settings.impl.TextFieldSettings"%>
+<div class="tab-page">
+  <h2 class="tab"><%= glp("ui.adm.type-edit.edit.tab", formHandler.getFieldLabel()) %></h2>
+
+  <%-- PREV - NEXT ------------------------------------------------------- --%> 
+  <% String prevUrl = HttpUtil.getUrlWithCSRFToken("admin/typeEditor.jsp?type=" + formHandler.getTypeName() + "&amp;pos=" + formHandler.getFieldPrevPos(), request, true); %>
+  <% String nextUrl = HttpUtil.getUrlWithCSRFToken("admin/typeEditor.jsp?type=" + formHandler.getTypeName() + "&amp;pos=" + formHandler.getFieldNextPos(), request, true); %>
+  <a href="<%= prevUrl %>" class="btn btn-default"><jalios:icon src="prev" title='<%= glp("ui.com.alt.prev") %>'  /></a>&nbsp;
+  <a href="<%= nextUrl %>" class="btn btn-default"><jalios:icon src="next" title='<%= glp("ui.com.alt.next") %>'  /></a>
+
+  <form method="post" action="admin/typeEditor.jsp" name="editForm_field" class="form-horizontal">
+    <%-- FIELD LABEL ------------------------------------------------------- --%> 
+    <jalios:field name="fieldLabels" label="ui.com.lbl.label" required='true' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getFieldLabelMap() %>'>
+      <jalios:control settings='<%= new TextFieldSettings().showLanguageChooser() %>' />
+    </jalios:field>
+
+    <%-- DESCRIPTION ------------------------------------------------------- --%> 
+    <% if (showDescription) { %>
+    <jalios:field name="fieldDescriptions" label="ui.com.lbl.description" tooltip="ui.adm.type-edit.lbl.desc.h" ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getFieldDescriptionMap() %>'>
+      <jalios:control settings='<%= new TextAreaSettings().rows(2) %>' />
+      <div style="clear:both">
+        <input type="radio" name="descriptionType" value="tooltip" <%= !formHandler.getFieldDescriptionType().equals("text") ? "checked" : "" %>> <%= glp("ui.adm.type-edit.lbl.desc-tooltip") %>
+        <input type="radio" name="descriptionType" value="text" <%= formHandler.getFieldDescriptionType().equals("text") ? "checked" : "" %>> <%= glp("ui.adm.type-edit.lbl.desc-text") %>
+      </div> 
+    </jalios:field>  
+    <% } %>
+
+    <%-- JAVA NAME (NAME)------------------------------------------------------- --%> 
+    <jalios:field name="name" label="ui.adm.type-edit.fld.lbl.j-name" tooltip="ui.adm.type-edit.fld.lbl.j-name.h" required="true" value="<%= formHandler.getFieldName() %>">
+      <% if (formHandler.canEditJavaName()) { %>
+      <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+      <% } else { %>
+      <p class="form-control-static"><code><%= formHandler.getFieldName() %></code></p>
+      <% } %>
+    </jalios:field>
+    
+    <%-- *** FIELD PROPERTIES ******************************************* --%>
+    <%@ include file='/admin/typeEditor/doTypeFieldEditor_field_prop.jspf' %>
+    
+    <%-- *** EDITOR PROPERTIES ******************************************* --%>
+    <%@ include file='/admin/typeEditor/doTypeFieldEditor_field_editor.jspf' %>
+    
+    <%-- *** DISPLAY PROPERTIES ******************************************* --%>
+    <%@ include file='/admin/typeEditor/doTypeFieldEditor_field_display.jspf' %>
+
+    <%-- *** BUTTONS ******************************************* --%>
+    <input type='hidden' name='type' value='<%= formHandler.getTypeName() %>' />
+    <input type='hidden' name='name' value='<%= formHandler.getFieldName() %>' />
+    <input type='hidden' name='pos' value='<%= getIntParameter("pos", 0) %>' />
+    <button class='btn btn-primary' type='submit' name='opUpdate' value='true'><%= glp("ui.com.btn.update") %></button>
+    <% String confirmDelete = encodeForJavaScript(glp("msg.js.confirm-delete", formHandler.getFieldLabel())); %>
+    <button class='btn btn-default' type="button" name="opDelete" value='true' onclick='confirmAction("<%= confirmDelete %>", "<%= contextPath %>/admin/typeEditor.jsp?opDelete=true&amp;type=<%= formHandler.getTypeName() %>&amp;pos=<%= getIntParameter("pos", 0) %>")'><%= glp("ui.com.btn.delete") %></button>
+    <button class='btn btn-default' type="submit" name="opCancel" value='true'><%= glp("ui.com.btn.cancel") %></button>
+
+  </form>
+<% if (isString) { %>
+<jalios:javascript>dispEditOptions2("<%= fieldEditor %>");</jalios:javascript>
+<% } %>       
+
+</div>

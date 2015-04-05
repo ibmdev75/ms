@@ -1,0 +1,12 @@
+<%@ page import='com.jalios.jcms.authentication.handlers.*' %>
+<% if (alert.isPersisted() && channel.getBooleanProperty("alert.mail.track", true)) {
+String url = channel.getUrl() + "jcore/alert/mail/markAsRead.jsp?img=true&id=" + alert.getId();
+
+AuthKeyHints hints = new AuthKeyHints();
+hints.setVersion("2"); // Version 2 to accept ipMask, prefix mode and methods
+hints.setPrefixMode(false);
+hints.setMethods("GET");
+String urlAndAuthkey = AuthKeyAuthenticationHandler.getUrlWithAddedAuthKeyParam(url, alert.getRecipient(), hints, false);
+%>
+<img src="<%= urlAndAuthkey %>" alt="" />
+<% } %>

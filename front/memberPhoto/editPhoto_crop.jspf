@@ -1,0 +1,45 @@
+<% if (step == EditMemberPhotoHandler.CROP_STEP) {
+  String url = "";
+  if (formHandler.useCurrentMemberPhoto()) { 
+    url = formHandler.getMember().getPhoto();
+  } else {
+    url = "front/memberPhoto/memberPhotoTempImage.jsp?extension="+ formHandler.getExtension() +"&amp;mbrId=" + formHandler.getMember().getId() + "&amp;rd=" + System.currentTimeMillis();
+  }
+%>
+    <div class="row">
+      <div id="cropImgWrap" class="cropper col-md-9" style="overflow: auto; height: 375px;">
+        <div class="crop-info">
+          <jalios:message msg="ui.adm.mbr-edit.photo.crop.info1" title="" dismissable="false" />
+        </div>
+        <img data-jalios-crop-ratio="1" id="cropImgArea" src="<%= url %>" style="width: auto; max-width: none;" alt="" />
+      </div>
+      <div class="col-md-3 cropper-result">
+        <p><%= glp("ui.adm.mbr-edit.photo.crop.info2") %></p>
+        <div class="photo-preview-container img-polaroid">
+          <div class="photo-preview-wrapper" style="width:<%= PhotoSize.NORMAL.getWidth()%>px;height:<%= PhotoSize.NORMAL.getHeight() %>px;">
+            <img alt="" style="max-width:initial;" class="crop-preview" data-jalios-crop-max-size="<%= PhotoSize.NORMAL.getWidth() %>" id="crop-preview" src="<%= url %>"/>
+          </div>
+        </div>
+        <div id="cropResults" data-jalios-crop-preview-width="<%= PhotoSize.NORMAL.getWidth()%>" data-jalios-crop-preview-height="<%= PhotoSize.NORMAL.getHeight() %>" class="form-horizontal hide">
+          <h4>Crop values:</h4>
+          <div class="">
+            <label for="x1" class="control-label">x1: </label> <div class="controls "><input type="text" name="x1" size="4" /></div>
+          </div>
+          <div>  
+            <label for="y1" class="control-label">y1: </label> <div class="controls "><input type="text" name="y1" size="4" /></div>
+          </div>
+          <div class="">
+            <label for="x2" class="control-label">x2: </label> <div class="controls "><input type="text" name="x2" size="4" /></div>
+          </div>
+          <div>              
+            <label for="y2" class="control-label">y2: </label> <div class="controls "><input type="text" name="y2" size="4" /></div>
+          </div>
+            
+          <div class="row">
+            <label for="width" class="control-label">width: </label> <div class="controls  col-md-3"><input type="text" name="width" size="4" /></div>
+            <label for="height" class="control-label col-md-3">height: </label> <div class="controls  col-md-3"><input type="text" name="height" size="4" /></div>
+          </div>
+        </div><%-- EOF #cropResults --%>
+      </div><%-- EOF .col-md-3 --%>
+    </div><%-- EOF .row --%>
+<% } %>

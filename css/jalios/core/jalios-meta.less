@@ -1,0 +1,44 @@
+//
+// Jalios meta style
+// --------------------------------------------------
+
+/* 
+ * Style to display meta text in JCMS. 
+ */
+.meta-text {
+  font-size: @meta-font-size;
+  color: @meta-text;
+  .meta-link {
+    color: @meta-text;
+  }
+}
+
+/* 
+ * Style to represent a meta categories in JCMS. 
+ * Uses some code from badges.less
+ */
+.meta-cat {
+  padding: @meta-cat-padding;
+  display: inline-block;
+  min-width: 10px;
+  font-size: @meta-font-size;
+  
+  line-height: @meta-cat-line-height;
+  white-space: nowrap;
+  vertical-align: baseline;
+  text-align: center;
+  color: @meta-cat-text;
+  
+  background-color: @meta-cat-bg;
+  border: @meta-cat-border;
+  
+  .border-radius(@meta-cat-border-radius);
+  .transition(all 0.2s ease-out);
+  
+  &:hover {
+    background-color: @meta-cat-hover-bg;
+    color: @meta-cat-hover-color;
+    text-decoration: none;
+  }
+  
+}

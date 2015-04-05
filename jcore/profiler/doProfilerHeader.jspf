@@ -1,0 +1,27 @@
+<%--
+ @Description :  Displays a portlet header when using profiling GUI and
+                 when not in portal mode.
+--%><%
+  // inspired from /jcore/portal/doPortletToolbar.jspf
+  jcmsContext.addCSSHeader("css/jalios/portal.css");
+
+  if (prDipData instanceof PortalElement) {
+    PortalElement prDipPortalElement = (PortalElement) prDipData;
+    
+%><div class="PortalModeHeader profiler_header Cache<%= prDipPortalElement.getCacheTypeInt() %>"><%-- 
+
+## RESULTS 
+#  Div in which profiling results (for current data) will
+#  be inserted, in javascript (see doEndProfiler.jsp)
+--%><div class="profiler_results" id="profiler_results_<%= prDipData.getId() %>"></div><%--
+
+## EDIT 
+--%><% if (isLogged && loggedMember.canWorkOn(prDipPortalElement)) { 
+%><a href="edit.jsp?id=<%= prDipPortalElement.getId() %>&redirect=<%= ServletUtil.encodeURL(requestUrl) %>&amp;popupEdition=true&amp;showContentTabOnly=true" onclick="popupWindow(this.href, 'PopupEdition', 800, 600, false, true, true, false); return false;" name="editPub<%= prDipPortalElement.getId() %>"><jalios:icon src='edit' alt='E' title='<%= glp("ui.portalihm.alt.edit") + " " + Util.getClassShortName(prDipPortalElement.getClass().getName()) %>' /></a><% } %><%-- 
+
+## TITLE 
+--%><a href="#" onclick="$('profiler_<%= prDipData.getId() %>').toggleClassName('highlight'); $('profiler_results_<%= prDipData.getId() %>').toggleClassName('highlight'); return false;" id="profiler_link_<%= prDipData.getId() %>">&nbsp;<%= prDipPortalElement.getTitle(userLang) %>&nbsp;</a><%--
+
+--%></div><%
+  }
+%>

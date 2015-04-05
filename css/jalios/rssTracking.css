@@ -1,0 +1,69 @@
+dt.readRssItem,
+dt.readRssItem a,
+dt.readRssItem a:link,
+dt.readRssItem a:active,
+dt.readRssItem a:visited,
+dt.readRssItem a:hover
+	{
+	color: #AAAAAA;
+	text-decoration: none;  
+	cursor:  pointer;
+}
+
+dt.readRssItem.readArticleRssItem,
+dt.readRssItem.readArticleRssItem a,
+dt.readRssItem.readArticleRssItem a:link,
+dt.readRssItem.readArticleRssItem a:active,
+dt.readRssItem.readArticleRssItem a:visited,
+dt.readRssItem.readArticleRssItem a:hover
+	{
+	color: #DDDDDD;
+	text-decoration: none;  
+	cursor:  pointer;
+}
+
+
+.RssItems DT.currentRss,
+.RssItems DT.currentRss a,
+.RssItems DT.currentRss a:link,
+.RssItems DT.currentRss a:active,
+.RssItems DT.currentRss a:visited,
+.RssItems DT.currentRss a:hover{
+  background-color:#CCCCFF;
+  color:#333388;
+}
+
+.RssItemLink {
+  cursor:  pointer;
+}
+.contentContainer {
+	height: 100%;
+	width: 100%;
+	overflow: auto;
+}
+
+.rssSidebar,
+.rssContent {
+	vertical-align: top;
+}
+
+.rssItemContentTitleDiv {
+	vertical-align: middle;
+	display: inline;
+}
+
+.rssItemContentFavicon {
+	display: inline;
+	vertical-align: middle;
+}
+
+.rssItemContentTitle {
+	vertical-align: middle;
+	display: inline;
+	font-weight: bold;
+	font-size: 0.7em;
+}
+
+.rssItemContentArticle {
+	padding: 5px;
+}

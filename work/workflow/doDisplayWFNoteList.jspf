@@ -1,0 +1,37 @@
+<%--
+  @Summary: Display the list of Workflow's notes
+  @Category: Work Area / Workflow
+  @Author: Oliver Dedieu
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: True
+  @Deprecated: False
+  @Since: jcms-2.1
+--%>
+<% if (Util.notEmpty(wfNoteList)) { %>
+  <div class="wfnote-wrapper">
+  <jalios:foreach collection="<%= wfNoteList %>" name="itWFNote" type="WFNote">
+  	<div class="panel panel-default br wfnote" >
+      <div class="panel-body media">
+      <jalios:memberphoto css="pull-left" member="<%= itWFNote.getAuthor() %>" size="<%= PhotoSize.TINY %>"/>
+  	  
+      <div class="media-body">
+    		<div class="wfnote-header media-heading">
+          <%= itWFNote.getFinalVote() ? "" : glp("msg.wf.wfnote-final-vote") + " &middot" %>
+    			<%= com.jalios.jcms.WorkflowManager.getInstance().getWFStateStateLabelHtml(pub,itWFNote.getPrevPstatus(),userLang) %> <jalios:icon src="chevron-right"/> <%= com.jalios.jcms.WorkflowManager.getInstance().getWFStateStateLabelHtml(pub,itWFNote.getNewPstatus(),userLang) %>
+    		</div>	  
+    	  <jalios:if predicate="<%= Util.notEmpty(itWFNote.getNote()) %>">
+          <div class="wfnote-content">
+      	    <p><jalios:wiki><%= itWFNote.getNote() %></jalios:wiki></p>
+          </div>
+    	  </jalios:if>
+        <div class="wfnote-meta text-info">
+          <jalios:link data="<%= itWFNote.getAuthor() %>"/> &middot; <jalios:date date="<%= itWFNote.getMdate() %>"/> - <jalios:time date="<%= itWFNote.getMdate() %>"/>
+        </div>
+  	  </div>
+  	  
+  	</div>
+    </div>
+  </jalios:foreach>
+  </div>
+<% } %>

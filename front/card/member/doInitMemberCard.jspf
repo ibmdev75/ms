@@ -1,0 +1,17 @@
+<%--
+  @Summary: Common initialization for Member card
+  @Category: UI Component
+  @Author: Sylvain DEVAUX
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-9.1
+--%><%
+jcmsContext.addCSSHeader("css/jalios/core/jalios-member-card.css");
+String cardId = ServletUtil.generateUniqueDOMId(request, "card" + (itMember.isPersisted() ? "-id-"+itMember.getId() : ""));
+String customContent = (String) request.getAttribute("card-member-content");
+boolean hasBackCard = !Util.toBoolean(request.getAttribute("card-member-no-back-card"), Boolean.FALSE);
+String customBackCard = Util.getString(request.getAttribute("card-member-back"), null);
+String customClasses = Util.getString(request.getAttribute("card-member-css"), "").trim();
+%>

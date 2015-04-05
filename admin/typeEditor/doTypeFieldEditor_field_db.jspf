@@ -1,0 +1,67 @@
+<%-- DATA SOURCE ------------------------------------------------------- --%> 
+<% if (showDataSource) { %>
+<jalios:field name="dataSource" label="ui.com.lbl.datasource" required="true" tooltip="ui.adm.type-edit.lbl.ds.h" value="">
+  <% String dataSource = formHandler.getFieldDataSource(); %>
+  <select name="dataSource" class="form-control">
+    <% if (isSQLQuery) { %><option value=''></option><% } %>
+    <jalios:foreach collection='<%= DBUtil.getDataSourceMap().keySet() %>' name='itDataSource' type='String'>
+    <option value='<%= itDataSource %>' <%= itDataSource.equals(dataSource) ? "selected" : "" %>><%= channel.getDataSourceLabel(itDataSource, userLang) %></option>
+    </jalios:foreach>
+  </select>
+</jalios:field>
+<% } %>
+
+<%-- MAX ROWS ------------------------------------------------------- --%> 
+<% if (showMaxRows) { %>
+<jalios:field name="maxRows" label="ui.com.lbl.max-rows" tooltip="ui.adm.type-edit.lbl.max-rows.h" required="true" value="<%= formHandler.getFieldMaxRows() %>">
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>
+<% } %>
+
+<%-- SQLRESULT =============================================== --%>
+<% if (isSQLResult) { %>
+  <%--    QUERY ------------------------------------------------------- --%> 
+  <jalios:field name="sqlrQuery" label="ui.adm.type-edit.lbl.sqlr-q" tooltip="ui.adm.type-edit.lbl.sqlr-q.h" value="<%= formHandler.getFieldSqlrQuery() %>" >
+    <jalios:control type="<%= ControlType.TEXTAREA %>" />
+  </jalios:field>   
+
+  <%--    PARAMS ------------------------------------------------------- --%> 
+  <jalios:field name="sqlrParams" label="ui.adm.type-edit.lbl.sqlr-p" tooltip="ui.adm.type-edit.lbl.sqlr-p.h" value="<%= formHandler.getFieldSqlrParams() %>" >
+    <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+  </jalios:field>   
+<% } %>
+
+  
+<%-- DBQUERY ----------------------------------------------------- --%>
+<% if (isDBRecord) { %>
+<%--    TABLE ------------------------------------------------------- --%> 
+<jalios:field name="dbrTable" label="ui.adm.type-edit.lbl.dbr-table" tooltip="ui.adm.type-edit.lbl.dbr-table.h" required="true" value="<%= formHandler.getFieldDbrTable() %>" >
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>
+
+<%--    KEY ------------------------------------------------------- --%> 
+<jalios:field name="dbrKeyCol" label="ui.adm.type-edit.lbl.dbr-key" tooltip="ui.adm.type-edit.lbl.dbr-key.h" required="true" value="<%= formHandler.getFieldDbrKeyCol() %>" >
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>
+
+<%--    COLS ------------------------------------------------------- --%> 
+<jalios:field name="dbrColumns" label="ui.adm.type-edit.lbl.dbr-cols" tooltip="ui.adm.type-edit.lbl.dbr-cols.h" required="true" value="<%= formHandler.getFieldDbrColumns() %>" >
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+  <% String testURL = "\"" + contextPath + "/work/checkSQLQuery.jsp?" +
+                      "dataSource=\" + escape(document.editForm_field.dataSource.options[document.editForm_field.dataSource.selectedIndex].value) + " + 
+                      "\"&amp;sqlQuery=\" + escape(\"SELECT \" + document.editForm_field.dbrColumns.value + \" FROM \" + document.editForm_field.dbrTable.value + (document.editForm_field.dbrOrderBy.value != \"\" ? \" ORDER BY \" + document.editForm_field.dbrOrderBy.value : \"\") ) "; %>
+  <input type="button" value="<%= glp("ui.work.form.btn.test-sql") %>" class='btn btn-default' onclick='window.open(<%= testURL %>, "testSQLQuery", "width=600,height=600,scrollbars=yes")' />
+</jalios:field>
+
+<%--    LABEL COLUMN ------------------------------------------------------- --%>
+<jalios:field name="dbrKeyCol" label="ui.adm.type-edit.lbl.dbr-lblcol" tooltip="ui.adm.type-edit.lbl.dbr-lblcol.h" required="true" value="<%= formHandler.getFieldDbrLabelCol() %>" >
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>       
+
+ <%--    ORDER BY ------------------------------------------------------- --%> 
+<jalios:field name="dbrOrderBy" label="ui.adm.type-edit.lbl.dbr-orderby" tooltip="ui.adm.type-edit.lbl.dbr-orderby.h" required="true" value="<%= formHandler.getFieldDbrOrderBy() %>" >
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+</jalios:field>    
+<% } %>
+
+

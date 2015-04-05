@@ -1,0 +1,60 @@
+    <%-- Admin Area ICON --%>
+    <% if (checkAccess("admin/")) { %>
+    <td class="menuIcon"> 
+      <a href="admin/admin.jsp"><jalios:icon src="admin" title='<%= glp("ui.com.alt.admin") %>' /></a>
+    </td>
+    <% } %>
+	
+    <%-- Lang ICON --%>
+    <% if (channel.isMultilingual()) { %>
+    <td class="menuIcon"> 
+      <jalios:lang display='menu' useLocalizedLanguageList='<%= true %>'/>
+    </td>
+    <% } %>
+
+
+
+    <%-- Home ICON --%>
+		<% 
+		{
+		  Set workspaceSet = Workspace.getAllWorkspaceSet(loggedMember);
+		  int count = workspaceSet.size();
+		  boolean isCS     = workspace.isCollaborativeSpace();
+		  boolean single   = channel.getDataCount(Workspace.class) <= 1;
+		  String homeUrl   = count < 1 || single ?  "index.jsp" : workspace.getHomeUrl(userLocale);
+		  String homeName  = count < 1 || single ? glp("ui.com.alt.home") : workspace.getTitle(userLang);
+		  String homeTitle = homeName.replace('"','\'');
+		  String homeIcon  = workspace.isModel() ? (isCS ? "collaborative-space-model" : "home-gray") : (isCS ? "collaborative-space" : "home");
+		  
+		%>
+    <td class="menuIcon"> 
+      <a href="<%= homeUrl %>" title="<%= encodeForHTMLAttribute(homeName) %>"><jalios:icon src='<%= homeIcon %>' /></a><%
+        if (count >= 1 && !single) {
+      %><a href='#' class='ctxHomeMenu'><jalios:icon src='combo-arrowdn'  /></a>
+      <ul class='ctxMenu click' id='ctxHomeMenu' style='display: none;'>
+        <li class='icon'><a href="index.jsp" title="<%= glp("ui.com.alt.home") %>" style="font-weight: bold;"><jalios:icon src="building" /> <%= glp("ui.com.alt.home") %></a></li>
+				<% 
+				  for (Iterator it = workspaceSet.iterator() ; it.hasNext() ; ) { 
+				    Workspace itWs = (Workspace) it.next();
+				    isCS      = itWs.isCollaborativeSpace();
+				    homeUrl   = itWs.getHomeUrl(userLocale);
+				    homeName  = itWs.getTitle(userLang);
+				    homeIcon  = itWs.isModel() ? (isCS ? "collaborative-space-model" : "home-gray") : (isCS ? "collaborative-space" : "home");
+
+				    String ctxHomeMenuClass = itWs == workspace ? "ws-current" : "";
+				    ctxHomeMenuClass += itWs.isModel() ? " ws-model" : "";
+				    if (Util.notEmpty(ctxHomeMenuClass)){
+				      ctxHomeMenuClass = "class='"+ctxHomeMenuClass+"'";
+				    }
+				%>
+				<li class='icon'><a href="<%= homeUrl %>" <%= ctxHomeMenuClass %> title="<%= encodeForHTMLAttribute(homeName) %>" ><jalios:icon src='<%= homeIcon %>' /><%= encodeForHTML(homeName) %></a></li>
+        <% } %>
+      </ul>
+		<% } %>
+    <% } %>
+		</td>
+
+    <%-- Logout ICON --%>
+    <td class="menuIcon"> 
+      <jalios:login/>
+    </td>

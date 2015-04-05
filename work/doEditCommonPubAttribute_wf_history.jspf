@@ -1,0 +1,6 @@
+<h2 class="tab"><% /* %>Workflow History<% */ %><%= glp("ui.work.form.tab.wf-hist") %></h2>
+<% if (isWFHistoryAvailable) { %>
+<%@ include file='/work/workflow/doDisplayWFNoteList.jspf' %>
+<% } else { %>
+<jalios:message msg="ui.work.form.lbl.wf.no-hist" title="" dismissable="false" />
+<% } %> 

@@ -1,0 +1,1 @@
+Event.observe(window,"load",function(){Util.observeClass("note",function(e,f,c,a){var b=$(f).fastNext("DIV","note",false,2);if(b.style.display=="block"){b.setStyle({display:"none"})}else{var d=$(document._last);if(d){d.setStyle({display:"none"})}b.setStyle({display:"block"});document._last=b.identify()}})});

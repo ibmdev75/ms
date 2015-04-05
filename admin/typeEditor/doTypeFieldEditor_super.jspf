@@ -1,0 +1,34 @@
+<div class="tab-page">
+  <% 
+     String superTypeLabelProperty = TypeUtil.getTypeLabelProperty(formHandler.getSuperElt().getAttributeValue("name"));
+     String superTypeLabel = Util.getString(TypeUtil.getLabel(formHandler.getSuperElt(), userLang), glp(superTypeLabelProperty));
+  %>
+  <h2 class="tab"><%= glp("ui.adm.type-edit.fld.txt.super", superTypeLabel) %></h2>
+
+  <%-- SUPER EDITOR / PREV - NEXT ------------------------------------------------------- --%> 
+  <% String prevUrl = HttpUtil.getUrlWithCSRFToken("admin/typeEditor.jsp?type=" + formHandler.getTypeName() + "&amp;pos=" + formHandler.getFieldPrevPos(), request, true); %>
+  <% String nextUrl = HttpUtil.getUrlWithCSRFToken("admin/typeEditor.jsp?type=" + formHandler.getTypeName() + "&amp;pos=" + formHandler.getFieldNextPos(), request, true); %>
+  <a href="<%= prevUrl %>"><jalios:icon src="prev" title='<%= glp("ui.com.alt.prev") %>'  /></a>&nbsp;
+  <a href="<%= nextUrl %>"><jalios:icon src="next" title='<%= glp("ui.com.alt.next") %>'  /></a>
+
+  <form method="post" action="admin/typeEditor.jsp" name="editForm_super" class="form-horizontal">
+    <%-- SUPER EDITOR / TAB ------------------------------------------------------- --%>
+    <jalios:field label="ui.adm.type-edit.lbl.tab" tooltip="ui.adm.type-edit.lbl.tab.h">
+      <select class="form-control" name="tab" onchange='toggleEltVisibility("newTab", (this.options.selectedIndex == this.options.length - 1))'>
+        <option></option>
+        <jalios:foreach collection='<%= formHandler.getTabMap().keySet() %>' name='itTabID' type='String'>
+          <option value='<%= itTabID %>' <%= itTabID.equals(formHandler.getFieldTab()) ? "selected" : "" %>><%= formHandler.getTabLabel(itTabID) %></option>
+        </jalios:foreach>
+        <option>------------------</option>
+        <option value="<%= TypeEditorHandler.NEW_TAB_ID %>"><%= glp("ui.adm.type-edit.lbl.new-tab") %></option>
+      </select> 
+      <div id='newTab' style='display: none'>
+        <input class="form-control" type='text' name='newTab' value='' size='50' />
+      </div>             
+    </jalios:field> 
+
+    <input type='hidden' name='type' value='<%= formHandler.getTypeName() %>' />
+    <input type='hidden' name='pos' value='<%= getIntParameter("po", 0) %>' />
+    <button class='btn btn-default' type='submit' name='opUpdateSuper' value='true'><%= glp("ui.com.btn.update") %></button>
+  </form>
+</div>

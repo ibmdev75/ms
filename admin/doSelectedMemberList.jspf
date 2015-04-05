@@ -1,0 +1,59 @@
+<form name='selectedMembersForm' style="margin-top:10px;">
+ <input name="selectedMembers" type="hidden" value="<%= JcmsUtil.dataListToString(selectedMembers, ",") %>"/>
+ <input class='btn btn-primary' type='button' value='<% /* %>Select Members<% */ %><%= glp("ui.adm.mbr-list.btn.select") %>'
+       onclick='javascript:insertLink(document.selectedMembersForm.selectedMembers.value, "<%= glp("ui.work."+propPrefix+"-ch.list") %>")'>
+</form> 
+
+<h2 class="boTitle"><%= glp("ui.adm.mbr-list.txt.selected-mbr", selectedMembers.size()) %></h2>
+
+<ol style="font-size: smaller; font-family: arial, sans-serif">
+ <jalios:foreach name="itMember" type="Member" collection="<%= selectedMembers %>"> 
+  <li>
+    <%
+       Set workingSet = new TreeSet(selectedMembers);
+       if (selectedMembers.contains(itMember)) { workingSet.remove(itMember); }
+       else { workingSet.add(itMember); }
+       String newMembersValue = JcmsUtil.dataListToString(workingSet, ",");
+    %>
+    <input type="checkbox" name="members" checked="checked"
+               onclick="disableAllCheckbox(); document.location='<%= ServletUtil.getAbsUrlWithUpdatedParam(request, "members", newMembersValue)%>'">
+    <%= guiShowWorkspace ? itMember.getHtmlIcon(userLang) : itMember.getHtmlIcon(workspace,userLang) %>
+    
+      <span style='<%= itMember.isDisabled() ? "color: #ff0000" : "" %>'><%= itMember.getFullName() %></span>
+    
+  </li>
+ </jalios:foreach>
+</ol>
+
+<%
+{ 
+  // Compute whether we are going to selectall, or unselect all
+  Set selectedMembersOnPage = Util.interSet(new HashSet(membersOnPage), selectedMembers);
+  boolean selectingAll = selectedMembersOnPage.size() < membersOnPage.size();
+  // Compute the URL used by selectAllMembers()
+	String selectAllURL;
+  {
+	  Set workingSet = new TreeSet(selectedMembers);
+	  if (selectingAll) { workingSet.addAll(membersOnPage); }
+	  else { workingSet.removeAll(membersOnPage); }
+	  selectAllURL = ServletUtil.getAbsUrlWithUpdatedParams(request,
+	                         new String[]{"members"}, new String[]{JcmsUtil.dataListToString(workingSet, ",")}, null, false);
+  }
+%>
+<jalios:javascript>
+$('selectAllCheckbox').checked = <%= selectingAll %>;
+$('selectAllCheckbox').title = '<%= glp("ui.adm.mbr-list.btn.select-" + (selectingAll ? "all" : "none")) %>';
+</jalios:javascript>
+<script type="text/javascript">
+function selectAllMembersOnPage() {
+ document.location = '<%= encodeForJavaScript(selectAllURL) %>';
+}
+function disableAllCheckbox() {
+ $$('INPUT[type="checkbox"]').each(function(formEl) {
+   formEl.disabled = "disabled";
+ });
+}
+</script>
+<%
+}
+%>

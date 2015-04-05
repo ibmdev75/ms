@@ -1,0 +1,64 @@
+@import "core/init-mixins.less";
+
+#csvMemberImportForm {
+  
+  TABLE.import-options {
+    margin-bottom: 0;
+    
+    & > TBODY > TR > TD:first-child { // Override TABLE.peer core's rule
+      width: 20%;
+    }
+  }
+}
+
+A[data-jalios-target='#formatRules'] { cursor: help; }
+
+.workspace-group-list {
+  .wrapper {
+    /* ToggleManager */
+    .ws-close { display: block; }
+    .ws-open { display: none; }
+    &.group-show .ws-close { display: none; }
+    &.group-show .ws-open { display: block; }
+  }
+  UL {
+  
+    &.workspaces-container {
+    
+      margin: 10px 0;
+      
+      .workspace {
+        margin-bottom: 5px;
+        
+        IMG.toggle-icon {
+          margin: 0 5px;
+        }
+        .workspace-label {
+          margin-left: 5px;
+        }
+        .group-name {
+          font-weight: normal;
+          margin-left: 5px;
+          &.default-group {
+            font-style: italic;
+          }
+        }
+        UL.group-list {
+          margin-left: 35px;  
+          .group-icon {
+            margin-left: 5px;
+          }
+        }
+        INPUT.group-checker {
+          margin-top: 0;
+          margin-left: 5px;
+        }
+
+      } // .workspace
+    }
+  }
+}
+
+.csv-import-modal.modal-result {
+  OL { margin-left: 40px; }
+}

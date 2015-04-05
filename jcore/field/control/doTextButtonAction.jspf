@@ -1,0 +1,55 @@
+<%@page import="com.jalios.util.Util"%><%
+%><%@page import="com.jalios.jcms.taglib.ControlTag"%><%
+%><%@page import="com.jalios.jcms.taglib.FieldTag"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.ControlSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.AbstractChooserSettings"%><%
+%><%@page import="com.jalios.jcms.taglib.settings.AbstractTextSettings"%><%
+%><%
+String disabledButton = Util.toBoolean(fieldDisabled, false) ? "disabled='disabled'" : "";
+String disabledLink = Util.toBoolean(fieldDisabled, false) ? " disabled" : "";
+
+// Show language chooser when LANGUAGE_CHOOSER option is true and field is multilingual 
+boolean showLanguageChooser = channel.isMultilingual() && getOption(AbstractTextSettings.LANGUAGE_CHOOSER, false) && Util.toBoolean(request.getAttribute(FieldTag.FIELD_MULTILINGUAL), false);
+
+// Used to show the clear button when the control is a keyword input
+// boolean displayClearButton = Util.toBoolean(request.getAttribute(FieldTag.FIELD_KEYWORD), false) || Util.toBoolean(request.getAttribute(FieldTag.FIELD_MULTIVALUED), false);
+boolean displayClearButton = Util.toBoolean(getIncludeObject("APPEND_CLEAR_BUTTON", false), false);
+
+if (Util.isEmpty(getIncludeString("BTN_ACTION", ""))) {
+  String chooserName = getOption(AbstractChooserSettings.CHOOSER_NAME, null);
+  
+  if(chooserName != null) { // Chooser control
+    String chooserIcon = getOption(AbstractChooserSettings.CHOOSER_ICON, chooserName);
+    String dataOptions = formatAttribute(" data-jalios-options='%s'", getOption(AbstractChooserSettings.CHOOSER_OPTION, ""));
+    String dataChooserPopupWidth = formatAttribute(" data-jalios-chooser-popup-width='%s'", String.valueOf(getOption(AbstractChooserSettings.POPUP_WIDTH, "")));
+    String dataChooserPopupHeight = formatAttribute(" data-jalios-chooser-popup-height='%s'", String.valueOf(getOption(AbstractChooserSettings.POPUP_HEIGHT, "")));
+  %>
+  <div class="input-group-btn">
+    <button type="button" class="btn btn-default btn-chooser" <%= disabledButton %> data-jalios-action="chooser:<%= chooserName %>"<%= dataOptions %><%= dataChooserPopupWidth %><%= dataChooserPopupHeight %>>
+      <jalios:icon src="<%= chooserIcon %>" />
+    </button>
+    <%= getIncludeString("APPEND_BTN_ACTION", "") %>
+    <% if(showLanguageChooser) { %>
+      <a href="#" class="ctxLangForm ctxmenu langStatus btn btn-default icon<%= disabledLink %>"><jalios:lang lang="<%= cptLang %>" /></a>
+    <% } %>
+    <% if(displayClearButton) { %>
+      <button type="button" class="btn btn-default btn-remove" <%= disabledButton %> data-jalios-action="widget:clear"><jalios:icon src="clear" /></button>
+    <% } %>
+  </div>
+  <%
+  } else if(showLanguageChooser) { // Simple text control (eg. TextField)
+  %>
+  <div class="input-group-btn">
+    <%= getIncludeString("APPEND_BTN_ACTION", "") %>
+    <a href="#" class="ctxLangForm ctxmenu langStatus btn btn-default icon<%= disabledLink %>" onclick="return false;"><jalios:lang lang="<%= cptLang %>" /></a>
+  </div>
+  <%
+  }
+} else { // Custom action buttons %>
+  <div class="input-group-btn">
+    <%= getIncludeString("BTN_ACTION", "") %>
+    <% if(showLanguageChooser) { %>
+      <a href="#" class="ctxLangForm ctxmenu langStatus btn btn-default icon<%= disabledLink %>"><jalios:lang lang="<%= cptLang %>" /></a>
+    <% } %>
+  </div>
+<% } %>

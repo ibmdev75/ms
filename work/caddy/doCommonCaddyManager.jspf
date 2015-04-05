@@ -1,0 +1,56 @@
+<%@page import="com.jalios.jcms.taglib.ControlTag"%>
+<fieldset>
+  <legend class='formLabel'><% /* %>Search & Replace<% */ %><%= glp("ui.work.caddy.srch-rplc.title") %>&nbsp;<jalios:tooltip property="ui.work.caddy.srch-rplc.title.h" /></legend>
+
+  <jalios:field name="searchPattern" label="ui.work.caddy.srch-rplc.find" description="ui.work.caddy.srch-rplc.find.example"
+                value="<%= formHandler.getSearchPattern() %>">
+    <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+  </jalios:field>
+  
+  <jalios:field name="replacePattern" label="ui.work.caddy.srch-rplc.replace" description="ui.work.caddy.srch-rplc.replace.example"
+                value="<%= formHandler.getReplacePattern() %>">
+    <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+  </jalios:field>
+  
+  <jalios:field name="useRegExp" label="ui.work.caddy.srch-rplc.use-regexp" description="ui.work.caddy.srch-rplc.use-regexp.h" 
+                value="<%= formHandler.isUsingRegExp() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+  
+  <jalios:field name="applyInEmptyFields" label="ui.work.caddy.srch-rplc.apply-in-empty" description="ui.work.caddy.srch-rplc.apply-in-empty.h" 
+                value="<%= formHandler.isApplyingInEmptyFields() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+  
+  
+  <%
+    Set<String> searchAndReplaceLangSelectedSet = new HashSet<String>();
+    for (String lang : channel.getLanguageList()) {
+      if (formHandler.isSearchAndReplaceLangSelected(lang)) {
+        searchAndReplaceLangSelectedSet.add(lang);
+      }
+    }
+  %>
+  <jalios:field name="searchAndReplaceLang" label="ui.work.caddy.srch-rplc.select-lang" 
+                value="<%= searchAndReplaceLangSelectedSet %>">
+    <jalios:control settings='<%= new LanguageSettings().inline().checkbox().enumValues(channel.getLanguageList()) %>' />
+  </jalios:field>
+  
+  <jalios:field>
+    <button type="button" onclick='submitForm("opPreview")' class='btn btn-default'>
+      <jalios:icon src="preview-search-replace"  /> <%= glp("ui.work.caddy.srch-rplc.preview") %>
+    </button>
+  </jalios:field>
+
+</fieldset>
+
+<% if (isAdmin)  { %>
+  <jalios:field name="deleteDataExtension" label="ui.work.caddy.lbl.delete-data-extension" 
+                value="<%= formHandler.isDeletingDataExtension() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+  <jalios:field name="ignoreIntegrityCheck" label="ui.work.caddy.lbl.ignore-integrity-check"
+                value="<%= formHandler.isIgnoringIntegrityCheck() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+<% } %>

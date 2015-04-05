@@ -1,0 +1,115 @@
+/* ----------------------------------------------- */
+/*  TOPBAR publish menu                            */
+/* ----------------------------------------------- */
+
+.topbar-publish-wrapper {
+  padding: 0 @tb-space-icon 0 @tb-space-icon;
+  .publish-menu-container {
+    background-color: @tb-publish-menu-bg-color;
+    border: 1px solid @tb-color-hover;
+    display: none;
+    left: 0;
+    position: absolute;
+    overflow: hidden;
+    width: 300px;
+    &:hover {
+      color: @tb-color;
+    }
+
+    .list-group-item {
+      border-radius: 0;
+    }
+
+    .main-menu {
+      border-right: 1px solid @tb-color-hover;
+      float: left;
+      padding: 0;
+      overflow: hidden;
+      width: @tb-publish-menu-width - 1;
+      margin-bottom: 0;
+      .icon-child-menu {
+        display: block;
+        height: @tb-height;
+        line-height: @tb-height;
+        position: absolute;
+        right: @tb-height / 4;
+        top: 0;
+      }
+
+      .jalios-icon {
+        font-size: 1em;
+      }
+    }
+
+    .publish-slider {
+      float: left;
+      position: relative;
+      left: 0;
+      width: @tb-publish-menu-width * 2;
+    }
+
+    .child-menu-container {
+      float: left;
+      position: relative;
+      width: @tb-publish-menu-width;
+      .child-menu {
+        display: none;
+        left: 0;
+      }
+    }
+
+    .child-menu {
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      left: @tb-publish-menu-width;
+      top: 0;
+      width: @tb-publish-menu-width;
+      LI.back .jalios-icon {
+        font-size: 1em;
+        padding-right: 5px;
+      }
+
+      LI:hover A {
+        color: #FFF;
+        text-decoration: none;
+      }
+    }
+
+    .back {
+      color: @tb-color-hover;
+    }
+  }
+}
+
+.topbar .topbar-item.publish-selected .publish-menu-icon-sm {
+  color: white;
+}
+
+.topbar-publish-wrapper.publish-selected {
+  background-color: @tb-color-hover;
+  position: relative;
+  
+  
+  &:hover {
+    color: @tb-color;
+  }
+
+  .publish-label {
+    background: none;
+    border: 0 none;
+    box-shadow: none;
+    
+    .btn-primary {
+      background: none;
+      border-color: transparent;
+    }
+  }
+
+  .publish-menu-container {
+    LI:hover {
+      background-color: @tb-color-hover;
+      color: @tb-color-selected;
+    }
+  }
+}

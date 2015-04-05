@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="Faq" reviewable="false" debatable="false" visible="true" superclass="com.jalios.jcms.Content" categoryRequired="true" categoryTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="description" editor="textarea" wiki="true" required="false" ml="true" compactDisplay="false" type="String" searchable="true" rows="5" cols="80" abstract="true" />
+  </fields>
+</type>
+

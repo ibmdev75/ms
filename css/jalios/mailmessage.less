@@ -1,0 +1,245 @@
+@import "core/init-mixins.less";
+
+// VARIABLEs
+// ----------------
+@photo-icon-width: 16px;
+@photo-tiny-width: 35px;
+@bg-color: rgba(220,220,220,.15);
+@visible-inline-first-cell-width: 200px;
+@cell-h-padding: 5px;
+@cell-v-padding: 20px;
+
+@bg-priority-1: red;
+@bg-priority-2: lighten(@bg-priority-1, 40%);
+@bg-priority-3: white;
+@bg-priority-4: lighten(@bg-priority-5, 40%);
+@bg-priority-5: blue;
+
+// DEBUG
+.mail-message {
+  TD { /* border: 1px solid red; */ }
+}
+
+// MIXINs
+// ----------------
+.info-grayed() {
+  color: #888888;
+}
+.allWidth(@width) {
+  width: @width; min-width: @width; max-width: @width;  // Handle table column width: min and max needed when viewport is not wide enought
+}
+
+.bordered-row() {
+  overflow: hidden;
+  background: @bg-color;
+  border-top: 1px solid #CCC;
+  width: auto;
+}
+.hl() {
+  background: @highlightBackground;
+}
+
+// STYLEs
+// ----------------
+.mail-message {
+
+  // HEADER
+  // ----------------
+  .header {
+    .bordered-row();
+
+    TABLE { width: 100%; }  // cause .layout not used
+    TD                        { 
+      padding: 0 @cell-h-padding;
+      vertical-align: middle; // To cancel potential surrounding TABLE.layout
+      &.abstract A            { width: 100%;      } // Make abstract area full width cliquable
+    }
+
+    // DETAILS
+    .visible-detailled        { border-style: dotted; border-color: #AAA; border-width: 0; border-top-width: 1px; border-bottom-width: 1px; }
+
+    // Counter CELL
+    .count-column A          { .info-grayed();    }
+
+    // Abstract CELL: Mail's title + truncated abstract
+    .abstract                 { .text-overflow();  }
+    .abstract A               { .info-grayed(); .object { font-weight: bold; color: black; } }
+
+  }
+  .first .abstract .object    { display: none;    } // Hide Mail subject of First message of a Thread
+  TIME                        { .info-grayed();   }
+
+  // Priority
+  .badge.priority {
+    &.priority-1              { background: @bg-priority-1; }
+    &.priority-2              { background: @bg-priority-2; }
+    &.priority-3              { background: @bg-priority-3; }
+    &.priority-4              { background: @bg-priority-4; }
+    &.priority-5              { background: @bg-priority-5; }
+  }
+  .priority-3                 { display: none;      }  // Do not show normal priority by default
+
+
+  // Mail content                    
+  // ----------------
+  .body-text, .body-html      { padding: 1em 0.5em; }
+  .body-text PRE              { background: inherit; border: none; padding: 0; margin: 0; }
+
+  // Email Address Photo             
+  // ----------------
+  .email-details {
+    .tiny-photo               { display: none;      }
+  }
+  .wrapper-photo {
+    &.no-member-photo,
+    &.icon-photo               { margin-right: 4px;  }
+  }
+
+  // Email formatting                
+  // ----------------
+  .beautiful-email            { display: inline-block; }
+  .dl-horizontal .beautiful-email { display: inherit; }  // Exception for DL.dl-horizontal
+  .beautiful-email .label     { font-weight: bold; }
+  .toggle-format,
+  .toggle-details             { display: inline-block; }
+  .toggle-details             { float: right; }
+  .email                      { display: none; .info-grayed(); }
+  .member-link                { display: inline; } // <jalios:link/> inline
+  .unknown-member A           { .info-grayed(); }
+
+  // Mail message details            
+  // ----------------
+  .email-details {
+    background: white;
+    DL            { margin-top: 0.5em; margin-bottom: 0.5em;  }
+    DD, DT        { line-height: @baseline*1.5 - 2;           }
+    DT            { .info-grayed(); font-weight: normal;      }
+    DD            { color: black;                             }
+    .email        { display: block;                           }   // Email address displayed in details 
+    SPAN.email    { display: inline;                          }
+    .icon-photo   { width: @photo-icon-width; vertical-align: baseline;  }
+  }
+
+  // LAYOUT
+  // ----------------
+  TD {
+    &.right-column            { width: 10%; text-align: right; white-space: nowrap; }
+    &.from                    { .text-overflow(); }
+    &.abstract                { min-width: @visible-inline-first-cell-width; max-width: @visible-inline-first-cell-width; }
+    &.attachements            { .allWidth(20px); text-align: right; }
+  }
+
+  // BLOCKs visibility               
+  // ----------------
+  .inline-email .visible-inline         { display: block;         }
+  .inline-email .visible-block          { display: none;          }
+                .visible-block          { display: none;          }
+  .block-email  .visible-block          { display: block;         }
+  .block-email  .visible-inline         { display: none;          }
+                .mail-content           { display: none;          }
+  .block-email .mail-content            { display: block;         }
+
+  .hide-details                         { display: none;          }
+  .show-details                         { display: inline-block;  }
+  .detailled-email {
+    .show-details                       { display: none;          }
+    .hide-details                       { display: inline-block;  }
+    .visible-detailled                  { display: block;         }
+    TR.visible-detailled                { display: table-row;     }
+  }
+  .visible-inline {
+     TR:hover                           { .hl();                  }
+  }
+  .visible-detailled                    { display: none;          }
+
+  // Switch text/html
+   .body-html                           { display: none;          }
+   .body-text                           { display: none;          }
+   .html-display                        { display: inline;        }
+   .html-hide                           { display: none;          }
+
+  .block-email {
+    .body-text                          { display: block;         }
+    &.text-html {
+      .body-html                        { display: block;         }
+      .body-text                        { display: none;          }
+      .html-display                     { display: none;          }
+      .html-hide                        { display: inline;        }
+    }
+  }
+
+} // EOF .mail-message
+
+
+// Attachement
+// ----------------
+SECTION.attachements {
+  clear: both;
+  border-top: 1px dashed #DDDDEE;
+  overflow: hidden;
+  margin-bottom: @baseline;
+
+  .attachement {
+    &:hover { .hl(); }
+  }
+}
+
+// Layout + Responsive
+// ----------------
+.mail-message {
+  .large-thumbnail                { display: block;           }
+  .small-thumbnail                { display: none;            }
+  TD.count-column                 { .allWidth(20px);          }
+
+  .left-column {
+    .tiny-photo                   { display: inline-block;    }
+    .icon-photo                   { display: none;            }
+  }
+  .short-time                     { display: inline-block;    }
+  .short-no-time                  { display: none;            }
+
+  // Toggle Cell                     
+  // ----------------
+  // Put padding on A link instead of TD, for easier area clicking
+  .toggle-cell A                  { display: inline-block; padding: @cell-v-padding @cell-h-padding; }
+  .header TD.toggle-cell          { padding: 0; } // Cancel duplicate padding in case of Header's toggle-cell
+}
+
+// Larger viewport                 
+// ----------------
+@media (min-width: @screen-xs-max) {
+  .dl-horizontal {
+    // Reduce a little bootstrap left margin  
+    DT { width: 130px; }
+    DD { margin-left: 150px; }
+  }
+}
+
+// Smaller viewport                
+// ----------------
+@media (max-width: @screen-xs-max) {
+  .mail-message {
+    .large-thumbnail                { display: none;                      }
+    .small-thumbnail                { display: block;                     }
+
+    // reduce vertical padding 
+    .toggle-cell A                  { padding: 5px inherit;               }
+    .count-column                   { display: none;                      }
+    TD.left-column                  { .allWidth(18px); padding-right: 0;  }
+    TD.from                         { .allWidth(100px);                   }
+    .left-column {
+      .tiny-photo                   { display: none;                      }
+      .icon-photo                   { display: inline-block;              }
+    }
+    .short-time                     { display: none;                      }
+    .short-no-time                  { display: inline-block;              }
+
+   .icon-photo IMG                  { max-height: @photo-icon-width; width: auto; } // with auto for scaling 
+    .abstract {
+      .object { 
+        display: none;  // Hide Mail subject 
+        &.empty-abstract { display: inline; } // Display Mail subject if empty abstract 
+      }
+    }
+  }
+}

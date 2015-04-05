@@ -1,0 +1,58 @@
+@import "../core/init-mixins.less";
+.recommendation-modal {
+  .message {
+    background: #EDF8FE;
+    border: 1px solid #DAEDF9;
+    padding: 15px;
+    .border-radius (5px);
+    margin-left: @baseline * 3;
+    position: relative;
+    overflow: initial;
+    
+    .tail {
+      left: -16px;
+      position: absolute;
+      top: 2px;
+    }
+  }
+
+  .badge-success {
+    background-color: @successText;
+  }
+
+  .badge-important {
+    background-color: @errorText;
+  }
+
+  .recommendation-tracking {
+    .title {
+      background-color: #CCCCCC;
+      border-bottom: 1px solid #AAAAAA;
+      border-top: 1px solid #AAAAAA;
+      padding: 5px 15px;
+    }
+  }
+
+  .recommendation-meta {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    font-size: 90%;
+    color: #888;
+  }
+
+  .recommendation {
+    border-bottom: 1px solid #DADADA;
+    &.bottom-less {
+      border-bottom: 0 none;
+    }
+  }
+
+  .recommendation-container {
+    margin-left: @baseline * 3;
+  }
+}
+
+.ttRecoGroup {
+  padding: 10px;
+  width: 400px;
+}

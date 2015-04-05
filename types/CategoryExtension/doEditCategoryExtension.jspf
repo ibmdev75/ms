@@ -1,0 +1,18 @@
+<%-- This file has been automatically generated. --%>
+<%--
+  @Summary: CategoryExtension content editor
+  @Category: Generated
+  @Author: JCMS Type Processor 
+  @Customizable: True
+  @Requestable: False 
+--%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%
+{ 
+  TreeSet  removedCatSet = new TreeSet(); 
+  Category itRemoveCat = null;
+  request.setAttribute("CategoryExtension.removedCatSet", removedCatSet);
+}  
+%>
+<% ServletUtil.restoreAttribute(pageContext , "classBeingProcessed"); %><%-- **********4A616C696F73204A434D53 *** SIGNATURE BOUNDARY * DO NOT EDIT ANYTHING BELOW THIS LINE *** --%><%
+%><%-- o8IK7Y3eRHC6D7l0W5y+uQ== --%>

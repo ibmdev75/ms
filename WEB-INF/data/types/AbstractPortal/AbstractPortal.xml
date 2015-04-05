@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="AbstractPortal" reviewable="false" debatable="false" categoryTab="true" categoryRequired="false" visible="true" superclass="com.jalios.jcms.portlet.Portal" formhandler="com.jalios.jcms.portlet.EditPortalHandler" abstract="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="pageTitle" editor="textfield" required="false" compactDisplay="false" type="String" searchable="true" size="80" ml="true" descriptionType="tooltip" />
+    <field name="child" editor="link" required="false" compactDisplay="false" type="com.jalios.jcms.portlet.PortalElement" ml="false" searchable="false" />
+    <field name="cssFile" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="Default | Custom" descriptionType="tooltip" chooser="listbox" />
+    <field name="description" editor="textarea" wiki="true" required="false" compactDisplay="false" type="String" searchable="true" rows="5" cols="80" ml="true" abstract="true" />
+    <field name="portletImage" editor="image" dataimage="true" required="false" type="String" searchable="true" compactDisplay="false" ml="true" />
+    <field name="cacheType" editor="enumerate" required="false" compactDisplay="false" type="String" searchable="false" ml="false" valueList="None | Server | Groups | Members | Session | SessionAndVisitors | VisitorsOnly " descriptionType="tooltip" chooser="listbox" html="false" />
+    <field name="cacheSensibility" editor="enumerate" required="false" compactDisplay="false" type="String" chooser="listbox" valueList="None | Portal | Current " ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="invalidClass" editor="enumerate" required="false" compactDisplay="false" type="String[]" searchable="false" ml="false" valueList="Data | Publication | Content" descriptionType="tooltip" chooser="listbox" />
+    <field name="invalidTime" editor="duration" required="false" compactDisplay="true" type="long" default="60" />
+    <field name="behaviorCopy" editor="enumerate" required="false" compactDisplay="false" type="String" chooser="listbox" valueList="true|false|ws" ml="false" descriptionType="tooltip" searchable="false" html="false" checkHtml="true" />
+    <field name="cssId" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="10" ml="false" html="false" descriptionType="tooltip" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" />
+    <field name="cssClasses" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="80" ml="false" html="false" />
+    <field name="exactCategory" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" descriptionType="tooltip" searchable="false" html="false" />
+  </fields>
+</type>
+

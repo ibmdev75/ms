@@ -1,0 +1,43 @@
+@import "jalios/core/init-mixins.less";
+
+/*  Default Wysiwyg Styles   */
+
+.classic, .pourcent, .red, .gray {
+
+  // Custom
+  CODE { background: #F7F7F7; }
+  PRE  { font-family:  @font-family-monospace; }
+  
+  UL LI { list-style: square inside; }
+  OL LI { list-style-position: inside; }
+  
+  THEAD TD,
+  TFOOT TD { background: #E0E0E0; }
+
+  // Use the "cms-" prefix to declare classes that you 
+  // want available in the wysiwyg editor for contributors,
+  // or redefine property "wysiwyg.tinymce.class-filter-regex"
+  // .cms-test { border: 1px solid red; }
+  
+  .special   { font-size: @font-size-base - 2; }
+  .legend    { font-style: oblique; }
+  
+  .quotation { 
+    border-left: 4px solid #D2D2D2;
+    float: left;
+    background: #EFEFEF url(../images/jalios/layout/bg_quote_right.gif) no-repeat right bottom;
+    text-align: justify;
+    padding: @baseline/2 @baseline*2 @baseline/2 @baseline/2;
+    
+    font-size:   @font-size-base;
+    line-height: @baseline;
+  }
+  
+  TABLE.tablelayout { border-collapse: collapse; }
+  TD .tablelayout { border: 0px; }
+}
+
+// ------------------------------------------
+//  CUSTOM WYSIWYG STYLES
+// ------------------------------------------
+

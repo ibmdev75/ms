@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates version="5.0">
+  <template name="default" file="doPortletNotificationFullDisplay.jsp" usage="box" />
+  <template name="default" file="doPortletNotificationResultDisplay.jsp" usage="query" />
+</templates>
+

@@ -1,0 +1,23 @@
+/* ----------------------------------------------- */
+/*  ADMIN BOX                                      */
+/* ----------------------------------------------- */
+
+.box.addpack      { #JCMS > .box(lighten(#FF2000, 25%), #FF2000, #FFEBEB, @borderRadiusLarge, @borderRadiusLarge, #FFF, @boxTxtShadow); }
+.box.warning      { #JCMS > .box(lighten(#FF8001, 25%), #FF8001, #FFF4EA, @borderRadiusLarge, @borderRadiusLarge, #FFF, @boxTxtShadow); }
+.box.development  { #JCMS > .box(lighten(#5CB32B, 25%), #5CB32B, #EDF9E6, @borderRadiusLarge, @borderRadiusLarge, #FFF, @boxTxtShadow); }
+.box.docs         { #JCMS > .box(lighten(#4049D1, 25%), #4049D1, #E7E7F9, @borderRadiusLarge, @borderRadiusLarge, #FFF, @boxTxtShadow); }
+.box.bo-table     { #JCMS > .box(lighten(@boTableHeaderColor, 10%), @boTableHeaderColor, @boTableBgColorEven, @borderRadiusLarge, @borderRadiusLarge, #FFF, @boxTxtShadow); }
+
+
+BODY.browser-IE7, 
+BODY.browser-IE8 { 
+  .box.addpack     .box-header { background-image: url('../../../images/jalios/assets/box/header-gray.jpg');   }
+  .box.warning     .box-header { background-image: url('../../../images/jalios/assets/box/header-orange.jpg'); }
+  .box.development .box-header { background-image: url('../../../images/jalios/assets/box/header-green.jpg');  }
+  .box.docs        .box-header { background-image: url('../../../images/jalios/assets/box/header-purple.jpg'); }
+  .box.data-table  .box-header { background-image: url('../../../images/jalios/assets/box/header-table.jpg');  }
+} 
+
+
+.WorkArea { .box-msg { A, STRONG { color: @orange; }}}
+

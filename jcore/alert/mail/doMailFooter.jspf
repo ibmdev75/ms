@@ -1,0 +1,3 @@
+<%@ include file='/jcore/alert/mail/doMailTracker.jspf' %>
+</body>
+</html>

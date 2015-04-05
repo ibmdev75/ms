@@ -1,0 +1,118 @@
+<%--
+  @Summary: Access Control Manager
+  @Since: jcms-7.0 
+--%>
+
+  <%-- ************************************************************* --%>
+  <%-- *** Resources Audit ***************************************** --%>
+
+<div class="tab-page" id="rsrcs-audit">
+  <h2 class="tab"><% /* %>Audit<% */ %><%= glp("accesscontrol.resource-audit.title") %></h2>
+  
+    <div class="alert alert-info"><%= glp("accesscontrol.resource-audit.intro") %></div>
+  
+    <table class="table-data table-condensed acls">
+     <thead>
+      <tr>
+       <th class="text-overflow"><%= glp("accesscontrol.resource-audit.resource") %></th>
+       <th><%= glp("accesscontrol.resource-audit.authorized-acl") %></th>
+       <th><%= glp("accesscontrol.resource-audit.authorized-groups") %></th>
+       <th><%= glp("accesscontrol.resource-audit.authorized-members") %></th>
+       <th><%= glp("accesscontrol.resource-audit.authorized-delegation") %></th>
+     </thead>
+     <tbody>
+     <%
+       for (Map.Entry<String,Integer> entry : AccessControlUtil.getOrderedResourcesAndLevelMap().entrySet()) {
+         String resource = entry.getKey();
+         int level = entry.getValue();
+         Set<Group> authorizedGroupSet = new TreeSet<Group>();
+         Set<Member> authorizedMemberSet = new TreeSet<Member>();
+         Set<Member> authorizedMemberDelegationSet = new TreeSet<Member>();
+         boolean isAdminResource = AccessControlUtil.isAdminResource(resource);
+         if (isAdminResource && aclWorkspaceFilter) {
+           continue;
+         }
+         String resourceLabelProp = "acl.resource." + resource;
+         String resourceLabelHelpProp = "acl.resource." + resource + ".h";
+         boolean hasHelp = !resourceLabelHelpProp.equals(glp(resourceLabelHelpProp)); 
+     %>
+        <tr class="acl level<%= level %>">
+          <td class="formLabel"><%= glp(resourceLabelProp) %> <% if (hasHelp) { %><jalios:tooltip property='<%= resourceLabelHelpProp %>' /><% } %></td>
+          <td>
+           <ul><%
+            for (AccessControlList acl : aclSet) {
+              Boolean aclResourceAuthorization = (acl != null) ? acl.getExplicitAccessAuthorization(resource) : null;
+              if (aclResourceAuthorization != null && aclResourceAuthorization.booleanValue()) {
+                %>
+                <li>
+                 <jalios:icon src="acl" alt="acl" />
+                 <a href="<%= ServletUtil.getResourcePath(request) %>?id=<%= acl.getId()%>"><%= acl.getName() %> (<%= acl.getGroupSet().size() %>)</a>
+                 <jalios:edit data="<%= acl %>" />
+                </li><%
+                // Build Authorized Group Set
+                authorizedGroupSet.addAll(acl.getGroupSet());
+              }
+            }
+           // Build Set of Members authorized through groups
+           for (Group group : authorizedGroupSet) {
+             authorizedMemberSet.addAll(group.getMemberSet());
+           }
+           // Build Set of Members authorized through delegation
+           for (Member mbr : authorizedMemberSet) {
+             if (Util.notEmpty(mbr.getDelegateMemberSet())) {
+               authorizedMemberDelegationSet.addAll(mbr.getDelegateMemberSet());
+             }
+           }
+           %>
+           </ul>
+          </td>
+          <td>
+           <ul><% 
+            for (Group group : authorizedGroupSet) {
+              if (aclWorkspaceFilter && group.getWorkspace() != workspace) {
+                continue;
+              }
+              %><li>
+              <jalios:icon src="group" alt="grp"  />
+              <%= group.getName(userLang) %>
+              <jalios:edit data='<%= group %>'/>
+              </li><% 
+            }
+           %>
+           </ul>
+          </td>
+          <td>
+           <ul><% 
+            for (Member mbr : authorizedMemberSet) {
+              if (aclWorkspaceFilter && !mbr.belongsToWorkspace(workspace)) {
+                continue;
+              } %>
+             <li>
+              <%= aclWorkspaceFilter ? mbr.getHtmlIcon(userLang) : mbr.getHtmlIcon(workspace,userLang) %>
+              <jalios:link data='<%= mbr %>' />
+              <jalios:edit data='<%= mbr %>'/>
+             </li><% 
+            }
+           %>
+           </ul>
+          </td>
+          <td>
+           <ul><% 
+            for (Member mbr : authorizedMemberDelegationSet) {
+              if (aclWorkspaceFilter && !mbr.belongsToWorkspace(workspace)) {
+                continue;
+              } %>
+             <li>
+              <%= aclWorkspaceFilter ? mbr.getHtmlIcon(userLang) : mbr.getHtmlIcon(workspace,userLang) %>
+              <jalios:link data='<%= mbr %>' />
+              <jalios:edit data='<%= mbr %>'/>
+             </li><% 
+            }
+           %>
+           </ul>
+          </td>
+        </tr>
+     <% } %>
+     </tbody>
+    </table>
+  </div>

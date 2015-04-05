@@ -1,0 +1,42 @@
+<%--
+  @Summary: Publish links as a primary button, for a given portlet
+            Requires 'doAddIcon.jspf'
+            Used to be in 'doSkinAdd.jspf'
+  @Category: Publication
+  @Author: Sylvain DEVAUX
+  @Customizable: True
+  @Requestable: False
+  @Since: jcms-9.0.1
+--%><%
+%><%@page import="java.util.regex.Matcher"%><%
+%><%@ page contentType="text/html; charset=UTF-8" %>
+
+<jalios:buffer name="addButtonAction">
+  <%
+  boolean validateAdd = isLogged && channel.isDataWriteEnabled();
+
+  if (validateAdd) {
+    String addAction = "";
+    String addActionLabel = glp("ui.com.btn.publish");
+
+    // Get "Publish links" HTML in a buffer for rewritting
+    %><jalios:buffer name="addIconAction"><%@ include file="/front/portlet/doAddIcon.jspf" %></jalios:buffer><%
+
+    if (Util.notEmpty(addIconAction.toString().trim())) {
+      String ctxIconRegexp = "<" + "img(.*?)/>"; // Split regexp to prevent CI / WCAG test failure
+      // Extract and replace native JCMS add label
+      addAction = addIconAction.toString().replaceFirst(ctxIconRegexp, addActionLabel);
+      if (Util.notEmpty(addAction.trim())) {
+        // Replace native JCMS ctx icon by button
+        addAction = addAction.replaceFirst(Matcher.quoteReplacement("<a([^>]*)(class=['\"]editArea)"), "<a$1$2 btn btn-primary");
+      }
+    }
+    %>
+    <%-- Provide publish link(s) --%>
+    <div class="publish-action"><%= addAction %></div>
+  <% } %>
+</jalios:buffer>
+
+<% if (Util.notEmpty(addButtonAction.toString().trim())) { %>
+  <%= addButtonAction %>
+<% } %>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="AbstractPortletStat" superclass="generated.AbstractPortletSkinable" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" abstract="true" interfaces="com.jalios.jcms.stat.PortletStat" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="tabGroup" editor="textfield" required="false" compactDisplay="false" type="String" searchable="false" size="80" ml="true" descriptionType="text" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" />
+    <field name="displayTimeChart" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="displayWeekChart" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="displayAverage" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" />
+    <field name="regExpFilter" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="topTen" editor="int" required="false" compactDisplay="false" type="int" default="10" ml="false" descriptionType="tooltip" searchable="false" minValue="0" unitPos="after" />
+    <field name="filteredArea" editor="enumerate" required="false" compactDisplay="false" type="String" chooser="listbox" valueList="  |Public|AdminArea|WorkArea|FeedArea" ml="false" descriptionType="tooltip" searchable="false" />
+    <field type="super" />
+  </fields>
+</type>
+

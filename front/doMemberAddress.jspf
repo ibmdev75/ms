@@ -1,0 +1,35 @@
+<%--
+  Display the address of the given addressMember. 
+  Uses the new jcms9 splitted address if any new field is found.
+  
+  How to use:
+  <% Member addressMember = itMember; %>
+  <%@ include file="/front/doMemberAddress.jspf" %>
+ 
+--%><% 
+if (addressMember != null && addressMember.hasAnyAddress()) {%>
+  <div class="address-wrapper" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+    <% if (addressMember.hasStructuredAddress()) { %>
+      <% if (Util.notEmpty(addressMember.getStreet())) { %>
+        <span itemprop="streetAddress" class="address-item address-street"><%= addressMember.getStreet() %></span>
+      <% } %>
+      <% if (Util.notEmpty(addressMember.getRegion())) { %>
+        <span itemprop="addressRegion" class="address-item address-region"><%= addressMember.getRegion() %></span>
+      <% } %>
+      <% if (Util.notEmpty(addressMember.getPoBox())) { %>
+        <span itemprop="postOfficeBoxNumber" class="address-item address-post-office-box"><%= addressMember.getPoBox() %></span>
+      <% } %>
+      <% if (Util.notEmpty(addressMember.getPostalCode())) { %>
+        <span itemprop="postalCode" class="address-item address-postal-code"><%= addressMember.getPostalCode() %></span>
+      <% } %>
+      <% if (Util.notEmpty(addressMember.getLocality())) { %>
+        <span itemprop="addressLocality" class="address-item address-locality"><%= addressMember.getLocality() %></span>
+      <% } %>      
+      <% if (Util.notEmpty(addressMember.getCountry())) { %>
+        <span itemprop="addressCountry" class="address-item address-country"><%= glp("country." + addressMember.getCountry()) %></span>
+      <% } %>            
+    <% } else { %>
+      <%= addressMember.getAddress() %>
+    <% } %>
+  </div>
+<% } %>

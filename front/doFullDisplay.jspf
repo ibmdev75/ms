@@ -1,0 +1,4 @@
+<% jcmsContext.addCSSHeader ("css/fulldisplay.css"); %>
+
+<%-- TARGET --%>
+<jalios:include target="FULLDISPLAY_HEADER" />

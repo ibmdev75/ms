@@ -1,0 +1,47 @@
+<%@page import="com.jalios.jcms.PhotoSize"%><%
+%><%@page import="com.jalios.jcms.JcmsConstants"%><%
+%><%@page import="com.jalios.util.Util"%><%
+%><%@ page contentType="text/html; charset=UTF-8" %><%
+
+{
+  Member fromMbr = (Member) request.getAttribute("beautiful-email-member");
+  String fromStr = (String) request.getAttribute("beautiful-email-string");
+  if (Util.notEmpty(fromMbr) || Util.notEmpty(fromStr)) {
+    boolean beautifulMailColorizeEmail  = Util.toBoolean(request.getAttribute("beautiful-email-colorize"), false);
+    boolean beautifulMailPrintPhoto     = Util.toBoolean(request.getAttribute("beautiful-email-print-photo"), true);
+
+    Member mbr = null;
+    String email = "";
+    PhotoSize photoSize = request.getAttribute("beautiful-email-photo-size") != null ? ((PhotoSize) request.getAttribute("beautiful-email-photo-size")) : PhotoSize.ICON;
+
+    if (Util.notEmpty(fromMbr)) {
+      mbr = fromMbr;
+      email = mbr.getFullEmail();
+    } else if (Util.notEmpty(fromStr)) {
+      email = fromStr;
+    }
+
+    %><div class='member-link'><%
+      if (beautifulMailPrintPhoto) {
+        if (mbr != null) { 
+          %><jalios:memberphoto member="<%= mbr %>" size="<%= photoSize %>" /><%
+        } else { 
+          %><div class='wrapper-photo <%= photoSize.toString().toLowerCase() %>-photo'><%
+            %><img src="images/jalios/layout/silhouette.jpg" class="photo no-member-photo" alt="" style="max-height: <%= photoSize.getWidth() %>px" /><%
+          %></div><%
+        }
+      }
+
+      if (mbr != null) {
+        %><jalios:link data='<%= mbr %>'><%= getBeautifiedEmail(email, beautifulMailColorizeEmail) %></jalios:link><%
+      } else {
+        %><span title='<%= encodeForHTMLAttribute(email) %>'><%= getBeautifiedEmail(email, beautifulMailColorizeEmail) %></span><%
+      }
+    %></div><%
+    request.removeAttribute("beautiful-email-member");
+    request.removeAttribute("beautiful-email-string");
+    request.removeAttribute("beautiful-email-photo-size");
+    request.removeAttribute("beautiful-email-print-photo");
+  }
+}
+%>

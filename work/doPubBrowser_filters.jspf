@@ -1,0 +1,81 @@
+<% if (isTextFieldPubLink) {%>
+<form action='<%= ServletUtil.getResourcePath(request) %>' name='typeForm' style='overflow:auto;' class='nobr noSingleSubmitButton' >
+    <%
+        Set wspcSet = Workspace.getAllWorkspaceSet();
+        boolean isIE = jcmsContext.getBrowser() != null && (jcmsContext.getBrowser().isIE7() || jcmsContext.getBrowser().isIE8() || jcmsContext.getBrowser().isIE9());
+    %>
+    <%= printDisabledHiddenParams(request , Arrays.asList(new String[]{"classname","pstatus","gid","mid","portalId","text","skip","oldType","ability","documentKinds", "start"})) %>
+  <% if (showWorkspaceFilter && (wspcSet != null) && (wspcSet.size() > 1)) { %>
+    <h4>
+        <a href='<%= ServletUtil.getUrlWithUpdatedParam(request , "workspaceFilter" , ""+!workspaceFilter) %>'  title='<%= workspaceFilter ? glp("ui.work.mn.allworkspaces") : glp("ui.work.mn.alt.filter",workspace.getTitle(userLang)) %>'><jalios:icon src='<%= workspaceFilter ? "work-filter-off" : "work-filter-on" %>'  /></a>
+        <%= workspaceFilter ? workspace.getTitle(userLang) : glp("ui.work.mn.allworkspaces") %>
+    </h4>
+  <% } %>   
+    <% if (formHandler.showTextFilter()) { %>
+      <div class="widget pull-left">
+        <% if(isIE) { %><b><%= glp("ui.work.mn.search") %></b><br/><% } %>
+            <input class="search" type="text" name="text" size="25" placeholder="<%= glp("ui.com.placeholder.search") %>" value="<%= encodeForHTMLAttribute(formHandler.getText()) %>"/>
+    <% String classShortName = Util.getClassShortName(formHandler.getCurrentClass()); %>
+        <span class='formInfoSmaller'>&nbsp;</span>
+        <%
+     // All Type, display edit icon, unless we are using "All my workspace" in which menu make no cense (types can be different and creation would occur in the previous workspace)
+         if (Util.notEmpty(subTypeList) && workspaceFilter &&
+         (formHandler.getCurrentClass() == Content.class ||
+          formHandler.getCurrentClass() == Portlet.class  ||
+          formHandler.getCurrentClass() == PortalElement.class)) {
+           HashSet typesSet = new HashSet();
+           for (Iterator itClass = subTypeList.iterator(); itClass.hasNext(); ) {
+             Class curClass = (Class) itClass.next();
+             if (loggedMember.canPublish(curClass) && !channel.getTypeEntry(curClass).isAbstract()) {
+               typesSet.add(curClass);
+             }
+           }
+        %>
+          <div class="btn"><jalios:edit typeSet='<%= typesSet %>' cids='<%=formHandler.getCategory() != null ? formHandler.getCategory().getId() : ""%>' redirect='<%= redirectRefresh %>' popup="<%= popupEdition %>"/></div>
+        <%
+        }
+    boolean canPublish = formHandler.canPublish();
+    if (canPublish || (formHandler.isFormMode() && formHandler.getCurrentClass() != Form.class )) {
+      if (showAddIcon) {
+        if (FileDocument.class.isAssignableFrom(formHandler.getCurrentClass())) {
+          String docTypeParam= "type=" + Util.getClassShortName(formHandler.getCurrentClass());
+          if (workspaceFilter) { 
+            %><a href="work/docChooserModal.jsp?<%= docTypeParam %>&amp;refresh=true&amp;nbElt=1&amp;pstatus=0<%=formHandler.getCategory() != null ? "&amp;cids=" + formHandler.getCategory().getId() : ""%>" class="modal"><jalios:icon src="upload" title='<%= glp("ui.com.alt.doc-chooser") %>' /></a><%
+          }
+          %><a href="work/mediaBrowser.jsp?workspaceFilter=<%= workspaceFilter %>&media=all" onclick="popupWindow(this.href, 'mediaBrowser', 930, 570, '', false, false); return false;"><jalios:icon src="mediabrowser" title='<%= glp("ui.work.mediabrowser.title") %>' /></a><% 
+          if (workspaceFilter) {
+            %><jalios:webdav folder='<%= formHandler.getCategory() %>' /><%
+          }
+        } else if (formHandler.isFormMode()) {
+          if (canPublish) {
+            %><a href='types/<%= classShortName %>/editForm<%= classShortName %>.jsp'><jalios:icon src='add'  /></a><%
+          }
+        } else {
+          if (workspaceFilter) {
+            %><jalios:edit type='<%= formHandler.getCurrentClass().getName() %>' cids='<%=formHandler.getCategory() != null ? formHandler.getCategory().getId() : ""%>' redirect='<%= redirectRefresh %>' popup="<%= popupEdition %>"/><%
+          }
+        }
+      }
+      if (Form.class.isAssignableFrom(formHandler.getCurrentClass())) { %>
+          <a href="work/displayFormReport.jsp?type=<%= classShortName %>"><jalios:icon src="stats" title='<%= glp("ui.work.pub.lbl.report") %>' /></a>
+          <% } %>
+        <% } %>   
+      
+      <br/>
+      </div>
+    <div class="widget pull-right">
+      <% if(isIE) { %><br/><% } %>
+        <input type="submit" class="btn btn-primary" value="<%= glp("ui.analytics.report.filter") %>"/>
+    </div>
+    <% } else { %>
+    <div class="widget pull-right">
+      <% if(isIE) { %><br/><% } %>
+    <input type="submit" class="btn btn-primary" value="<%= glp("ui.analytics.report.filter") %>"/>
+  </div>
+    <% } %>
+    <% if(isIE) { %><b style="position:relative;bottom:-5px;"><%= glp("ui.com.lbl.author") %></b><br/><% } %>
+<jalios:field  name='<%= "mid" %>' value='<%= getMemberParameter("mid") %>' css='jstoreOnly nodnd pull-left'>
+  <jalios:control settings='<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT).placeholder("ui.com.lbl.author") %>' />  
+</jalios:field>
+</form>
+<% } %>

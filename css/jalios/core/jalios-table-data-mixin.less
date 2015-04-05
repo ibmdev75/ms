@@ -1,0 +1,39 @@
+// ----------------------------------------------------
+// See
+//  http://uxmovement.com/content/useful-techniques-for-user-friendly-tables/
+//  http://ux.stackexchange.com/questions/24066/what-is-the-best-practice-for-data-table-cell-content-alignment
+//
+//  How to use:
+//    1. include this mixin file in your .less
+//      @import "../../../css/jalios/core/jalios-table-data-mixin.less";
+//    2. create your variant
+//      .table-data-row-variant(myClassName; @myClassBgColor);
+// ----------------------------------------------------
+
+// Tables
+// -------------------------
+.table-data-row-variant(@state; @background) {
+  // Exact selectors below required to override `.table-striped` and prevent
+  // inheritance to nested tables.
+  TABLE.table-data > THEAD > TR,
+  TABLE.table-data > TBODY > TR,
+  TABLE.table-data > TFOOT > TR {
+    > TD.@{state},
+    > TH.@{state},
+    &.@{state} > TD,
+    &.@{state} > TH {
+      background-color: @background;
+    }
+  }
+
+  // Hover states for `.table-hover`
+  // Note: this is not available for cells or rows within `thead` or `tfoot`.
+  TABLE.table-data > TBODY > TR {
+    > TD.@{state}:hover,
+    > TH.@{state}:hover,
+    &.@{state}:hover > TD,
+    &.@{state}:hover > TH {
+      background-color: darken(@background, 5%);
+    }
+  }
+}

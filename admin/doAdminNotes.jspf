@@ -1,0 +1,39 @@
+<%--
+  @Summary: Admin Notes: this jsp insert the admin notes div.
+            It must be added before the following icons:
+    <a href="#" onclick="return false;" class="admin-notes-toggle">
+      <img src="images/jalios/icons/<%= hasAdminNote ? "postit-marked.gif" : "postit.gif" %>"
+           title='<%= glp(hasAdminNote ? "ui.adm.admin-notes.alt-edit" : "ui.adm.admin-notes.alt-add", adminNoteKey) %>.'
+           alt='<%= glp("ui.adm.admin-notes.alt", adminNoteKey) %>' class='icon' />
+    </a>
+  @Category: Admin
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Since: jcms-5.5.0
+--%>
+<%
+  com.jalios.jcms.AdminNotes adminNotes = com.jalios.jcms.AdminNotes.getInstance();
+  if (json_bridge != null) {
+    json_bridge.registerObject("AdminNotes", adminNotes);
+  }
+  String adminNoteKey = ServletUtil.getResourcePath(request);
+  String adminNote = adminNotes.get(adminNoteKey);
+  boolean hasAdminNote = Util.notEmpty(adminNote);
+  jcmsContext.addJavaScript("js/jalios/core/jalios-admin-notes.js");
+%>
+<div id="admin-notes" data-jalios-admin-notes-key="<%= encodeForHTMLAttribute(adminNoteKey) %>" style="display:none;">
+  <div id="admin-notes-title">
+    <a href="#" onclick="return false;" class="admin-notes-close"><jalios:icon src="close" alt='X'  /></a>
+    <a href="#" onclick="return false;" class="admin-notes-minimize"><jalios:icon src="minimize" alt='-'  /></a>
+    <strong><%= glp("ui.adm.admin-notes.title") %></strong>
+    <div id="admin-notes-unsaved-message" style="display:none;">
+     <a href="#" onclick="return false;" class="admin-notes-save">
+      <%= glp("ui.adm.admin-notes.unsaved") %> &nbsp;
+     </a>
+    </div>
+  </div>
+  <div id="admin-notes-content">
+    <form name="adminNotesForm" action="#"><textarea id="admin-notes-textarea" name="note" cols="80" rows="23" ><%= encodeForHTML(adminNote) %></textarea></form>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<%--
+  @Summary: Inits a Publication's oriented dataImage
+  @Category: Template
+  @Deprecated: False
+  @Customizable: True
+  @Requestable: False
+  @Since: jcms-9.0.1
+--%><%@page import="com.jalios.jcms.FileDocument"%><%
+%><%@page import="com.jalios.util.Orientation"%><%
+%><%@ page contentType="text/html; charset=UTF-8" %><%
+  // Public
+String dataImage = pub.getDataImage(userLang);
+Orientation imageOrientation = null;
+String dataImageTitle = "";
+boolean isLandscape = false;
+boolean isPortrait = false;
+boolean isSquare = false;
+boolean hasImage = false;
+
+{
+  // Internal / private
+  if (Util.notEmpty(dataImage)) {
+    hasImage = true;
+
+    File imageFile = new File(channel.getRealPath(dataImage));
+    if (imageFile.exists()) {
+      imageOrientation = new Orientation(imageFile);
+      FileDocument imageFd = FileDocument.getFileDocumentFromFile(imageFile);
+      if (imageFd != null && imageFd.canBeReadBy(loggedMember)) {
+        // Compute a label for the IMG's title attribute
+        dataImageTitle = imageFd.getTitle(userLang, true);
+      }
+  
+      // HOOK: Check minimum width for image to be Landscape
+      Integer landscapeMinWidth = (Integer)request.getAttribute("publication-image-landscape-min-width");
+      if (landscapeMinWidth == null) {
+        landscapeMinWidth = 800;  // Default minimum width for an image to be "Landscape"
+      }
+      double dataImageWidth = imageOrientation.getWidth();
+      boolean isValidLandscape = dataImageWidth >= landscapeMinWidth;
+  
+      // Fill variables
+      isLandscape = isValidLandscape && imageOrientation.isLandscape();
+      isPortrait = imageOrientation.isPortrait();
+      isSquare = imageOrientation.isSquare();
+    }
+  }
+  request.removeAttribute("publication-image-landscape-min-width");
+}
+%>

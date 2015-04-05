@@ -1,0 +1,36 @@
+<%--
+  @Summary: Retrieve the authentication already process in InitFilter, by the AuthenticationManager
+  @Category: Authentication
+  @Author: Oliver Dedieu, Olivier Jaquemet
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-2.0 
+--%><%
+
+final String jspFile = ServletUtil.getResourcePath(request);
+final Member loggedMember;
+final boolean isLogged;
+final boolean isAdmin;
+final boolean isDBMember;
+final String userLang;
+final String userCountry;
+final Locale userLocale;
+final HashMap trace; // trace store in the jcms session tracker
+final String untranslatedZoneAttribute; // see JcmsUtil.getUntranslatedZoneAttribute(String)
+
+// Retrieve request attributes, as defined by the InitFilter
+loggedMember = (Member) request.getAttribute("loggedMember");
+userLang = Util.getString(request.getAttribute("userLang"), channel.getLanguage());
+userCountry = Util.getString(request.getAttribute("userCountry"), channel.getCountry());
+userLangTL.set(userLang);
+userLocale = (Locale) ((request.getAttribute("userLocale") != null) ? request.getAttribute("userLocale"): channel.getLocale());
+trace = (HashMap) request.getAttribute("trace");
+untranslatedZoneAttribute = JcmsUtil.getUntranslatedZoneAttribute(userLang);
+
+isLogged = (loggedMember != null);
+isAdmin = (isLogged && loggedMember.isAdmin());
+isDBMember = (isLogged && loggedMember instanceof DBMember);
+
+%>

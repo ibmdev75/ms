@@ -1,0 +1,53 @@
+/* --- SIDEBAR and their PANELs --- */
+
+.rt-sidebar {
+  vertical-align: top;
+  background: #F7F7F7;
+}
+.rt-sidebar-wrapper {
+  width: 250px;
+  overflow: hidden;
+  position: relative
+}
+
+A.rt-sidebar-header {
+  display: block;
+  padding: 1px 3px;
+  margin:0px;
+  font-size: 12px;
+  font-weight: normal;
+  white-space: nowrap;
+  background: #f3f3f3;
+  border-top: 1px solid white;
+  border-right: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  border-left: 1px solid white;
+}
+
+DIV.rt-panel {
+  background: white;
+  border-bottom: 1px solid #DFDFDF;
+  padding: 6px;
+  font-size: 11px;
+  width: 100%;
+}
+DIV.rt-panel TD ,DIV.rt-panel div {
+  font-size: 11px;
+}
+
+TD.rt-sidebar-resize, div.rt-sidebar-resize {
+  border-left: 3px solid #f3f3f3;
+  border-right: 1px solid #dfdfdf;
+  background: #f3f3f3;
+  font-size: 1px;
+  line-height: 1px;
+  width: 2px;
+  cursor: e-resize;
+}
+* html TD.rt-sidebar-resize, * html div.rt-sidebar-resize {
+  cursor: auto;
+}
+.rt-content{
+	padding:5px;
+}
+

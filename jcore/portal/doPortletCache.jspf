@@ -1,0 +1,91 @@
+<%
+PortalElement portalElement = (PortalElement) request.getAttribute(PortalManager.PORTAL_PORTALELEMENT);
+boolean portalElementMode =  Util.toBoolean(request.getAttribute("isPortletMode"),false);
+Category portalCat = (Category) request.getAttribute(PortalManager.PORTAL_PORTALCATEGORY);
+Category currentCat = (Category) request.getAttribute(PortalManager.PORTAL_CURRENTCATEGORY);
+Category[] ctxCat = (Category[]) request.getAttribute(PortalManager.PORTAL_CTXCATEGORIES);
+boolean portalCacheDisabled = Util.toBoolean(session.getAttribute("portal.cache.disabled"), false);
+String tmplUsage = jcmsContext.getTemplateUsage(); tmplUsage = tmplUsage!=null ? "USAGE_" + tmplUsage : "";
+
+boolean isCacheDisabled = channel.getCacheManager().isDisabled() || portalElementMode || PortalManager.disableCache(request, portalElement, loggedMember) || portalCacheDisabled;
+boolean isCacheSession = portalElement.hasCacheSession();
+boolean refreshCache = PortalManager.refreshCache(request , portalElement , loggedMember);
+if (portalElement.hasNoCache()) {
+  isCacheDisabled = true;
+} else if (portalElement.hasCacheVisitorsOnly()) {
+  if (isLogged) {
+    isCacheDisabled = true;
+  }
+}
+// FIXME: replace this condition with a test for shared cache : portlet.hasCacheGroups() || portlet.hasCacheServer()
+else if (!isCacheSession) {
+  if (jcmsContext.isEditIcon()) {
+    isCacheDisabled = true;
+  } else if (refreshCache) {
+    isCacheDisabled = true;
+  } else if (hasParameter("preview")) {
+    isCacheDisabled = true;
+  }
+}
+// FIXME: this last condition was probably here before apparition of LRU, to limit the
+// number of cache stored in memory
+// => Should be removed
+else if (Util.isEmpty(portalElement.getInvalidClass()) && (portalElement.getInvalidTime() <= 0)) {
+  isCacheDisabled = true; 
+}
+
+String cacheId = null; // cache id parameter computed only if cache enabled
+
+if (!isCacheDisabled) {
+  cacheId = portalElement.getId() + "_PE_" + userLang +"_"+tmplUsage;
+  
+  // Cache Type
+  if (portalElement.hasCacheGroups()) {
+    if (isLogged) {
+      Set groupSet = new TreeSet(Group.getNameComparator());
+      groupSet.addAll(Arrays.asList(loggedMember.getGroups()));
+      cacheId += "_" + JcmsUtil.dataListToString(new ArrayList(groupSet), "_");
+    }
+  } else if (portalElement.hasCacheMembers()) {
+    if (isLogged) {
+      cacheId += "_" + loggedMember.getId();
+    }
+  } else if (portalElement.hasCacheSessionAndVisitors()) {
+    isCacheSession = isLogged;
+  }
+
+  // Cache sensibility (categories)
+  if (portalElement.hasPortalCategoryCacheSensibility() && portalCat != null) {
+    cacheId += "_" + portalCat.getId();
+  } else if (portalElement.hasCurrentCategoryCacheSensibility() && currentCat != null) {
+    cacheId += "_" + currentCat.getId();
+  }
+    
+  if (Util.notEmpty(ctxCat)) {
+    cacheId += "_" + Util.join(JcmsUtil.dataArrayToStringArray(ctxCat),"_");  
+  }
+
+} // end if (!isCacheDisabled)
+%>
+<jalios:cache id='<%= cacheId %>'  
+              disabled='<%= isCacheDisabled %>'
+              session='<%= isCacheSession %>'
+              classesStr='<%= portalElement.getInvalidClass() %>'
+              timeout='<%= portalElement.getInvalidTime() %>'
+              refresh='<%= refreshCache %>'>
+  <%
+  boolean isPreview = PortalManager.isPreview(request , portalElement);
+  String isPreviewClass = isPreview ? " portletPreview" : "";
+  
+  String templateUsage = Util.getString(jcmsContext.getTemplateUsage(), HttpUtil.getAlphaNumParameter(request, "usage", "box"));
+  
+  if (portalElementMode) { %><div class='PortalMode <%= isPreviewClass %> Portlet ajax-refresh-div <%= "box".equals(templateUsage) ? " box-responsive" : "" %> <%= tmplUsage %> ID_<%= portalElement.getId() %>' id='<%= ServletUtil.generateUniqueDOMId(request, "pmode") %>'><%@ include file='/jcore/portal/doPortletToolbar.jspf' %><% } 
+  if (logger.isDebugEnabled() && !jcmsContext.isAjaxRequest()) { %><!-- [Portlet START]: <%= portalElement.getId() %> / <%= Util.getClassShortName(portalElement.getClass()) %> --><% }
+  try {
+    %><jalios:include target="INCLUDE_BEFORE_SKIN" targetContext="li skin" /><jsp:include page='<%= "/"+portalElement.getSkinPath(jcmsContext) %>' flush="true" /><jalios:include target="INCLUDE_AFTER_SKIN" targetContext="li skin" /><% }
+  catch (Throwable ex) {
+    PortalManager.printPortletException(out, ex, portalElement, logger);
+  }
+  if (logger.isDebugEnabled() && !jcmsContext.isAjaxRequest()) { %><!-- [Portlet END]: <%= portalElement.getId() %> / <%= Util.getClassShortName(portalElement.getClass()) %> --><% } 
+  if (portalElementMode) { %></div><% } %>
+</jalios:cache>

@@ -1,0 +1,143 @@
+<%--
+  @Summary: Member CSV import : workspace's groups List
+  @since: jcms-8
+  @author Sylvain Devaux <sylvain.devaux@jalios.com>
+--%><%@page import="com.jalios.jcms.JcmsUtil"%><%
+%><%!
+//---------------------------------------------------------------
+//
+//	Static code
+//
+//---------------------------------------------------------------
+
+/**
+  *	Prints the toggle link of the Workspace's groups.
+  */
+public String getWorkspaceToggleLink (HttpServletRequest request,
+    										Workspace workspace, 
+    										String userLang, 
+    										boolean displayTheGroups, 
+    										List<String> selectedDatasIdList) {
+  if (workspace == null) { return ""; }
+  StringBuilder sb = new StringBuilder("");
+  for (String[] css : Arrays.asList(new String[][]{new String[]{"ws-open", "treenode-close"}, new String[]{"ws-close", "treenode-open"}})) {
+    sb.append("<a href='#' ");
+    sb.append("class='").append(css[0]).append("' ");
+    sb.append("title='").append(HttpUtil.encodeForHTMLAttribute(glp("ui.member.csv-import.workspaces-and-groups.workspace.label.title"))).append("' ");
+    sb.append("data-jalios-action='toggle:group-show' data-jalios-target='.wrapper' data-jalios-target-position='closest' >");
+    sb.append(JcmsUtil.getHtmlIcon(css[1], "+/-", "", "toggle-icon"));
+    // Workspace icon
+    sb.append(JcmsUtil.getHtmlIcon(workspace.getIcon(), "Workspace", "", ""));
+    sb.append("<span class='workspace-label'>").append(workspace.getTitle(userLang)).append("</span></a>");
+  }
+  return sb.toString();
+}
+
+/**
+  *	Prints the groups container of a workspace.
+  */
+public String getWorkspaceGroupsContainer (HttpServletRequest request, 
+    													Workspace itWs, 
+    													String userLang, 
+    													boolean displayTheGroups, 
+    													List<String> selectedDatasIdList, 
+    													Set<Group> itWsGroupSet) {
+  if (itWs == null) { return ""; }
+  StringBuilder sb = new StringBuilder("");
+  sb.append("<ul id='").append(itWs.getId()).append("_groups' ");
+  sb.append("class='group-list list-unstyled ws-open'>");
+
+  for (Group itGroup : itWsGroupSet) {
+    boolean isDefaultGroup = itGroup.equals(itWs.getDefaultGroup(false));
+		//---------------------------------------------------------------
+		//	Group input
+		//---------------------------------------------------------------
+	  sb.append("<li>");
+	  sb.append("<input type='checkbox' ");
+	  sb.append("name='"+Util.getString(request.getAttribute("step-input-name-attribute"), "missing-name")+"' ");
+	  sb.append("class='group-checker' ");
+	  sb.append("id='ID_").append(itGroup.getId()).append("' ");
+	  int formElementCount = request.getAttribute("formElementCount") != null ? ((Integer)request.getAttribute("formElementCount")).intValue() : -1;
+	  if (formElementCount != -1) {
+	    sb.append("tabindex='").append(formElementCount++).append("' ");
+	  }
+
+	  // Do check the checkbox ?
+	  if (selectedDatasIdList.contains(itGroup.getId()) || (selectedDatasIdList.contains(itWs.getId()) && isDefaultGroup)) {
+		  sb.append("checked='checked' ");
+	  }
+	  
+	  sb.append("value='").append(itGroup.getId()).append("' />");
+    sb.append(JcmsUtil.getHtmlIcon(itGroup.getIcon(), "Grp", "", "group-icon"));
+	  sb.append("<label for='ID_").append(itGroup.getId()).append("' ");
+	  sb.append("class='group-name ").append(isDefaultGroup ? "default-group" : "").append("' ");
+	  sb.append(isDefaultGroup ? "title='"+JcmsUtil.glp(userLang, "ui.wrkspc-edit.lbl.default-grp")+"'" : "");
+	  sb.append(">");
+	  sb.append(itGroup.getName(userLang));
+	  sb.append("</label>");
+	  sb.append("</li>");
+  }
+  sb.append("</ul>");
+	return sb.toString();  
+}
+
+/**
+	*	Prints workspaces list container.
+	*/
+public String getWorkspaces (HttpServletRequest request, 
+    								Set<Workspace> wsSet, 
+    								String userLang, 
+    								List<String> selectedDatasIdList,
+    								boolean isCollaborativeCase, 
+    								final Workspace filterWorkspace,
+    								final Group filterGroup) {
+	if (Util.isEmpty(wsSet)) { return ""; }
+	int counter = 0;
+	StringBuilder sb = new StringBuilder("");
+	sb.append("<div class='workspace-group-list'>");
+	sb.append("<ul class='workspaces-container list-unstyled'>");
+
+ 	for (Workspace itWs : wsSet) {
+ 	  counter++;
+ 	  
+ 	  // Is there any checked group for the current workspace ? If yes, do display the groups
+ 	  Set<Group> itWsGroupSet = itWs.getGroupSet();
+ 	  Set<Data> selectedDataSet = Util.interSet(itWsGroupSet, JcmsUtil.idCollectionToDataSet(selectedDatasIdList, Data.class));
+ 	  boolean isGroupOrCollabSpaceSelected = Util.notEmpty(selectedDataSet);
+ 	  
+		//---------------------------------------------------------------
+		//	Has a workspace been filtered ?
+		//---------------------------------------------------------------
+ 	  if (filterWorkspace != null && ! selectedDatasIdList.contains(filterWorkspace.getId())) {
+ 	    selectedDatasIdList.add(filterWorkspace.getId());	// Mark the filtered workspace as "selected"
+ 	  }
+ 	  
+		//---------------------------------------------------------------
+		//	Has a group been filtered ?
+		//---------------------------------------------------------------
+ 	  if (filterGroup != null && ! selectedDatasIdList.contains(filterGroup.getId())) {
+ 	    selectedDatasIdList.add(filterGroup.getId());	// Mark the filtered group as "selected"
+ 	  }
+ 	  
+ 	  boolean displayTheGroups = isGroupOrCollabSpaceSelected || itWs.equals(filterWorkspace);	// Should display the groups if at least one is selected, or if the logged member filtered the member list on a workspace
+ 	  
+    sb.append("<li class='workspace ").append(isCollaborativeCase ? "cs-groups-container" : "ws-groups-container").append("'>");
+
+		//---------------------------------------------------------------
+		//	Workspace cliquable link
+		//---------------------------------------------------------------
+		sb.append("<div class='wrapper ").append(displayTheGroups ? "group-show" : "").append("'>");
+		sb.append(getWorkspaceToggleLink(request, itWs, userLang, displayTheGroups, selectedDatasIdList));
+
+		//---------------------------------------------------------------
+		//	Workspace groups container
+		//---------------------------------------------------------------
+		sb.append(getWorkspaceGroupsContainer(request, itWs, userLang, displayTheGroups, selectedDatasIdList, itWsGroupSet));
+		sb.append("</div>");
+		sb.append("</li>");
+ 	}
+	sb.append("</ul>");
+	sb.append("</div>");
+	return sb.toString();
+}
+%>

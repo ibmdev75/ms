@@ -1,0 +1,70 @@
+<%@page import="com.jalios.jcms.analytics.AnalyticsManager"%>
+<%@page import="com.jalios.jcms.JcmsConstants"%>
+<%@page import="com.jalios.util.ServletUtil"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Collections"%>
+<%
+if(formHandler.isReportProcessed()){
+
+	List<AbstractStatisticAgent> agentList = instance.getAgents();
+	if(Util.isEmpty(agentList)){
+	  	%><%=glp("ui.analytics.report.no-agent-list")%><%
+	}
+	else{
+%><ul class="nav nav-tabs br" data-jalios-prefs="<%=prefId%>"><%
+	  AbstractStatisticAgent firstAgent = null;
+	  int counter = 1;
+	  List<AbstractStatisticAgent> displayedAgentList = new ArrayList<AbstractStatisticAgent>();
+	  for(AbstractStatisticAgent agent : agentList){
+	    if(agent.isReportDisplayed(selectedWorkspace, formHandler.getAvailableBeginDate(), formHandler.getAvailableEndDate())){
+		    if(firstAgent == null){
+		      firstAgent = agent;
+		    }
+	        displayedAgentList.add(agent);
+		    %><li <%=counter ==  1 ?"class='active'":""%>><a href="#<%=agent.getClass().getName().replaceAll("\\.","_") %>" data-toggle="tab" onclick="return false;"><%=agent.getName(userLang) %></a></li><%
+		    counter ++;
+	    }
+	  }
+	%></ul><%
+	%><div class="tab-content"><%
+	  counter = 1;
+	  long displayedInterval = formHandler.getAvailableEndDate().getTime() - formHandler.getAvailableBeginDate().getTime();
+	  boolean isLazy = displayedInterval > instance.getAjaxDisplayMinimumPeriod();
+	  for(AbstractStatisticAgent agent : displayedAgentList){
+			String agentId = agent.getClass().getName().replaceAll("\\.","_");
+			String jsEventDisplayName = "jalios:analytics:tab:"+agentId;
+			ServletUtil.backupAttribute(pageContext, "jsDisplayEventName");
+			request.setAttribute("jsDisplayEventName", jsEventDisplayName); 
+      if(!isLazy){
+        	%><div class="tab-pane <%=counter ==  1 ?"active":""%>" id="<%=agentId%>"><%
+		        %><jalios:include jsp="<%=agent.getDisplayJSP()%>" /><%
+		      %></div><%
+			}
+			else {
+			   %><div class="analytics-report tab-pane ajax-refresh-div <%=counter ==  1 ?"active":""%>" id="<%=agentId%>" data-jalios-analytics-lazy-jsp="true"><%
+			     %><%=glp("msg.js.process-in-progress")%><%
+	       %></div><%
+			}
+	    ServletUtil.restoreAttribute(pageContext, "jsDisplayEventName");
+	    counter ++;
+	  }
+	  %></div><%
+	  %><jalios:javascript>
+	  !function($){ 		 		
+				$(document).on('jalios:tab', function(event){							
+					if (event.tab.pane.length == 0) { 
+						return; 
+					} 		
+					var evt = jQuery.Event("jalios:analytics:tab:"+event.tab.pane[0].id );
+      				evt.origEvent  = event;
+      				$(document).trigger(evt);
+				});
+				//display first pane
+				var evt = jQuery.Event("jalios:analytics:tab:<%=firstAgent.getClass().getName().replaceAll("\\.","_")%>");
+      			$(document).trigger(evt);
+		}(window.jQuery);
+	  </jalios:javascript>	  
+	  <%
+	}
+}
+%>

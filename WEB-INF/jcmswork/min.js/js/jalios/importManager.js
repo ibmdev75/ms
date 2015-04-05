@@ -1,0 +1,1 @@
+var ImportManager={toggle:function(b){var b=$(b);b.toggle();var a=function(c){if(b!=c){c.hide()}};$$("div.importForm").each(a)}};

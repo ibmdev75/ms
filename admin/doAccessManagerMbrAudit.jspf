@@ -1,0 +1,220 @@
+<%--
+  @Summary: Access Control Manager
+  @Since: jcms-7.0 
+--%>
+  <%-- ************************************************************* --%>
+  <%-- *** Member Audit  ******************************************* --%>
+<%
+  Member auditedMbr = getMemberParameter("mid");
+  Workspace auditedWS = aclWorkspaceFilter ? workspace : getWorkspaceParameter("wsid");
+%>
+  <div class="tab-page" id="mbr-audit">
+  <h2 class="tab">
+    <% if (auditedMbr == null) {%>
+     <% /* %>Member Audit<% */ %> <%= glp("accesscontrol.mbr-audit.title-empty") %>
+    <% } else { %>
+     <% /* %>Member Audit<% */ %> <%= glp("accesscontrol.mbr-audit.title", encodeForHTML(auditedMbr.getName())) %>
+    <% } %>
+  </h2>
+
+    <%-- Select Member --%>
+    <div class="alert alert-info"><%= glp("accesscontrol.mbr-audit.intro") %></div>
+    <form action="<%= ServletUtil.getResourcePath(request) %>" method="get" class="form-horizontal">
+     <fieldset>
+     
+     <jalios:field label="ui.com.lbl.member" name="mid" value='<%=  auditedMbr %>'>
+       <jalios:control settings="<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>" />
+     </jalios:field>
+     
+     <jalios:field label="ui.com.lbl.workspace" name="wsid" value='<%=  auditedWS %>'>
+       <% if (aclWorkspaceFilter) { %>
+         <span class="help-block"><%= auditedWS != null ? auditedWS.getTitle() : "-" %></Span>
+       <% } else { %>
+         <jalios:control type="<%= ControlType.WORKSPACE %>" />
+       <% } %>
+     </jalios:field>
+     
+     <jalios:field>
+     <button type="submit" class="btn btn-primary"><%= glp("accesscontrol.mbr-audit.submit") %></button>
+     </jalios:field>
+     </fieldset>
+    </form>
+    
+   <% if (auditedMbr != null) { %>
+   
+    <%-- Member's groups --%>
+    <h3>
+     <jalios:icon src="group"  alt="group"/> 
+     <%= glp("accesscontrol.mbr-audit.mbr-groups") %>
+    </h3>
+    <p>
+     <%
+      if (Util.isEmpty(auditedMbr.getGroups())) {
+        %><%= glp("accesscontrol.mbr-audit.mbr-group-empty") %><%
+      } else {
+        %><ul><%
+        for (Group auditedMbrGroup : auditedMbr.getGroups()) { 
+          AccessControlList auditedMbrGroupAcl = auditedMbrGroup.getAccessControlList(); %>
+         <li>
+          <jalios:icon src="group" alt="grp"  />
+          <%= auditedMbrGroup.getName(userLang) %>
+          <jalios:edit data='<%= auditedMbrGroup %>'/> 
+          <% if (auditedMbrGroupAcl != null) { %>
+            &nbsp; &rarr; &nbsp; 
+            <jalios:icon src="acl" alt="acl"  />
+            <a href="<%= ServletUtil.getResourcePath(request) %>?id=<%= auditedMbrGroupAcl.getId()%>"><%= auditedMbrGroupAcl.getName() %></a>
+            <jalios:edit data='<%= auditedMbrGroupAcl %>'/> 
+          <% } %>
+         </li><%
+        }
+        %></ul><%
+      }
+     %>
+    </p>
+
+    <%-- Member's WORKSPACE access right --%>
+    <h3>
+     <jalios:icon src="work"  alt="admin"/> 
+     <%= glp("accesscontrol.mbr-audit.adminws-rsrc") %>
+    </h3>
+    <% if (auditedWS == null) { %>
+    <p><%= glp("accesscontrol.mbr-audit.adminws.no-workspace") %></p>
+    <% } %>
+    <% if (auditedWS != null) { %>
+      <p><%= glp("accesscontrol.mbr-audit.adminws.intro", auditedWS.getTitle()) %></p>
+      <table class="table-data table-condensed acls">
+       <thead>
+        <tr>
+         <th class="fixed left text-overflow"><%= glp("accesscontrol.mbr-audit.resource") %></th>
+         <th class="fixed left"><%= glp("accesscontrol.mbr-audit.authorization") %></th>
+         <th class="large left"><%= glp("accesscontrol.mbr-audit.authorized-groups") %></th>
+       </thead>
+       <tbody>
+       <%
+          for (Map.Entry<String,Integer> entry : AccessControlUtil.getOrderedResourcesAndLevelMap().entrySet()) {
+            String resource = entry.getKey();
+            int level = entry.getValue();
+            if (!AccessControlUtil.isWorkspaceAdminResource(resource)) {
+              continue;
+            }
+            boolean resourceAuthorized = auditedMbr.checkAccess(resource, AccessControlUtil.getContext(auditedWS));
+            boolean resourceParentAuthorized = auditedMbr.checkAccess(resource + "/", AccessControlUtil.getContext(auditedWS));
+       %>
+          <tr class="acl level<%= level %> <%= (resourceAuthorized || resourceParentAuthorized) ? "authorized" : "" %>">
+            <td class="formLabel"><%= glp("acl.resource." + resource) %></td>
+            <td>
+            <%
+            if (resourceAuthorized || resourceParentAuthorized) {
+              %><jalios:icon src="tick"  alt="allowed"/><%
+            } else {
+              %><jalios:icon src="cross"  alt="denied"/><%
+            }
+            %>
+            </td>
+            <td>
+             <ul>
+             <% 
+             for (Group auditedMbrGroup : auditedMbr.getGroups()) {
+               AccessControlList auditedMbrGroupAcl = auditedMbrGroup.getAccessControlList(); 
+               if (auditedMbrGroupAcl == null) {
+                 continue;
+               }
+               Boolean auditedMbrGroupAclAuthorization = auditedMbrGroupAcl.getExplicitAccessAuthorization(resource);
+               if (auditedMbrGroupAclAuthorization == null || !auditedMbrGroupAclAuthorization.booleanValue()) {
+                 continue;
+               }
+               %>
+               <li>
+                <jalios:icon src="group" alt="group"  />
+                <%= auditedMbrGroup.getName(userLang) %>
+                <jalios:edit data='<%= auditedMbrGroup %>'/> 
+                 &nbsp; &rarr; &nbsp; 
+                <jalios:icon src="acl" alt="acl"  />
+                <a href="<%= ServletUtil.getResourcePath(request) %>?id=<%= auditedMbrGroupAcl.getId()%>"><%= auditedMbrGroupAcl.getName() %></a>
+                <jalios:edit data='<%= auditedMbrGroupAcl %>'/>
+               </li>
+               <%
+             }
+             %>
+             </ul>
+            </td>
+          </tr>
+       <% } %>
+       </tbody>
+      </table>
+    <% } %>
+    
+    <%-- Member's ADMIN access right --%>
+    <% if (!aclWorkspaceFilter) { %>
+    <h3>
+     <jalios:icon src="admin"   alt="admin"/>
+     <%= glp("accesscontrol.mbr-audit.admin-rsrc") %>
+    </h3>
+      <table class="table-data table-condensed acls">
+       <thead>
+        <tr>
+         <th class="fixed left text-overflow"><%= glp("accesscontrol.mbr-audit.resource") %></th>
+         <th class="fixed left"><%= glp("accesscontrol.mbr-audit.authorization") %></th>
+         <th class="large left"><%= glp("accesscontrol.mbr-audit.authorized-groups") %></th>
+       </thead>
+       <tbody>
+       <%
+          for (Map.Entry<String,Integer> entry : AccessControlUtil.getOrderedResourcesAndLevelMap().entrySet()) {
+            String resource = entry.getKey();
+            int level = entry.getValue();
+            if (AccessControlUtil.isWorkspaceAdminResource(resource)) {
+              continue;
+            }
+            boolean resourceAuthorized = auditedMbr.checkAccess(resource, null);
+            boolean resourceParentAuthorized = auditedMbr.checkAccess(resource + "/", null);
+       %>
+          <tr class="acl level<%= level %> <%= (resourceAuthorized || resourceParentAuthorized) ? "authorized" : "" %>">
+            <td class="formLabel"><%= glp("acl.resource." + resource) %></td>
+            <td>
+            <%
+            if (resourceAuthorized || resourceParentAuthorized) {
+              %><jalios:icon src="tick"  alt="allowed"/><%
+            } else {
+              %><jalios:icon src="cross"  alt="denied"/><%
+            }
+            %>
+            </td>
+            <td>
+             <ul>
+             <% 
+             for (Group auditedMbrGroup : auditedMbr.getGroups()) {
+               AccessControlList auditedMbrGroupAcl = auditedMbrGroup.getAccessControlList(); 
+               if (auditedMbrGroupAcl == null) {
+                 continue;
+               }
+               Boolean auditedMbrGroupAclAuthorization = auditedMbrGroupAcl.getExplicitAccessAuthorization(resource);
+               if (auditedMbrGroupAclAuthorization == null || !auditedMbrGroupAclAuthorization.booleanValue()) {
+                 continue;
+               }
+               %>
+               <li>
+                <jalios:icon src="group" alt="group"  />
+                <%= auditedMbrGroup.getName(userLang) %>
+                <jalios:edit data='<%= auditedMbrGroup %>'/> 
+                 &nbsp; &rarr; &nbsp; 
+                <jalios:icon src="acl" alt="acl"  />
+                <a href="<%= ServletUtil.getResourcePath(request) %>?id=<%= auditedMbrGroupAcl.getId()%>"><%= auditedMbrGroupAcl.getName() %></a>
+                <jalios:edit data='<%= auditedMbrGroupAcl %>'/>
+               </li>
+               <%
+             }
+             %>
+             </ul>
+            </td>
+          </tr>
+       <% } %>
+       </tbody>
+      </table>
+     <% } %>
+  
+   <jalios:javascript>
+     setSelectedTab("aclManagerTab", 2);
+   </jalios:javascript>  
+  <% } %>
+  </div>
+  

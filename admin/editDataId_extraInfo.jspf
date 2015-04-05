@@ -1,0 +1,43 @@
+       
+<% Map<String,Object> extraInfoMap = data.getExtraInfoMap(); %>
+<% if (Util.notEmpty(extraInfoMap)) { %>
+<h4>ExtraInfo (<%= Util.getSize(extraInfoMap) %>)</h4>
+<table class="<%= tableCSS %>">
+  <tr>
+    <th>#</th>  
+    <th><%= glp("ui.com.lbl.name") %></th>
+    <th><%= glp("ui.adm.data-inspector.lbl.class") %></th>
+    <th><%= glp("ui.adm.data-inspector.lbl.value") %></th>
+  </tr>
+  <jalios:pager name="pagerHandlerExtraInfo" declare="true" action="init" size="<%= Util.getSize(extraInfoMap) %>" paramPrefix="inspector_extraInfo_" />  
+  <jalios:foreach collection="<%= extraInfoMap.entrySet() %>" 
+                  name="itEntry" 
+                  type="Map.Entry<String,Object>"
+                  max="<%= pagerHandlerExtraInfo.getPageSize() %>"
+                  skip="<%= pagerHandlerExtraInfo.getStart() %>"
+                  >
+  <% Object obj = itEntry.getValue(); %>
+  <tr>
+    <td class="fit numeric"><%= itCounter %></td>
+    <td class="fit norwrap"><%= itEntry.getKey() %></td>           
+    <td class="fit norwrap">
+      <% if (obj != null) { %>
+      <code title="<%= obj.getClass().getName() %>"><%= obj.getClass().getSimpleName() %></span>
+      <% } %>
+    </td>
+      
+    <td class="value">
+      <% if (obj instanceof Data) { %>
+      <jalios:edit data="<%= (Data)obj %>" /> <jalios:link data="<%= (Data)obj %>" />
+      <% } else if (obj != null) { %>
+      <%= encodeForXML(Util.truncate(obj.toString(), 60, "...")) %>
+      <% } else {  %>
+      <%= obj %>
+      <% } %>
+     </td>
+  </tr>
+  </jalios:foreach>
+ 
+</table>
+<jalios:pager name="pagerHandlerExtraInfo" />
+<% } %>

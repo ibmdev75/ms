@@ -1,0 +1,174 @@
+
+// ------------------------------------------
+//  LIST
+// ------------------------------------------
+
+// The Widget will be pushed by it wrapper
+#JCMS {
+  .widget-aligned() {
+    DIV.widget { 
+      padding-left: 0px;
+      .wdg-list { margin-left: 0px; } 
+    }
+  }
+}
+
+// Badges
+// -------------------------
+.badge-variant(@color: @badge-color; @color-bg: @badge-bg) {
+  color: @color;
+  background-color: @color-bg;
+}
+
+// ------------------------------------------
+//  MISCS
+// ------------------------------------------
+
+#JCMS {
+  .br()         { margin-bottom: @baseline; }
+  .nobr()       { margin-bottom: 0; }
+  .icon()       { // see sprite.less
+	  border: 0;
+	  display: inline-block;
+	  /*.ie7-restore-right-whitespace(); Do not recopy this mixin from sprite.less as it leads to bug JCMS-3567 */
+	  vertical-align: text-top;
+	  // margin-top: 1px;
+   } 
+}
+      
+#JCMS {
+  .badge() { // see label()
+    padding: @paddingMini;
+    font-size: @font-size-small;
+    font-weight: bold;
+    color: #FFF;
+    white-space: nowrap;
+    background-color: @grayLight;
+    .border-radius(@borderRadiusSmall);
+  }
+}
+
+// ------------------------------------------
+//  GRADIENT (fix)
+// ------------------------------------------
+
+#gradient {
+  .radial(@startColor: #0E0E0E, @stopColor: #7D7E7D) when (@mixGradient) {
+    background: @stopColor;
+    background: -moz-radial-gradient(center, ellipse cover, @stopColor 0%, @startColor 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,@stopColor), color-stop(100%,@startColor));
+		background: -webkit-radial-gradient(center, ellipse cover, @stopColor 0%,@startColor 100%);
+//  background: -o-radial-gradient(center, ellipse cover, @stopColor 0%,@startColor 100%); // Opera
+		background: -ms-radial-gradient(center, ellipse cover, @stopColor 0%,@startColor 100%);
+		background: radial-gradient(center, ellipse cover, @stopColor 0%,@startColor 100%);
+  }
+  .radial(@startColor: #0E0E0E, @stopColor: #7D7E7D) when not (@mixGradient) { background: @stopColor; }
+}
+
+// ------------------------------------------
+//  TEXT SHADOW (fix)
+// ------------------------------------------
+
+.text-shadow(@textShadow) when (@mixTextShadow) {
+  text-shadow: @textShadow;
+}
+.text-shadow(@textShadow) when not (@mixTextShadow) {}
+
+// ------------------------------------------
+//  OUTLINE (fix)
+// ------------------------------------------
+
+.outline(@outlineValue) when (@mixOutline) {
+  outline: @outlineValue;
+}
+.outline(@outlineValue) when not (@mixOutline) { }
+
+// ------------------------------------------
+//  BOX
+// ------------------------------------------
+
+#JCMS {
+	.box(@startColor: #F7F8F8, @endColor: #D7D7D7, @bgColor: #FFF, @borderTop: @borderRadiusLarge, @borderBottom: @borderRadiusLarge, @headColor: #606060, @headShadow: @boxTxtLight) { 
+	  .border-radius(@borderTop @borderTop @borderBottom @borderBottom);
+	  background-color: @bgColor;
+	  
+	  .box-header { 
+	    #gradient > .vertical(@startColor, @endColor);
+	    background-color: darken(@startColor, 10%);
+	    
+	    .border-radius(@borderTop @borderTop 0px 0px);
+	
+	    H3, H4 {
+	      color: @headColor;
+	      padding: @boxPadding/2 @boxPadding;
+	      .text-shadow( @headShadow);
+	      margin: 0;
+	      font-size: 16px;
+	    }
+	    A { color: @headColor; }
+	  }
+	  .box-msg { background-color: @startColor; }
+	  .box-footer {
+	    .border-radius(0px 0px @borderBottom @borderBottom);
+	  }
+	  .item-box-footer{
+	    background-color: @grayLightest;
+	    .border-radius(0px 0px @borderBottom @borderBottom);
+	  }
+	}
+	
+	.table-border(@borderColor: @gray, @borderWidth: 1px){
+	  > TR > TD,
+	  > TBODY > TR > TD {
+	    border-width: @borderWidth;
+	    border-color: @borderColor;
+	  }
+	}
+	
+	.sticky(@padding: @boxPadding) {
+		.stick           { margin-left:   -@padding; margin-right: -@padding; }
+	  .stick-footer    { margin-bottom: -@padding; margin-top:    @padding; }
+	  .stick-header    { margin-bottom:  @padding; margin-top:   -@padding; }
+	  .item-box        { margin-left:   -@padding; margin-right: -@padding; }
+	  .item-box-footer { margin-bottom: -@padding; } // No margin-top
+	  .inner-tabs      { padding-left: 5px; margin-left:   -@padding; margin-right: -@padding; overflow:hidden;}
+  }
+}
+
+// Custom font include
+// Generates lines to import your custom font
+.include-custom-font(@folder, @family: arial, @weight: normal, @style: normal){
+  @font-face{
+    font-family: @family;
+    src:url('@{folder}/@{family}.eot');
+    src:url('@{folder}/@{family}.eot?#iefix') format('embedded-opentype'),
+        url('@{folder}/@{family}.woff') format('woff'),
+        url('@{folder}/@{family}.ttf') format('truetype'),
+        url('@{folder}/@{family}.svg#icon') format('svg');
+    font-weight: @weight;
+    font-style: @style;
+  }
+}
+
+.include-custom-font-woff2(@folder, @family: arial, @weight: normal, @style: normal){
+  @font-face{
+    font-family: @family;
+    src:url('@{folder}/@{family}.eot');
+    src:url('@{folder}/@{family}.eot?#iefix') format('embedded-opentype'),
+        url('@{folder}/@{family}.woff2') format('woff2'),
+        url('@{folder}/@{family}.woff') format('woff'),
+        url('@{folder}/@{family}.ttf') format('truetype'),
+        url('@{folder}/@{family}.svg#icon') format('svg');
+    font-weight: @weight;
+    font-style: @style;
+  }
+}
+
+// Responsive image
+// Copy from image.less. Fix for IE9
+.img-responsive(@display: block) {
+  display: @display;
+  width: auto \9; // Fix to avoid with: 100% on icons (see image.less)
+  max-width: 100%; // Part 1: Set a maximum relative to the parent
+  height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
+}

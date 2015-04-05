@@ -1,0 +1,126 @@
+
+/* ----------------------------------------------- */
+/*  CTXTOOLTIP                                     */
+/* ----------------------------------------------- */
+
+.popover.tt {
+  display: table;
+  overflow: visible;
+  
+  min-width:  400px;
+  min-height: 100px;
+  padding: 0;
+  position: relative;
+  
+  &.top .arrow { border-top-color: #E3E9FF; }
+  BUTTON.close { right: 4px; top: 0px; padding-left: 2px; position: absolute; z-index: 1; }
+  
+  .popover-footer { // see Bootstrap: popover-title
+	  background: @popover-title-bg;
+	  padding: 10px 15px;
+	  border-top: 1px solid darken(@popover-title-bg, 5%);
+	  .border-radius(0px 0px 5px 5px);
+	}
+}
+
+/* ----------------------------------------------- */
+/*  CTXTOOLTIP > TOOLTIP                           */
+/* ----------------------------------------------- */
+
+.ctxTooltipMenu {
+  cursor: help;
+}
+
+.popover.tip {
+  min-width:  200px;
+  min-height:  20px;
+
+  &.top    > .arrow:after { border-top-color:    @tooltip-background-color; }
+  &.bottom > .arrow:after { border-bottom-color: @tooltip-background-color; }
+  &.left   > .arrow:after { border-left-color:   @tooltip-background-color; }
+  &.right  > .arrow:after { border-right-color:  @tooltip-background-color; }
+}
+
+.popover.left   > .arrow {left: initial !important;}
+
+.tip .popover-content {
+  max-width: 400px;
+  overflow: hidden;  
+
+  font-size: @font-size-small;
+  line-height: 1,4;  
+
+  background-color: @tooltip-background-color;
+  
+  .border-radius(5px);
+  
+  .tip-content {
+    margin-bottom: 0;
+  }
+  
+  &.popover-large {
+    H5 { margin-top: 0; } // Kludge 
+    min-width: 300px;
+    max-width: 600px; 
+  }
+}
+
+/* ----------------------------------------------- */
+/*  CTXTOOLTIP > TTCARD                            */
+/* ----------------------------------------------- */
+
+DIV.ctxTooltipCard,
+SPAN.ctxTooltipCard { cursor: pointer; }
+
+.tt-card { 
+  max-width: 400px;
+  
+  .popover-content {
+    padding: 0;
+  }
+  
+  .tt-card-body {
+    padding: @ttcard-padding;
+  }
+  
+  .tt-card-abstract {
+	  overflow: hidden;
+  }
+  
+  .tt-card-thumbnail {
+    margin-right: @baseline /2;
+    margin-bottom: @baseline /2;
+  }
+  
+  .tt-card-title {
+    font-weight:bold;
+    margin-bottom: @baseline /2;
+  }
+  
+  .tt-card-meta {
+    font-size: @font-size-small;
+    color: #999;
+  }
+  
+  .tt-card-meta,
+  .tt-card-section {
+    margin-top: 10px;
+    padding-top: 10px;
+	border-top: 1px dashed @gray-lighter;
+  }
+  
+  .AFACtt-card-meta {
+    margin: 0 0 @ttcard-padding 0;
+  }
+  
+
+  
+}
+
+.tt-member {
+  .tt-member-title {
+    font-weight:bold;
+    font-size:@font-size-large;
+    margin-bottom: @baseline /2;
+  }
+}

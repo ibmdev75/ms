@@ -1,0 +1,52 @@
+<%--
+  @Summary: Languages search panel
+  @Deprecated: False
+  @Customizable: False
+  @Requestable: False
+  @Category: Search / Query
+  @Since: jcms-4.0
+--%>
+<%@page import="com.jalios.jcms.taglib.ControlTag"%>
+<% 
+{
+
+boolean dslUserLang = Util.getString((String)request.getAttribute("dslUserLang"), "false").equals("true");
+String[] dslLangs = (String[])request.getAttribute("dslLangs"); 
+Set langSet = new HashSet();
+if (Util.notEmpty(dslLangs)) {
+  langSet.addAll(Arrays.asList(dslLangs));
+}
+int userLangCount = -1;
+%>
+<jalios:field name="langs" resource="field-light">
+           
+  <jalios:if predicate='<%= dslUserLang %>'>
+   <% String langUserInputId = ADVANCEDSEARCH_INPUT_ID_PREFIX + "langUser"; %>       
+   <div class="checkbox">
+     <label dir="<%= channel.getLanguageDirection(userLang) %>">
+       <input type="checkbox" name="langs" value="user" id="<%= langUserInputId %>"
+                              lang="<%= userLang %>" xml:lang="<%= userLang %>"
+                              <%= dslLangs != null && langSet.contains("user") ? "checked=\"checked\"" : "" %>/>
+       <%= glp("ui.work.search.lang.user") %>
+     </label>
+   </div>    
+  </jalios:if>
+  
+  <jalios:foreach collection="<%= channel.getLanguageList() %>"
+                  name="itLang" type="String"> 
+   <% String langInputId = ADVANCEDSEARCH_INPUT_ID_PREFIX + "lang" + itLang; %>
+   <div class="checkbox">
+     <label dir="<%= channel.getLanguageDirection(userLang) %>">
+       <input type="checkbox" name="langs" value="<%= HttpUtil.encodeForHTMLAttribute(itLang) %>"
+                              id="<%= HttpUtil.encodeForHTMLAttribute(langInputId) %>"
+                              lang="<%= userLang %>" xml:lang="<%= userLang %>"
+                              <%= dslLangs != null && langSet.contains(itLang) ? "checked=\"checked\"" : "" %>/>
+       <jalios:lang lang='<%= itLang %>' /> <%= glp("lang." + itLang) %>
+     </label>
+   </div>
+  </jalios:foreach>
+
+  <input type='hidden' name='langs' value='' />
+                  
+</jalios:field>
+<% } %> 

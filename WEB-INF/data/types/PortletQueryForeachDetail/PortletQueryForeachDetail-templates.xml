@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates version="5.0">
+  <template name="ListPresentation" usage="box" file="doListBox.jsp" />
+  <template name="FirstFullDisplay" usage="box" file="doFirstFullDisplay.jsp" />
+  <template name="SpanPresentation" usage="box" file="doSimpleBox.jsp" />
+  <template name="YearlyPresentation" usage="box" file="doYearlyBox.jsp" />
+  <template name="ThumbnailsPresentation" usage="box" file="doThumbnails.jsp" />
+  <template name="ThumbnailsPresentation" usage="full" file="doThumbnails.jsp" />
+  <template name="default" usage="full" file="doFirstFullDisplay.jsp" />
+  <template name="carousel" usage="box" file="doPortletQueryForeachCarousel.jsp" />
+  <template name="carousel" usage="full" file="doPortletQueryForeachCarousel.jsp" />
+</templates>
+

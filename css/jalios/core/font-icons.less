@@ -1,0 +1,74 @@
+@import "init-mixins.less";
+
+/* ----------------------------------------------- */
+/*  GLYPHS                                           */
+/* ----------------------------------------------- */
+
+// Glyphicons Pro 1.8.1
+@import "../../lib/glyphicons/glyphicons.less";
+@import "../../lib/glyphicons/glyphicons-halflings.less";
+
+// Font awesome 4.0.3
+@import "../../lib/fa/font-awesome.less";
+
+// Icomoon
+@import "../../lib/icomoon/icomoon.less";
+
+/* ----------------------------------------------- */
+/*  ICON                                           */
+/* ----------------------------------------------- */
+
+/* Force vertical align for IMG to text-bottom */
+IMG.jalios-icon {
+  vertical-align: text-bottom;
+}
+
+/* Force default color on a jalios-icon */
+.jalios-icon.icon-default-color{
+  color: @icon-font-default-color;
+  &:before{
+    color: @icon-font-default-color;
+  }  
+}
+
+.jalios-icon.white{
+  color: white;
+  &:before{
+    color: #fff;
+  }  
+}
+
+.jalios-icon {
+  /*border: 2px solid @debug ! important;*/
+  &.glyphicon-asterisk { 
+    font-size: 60%;
+    vertical-align: super; 
+    color: @state-danger-text;
+  }
+} 
+
+.jalios-icon-sm {
+  width: 16px;
+  height: 16px;
+  line-height: 16px; // override fff sprites
+  .jalios-icon();
+}
+
+/* ----------------------------------------------- */
+/*  THUMBNAIL                                      */
+/* ----------------------------------------------- */
+
+.thumbnail-inline{
+  display:inline-block;
+}
+
+.thumbnail-broken {
+  background-image: url('../../../images/jalios/layout/bg/thumbnailBroken.gif'); 
+  background-position: center center; 
+  background-repeat: no-repeat;
+  IMG { 
+    width: 100%; height: 100%;
+    background-position: center center; 
+    background-repeat: no-repeat;
+  } 
+} 

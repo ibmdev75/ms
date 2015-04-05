@@ -1,0 +1,68 @@
+§ Option             § Syntax             § 
+| bold font          | *bold*             |
+| italic type        | _italic_           |
+| bold italic text   | __bold italic__    |
+| pre text           | =a pre=            |
+| pre bold text      | ==a pre bold==     |
+
+Separator:
+----
+
+---++ Titre 1
+
+Lorem ipsum dolor sit amet, [[An article]] consectetur adipiscing elit. Sed non risus. Suspendisse [[c_1234][This article]] lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.
+
+---+++ Titre 1-1
+
+Dignissim sit amet, adipiscing nec, ultricies sed, dolor. Some text images/powered-by-jcms.gif du texte
+
+---++++ Titre 1-1-1
+
+Mon paragraphe 3
+
+---++ Lists
+
+   # ordered list, level 1
+      # ordered list, level 2
+         # unordered list, level 3
+
+   * unordered list, level 1
+      * unordered list, level 2
+         * unordered list, level 3
+         
+   1 ordered list, level 1
+      1 ordered list, level 2
+         1 unordered list, level 3
+
+   def1: test1
+   def2: test2
+
+---++ Links
+
+[[An article]]
+
+[[c_1234][This article]]
+
+Some text images/powered-by-jcms.gif du texte
+
+[[upload/docs/image/jpeg/2009-01/image.jpg][320x240]]
+
+con-ta.ct@jalios.com
+
+---++ Blocks
+
+[flv path="upload/video.flv" 
+     width="320" height="240" 
+     image="upload/intro.gif" /]
+
+[mp3 path="upload/music.mp3" /]
+
+[quote]
+  Que penses-tu de cela?
+  [mp3 path="upload/music.mp3" /]
+  et de cela ?
+  [[An article]]
+  et de ça ?
+[/quote]
+
+it's working fine after block !

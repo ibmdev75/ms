@@ -1,0 +1,71 @@
+<%
+{
+Set diffSet = (Set)request.getAttribute("diffSet");
+boolean hiddeCheckboxColumn = (request.getAttribute("hiddeCheckboxColumn") == Boolean.TRUE); 
+boolean checkCanRead = (request.getAttribute("checkCanRead") == Boolean.TRUE); 
+boolean checkCanWrite = (request.getAttribute("checkCanWrite") == Boolean.TRUE); 
+boolean canSelectDeleted = (request.getAttribute("canSelectDeleted") == Boolean.TRUE); 
+File parentDir = (File)request.getAttribute("parentDir");
+String tableId = Util.getString(request.getAttribute("tableId"),"webapps");
+%>
+<table class='table-data listDiff' id='<%= tableId %>'>	
+  <tr>
+    <th>&nbsp;</th>
+    <jalios:if predicate='<%= !hiddeCheckboxColumn %>'>
+    <td class="listHeader text-center"><input type='checkbox' title="<%= glp("ui.com.alt.check-all") %>" onclick='javascript:checkAllwithParentId("<%= tableId %>", "files", this)' /></td>
+    </jalios:if>
+    <th><% /* %>Directory<% */ %><%= glp("ui.adm.um.sign.dir") %></th>
+    <th><% /* %>File<% */ %><%= glp("ui.adm.um.sign.file") %></th>
+    <th><% /* %>Source Change<% */ %><%= glp("ui.adm.um.sign.src-ch") %></th>
+  </tr>
+<% int count = 1; %>
+<jalios:foreach collection='<%= diffSet %>' type='com.jalios.io.SignatureDiffEntry' name='itDiff' counter='diffCounter'>
+  <% 
+  String sourceChange = null;
+  if (itDiff.isSourceCreated()) {
+    sourceChange = "<span class='label label-success'>" + glp("ui.adm.um.diff.create")+ "</span>";
+  } else if (itDiff.isSourceUpdated()) {
+    sourceChange = "<span class='label label-warning'>" + glp("ui.adm.um.diff.update")+ "</span>";
+  } else {
+    sourceChange = "<span class='label label-danger'>" + glp("ui.adm.um.diff.delete")+ "</span>";
+  }
+  String trClass = itDiff.isSourceCreated() ? "listCreateRow" : (itDiff.isSourceUpdated() ? "listUpdateRow" : "listDeleteRow"); 
+  File itFile = new File(parentDir, itDiff.getFile().toString());
+  boolean badAccess = false;
+  String accessErr = "";
+  if (checkCanRead) {
+    badAccess = !itFile.canRead();
+    accessErr = glp("ui.adm.um.sign.read-err", itFile);
+  }
+  if (!badAccess && checkCanWrite) {
+    badAccess = !com.jalios.io.IOUtil.canWrite(itFile, true);
+    accessErr = glp("ui.adm.um.sign.write-err", itFile);
+  }  
+  %>
+  <tr class="<%= trClass %>">
+    <td class="numeric">
+      <%= count++ %>
+    </td>
+    <jalios:if predicate='<%= !hiddeCheckboxColumn %>'>
+    <td class="numeric">
+      <% if (!itDiff.isSourceDeleted()) { %>
+      <%   if (badAccess) { %>
+      <jalios:icon src='warning' title="<%= accessErr %>"/>
+      <%   } else { %>
+      <input type="checkbox" name="files" value="<%= itFile %>" checked />
+      <%   } %>
+      <% } else if (canSelectDeleted) { %>
+      <input type="checkbox" name="files" value="<%= itFile %>" checked />
+      <% } else { %>
+      &nbsp;
+      <% } %>
+    </td>
+    </jalios:if>
+    <td><%= itDiff.getFile().getParent() %></td>
+    <td><%= itDiff.getFile().getName() %></td>
+
+    <td class='text-center'><%= sourceChange %></td>
+  </tr>
+</jalios:foreach>
+</table>
+<% } %>

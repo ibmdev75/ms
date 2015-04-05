@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="Tag" superclass="com.jalios.jcms.Content" debatable="false" unitFieldEdition="true" audienced="false" categoryTab="true" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" titleML="true">
+  <label xml:lang="fr">Tag</label>
+  <title ml="true">
+    <label xml:lang="fr">Titre</label>
+    <label xml:lang="en">Title</label>
+  </title>
+  <fields>
+    <field name="description" editor="textarea" required="true" type="String" searchable="true" abstract="true" wiki="true" rows="5" cols="80" compactDisplay="false" ml="true">
+      <label xml:lang="fr">Description</label>
+      <label xml:lang="en">Description</label>
+    </field>
+    <field name="couleurFond" editor="color" required="true" compactDisplay="false" type="String" ml="false" descriptionType="text" searchable="false" html="false" checkHtml="true">
+      <label xml:lang="fr">couleur de fond</label>
+    </field>
+    <field name="couleurTexte" editor="color" required="false" compactDisplay="false" type="String" ml="false" descriptionType="text" searchable="false" html="false" checkHtml="true">
+      <label xml:lang="fr">couleur de texte</label>
+    </field>
+    <field name="compteur" editor="int" required="false" compactDisplay="false" type="int" default="0">
+      <label xml:lang="fr">compteur</label>
+    </field>
+    <field name="url" editor="link" required="false" compactDisplay="false" type="com.jalios.jcms.portlet.PortalElement" parent="false">
+      <label xml:lang="fr">Url</label>
+    </field>
+  </fields>
+</type>
+

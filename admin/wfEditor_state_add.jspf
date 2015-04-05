@@ -1,0 +1,131 @@
+       
+<jalios:panel title='<%= glp( state == null ? "ui.adm.wf-edit.st.lbl.add" : "ui.adm.wf-edit.st.lbl.update") %>'>
+
+  <ul class="nav nav-tabs br">
+    <li class="active"><a href="#info" data-toggle="tab" onclick="return false;"><jalios:icon src='status' /> <%= glp("ui.adm.wf-edit.st.lgd.info") %></a></li>
+    <li><a href="#actions" data-toggle="tab" onclick="return false;"><jalios:icon src='mail'  /> <%= glp("ui.adm.wf-edit.st.lgd.act") %></a></li>
+    <% if (formHandler.showReminder()) { %>
+    <li><a href="#reminder" data-toggle="tab" onclick="return false;"><jalios:icon src='bell'  /> <%= glp("ui.adm.wf-edit.st.lgd.reminder") %></a></li>
+    <% } %>
+    <% if (formHandler.showWorkflowExpress()) { %>
+    <li><a href="#wfExpress" data-toggle="tab" onclick="return false;"><jalios:icon src='timer'  /> <%= glp("ui.adm.wf-edit.st.lgd.wfe") %></a></li>
+    <% } %>
+  </ul>
+  
+  <div class="tab-content">
+      
+  
+    <%-- -- INFO ------------------------------------------------------- --%>
+    <div class="tab-pane active" id="info">
+      <%-- INFO / LABEL --%>
+      <jalios:field  name="stateLabel" label="ui.com.lbl.label" required='true' ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getAvailableStateLabelMap() %>' disabled='<%= isSpecialState %>'>
+        <jalios:control settings='<%= new TextFieldSettings().showLanguageChooser() %>' />
+      </jalios:field>
+  
+      <%-- INFO / DESCRIPTION --%>
+      <jalios:field  name="stateDescription" label="ui.com.lbl.description" ml='<%= channel.isMultilingual() %>' value='<%= formHandler.getAvailableDescriptionMap() %>' disabled='<%= isSpecialState %>'>
+        <jalios:control settings='<%= new TextAreaSettings().rows(2) %>' />
+      </jalios:field>
+  
+      <%-- INFO / PSTATUS --%>
+      <jalios:field  name='<%= isStateUpdate ? "newPstatus" : "pstatus" %>' label="ui.adm.wf-edit.st.lbl.pstatus" description='<%= isSpecialState ? "" : "ui.adm.wf-edit.st.lbl.pstatus.h" %>' required='true' value='<%= "" + formHandler.getAvailablePstatus() %>'>
+        <% if (isSpecialState) { %>
+          <p class="form-control-static"><code><%= formHandler.getAvailablePstatus() %></code></p>
+          <input type='hidden' name='pstatus' value='<%= formHandler.getAvailablePstatus() %>' />
+        <% } else { %>
+          <jalios:control type="<%= ControlType.NUMBER %>" />
+          <% if (isStateUpdate) { %>
+          <input type='hidden' name='pstatus' value='<%= formHandler.getAvailablePstatus() %>' />
+          <% } %>
+        <% } %>
+      </jalios:field>
+      
+
+      <%-- INFO / INIT STATE --%>
+      <% if (formHandler.showInitState() ) { %>
+      <jalios:field  name="initState" label="ui.adm.wf-edit.st.lbl.init-st" value='<%= "" + formHandler.getAvailableInitState() %>'>
+        <jalios:control type="<%= ControlType.BOOLEAN %>" />
+      </jalios:field>
+      <% } %>  
+    </div>
+    
+    
+    <%-- -- ACTIONS ------------------------------------------------------- --%>
+    <div class="tab-pane" id="actions">
+      <%-- ACTIONS/ INCOMING ACTIONS  --%>
+      <jalios:field name="inAction" label="ui.adm.wf-edit.st.lbl.in-act" tooltip="ui.adm.wf-edit.st.alt.in-act">
+        <div class="checkbox">
+          <label><input type="checkbox" name="inAuthor"  value="true" <%= formHandler.getAvailableInAuthor()  ? "checked" : "" %> /> <%= glp("ui.adm.wf-edit.st.lbl.alert-author") %></label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="inWorkers" value="true" <%= formHandler.getAvailableInWorkers() ? "checked" : "" %> /> <%= glp("ui.adm.wf-edit.st.lbl.alert-workers") %></label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="inAdmins"  value="true" <%= formHandler.getAvailableInAdmins()  ? "checked" : "" %> /> <%= glp("ui.adm.wf-edit.st.lbl.alert-admins") %></label>
+        </div>
+      </jalios:field>
+      
+      <%-- ACTIONS / OUTGOING ACTIONS  --%>
+      <% if (formHandler.showOutgoingActions()) { %>
+      <jalios:field name="outAction" label="ui.adm.wf-edit.st.lbl.out-act" tooltip="ui.adm.wf-edit.st.alt.out-act">
+        <div class="checkbox">
+          <label><input type="checkbox" name="outAuthor"  value="true" <%= formHandler.getAvailableOutAuthor()  ? "checked" : "" %> /> <%= glp("ui.adm.wf-edit.st.lbl.alert-author") %></label>
+         </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="outWorkers" value="true" <%= formHandler.getAvailableOutWorkers() ? "checked" : "" %> /> <%= glp("ui.adm.wf-edit.st.lbl.alert-workers") %></label>
+        </div>
+        <div class="checkbox">
+          <label><input type="checkbox" name="outAdmins"  value="true" <%= formHandler.getAvailableOutAdmins()  ? "checked" : "" %> /> <%= glp("ui.adm.wf-edit.st.lbl.alert-admins") %></label>
+        </div>
+      </jalios:field>
+      <% } %>
+    </div>
+    
+    <%-- -- REMINDER ---------------- --%>
+    <% if (formHandler.showReminder()) { %>
+    <div class="tab-pane" id="reminder">
+      <jalios:field name='<%= "reminder" %>' label="ui.adm.wf-edit.st.reminder" tooltip="ui.adm.wf-edit.st.reminder.h" value='<%= ""+formHandler.getAvailableReminder() %>'>
+        <jalios:control settings='<%= new DurationSettings().resolution(DurationSettings.Resolution.MINUTE) %>' />
+      </jalios:field>
+    </div>
+    <% } %>
+    
+    
+    <%-- WORKFLOW EXPRESS ----------------------------------------------------------------- --%>
+    <% if (formHandler.showWorkflowExpress()) { %>
+    <div class="tab-pane" id="wfExpress">
+      <jalios:field  name='<%= "duration" %>' label="ui.adm.wf-edit.st.timeout" tooltip="ui.adm.wf-edit.st.timeout.h" value='<%= ""+formHandler.getAvailableDuration() %>'>
+        <jalios:control settings='<%= new DurationSettings().resolution(DurationSettings.Resolution.MINUTE) %>' />
+      </jalios:field>
+
+      <%
+       List values = new ArrayList();
+       List labels = new ArrayList();
+         values.add(" ");
+         labels.add(" ");
+       for (WFState wfState : wf.getStateSet()){
+         values.add(String.valueOf(wfState.getPstatus()));
+         labels.add(wfState.getLabel(userLang));
+       }
+      %>
+      <jalios:field  name='<%= "targetPstatus" %>' label="ui.adm.wf-edit.st.dest" tooltip="ui.adm.wf-edit.st.dest.h" value='<%= formHandler.getAvailaibleTargetPstatus() %>'>
+        <jalios:control settings='<%= new EnumerateSettings().select().enumValues(values).enumLabels(labels) %>' />
+      </jalios:field>
+    </div>
+    <% } %>
+     
+  </div>
+  
+  
+  <%-- BUTTONS ---------------------------------------------------------------- --%>
+  <% if (state == null) { %>
+    <input class='btn btn-default <%= canEdit ?"btn-primary" : "" %>' type="submit" name="opAddState" value='<%= glp("ui.com.btn.add") %>' <%= !canEdit ? "disabled='disabled'": "" %> />
+    <% } else { %>
+    <input class='btn btn-default <%= canEdit ?"btn-primary" : "" %>' name="opUpdateState" value='<%= glp("ui.com.btn.update") %>' type="submit" <%= !canEdit ? "disabled='disabled'": "" %> />
+    <input class='btn btn-default' name="opCancel" value='<%= glp("ui.com.btn.cancel") %>' type="submit" />
+    <%   if (!isSpecialState) { %>
+    <%     String confirmDeleteState = encodeForJavaScript(glp("ui.adm.wf-edit.st.lbl.delete", state.getLabel(userLang))); %>
+    <input class='btn btn-default' type='button' name='opDeleteState' value='<%= glp("ui.com.btn.delete") %>' <%= !canEdit ? "disabled='disabled'": "" %> onclick='confirmAction("<%= confirmDeleteState %>", "<%= contextPath %>/admin/wfEditor.jsp?opDeleteState=true&amp;id=<%= formHandler.getAvailableId() %>&amp;pstatus=<%= formHandler.getAvailablePstatus() %>")' />
+    <%   } %>
+  <% } %>
+</jalios:panel>          

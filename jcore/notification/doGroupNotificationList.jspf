@@ -1,0 +1,11 @@
+<% if (group != null) { %>
+<% 
+  String notificationRedirect = ServletUtil.encodeURL(ServletUtil.getUrlWithUpdatedParams(request, new String[] {"openTab"}, new String[] {"4"}, null, false));
+  NotificationCriteria[] notificationCriteriaArray =  group.getNotification() == null ? null : group.getNotification().getCriteria();
+  
+  String dataType = "group";
+  String dataId = group.getId();
+  
+%> 
+  <%@ include file='/jcore/notification/doNotificationList.jspf' %>
+<% } %>

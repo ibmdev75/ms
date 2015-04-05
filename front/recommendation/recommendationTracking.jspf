@@ -1,0 +1,92 @@
+<%@ page import="com.jalios.jcms.tracking.*" %><% 
+  
+  int itRowCounter = 1; 
+  
+  List<ReaderTracker> readerTrackerSet = recoMgr.getRecommendationReaderTrackingMemberSet(recoTrack);
+  Set<Member> readerMemberSet = new java.util.HashSet<Member>();
+  for (ReaderTracker itReaderTracker : readerTrackerSet) {
+    readerMemberSet.add(itReaderTracker.getAuthor());
+  }
+  
+  Set<Member> unreadMemberSet = Util.subSet(recoTrack.getRecipientAndGroupMemberSet(),readerMemberSet);
+  int readCount = Util.getSize(readerMemberSet);
+  int unreadCount = Util.getSize(unreadMemberSet); 
+  int memberCount = readCount + unreadCount;  
+  
+  Map trackingPagerMap = new HashMap();
+  trackingPagerMap.put("recommendationTab","readerTrackingTab");
+  trackingPagerMap.put("recommendationId",recoTrack.getId());
+  
+  jcmsContext.addCSSHeader("css/jalios/core/jalios-member-card.css");
+%>
+<div class="recommendation-tracking">
+  <div class="modal-body">
+    <%@ include file="/front/recommendation/recommendation.jspf" %>
+    
+    <h3>
+      <%= glp("ui.recommendation.modal.lbl.reader-tracking") %>
+    </h3>
+    
+    <div class="content">
+  	  <% if (readCount > 0) { %>        
+  	    <% itRowCounter = 1; %>
+		    <div class="member-tracking br">
+			    <div class="br">
+				    <b><%= glp("ui.recommendation.modal.lbl.mbr.read") %> </b><span class="badge badge-small badge-success"><%= readCount > memberCount ? memberCount : readCount  %> / <%= memberCount %></span>
+			    </div>
+			    <jalios:pager name='readerTrackerPagerHandler' action='init' declare='true' pageSize='9' size='<%= readCount %>' parameterMap="<%= trackingPagerMap %>" />
+          <div class="row">
+			    <jalios:foreach collection="<%= readerMemberSet %>" type="Member" name="itReaderTracker" max="<%= readerTrackerPagerHandler.getPageSize() %>" skip='<%= readerTrackerPagerHandler.getStart() %>'>
+            <jalios:buffer name="cardContent">
+              <div class="date"><%= glp("ui.recommendation.modal.lbl.read") %> <%= JcmsUtil.getFriendlyDate(itReaderTracker.getMdate(), DateFormat.SHORT, true, userLocale) %></div>
+            </jalios:buffer>
+            <%
+            Member itMember = itReaderTracker.getAuthor();
+            request.setAttribute("card-member-no-back-card", Boolean.TRUE);
+            request.setAttribute("card-member-content", cardContent.toString());
+            %>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <%@ include file="/front/card/member/doMemberCard.jspf" %>
+            </div>
+			    </jalios:foreach>
+          <%
+          request.removeAttribute("card-member-no-back-card");
+          request.removeAttribute("card-member-content");
+          %>
+          </div>
+		    </div>          
+		    <jalios:pager name='readerTrackerPagerHandler' />
+		    <% if (unreadCount > 0) { %><hr/><% } %>
+	    <% } %>
+	    <% if(isAuthor && unreadCount > 0) { %>
+		    <% itRowCounter = 1; %>
+		    <div class="member-tracking br">
+			    <div class="br">
+  	        <b><%= glp("ui.recommendation.modal.lbl.mbr.unread") %></b> <span class="badge badge-small badge-important"><%= unreadCount %> / <%= memberCount %></span>
+			    </div>  
+			    <jalios:pager name='unreadMemberPagerHandler' action='init' declare='true' size='<%= unreadCount %>' pageSize='9'/>
+          <div class="row">
+          <jalios:foreach collection="<%= unreadMemberSet %>" type="Member" name="itMember" max="<%= unreadMemberPagerHandler.getPageSize() %>" skip='<%= unreadMemberPagerHandler.getStart() %>'>
+            <jalios:buffer name="cardContent">
+              <% if (!itMember.canRead((Publication) recoTrack.getData(),true)){ %><div class="mbr-card-name"><%= glp("ui.recommendation.modal.lbl.cannot-read") %></div><% } %>
+            </jalios:buffer>
+            <%
+            request.setAttribute("card-member-no-back-card", Boolean.TRUE);
+            request.setAttribute("card-member-content", Util.getString(cardContent.toString(), ""));
+            %>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <%@ include file="/front/card/member/doMemberCard.jspf" %>
+            </div>
+          </jalios:foreach>
+          <%
+          request.removeAttribute("card-member-no-back-card");
+          request.removeAttribute("card-member-content");
+          %>
+          </div>
+        </div>          
+		    <jalios:pager name='unreadMemberPagerHandler' />
+	    </div>
+	    <% } %>    
+    </div><!-- EOF .content -->
+  </div>
+</div><!-- EOF .recommendation-tracking -->

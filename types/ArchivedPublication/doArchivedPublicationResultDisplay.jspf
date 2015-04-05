@@ -1,0 +1,36 @@
+<%@ include file='/jcore/doInitPage.jspf' %><%
+
+  ArchivedPublication obj = (ArchivedPublication)request.getAttribute("publication");
+  String counter = (String)request.getAttribute("counter");
+%>
+<table class='layout'>
+  <tr>
+    <td class="text-left vTop"> 
+      <p>
+        <%-- Search counter, Title --%>
+        <b><font size="-1" face="Arial, Helvetica, sans-serif"><%= counter %>.</font></b>
+	      <font face="Arial, Helvetica, sans-serif">
+	        <jalios:icon src='archive'  title='<%= glp("ui.com.lbl.archived") %>' alt='' /> <b><jalios:link data="<%= obj %>"/></b>
+	        <jalios:if predicate='<%= obj.hasAnyReadRights() %>'>
+	        	<jalios:icon src='key'  title='<%= glp("ui.com.alt.restricted", obj.getReadRightsString(5)) %>'  />
+	        </jalios:if>
+	        <%-- Abstract --%>
+	        <% String archiveAbstract = obj.getAbstract(userLang); %>
+	        <jalios:if predicate="<%= Util.notEmpty(archiveAbstract) %>">
+		        <% String truncateSuffix = "...&nbsp;<a href='" + JcmsUtil.getDisplayUrl(obj, userLocale) + "'>" + glp("ui.com.txt.read-more") + "</a>"; %>
+		       
+		        <jalios:truncate length="400" suffix='<%= truncateSuffix %>'>
+		         <jalios:wiki><%= archiveAbstract %></jalios:wiki>
+            </jalios:truncate>
+           
+	        </jalios:if>
+				</font>
+			</p>
+	    <%-- Detail (author, cdate) --%>
+	    <p class="abstractDetail"> 
+        <a class="abstractDetail" href="<%= ResourceHelper.getQuery() %>?mids=<%= obj.getAuthor().getId() %>"><% /* %>John Smith<% */ %><%= obj.getAuthor() %></a> 
+        - <jalios:date date="<%= obj.getCdate() %>"/><br />
+	    </p>
+    </td>
+  </tr>
+</table>

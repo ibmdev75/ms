@@ -1,0 +1,25 @@
+<%--
+  This jspf should be include in the header of any publication full display
+  It contains : 
+     - Publication's title 
+     - Publication meta : 
+        - date
+        - author
+        - categories
+        - document : mime type and size
+  
+  How to use:
+  <%@ include file="/front/publication/doPublicationHeader.jspf" %>
+ 
+--%><% 
+{
+  Publication pub = (Publication) request.getAttribute(PortalManager.PORTAL_PUBLICATION);
+  if (pub != null) {
+%><div class="publication-header">
+  <%-- TITLE --%> 
+  <h1 class="publication-title" <%= gfla(pub, "title") %> itemprop="name"><%= pub.getTitle(userLang) %></h1>  
+  <%-- METADATA --%>
+  <%@ include file='/front/publication/doPublicationMeta.jspf' %>  
+</div>
+<% } %>
+<% } %>

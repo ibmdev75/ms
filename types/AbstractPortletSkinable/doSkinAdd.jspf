@@ -1,0 +1,19 @@
+<%--
+  @Summary: Publish links after a Skin's title
+  @Category: Skin utility
+  @Author: Jean-Philippe Encausse
+  @Customizable: True
+  @Requestable: False
+  @Since: jcms-5.7
+--%><%
+{
+  boolean showAdd = Util.toBoolean((Boolean)request.getAttribute("skin.show-add"), true);
+  if (showAdd){
+    request.setAttribute("portletAddLabel", Util.getString(request.getAttribute("skinAddLabel"),""));
+    %><%@ include file="/front/portlet/doAddIcon.jspf" %><%
+    request.removeAttribute("portletAddLabel");
+  }
+}
+%><jalios:include target="SKIN_AFTERADDICON" targetContext="skin" /><%
+request.removeAttribute("skin.show-add");
+%>

@@ -1,0 +1,30 @@
+<% 
+String redirect = (String) request.getAttribute("modal.redirect");
+boolean absolutRedirect = Util.toBoolean(request.getAttribute("modal.redirect.absolute"), false);
+boolean exit = Util.toBoolean(request.getAttribute("modal.redirect.exit"), true);
+%>
+<jalios:modal title="msg.js.process-in-progress" css="modal-md">
+  
+  <jalios:buffer name="MODAL_CONTENT">
+    <div class="modal-body text-center">
+      <jalios:icon src="wait" /> 
+    </div>
+    
+    <jalios:javascript>
+    setTimeout(function(){
+    
+    <% if (Util.notEmpty(redirect)) { %>
+    <%   if (absolutRedirect) { %>
+      jQuery.jalios.Browser.redirect("<%= redirect %>");
+    <%   } else { %>
+      jQuery.jalios.Browser.redirect("<%= contextPath + "/" + redirect %>");
+    <%   } %>
+    <% } else { %>
+    jQuery.jalios.Browser.reload();
+    <% } %>
+    },500);
+    </jalios:javascript>
+  </jalios:buffer>
+  
+</jalios:modal>
+<% if (exit) { return; } %>

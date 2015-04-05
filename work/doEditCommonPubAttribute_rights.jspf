@@ -1,0 +1,64 @@
+<%-- RIGHTS ------------------------------------------------------------ --%> 
+<% if (!formHandler.isReadRightTabHidden() || !formHandler.isUpdateRightTabHidden()) { 
+currentTabIndex++;%>
+<div class="tab-page">
+  <h2 class="tab">
+    <jalios:icon src="key" alt="R" title="ui.work.form.lbl.rights" />
+    <%= glp("ui.work.form.lbl.rights") %>
+  </h2>
+  <jalios:include target="EDIT_PUB_RIGHTTAB_HEADER" />
+
+  <div class="tab-pane" id="content-right-tab-pane-1">
+    <%-- READ RIGHT ------------------------------------------------------------ --%> 
+    <% if (!formHandler.isReadRightTabHidden()) { %>
+    <div class="tab-page">
+      <h2 class="tab">
+        <jalios:icon src="read-right" alt="R" title="ui.work.form.lbl.read-rights" />
+        <%= glp("ui.work.form.lbl.read-rights") %>
+      </h2>
+      <jalios:include target="EDIT_PUB_READRIGHTTAB_HEADER" />
+
+      <jalios:message msg="ui.work.form.lbl.read-rights.info" title="" dismissable="false" />
+
+      <%-- AuthorizedGroupSet ------------------------------------------------------------ --%> 
+      <jalios:field label="ui.work.form.lbl.grp-read-rights" name="authorizedGroupIds" value="<%= formHandler.getAvailableAuthorizedGroupSet() %>" mv="1" resource="field-vertical" css="nodnd">
+        <jalios:control type="<%= ControlType.GROUP %>" />
+      </jalios:field>
+
+      <%-- AuthorizedMemberSet ------------------------------------------------------------ --%> 
+      <jalios:field label="ui.work.form.lbl.mbr-read-rights" name="authorizedMemberIds" value="<%= formHandler.getAvailableAuthorizedMemberSet() %>" mv="1" resource="field-vertical" css="nodnd">
+        <jalios:control settings="<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>" />
+      </jalios:field>
+
+      <jalios:include target="EDIT_PUB_READRIGHTTAB_FOOTER" />
+    </div>
+    <% } %>
+  
+    <%-- UPDATE RIGHT ------------------------------------------------------------ --%> 
+    <% if (!formHandler.isUpdateRightTabHidden()) { %>
+    <div class="tab-page">
+      <h2 class="tab">
+        <jalios:icon src="update-right" alt="U" title="ui.work.form.lbl.update-rights" />
+        <%= glp("ui.work.form.lbl.update-rights") %>
+      </h2>
+      <jalios:include target="EDIT_PUB_UPDATERIGHTTAB_HEADER" />
+  
+      <jalios:message msg="ui.work.form.lbl.update-rights.info" title="" dismissable="false" />
+        
+      <%-- UpdateGroupSet ------------------------------------------------------------ --%> 
+      <jalios:field label="ui.work.form.lbl.grp-update-rights" name="updateGroupIds" value="<%= formHandler.getAvailableUpdateGroupSet() %>" mv="1" resource="field-vertical" css="nodnd">
+        <jalios:control type="<%= ControlType.GROUP %>" />
+      </jalios:field>
+  
+      <%-- UpdateMemberSet ------------------------------------------------------------ --%> 
+      <jalios:field label="ui.work.form.lbl.mbr-update-rights" name="updateMemberIds" value="<%= formHandler.getAvailableUpdateMemberSet() %>" mv="1" resource="field-vertical" css="nodnd">
+        <jalios:control settings="<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>" />
+      </jalios:field>
+  
+      <jalios:include target="EDIT_PUB_UPDATERIGHTTAB_FOOTER" />
+    </div>
+    <% } %>
+  
+  </div><%-- End RIGHTS '#content-right-tab-pane-1' --%>
+</div><%-- End RIGHTS 'tab-page' --%>
+<% } %>

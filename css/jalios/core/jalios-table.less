@@ -1,0 +1,49 @@
+/* ----------------------------------------------- */
+/*  TABLE                                          */
+/* ----------------------------------------------- */
+
+TABLE {
+  .expand {
+    width:100%;
+  }
+  .fit {
+    width:1%;
+  }  
+}
+TABLE.layout {
+  width: 100%;
+  table-layout: fixed;
+}
+
+// Default alignments
+TABLE.layout TD,
+DIV.Portlet DIV.col-item { vertical-align: top; }
+
+// Custom alignments
+TABLE.layout TD.row-item,
+DIV.Portlet DIV.col-item {
+  &.vBaseline { vertical-align: baseline; }
+  &.vTop      { vertical-align: top;      }
+  &.vMiddle   { vertical-align: middle;   }
+  &.vBottom   { vertical-align: bottom;   }
+}
+
+TABLE.auto     { width: auto; }
+TABLE.table TH { white-space: nowrap; }
+
+// Chrome fix default max-width value (Should * == DIV/SPAN/A) 
+TD > IMG,
+TD > * > IMG,
+TD > * > * > IMG { max-width: none; }
+
+
+TR.odd TH,
+TR.odd TD{
+  background-color: @table-bg-hover;
+}
+
+/* ----------------------------------------------- */
+/*  TABLE - MENU                                   */
+/* ----------------------------------------------- */
+
+TABLE.menu { border: 2px solid #C900B3;}

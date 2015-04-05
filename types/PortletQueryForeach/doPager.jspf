@@ -1,0 +1,36 @@
+<%--
+  @Summary: Display (or not) the pager for the PortletQueryForeach
+            jsp included after doForeachFooter.jsp
+--%>
+<% if ("Yes".equals(box.getShowPager()) || (request.getAttribute("publication") == box)) { %>
+  <jalios:pager name="pagerHandler" template="pqf" />
+<% } else if ("Link".equals(box.getShowPager()) && (qfeIdx > 0) && (qfeIdx < resultSize) && (Util.notEmpty(box.getQueries()))) { %>
+  <% if (box.getQueries().length == 1) { %>
+    <div class="text-right">
+      <% 
+      String queryUrl = ResourceHelper.getQuery() + "?" + ServletUtil.escapeAmpersand(box.getQueries()[0]);
+      if ("Portal".equals(box.getRefineQueries())) { queryUrl += "&amp;cids="+portalCategory.getId(); }
+      if ("Current".equals(box.getRefineQueries())){ queryUrl += "&amp;cids="+currentCategory.getId(); }
+      if (Util.getString(box.getRefineQueries(),"").indexOf("Exact") != -1){ queryUrl += "&amp;exactCat=true"; }
+      if (Util.notEmpty(box.getRefineQueries()) && !"None".equals(box.getRefineQueries())){ queryUrl += "&amp;portal="+portal.getId(); }
+      queryUrl += "&amp;sort=" + Util.getString(box.getOrderBy(),"date").toLowerCase();
+      %>
+      <a href='<%= queryUrl %>' class='PagerLink'><%= box.getPagerLabel(userLang) %></a>
+    </div>
+  <% } else if (box.getQueries().length > 1) { %>
+    <div class="text-right">
+      <a href='<%= ServletUtil.getUrlWithUpdatedParam(request,"id",box.getId()) %>' class='PagerLink'><%= box.getPagerLabel(userLang) %></a>
+    </div>
+  <% } %>
+<% } %>
+<%  
+// Now that all action params have been read and used for
+// this portlet (sorting, iteration & pager) remove them.
+// This will prevent those params to be reused for the same
+// portlet's instance but with another refinement. (fix JCMS-1081)
+PortalManager.removeAction(request, box, "sort");
+PortalManager.removeAction(request, box, "reverse");
+PortalManager.removeAction(request, box, "start");
+PortalManager.removeAction(request, box, "pageSize");
+PortalManager.removeAction(request, box, "pagerAll");
+%>

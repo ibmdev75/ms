@@ -1,0 +1,44 @@
+#jalios-bottombar-placeholder { height: @baseline * 1.5; }
+#jalios-bottombar {
+  width: 100%; position: fixed; bottom: 0;  left: 0; 
+  z-index: @zindex-bottombar;
+  margin: 0; padding: @baseline / 4 0; 
+  
+  background-color: @gray-lighter;
+  border-top:       1px solid #CCC;
+
+  #gradient > .vertical(@start-color: @well-bg; @end-color: darken(@well-bg, 10%));
+  
+  color: @text-muted;
+  A {
+    color: @text-muted;
+  }
+}
+
+.boMenu {
+  padding-top: @baseline / 2;
+  padding-left: @baseline / 2;
+  background-color: @gray-lighter;
+}
+
+.boSubMenu {
+  margin-left: @baseline / 2;
+  margin-right: @baseline / 2;
+}
+
+// Stick to top area after the sub menu
+.boSubMenu {
+  & + .AdminArea, 
+  & + .EditArea, 
+  & + .WorkArea {
+    padding-top: 0;
+  }
+}
+// Stick to top main area within an area
+.AdminArea,
+.WorkArea {
+  .AdminArea, 
+  .WorkArea {
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletMenu" reviewable="false" debatable="false" categoryTab="false" categoryRequired="false" visible="true" superclass="generated.AbstractPortlet" unitFieldEdition="false" audienced="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="items" editor="enumerate" required="false" compactDisplay="false" type="String[]" searchable="false" ml="false" valueList="Flag | FlagList | FlagMenu | LoggedMember | Date | Time | Space | Separator | Work | Admin | Home | SiteMap | Caddy | Login | Portal | Preview | UserManual | SwitchContext | Plugins" descriptionType="tooltip" chooser="multilistbox" html="false" checkHtml="true" />
+    <field name="itemSeparaor" editor="image" required="false" compactDisplay="false" type="String" searchable="false" size="80" maxlength="500" ml="false" descriptionType="tooltip" html="false" toolbar0="open" toolbar1="open" toolbar2="open" toolbar3="open" toolbar4="open" fileChooser="false" imageMap="false" resize="false" resizeWidth="100" resizeHeight="75" />
+    <field type="super" />
+  </fields>
+</type>
+

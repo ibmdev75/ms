@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates version="5.0">
+  <template name="FirstFullDisplay" usage="box" file="doFirstFullDisplay.jsp" />
+  <template name="FirstFullDisplay" usage="full" file="doFirstFullDisplay.jsp" />
+  <template name="carousel" usage="box" file="doPortletQueryForeachCarousel.jsp" />
+  <template name="carousel" usage="full" file="doPortletQueryForeachCarousel.jsp" />
+  <template name="default" usage="box" file="doPortletQueryForeachResults.jsp" />
+  <template name="default" usage="full" file="doPortletQueryForeachResults.jsp" />
+  <template name="full" usage="box" file="doPortletQueryForeachFulls.jsp" />
+  <template name="full" usage="full" file="doPortletQueryForeachFulls.jsp" />
+  <template name="fullwithheader" usage="box" file="doPortletQueryForeachFullsWithHeaders.jsp" />
+  <template name="fullwithheader" usage="full" file="doPortletQueryForeachFullsWithHeaders.jsp" />
+  <template name="newspaper" usage="box" file="doPortletQueryForeachNewspaper.jsp" />
+  <template name="newspaper" usage="full" file="doPortletQueryForeachNewspaper.jsp" />
+  <template name="newspaperLead" usage="box" file="doPortletQueryForeachNewspaperLead.jsp" />
+  <template name="newspaperLead" usage="full" file="doPortletQueryForeachNewspaperLead.jsp" />
+</templates>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletQueryForeachDetail" reviewable="false" debatable="false" categoryTab="false" categoryRequired="false" visible="true" superclass="generated.PortletQueryForeach" unitFieldEdition="false" audienced="false" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="showTitle" editor="boolean" required="false" compactDisplay="false" type="boolean" default="on" ml="false" searchable="false" descriptionType="tooltip" tab="common" />
+    <field name="showAbstract" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" searchable="false" tab="common" descriptionType="tooltip" />
+    <field name="showAuthor" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" searchable="false" tab="common" descriptionType="tooltip" />
+    <field name="showCategories" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" searchable="false" tab="common" descriptionType="tooltip" />
+    <field name="showDate" editor="enumerate" required="false" compactDisplay="false" type="String" valueList="cdate | udate | mdate | pdate | edate" ml="false" searchable="false" tab="common" descriptionType="tooltip" chooser="listbox" html="false" />
+    <field name="showStatus" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" descriptionType="tooltip" tab="technical" searchable="false" />
+    <field name="showType" editor="boolean" required="false" compactDisplay="false" type="boolean" default="off" ml="false" descriptionType="tooltip" tab="technical" searchable="false" />
+    <field name="showRights" editor="boolean" required="false" compactDisplay="false" tab="technical" type="boolean" default="off" ml="false" descriptionType="tooltip" searchable="false" />
+    <field name="showId" editor="boolean" required="false" compactDisplay="false" tab="technical" type="boolean" default="off" ml="false" descriptionType="tooltip" searchable="false" />
+    <field type="super" />
+  </fields>
+  <tabs>
+    <tab id="technical" />
+    <tab id="common" />
+  </tabs>
+</type>
+

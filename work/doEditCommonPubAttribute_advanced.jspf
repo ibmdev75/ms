@@ -1,0 +1,277 @@
+<%-- ADVANCED ------------------------------------------------------------ --%> 
+<% if (formHandler.isAdvancedTabHidden()) { %>
+  <input type="hidden" name="ws" value="<%= formHandler.getAvailableWorkspace().getId() %>" />
+<% } else { %>
+  <div class="tab-page">
+    <h2 class="tab">
+      <jalios:icon src="advanced" alt="A" title="ui.work.form.tab.adv" />
+      <%= glp("ui.work.form.tab.adv") %>
+    </h2>
+    <jalios:include target="EDIT_PUB_ADVTAB_HEADER" />
+
+    <div class="row">
+      <div class="col-md-6">
+
+        <%-- MEMBERSHIP --%>
+        <fieldset>
+          <legend><%= glp("ui.work.form.adv.membership") %></legend>
+
+          <%-- AUTHOR --------------------------------------------------------------- --%>
+          <% Member author = formHandler.getAvailableAuthor(); %>
+          <% if (false && isAdmin || (isLogged && loggedMember.isWorkAdmin())) { %> 
+            <jalios:field name="author" label="ui.com.lbl.author" required="true" value="<%= author %>">
+              <jalios:control settings='<%= new MemberSettings().filter(MemberSettings.MemberFilter.ACCOUNT) %>' />
+            </jalios:field>
+
+          <% } else if (author != null) { %> 
+            <jalios:field name="author" label="ui.com.lbl.author">
+              <p class="form-control-static"><%= author %></p>
+            </jalios:field>
+            <input type="hidden" name="author" value="<%= author.getId() %>" />
+          <% }  %>
+                                
+          <%-- WORKSPACE --------------------------------------------------------------- --%>
+          <% if (isAdmin) { %>
+            <jalios:field  name="ws" label="ui.com.lbl.workspace" required="true" value="<%= formHandler.getAvailableWorkspace() %>">
+              <jalios:control type="<%= ControlType.WORKSPACE %>" />
+            </jalios:field>
+          <% } else { %>
+            <%
+            // Compute a set of workspace in which member can publish the type of document being worked on
+            Set<Workspace> mbrWsSet = loggedMember.getWorkspaceSet();
+            Set<Workspace> mbrWsCanPublishSet = new TreeSet<Workspace>(Workspace.getNameComparator(userLang));
+            mbrWsCanPublishSet.add(workspace); // Fix JCMS-3606 - Force the current WS
+            for (Workspace itWs : mbrWsSet) {
+              if (loggedMember.canPublish(formHandler.getPublicationClass(), itWs)) {
+                mbrWsCanPublishSet.add(itWs);
+              }
+            }
+            // If the user can publish same data in other workspace, display a select of those workspace
+            if (mbrWsCanPublishSet.size() > 1) { %>
+              <jalios:field name="ws" label="ui.com.lbl.workspace">
+                <select name="ws" class="form-control form-control-inline">
+                  <% for (Workspace itWs : mbrWsCanPublishSet) { %>
+                    <option value="<%= itWs.getId() %>"   <% if (formHandler.getAvailableWorkspace() == itWs) { %>selected="selected"<% } %>><%= encodeForHTML(itWs.getTitle(userLang)) %></option>
+                  <% } %>
+                </select>
+              </jalios:field>
+            <%
+            // Otherwise : simply display the current workspace title
+            } else { %>
+              <jalios:field name="ws" label="ui.com.lbl.workspace">
+                <p class="form-control-static"><%= formHandler.getAvailableWorkspace().getTitle(userLang) %></p>
+              </jalios:field>
+              <input type="hidden" name="ws" value="<%= formHandler.getAvailableWorkspace().getId() %>" />
+            <% } %>
+          <% } %>
+        </fieldset>
+
+        <%-- ADVANCED OPTIONS --%>
+        <fieldset>
+          <legend><%= glp("ui.work.form.adv.adv-opt") %></legend>
+
+          <%-- TRACK READER ---------------------------------------------------------- --%>
+          <% if (formHandler.showReaderTracker()){ %>
+            <jalios:field label="ui.work.form.lbl.track" name="tracked" tooltip="ui.work.form.lbl.track.h" value="<%= formHandler.getAvailableTracked() %>">
+              <jalios:control type="<%= ControlType.BOOLEAN %>" />
+            </jalios:field>
+          <% } %>
+
+          <%-- MAIN LANGUAGE --------------------------------------------------------------- --%>
+          <% if (formHandler.showMainLanguage()){ %>
+            <jalios:field label="ui.work.form.lbl.main-language" name="mainLanguage" value="<%= formHandler.getAvailableMainLanguage() %>">
+              <jalios:control settings='<%= new LanguageSettings().enumValues(channel.getLanguageList()).select() %>' />
+            </jalios:field>
+          <% } %>
+
+          <%-- SDATE ------------------------------------------------------------ --%>
+          <% if (formHandler.showSDate()){ %>
+            <jalios:field  name="sdate" label="ui.work.form.lbl.sdate" value="<%= formHandler.getAvailableSdate() %>">
+              <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+            </jalios:field>
+          <% } %>
+        </fieldset>
+
+      </div>
+      <div class="col-md-6">
+            
+        <%-- IMPORT INFO --%>
+        <% if (pub != null && pub.isImported()) { %>
+
+          <fieldset>
+            <legend><%= glp("ui.work.form.adv.import") %></legend>
+
+            <%-- IMPORT STATUS ------------------------------------------------------------ --%>
+            <%= glp("ui.com.lbl.import.status") %>
+
+            <%
+            String importStatus = "ui.com.lbl.import.status.i";
+            if (pub.hasImportConflict()) {
+              importStatus = "ui.com.lbl.import.status.c";
+            }
+            else if (pub.isImportUpdated()) {
+              importStatus = "ui.com.lbl.import.status.u";
+            }
+            %>
+            <%= glp(importStatus) %>
+
+            <%-- IMPORT SOURCE ------------------------------------------------------------ --%>
+            <%= glp("ui.com.lbl.import.source") %>
+            <%= pub.getImportSource() %>
+
+            <%-- IMPORT BATCH ------------------------------------------------------------ --%>
+            <%= glp("ui.com.lbl.import.batch") %>
+            <%= pub.getImportBatch() %>
+
+            <%-- IMPORT VERSION ------------------------------------------------------------ --%>
+            <%= glp("ui.com.lbl.import.version") %>
+            <%= pub.getImportVersion() %>
+
+            <%-- IMPORT AUTHOR ------------------------------------------------------------ --%>
+            <%= glp("ui.com.lbl.import.author") %>
+            <%= pub.getImportAuthor() %>
+
+            <%-- IMPORT ID ------------------------------------------------------------ --%>
+            <%= glp("ui.com.lbl.import.id") %>
+            <%= pub.getImportId() %>
+
+          </fieldset>
+
+        <% } /* isImported */ %>
+
+        <%-- RIGHT COLUMN --%>
+        <% if (formHandler.showFriendlyURL()) { %>
+          <%-- FRIENDLY URL ------------------------------------------------------------ --%>
+          <fieldset><legend><%= glp("ui.com.lbl.friendly-urls") %></legend>
+              <% request.setAttribute("data", pub); %>
+              <%@ include file="/work/doEditFriendlyURL.jspf" %>
+          </fieldset>
+        <% } %>
+                        
+        <% if (pub != null) { %>
+          <%-- REFERRER ------------------------------------------------------------ --%>
+          <% boolean hasReferrer = false; %>
+          <jalios:buffer name="referrerFieldSet">
+            <fieldset>
+              <legend><%= glp("ui.work.form.adv.referrers") %></legend>
+
+              <%-- WORK COPIES ------------------------------------------------------------ --%>
+              <% if (Util.notEmpty(pub.getWorkCopySet())) { %>
+                <% hasReferrer = true; %>
+                <%= glp("ui.com.lbl.workcopy") %>
+                <ul>
+                  <jalios:foreach collection="<%= pub.getWorkCopySet() %>" name="itCopy" type="Publication">
+                    <li>
+                      <jalios:icon src="workcopy" />
+                      <jalios:link data="<%= itCopy %>" />
+                      (<jalios:date date="<%= itCopy.getCdate() %>" />
+                      <jalios:time date="<%= itCopy.getCdate() %>" />)
+                      <jalios:edit pub="<%= itCopy %>" />
+                    </li>
+                  </jalios:foreach>
+                </ul>
+              <% } %>
+
+              <%-- LINK REFERRER ------------------------------------------------------------ --%>
+              <% if (pub.getLinkCount() > 0) { %>
+                <% hasReferrer = true; %>
+                <% request.setAttribute("data", pub); %> <%@ include file="/admin/doLinkReferrer.jspf"%>
+              <% } %>
+
+              <%-- WEAK REFERRERS ------------------------------------------------------------ --%>
+              <% if (pub.hasWeakReferrers()) { %>
+                <% hasReferrer = true; %>
+                <%= glp("ui.work.form.lbl.weak-ref") %>
+                <ul>
+                  <jalios:foreach name="itReferrer" type="Publication" collection="<%= pub.getWeakReferrerSet() %>">
+                    <li>
+                      <jalios:edit pub="<%= itReferrer %>" redirect='<%= "edit.jsp?id=" + pub.getId() %>' />
+                      <jalios:link data="<%= itReferrer %>" />
+                    </li>
+                  </jalios:foreach>
+                </ul>
+              <% } %>
+            </fieldset>
+          </jalios:buffer>
+          <% if (hasReferrer) { %>
+            <%= referrerFieldSet %>
+          <% } %>
+                  
+          <%-- TECH INFO --%>
+          <fieldset>
+            <legend><%= glp("ui.work.form.adv.tech-info") %></legend>
+          
+            <dl class="dl-horizontal">
+
+              <%-- VERSION ------------------------------------------------------------ --%>
+              <% if (!formHandler.isDBType()) { %>
+                <dt><%= glp("ui.com.lbl.version") %></dt>
+                <dd>
+                  <%= pub.getVersionString() %>
+                  <% if (pub.isVersioned()) { %>
+                    <a href="work/version.jsp?id=<%= pub.getId() %>"><jalios:icon src="version" title="ui.com.alt.version" /></a>
+                  <% } %>
+                </dd>
+              <% } %>
+
+              <%-- CDATE ------------------------------------------------------------ --%>
+              <dt><%= glp("ui.com.lbl.cdate-long") %></dt>
+              <dd>
+                <jalios:date date="<%= pub.getCdate() %>" format="short" /> 
+                <jalios:time date="<%= pub.getCdate() %>" format="short" />
+              </dd>
+                          
+              <%-- UDATE ------------------------------------------------------------ --%>
+              <% if (!formHandler.isDBType()) { %>
+                <dt><%= glp("ui.com.lbl.udate-long") %></dt>
+                <dd>
+                  <jalios:date date="<%= pub.getUdate() %>" format="short" />
+                  <jalios:time date="<%= pub.getUdate() %>" format="short" />
+                </dd>
+              <% } %>
+              
+              <%-- MDATE ------------------------------------------------------------ --%>
+              <dt><%= glp("ui.com.lbl.mdate-long") %></dt>
+              <dd>
+                <jalios:date date="<%= pub.getMdate() %>" format="short" />
+                <jalios:time date="<%= pub.getMdate() %>" format="short" />
+              </dd>
+              
+              <%-- INDEXING DATE ----------------------------------------------------- --%>
+              <dt><%= glp("ui.com.lbl.idx-date-long") %></dt>
+              <dd>
+                <% Date indexingDate = pub.getIndexingDate();
+                if (indexingDate != null) { %>
+                  <jalios:date date="<%= indexingDate %>" format="short" />
+                  <jalios:time date="<%= indexingDate %>" format="short" />
+                <% } %>
+              </dd>
+              
+              <%-- OPAUTHOR ------------------------------------------------------------ --%>
+              <% if (!formHandler.isDBType()) { %>
+                <dt><jalios:tooltip property="ui.com.lbl.op-author-long" /> <%= glp("ui.com.lbl.op-author") %></dt>
+                <dd><%= Util.getString(pub.getOpAuthor(), glp("ui.com.lbl.no-op-author")) %></dd>
+              <% } %>
+              
+              <%-- OPDELEGATE ------------------------------------------------------------ --%>
+              <% if (pub.getOpDelegate() != null) { %>
+                <dt>
+                  <jalios:tooltip property="ui.com.lbl.op-delegate-long" /></span><br />
+                  <%= glp("ui.com.lbl.op-delegate") %>
+                </dt>                  
+                <dd><%= pub.getOpDelegate() %></dd>
+              <% } %>
+              
+              <%-- PUB ID ------------------------------------------------------------ --%>
+              <dt><%= glp("ui.com.lbl.id") %></dt>
+              <dd><%= formHandler.getId() %></dd>
+              
+            </dl>
+          </fieldset>
+        <% } %>
+
+        <jalios:include target="EDIT_PUB_ADVTAB_FOOTER" />
+      </div>
+    </div><%-- End ADVANCED 'row' --%>
+  </div><%-- End tab-page --%>
+<% } %>

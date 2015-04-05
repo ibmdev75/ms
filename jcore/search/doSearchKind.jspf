@@ -1,0 +1,44 @@
+<%--
+  @Summary: Document kind search panel
+  @Since: jcms-6.1
+--%><%
+%><%@ page import="com.jalios.jcms.handler.QueryHandler" %><%
+{
+  String[] dskTypes = (String[])request.getAttribute("dslDocumentKinds"); 
+  Set<String> kindSet = new HashSet<String>();
+  if (Util.notEmpty(dskTypes)) {
+    kindSet.addAll(Arrays.asList(dskTypes));
+  }
+%>
+    <%
+      // Retrieve map of the "kind group name" to "document kind group label"
+      Map<String,String> kindGroupMap = QueryHandler.getDocumentKindsGroupMap(userLang);
+      for (Map.Entry<String,String> groupEntry : kindGroupMap.entrySet()) {
+        String kindGroupName = groupEntry.getKey();
+        String kindGroupLabel = groupEntry.getValue();
+        %>
+
+      <fieldset>
+        <legend><%= kindGroupLabel %></legend>
+        <% 
+        Map<String,String> kindMap = QueryHandler.getDocumentKindsMap(userLang, kindGroupName);
+        for (Map.Entry<String,String> kindEntry : kindMap.entrySet()) {
+          String kindName = kindEntry.getKey();
+          String kindLabel = kindEntry.getValue();
+          String kindHelp = glp("file-document.kinds." + kindName + ".h");
+          String kindIcon = channel.getProperty("file-document.kinds." + kindName + ".icon", "s.gif"); 
+          String kindUserInputId = ADVANCEDSEARCH_INPUT_ID_PREFIX + "kind" + kindName; %>
+              <label >
+                <input id="<%= kindUserInputId %>" type="checkbox" name="documentKinds" value="<%= kindName %>"
+                       <%= dskTypes != null && kindSet.contains(kindName) ? "checked=\"checked\"" : "" %> />&nbsp;
+                <jalios:icon src="<%= kindIcon %>" alt='<%= kindName %>' /> <%= kindLabel %>
+              </label>
+              <p class="help-block"><%= kindHelp %></p>
+        <% } %>
+      </fieldset>
+    <% } %>
+    
+    
+<%
+}
+%>

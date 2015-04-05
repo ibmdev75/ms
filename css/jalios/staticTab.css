@@ -1,0 +1,25 @@
+/**
+ * @deprecated use LESS component inner-tabs
+ */
+ 
+	/* Main Tab Layout */
+	.tabMain          { border: 1px solid #787878; padding: 1em; border-top-width: 0px; border-color: #787878;}
+	.tabNav	          { height: 20px; margin: 0; padding-left: 10px; background: url(../../images/jalios/layout/tab.gif) repeat-x bottom; }
+	.tabNav li        { margin: 0; padding: 0; display: inline; list-style-type: none; }
+
+	/* Passive Tab Layout */
+	.tabNav a,
+	.tabNav a:link, 
+	.tabNav a:visited { font: bold 10px Verdana;
+											float: left;
+											line-height: 14px;
+											padding: 2px 10px 2px 10px;
+											margin-right: 4px;
+											border: 1px solid #787878;
+											text-decoration: none;
+									  }
+
+	/* Active Tab Layout */
+	.tabNav a.active,
+	.tabNav a:link.active, 
+	.tabNav a:visited.active { border-bottom-width: 1px; border-bottom-style: solid; }

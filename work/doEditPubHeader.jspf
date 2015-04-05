@@ -1,0 +1,177 @@
+<%@page import="com.jalios.jcms.db.DBData"%><%
+
+  if (formHandler.validate()) {
+    return;
+  }
+  formHandler.prepare();
+  Publication pub           = formHandler.getPublication();
+  String typeLabel          = formHandler.getTypeLabel();
+  boolean popupEdition      = formHandler.isPopupEdition();
+  boolean partialEdition    = formHandler.isPartialFieldEdition();
+  boolean contentTabOnly    = formHandler.isContentTabOnly();
+  boolean isDbData          = DBData.class.isAssignableFrom(formHandler.getPublicationClass());
+  
+  jcmsContext.addCSSHeader("css/jalios/ux/jalios-topbar-edit.css");
+  
+  request.setAttribute("boHeaderCSS","edit-pub sticky-display");
+  request.setAttribute("boMenuOff","true");
+  
+%><%-- *** PLUGINS ****************** --%><%
+%><jalios:include target="EDIT_PUB_HEADER" targetContext="header empty"/><%
+%><% if (!popupEdition) {
+%><%@ include file="/work/doWorkHeader.jspf" %><% 
+  } else { %>
+<% jcmsContext.addBodyAttributes("class", "popupEdition"); %>
+<%@ include file="/jcore/doEmptyHeader.jspf" %>
+<script type="text/javascript">
+<!--
+  function openFull() {
+   document.location = '<%= ServletUtil.getAbsUrlWithUpdatedParams(request, new String[] {"editField"}, new String[] {null}, null, false) %>';
+  }
+  function openBackOffice() {
+   window.opener.location = '<%= ServletUtil.getAbsUrlWithUpdatedParams(request, new String[] {"popupEdition", "editField"}, new String[] {null, null}, null, false) %>';
+   window.close();
+  }
+  function openAllTabs(){
+    window.document.editForm.showContentTabOnly.value = 'false';
+    simpleSubmitForm(window, window.document.editForm,'opRefresh','');
+  }
+  
+//-->
+</script>
+<div class="edit-pub">
+<% } %>
+
+<%-- -- FORM -------------------------------------------- --%>
+<% 
+  String formAction = (String) request.getAttribute("formAction");
+  if (formAction == null){
+    formAction = "types/"+ Util.getClassShortName(formHandler.getPublicationClass()) + "/edit" + Util.getClassShortName(formHandler.getPublicationClass()) + ".jsp";
+  }
+  
+  // UNLOCKER
+  String formCss = "editPublicationForm form-horizontal lang-trigger form-tabbed";
+  String dataUnlockerUrl = "";
+  if (pub != null ) {
+    formCss += " unlocker";
+    dataUnlockerUrl= "data-jalios-unlocker-url='" + encodeForHTMLAttribute(HttpUtil.getUrlWithCSRFToken("work/unlock.jsp?id="+ pub.getId(), request, false)) + "'";
+    jcmsContext.addJavaScript("js/jalios/core/jalios-unlocker.js");
+  }
+%>
+<form id="editFormId" name="editForm" action="<%= formAction %>" class="<%= formCss %>" <%= dataUnlockerUrl %> lang="<%= formHandler.getAvailableMainLanguage() %>" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+
+<%-- -- TOP BAR -------------------------------------------- --%>
+<div id="edit-topbar"<%= partialEdition ? " class='edit-partial'" : "" %>>
+  <div class="edit-topbar-header">
+    <div class="zoom">
+	    <div class="pull-right text-right hidden-xs hidden-sm">
+	      <h1><jalios:truncate length="42"><%= typeLabel %></jalios:truncate></h1>
+	      <span class="info"><%= Util.getString(request.getAttribute("ui.work.form.header.type"), glp("ui.work.form.header.type")) %></span>
+	    </div>
+	    <div><%@ include file="/work/doEditPubButton.jspf" %></div>
+    </div>
+    <% if (!partialEdition) { %>
+    <div class="field-title">
+    <%
+      boolean isTitleML = channel.isMultilingual();
+      TypeEntry titleTE = channel.getTypeEntry(formHandler.getPublicationClass());
+      request.setAttribute("field-inline", true);//TODO should use field-light instead
+    %>
+    <div class="row">
+      <jalios:field label="" name="title" formHandler="<%= formHandler %>">
+        <jalios:control settings='<%= new TextFieldSettings().placeholder(titleTE.getTitleLabel(userLang)) %>' />
+      </jalios:field>
+    </div>
+    <% request.removeAttribute("field-inline"); %>
+    </div>
+    <% } %>
+  </div>
+  <div id="tab-pane-anchor"></div>
+  
+</div>
+<div id="edit-topbar-placeholder"<%= partialEdition ? " class='edit-partial'" : "" %>></div>
+
+<%-- Surrounding div for popupEdition (used for style, and javascript window resize in footer) --%>
+<% if (popupEdition) { %>
+<div id="popupEdition" class="WorkArea <%= formHandler.getWorkAreaCss() %> EditArea">
+<% } else { %>
+<div class="EditArea">
+<% } %>
+
+<%-- -- MessageBox -------------------------------------------- --%>
+<%@ include file="/jcore/doMessageBox.jspf" %>
+
+<jalios:buffer name="otherWarningMessages">
+  <%-- -- WARN - DELEGATION -------------------------------------------- --%>
+  <% if (popupEdition && channel.getCurrentDelegateMember() != null) { %>
+  <p>
+  <jalios:icon src="warning" />
+  <%= glp("ui.com.msg.delegate-warning", channel.getCurrentDelegateMember().getFriendlyName(), loggedMember) %>
+  </p>
+  <% } %>
+
+  <%-- -- WARN - LOCK -------------------------------------------- --%>
+  <% if (formHandler.isLocked()) { %>
+  <p>
+  <jalios:icon src="lock" />
+  <%= pub.getLockInfo(userLang, userLocale, true) %>
+  </p>
+  <% } %>
+
+  <%-- -- WARN - NOT THE AUTHOR -------------------------------------------- --%>
+  <% if (pub != null && pub.getAuthor() != null && pub.getAuthor() != loggedMember ) { %>
+  <p>
+  <jalios:icon src="warning" />
+  <%= glp("ui.work.form.txt.not-author", pub.getAuthor().getFullName()) %>
+  </p>
+  <% } %>
+
+  <%-- -- WARN - NOT IN THE READ RIGHTS -------------------------------------------- --%>
+  <% if (!isAdmin && formHandler.cannotRead()) { %>
+  <p>
+  <jalios:icon src="warning" />
+  <%= glp("ui.work.form.txt.not-in-rr") %>
+  </p>
+  <% } %>
+</jalios:buffer>
+
+<% if (Util.notEmpty(otherWarningMessages)) { %>
+<jalios:message level="<%= MessageLevel.WARN %>"><%= otherWarningMessages %></jalios:message>
+<% } %>
+
+<%-- -- WORK COPY -------------------------------------------- --%>
+<% if (pub != null && pub.isWorkCopy() ) { %>
+<jalios:icon src="workcopy"  title="ui.com.lbl.workcopy" />
+<% /* %>Work Copy<% */ %><%= glp("ui.com.lbl.workcopy") %> - 
+<% /* %>Original<% */ %><%= glp("ui.com.lbl.original") %> : <jalios:link data="<%= pub.getMainInstance() %>"/> 
+<% } %>
+
+
+<%-- -- TABPANE -------------------------------------------- --%>
+<jalios:query name="__memberSet" dataset="<%= channel.getDataSet(Member.class) %>" comparator="<%= Member.getNameComparator() %>" />
+<% request.setAttribute("formMemberSet", __memberSet); %>
+<jalios:query name="__groupSet" dataset="<%= channel.getDataSet(Group.class) %>" comparator="<%= Group.getNameComparator() %>" />
+<% request.setAttribute("formGroupSet", __groupSet); %>
+
+
+<% if (popupEdition && (partialEdition || contentTabOnly)) { %>
+<div class="tab-single-pane">
+<% } else { %>
+<div class="tab-pane" id="mainTab">
+  <div class="tab-page">
+    <h2 class="tab">
+      <jalios:icon src="tab-content" />
+      <%= glp("ui.work.form.tab.content") %>
+    </h2>  
+<% } %>
+
+<jalios:include target="EDIT_PUB_MAINTAB_HEADER" />
+
+<% if (formHandler.isFieldEdition("title") && partialEdition) {
+  boolean isTitleML = channel.isMultilingual();
+  TypeEntry titleTE = channel.getTypeEntry(formHandler.getPublicationClass());
+%>
+  <jalios:field name="title" formHandler="<%= formHandler %>">
+    <jalios:control />
+  </jalios:field>
+<% } %>

@@ -1,0 +1,339 @@
+<% 
+// Setup Contextual Menu
+PublicationCtxMenu pcm = (PublicationCtxMenu) request.getAttribute("PublicationCtxMenu");
+if (pcm != null) {
+  pcm.setCategoryParam(jcmsContext, "cid");
+}
+
+boolean isTextFieldPubLink = getBooleanParameter("textFieldPubLink", false);
+
+Class currentClass = formHandler.getCurrentClass();
+%>
+
+<table class='layout spliter'>
+  <tr>
+    <%-- *** CATEGORIES ******************************************* --%>
+    <% if (formHandler.showCategories()) { %>
+      <% 
+      TreeSet highlightSet = new TreeSet();
+      if (formHandler.getCategory() != null){
+      highlightSet.add(formHandler.getCategory());
+      }
+      %>
+      <td class="sidebar">
+       <div class="overflowing-panel">
+        <% 
+        Set wCatSet = workspace.getCatSet();
+        Category root = channel.getRootCategory();
+        if (!workspaceFilter || wCatSet.contains(root)) {
+          wCatSet = new TreeSet();
+          if (formHandler.isPortletMode()) {
+            wCatSet.add(root);
+          } else {
+            wCatSet.addAll(root.getChildrenSet());
+          }
+        }
+        %>
+        <jalios:treecatview 
+                  prefix="pubbrowser"
+                  link='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[] {"cid", "skip", "pagerAll"}, new String[] {"_NODE_ID_", null, null}) %>'
+                  collection="<%= wCatSet %>"
+                  opened="<%= highlightSet %>"
+                  highlighted="<%= highlightSet %>"
+                  level="<%= formHandler.isPortletMode() ? 1 : 0 %>"
+                  dragdrop="true"
+                  showCtxMenu="true"
+                  showPortal="<%= formHandler.isPortletMode() %>"
+                  memo='<%= formHandler.isPortletMode() ? Util.getHashMap("display-portal-link", true) : null %>'
+                  css="autocomplete" />
+        <% if (formHandler.getPortals().size() == 1) { %>
+          <% PortalElement elm = (PortalElement)formHandler.getPortals().first(); %>
+          <label>&nbsp;&nbsp;<%= elm.getTitle(userLang) %>:</label>
+          <jalios:treeview
+                  prefix="treeportlet-pubbrowser"
+                  collection="<%= formHandler.getPortals() %>"
+                  link='<%= "work/displayWork.jsp?id=" + TreeViewTag.RXP_NODE_ID %>' />
+        <% } %>
+        </div>
+      </td>
+    <% } %>
+
+    <%-- *** VERTICAL SEPARATOR ******************************************* --%>
+    <% if (!formHandler.isDeleteMode()) { %>
+      <td class="split">
+        <% if (formHandler.showCategories()) { %>
+          <a href='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[] {"showCategories"}, new String[] {"false"}) %>'><jalios:icon src='arrowbk' /></a>
+        <% } else { %>
+          <a href='<%= ServletUtil.getUrlWithUpdatedParams(request, new String[] {"showCategories"}, new String[] {"true"}) %>'><jalios:icon src='arrow' /></a>
+        <% } %>
+      </td>
+    <% } %>
+    
+    <%-- *** PUBLICATION LIST ******************************************* --%>
+    <td>
+      <%@ include file='/work/doInsertLinkParams.jspf' %>
+      <% if (popupEdition) { %>
+        <%@ include file='/work/doInsertLinkPopup.jspf' %>
+      <% } %>
+      <%
+      Set resultSet = formHandler.getResultSet();
+      List<Class<?>> subTypeList = formHandler.getSubTypeList();
+      // Make sure when redirecting back there that we do not display the content of the caddy
+      String redirect = ServletUtil.encodeURL(ServletUtil.getAbsUrlWithUpdatedParam(request,"opCaddy",null));
+      %>
+      <jalios:pager name='plPagerHandler' declare="true" action='init' sort='<%= formHandler.isDeleteMode() ? "ddate" : "mdate" %>' showLastLink='<%= !formHandler.isHybrid() %>'/>
+
+      <div class="WorkArea">
+        <%-- *** TITLE ******************************************* --%>
+        <%@ include file='/jcore/doMessageBox.jspf' %>
+        
+        <% if (Util.toBoolean(request.getAttribute("jcms.pubbrowser.chooser.menu"),false)) { %>  
+          <h4 class="pub-chooser-menu">
+            <% if (popupEdition) { %><%= formHandler.getWorkspace() == null ? glp("ui.work.mn.allworkspace") : formHandler.getWorkspace().getTitle(userLang)  %>:<% } %>
+          <%= formHandler.getPubBrowserTitle(null) %>
+          <% if (formHandler.getCategory() != null) { %>&nbsp;&gt;&nbsp;<%= formHandler.getCategory().getName(userLang) %><%/*%>Category<%*/%><% } %>
+          (<%= formHandler.getPubCount() %><%/*%>Pub count<%*/%><% if (formHandler.showQueryStatusMessage()) { %> <jalios:icon src="info" title='<%= formHandler.getQueryStatusMessage(userLang) %>'/><% } %>)
+          </h4>
+        <% } else { %>  
+        <h1 class="boTitle icon iconContent">
+          <% Set wspcSet = Workspace.getAllWorkspaceSet(); %>
+          <% if (showWorkspaceFilter && (wspcSet != null) && (wspcSet.size() > 1)) { %>
+            <a href='<%= ServletUtil.getUrlWithUpdatedParam(request , "workspaceFilter" , ""+!workspaceFilter) %>'><jalios:icon src='<%= workspaceFilter ? "work-filter-off" : "work-filter-on"%>' title='<%= workspaceFilter ? glp("ui.work.mn.allworkspaces") : glp("ui.work.mn.alt.filter",workspace.getTitle(userLang)) %>' /></a>
+          <% } %>
+          <% if (popupEdition) { %><%= formHandler.getWorkspace() == null ? glp("ui.work.mn.allworkspaces") : formHandler.getWorkspace().getTitle(userLang)  %>:<% } %>
+          <%= formHandler.getPubBrowserTitle(null) %>
+          <% if (formHandler.getCategory() != null) { %>&nbsp;&gt;&nbsp;<%= formHandler.getCategory().getName(userLang) %><%/*%>Category<%*/%><% } %>
+          (<%= formHandler.getPubCount() %><%/*%>Pub count<%*/%><% if (formHandler.showQueryStatusMessage()) { %> <jalios:icon src="info" title='<%= formHandler.getQueryStatusMessage(userLang) %>'/><% } %>)
+        </h1>
+        <% } %>
+        
+        <% String pbDesc = formHandler.getPubBrowserDescription(); %>
+        <% if (Util.notEmpty(pbDesc)) { %><p class="br"><em><%= pbDesc %></em></p><% } %>
+        
+        <form action='<%= ServletUtil.getResourcePath(request) %>' name='typeForm' class='noSingleSubmitButton form-inline' >
+          <% 
+          //TYPES
+          boolean displayTypeList = Util.notEmpty(subTypeList) && (subTypeList.size() > 0);
+          
+          boolean displayCaddyIcon = !formHandler.isDeleteMode() && !isTextFieldPubLink && showCaddy;
+          boolean showPstatusFilter = formHandler.showPstatusFilter();
+          boolean showMemberFilter = formHandler.showMemberFilter();
+          
+          boolean showDocumentFilter = FileDocument.class.isAssignableFrom(currentClass) ||
+          DBFileDocument.class.isAssignableFrom(currentClass);
+          
+          // Portlet & Portal
+          Map abilityMap = PortalElement.getAllAbilityMap(); 
+          boolean showPortletAbilitiesFilter = formHandler.isPortletMode() && Util.notEmpty(abilityMap);
+          boolean showPortletPortalFilter = formHandler.showPortalFilter();
+          
+          boolean displayAddBtn = !isTextFieldPubLink && Util.notEmpty(subTypeList) && workspaceFilter &&   
+                                  (currentClass == Content.class ||
+                                  currentClass == UserContent.class ||
+                                  currentClass == Portlet.class  ||
+                                  currentClass == PortalElement.class);
+          
+          String classShortName = Util.getClassShortName(currentClass);
+          
+          boolean displayFilterLink = showPortletAbilitiesFilter || showPortletPortalFilter || showDocumentFilter || showMemberFilter;
+          boolean displayFilterBar = Util.notEmpty(getMemberParameter("mid")) || Util.notEmpty(getUntrustedStringParameter("documentKinds","")) || showDocumentFilter || showPortletPortalFilter || showPortletAbilitiesFilter;
+          %>
+          <%= printDisabledHiddenParams(request , Arrays.asList(new String[]{"classname","pstatus","gid","mid","midChooserDisplay","portalId","text","skip","oldType","ability","documentKinds", "start"})) %>
+          <div class="navbar navbar-default navbar-table-header">
+
+            <div class="container-fluid">
+  
+              <div class="navbar-left navbar-form">
+    
+                <%-- Icons --%>
+                <% if (displayCaddyIcon) { %>
+                  <div id="pubBrowserCaddy" class='ajax-refresh-div form-group'>
+                    <%
+                    boolean caddyFilter = formHandler.isCaddyFilter();
+                    String caddyQueryString = formHandler.getQueryHandler() != null ? formHandler.getQueryHandler().getQueryString() : null;
+                    %><%@ include file="/work/doPubBrowserCaddy.jspf" %>
+                  </div>        
+                  
+                  <jalios:javascript>
+                  jQuery(document).on("jalios:caddy", function(event){
+                    var url = 'work/doPubBrowserCaddy.jsp?pubBrowserCaddyFilter=<%= caddyFilter %>&pubBrowserCaddyQueryString=<%= encodeForJavaScript(caddyQueryString) %>';
+                    jQuery.jalios.AjaxRefresh.refresh(
+                      url,
+                      "#pubBrowserCaddy",
+                      {'noscroll'  : true, 'nohistory' : true, 'waiting' : false}
+                    );
+                    jQuery.jalios.ui.CtxMenu.hide();
+                  });
+                  </jalios:javascript>        
+                <% } %>
+                
+                <% if (Form.class.isAssignableFrom(currentClass)) { %>
+                  <a href="work/displayFormReport.jsp?type=<%= classShortName %>" class="btn btn-default" title='<%= encodeForHTMLAttribute(glp("ui.work.pub.lbl.report")) %>'>
+                    <jalios:icon src="stats" />
+                  </a>
+                <% } %>        
+      
+                <%-- Types --%>
+                <% if (displayTypeList) { %>
+                  <% 
+                  TreeSet<Class> sortedClassSet = JcmsUtil.getSortedClass(subTypeList, workspace, userLang); 
+                  EnumerateSettings typeSettings = new EnumerateSettings().select().onChange("submit");
+                  %>
+                  <div class="form-group">
+                    <jalios:field name="classname" required="true" value="<%= currentClass.getName() %>" resource="field-light">
+                      <jalios:control settings="<%= typeSettings %>" >
+                        <jalios:buffer name="SELECT_OPTIONS">
+                          <% if (formHandler.showAllTypesFilter()) { %>
+                            <option value="" <%= Util.isEmpty(fieldValue) ? "selected='selected'" : ""%>><%= glp("ui.work.pub.lbl.all-type") %></option>
+                            <option value="" disabled="disabled">-----------------------</option>
+                          <% } %>
+                          
+                          <% for (Class itClass : sortedClassSet) { %>
+                            <%
+                            String typeValue = itClass.getName();
+                            String selected = typeValue.equals(fieldValue) ? "selected='selected'" : ""; 
+                            %>                  
+                            <option value="<%= itClass.getName() %>" <%= selected %>><%= channel.getTypeLabel(itClass, formHandler.getWorkspace(), userLang) %></option>
+                          <% } %>
+                        </jalios:buffer>
+                      </jalios:control>
+            
+                      <%-- Add Icon --%>
+                      <%
+                      TypeEntry currentTypeEntry = channel.getTypeEntry(currentClass);
+                      
+                      // All Type, display edit icon, unless we are using "All my workspace" in which menu make no sense
+                      // (types can be different and creation would occur in the previous workspace)
+                      if (displayAddBtn) {
+                        HashSet typesSet = new HashSet();
+                        String editCids = formHandler.getCategory() != null ? formHandler.getCategory().getId() : "";
+                        
+                        for (Iterator itClass = subTypeList.iterator(); itClass.hasNext(); ) {
+                          Class curClass = (Class) itClass.next();
+                          if (loggedMember.canPublish(curClass) && !channel.getTypeEntry(curClass).isAbstract()) {
+                            typesSet.add(curClass);
+                          }
+                        }              
+                        %>
+                        <span class="input-group-btn">
+                          <jalios:edit css="dropdown-toggle btn btn-default add-type" typeSet="<%= typesSet %>" cids="<%= editCids %>" redirect='<%= redirectRefresh %>' popup="<%= popupEdition %>" />
+                        </span>
+                      <% } else if (currentClass != null && currentClass != Form.class && currentTypeEntry != null && !currentTypeEntry.isAbstract()) { %>
+                        <span class="input-group-btn">
+                          <% if (Form.class.isAssignableFrom(currentClass)) { %>
+                            <a href='<%= "types/" + classShortName + "/editForm" + classShortName + ".jsp" %>' class="editArea dropdown-toggle btn btn-default" title='<%= JcmsUtil.glp(userLang, "ui.com.title.add", channel.getTypeLabel(currentClass, workspace, userLang)) %>'><jalios:icon src="<%= EditTag.ICON_ADD %>" /></a>
+                          <% } else { %>
+                            <jalios:edit css="dropdown-toggle btn btn-default" type="<%= currentClass.getName() %>" />
+                          <% } %>
+                        </span>
+                      <% } %>
+                      <%-- EOF Icons --%>            
+                    </jalios:field>   
+                  </div>
+                  <% if (currentClass != formHandler.getSuperClass()) { %>
+                  <input type="hidden" name="oldType" value="<%= currentClass.getName() %>" />
+                  <% } %>
+                <% } %><%-- EOF Types --%>
+              </div><%-- EOF .navbar-left --%>   
+
+              <%-- Show/Hide filters --%>
+              <% if (displayFilterLink) { %>
+                <ul class="nav navbar-nav navbar-left">
+                  <li class="dropdown">
+                    <a href='#' class="dropdown-toggle <%= displayFilterBar ? "dropup" : "" %>" data-jalios-target=".pubbrowser-navbar-filters|this" data-jalios-action="toggle:hide toggle:dropup" onclick="return false;">
+                      <jalios:icon src='filter' /> <span class="hidden-xs hidden-sm"><%= glp("ui.com.txt.filters") %></span> <jalios:icon src='caret' />
+                    </a>
+                  </li>
+                </ul>
+              <% } %>
+
+              <div class="navbar-right navbar-form">
+                <%-- *** PSTATUS FILTER ******************************************* --%>
+                <% if (showPstatusFilter) {
+                  Set<WFState> stateSet = workspace.getWorkflow(currentClass) == null ? workspace.getWorkflow(Content.class).getStateSet() : workspace.getWorkflow(currentClass).getStateSet();
+                  EnumerateSettings pstatusEnumerateSettings = new EnumerateSettings().select().onChange("submit");
+                  %>
+                  <div class="form-group">
+                    <jalios:field required="true" label="ui.work.pub.lbl.filter.pstatus" name='pstatus' value='<%= formHandler.getPstatus() %>' resource="field-light">
+                      <jalios:control settings="<%= pstatusEnumerateSettings %>">
+                        <jalios:buffer name="SELECT_OPTIONS">
+                          <option value="" <%= Util.isEmpty(fieldValue) ? "selected='selected'" : ""%>><%= glp("ui.work.pub.lbl.all-pstatus") %></option>
+                          <option value="" disabled="disabled">-----------------------</option>
+                          <% for (WFState itWFState : stateSet){ %>
+                            <% 
+                            String pstatusValue = String.valueOf(itWFState.getPstatus());
+                            String selected = pstatusValue.equals(fieldValue) ? "selected='selected'" : ""; 
+                            %>
+                            <option value="<%= pstatusValue %>" <%= selected %>><%= itWFState.getLabel(userLang) %></option>
+                          <% } %>
+                        </jalios:buffer>            
+                      </jalios:control>
+                    </jalios:field>
+                  </div>
+                <% } %>
+      
+                <div class="form-group">
+                  <jalios:field name='text' value="<%= formHandler.getText() %>" resource="field-light">
+                    <jalios:control settings='<%= new TextFieldSettings().placeholder("ui.com.placeholder.search") %>' />
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" name="opSearch" type="submit"><jalios:icon src="search"/></button>
+                    </span>               
+                  </jalios:field>      
+                </div>
+              </div><%-- EOF .navbar-right --%>  
+            </div><%-- EOF .container-fluid --%>  
+            
+            <% if (displayFilterLink) { %>
+              <div class="container-fluid pubbrowser-navbar-filters<%= displayFilterBar ? "" : " hide" %>" >
+                <div class="navbar-left navbar-form">
+                  <%-- *** MEMBER FILTER ******************************************* --%>
+                  <%
+                  MemberSettings mbrSettings = new MemberSettings();
+                  mbrSettings.filter(MemberSettings.MemberFilter.ACCOUNT);
+                  mbrSettings.onChange("submit");
+                  if (showMemberFilter) {
+                    mbrSettings.group(formHandler.getGroups());
+                    %>
+                    <label><%= glp("ui.com.lbl.author") %></label>
+                    <div class="form-group">
+                      <jalios:field label="ui.work.pub.lbl.filter.member" name='mid' resource="field-light" value='<%= formHandler.getMember() %>'>
+                        <jalios:control settings='<%= mbrSettings %>' />
+                      </jalios:field>
+                    </div>
+                  <% } %>
+                  <%@ include file='/work/pubbrowser/doPubBrowserPortletFilters.jspf' %>
+                  <%@ include file='/work/pubbrowser/doPubBrowserFileDocumentFilters.jspf' %>
+                </div><%-- .navbar-left --%>
+              </div><%-- .container-fluid .pubbrowser-navbar-filters --%>
+            <% } %>
+          </div><%-- EOF .navbar --%>  
+        </form>
+        
+        <% 
+        if (!formHandler.isDeleteMode()){
+          request.setAttribute("plQueryString",    formHandler.getQueryHandler().getQueryString());
+        }
+        request.setAttribute("plPubSet",           resultSet); 
+        request.setAttribute("plPubCount",         formHandler.getPubCount()); 
+        request.setAttribute("plShowRefineLink",   Boolean.TRUE); 
+        request.setAttribute("plShowRadioInsert",  Boolean.valueOf(showRadioInsert)); 
+        request.setAttribute("plShowCheckInsert",  Boolean.valueOf(showCheckInsert)); 
+        request.setAttribute("plShowAuthor",       Boolean.valueOf(formHandler.isAllMode() || formHandler.isDeleteMode())); 
+        request.setAttribute("plShowWorkspace",    Boolean.valueOf(!workspaceFilter));
+        request.setAttribute("plShowCaddy",        Boolean.valueOf(showCaddy && !formHandler.isDeleteMode()));
+        request.setAttribute("plShowCSVExport",    Boolean.valueOf(showCSVExport && !formHandler.isDeleteMode()));
+        request.setAttribute("plShowVersion",      Boolean.valueOf(showVersion));
+        request.setAttribute("plShowWorkMerge",    Boolean.valueOf(showWorkMerge)); 
+        request.setAttribute("plShowPreviewIcon",  Boolean.valueOf(showPreviewIcon));  
+        request.setAttribute("plShowDeepDuplicate",Boolean.valueOf(showDeepDuplicate));
+        request.setAttribute("plIsDeleteMode",     Boolean.valueOf(formHandler.isDeleteMode()));
+        request.setAttribute("plIsContentMode",    Boolean.valueOf(formHandler.isContentMode()));  
+        request.setAttribute("plIsPortletMode",    Boolean.valueOf(formHandler.isPortletMode()));  
+        request.setAttribute("plIsFormMode",       Boolean.valueOf(formHandler.isFormMode()));  
+        request.setAttribute("plIsHybrid",         Boolean.valueOf(formHandler.isHybrid()));  
+        %>
+        <jsp:include page='/work/doPubList.jsp'/>
+      </div><%-- class="WorkArea" --%>
+    </td>
+  </tr>
+</table>

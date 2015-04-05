@@ -1,0 +1,105 @@
+@import "../core/init-mixins.less";
+
+/* ----------------------------------------------- */
+/*  SEARCH                                         */
+/* ----------------------------------------------- */
+
+.search-header {
+	.alert {
+	  margin-top: 0;
+  }
+}
+
+.search-result {
+  margin:0 0 @line-height-computed 0;
+  padding-bottom: @line-height-computed;
+  overflow:hidden;
+  border-bottom:1px solid @gray-lighter;
+ 
+  .abstract IMG {
+    max-height: @search-result-img-max-height;
+  }
+ 
+ .thumbnail {
+   margin-bottom:0;
+ }
+ 
+ .counter {
+   font-size: @font-size-small;
+   font-weight: normal;
+ }
+  .search-result-header {
+    H3 {
+  	  margin: 0 0 (@line-height-computed /2)  0;
+  	  font-weight:bold;
+  	  font-size: @font-size-large;
+    }
+  } 
+   
+  .search-result-meta {
+    margin-bottom: @baseline /4;
+  }
+}
+ 
+
+
+.search {
+
+  // Design of the Bubble Search
+  &.bubble {
+    H3 { margin-top: 0; }
+    margin-right: @baseline*16; // see .search-facets
+    .querySortBar { 
+      font-size: @font-size-base - 2;
+      .sort{ color: @grayDark; } 
+    }
+  }
+}
+
+.search-facets {
+  .panel {
+    margin-bottom: -1px;
+	  .panel-heading H4 { 
+	    font-size: @font-size-base; 
+	    line-height: 22px; 
+	     A { display: block; }
+	  }
+	  
+	  .panel-body {
+	    max-height: @baseline*10;
+	    overflow: auto;
+	  }
+  }
+  
+  LABEL{ font-weight: normal; cursor: pointer; }
+  INPUT[type=radio], INPUT[type=checkbox] {
+    /*
+    * Kludge IE workaround : do NOT use display:none to workaround IE bug which does not properly change
+    * change value of input which are not being displayed when clicking on the corresponding label (and does not trigger expected JS event)
+    * http://stackoverflow.com/questions/1252690/ie-hidden-radio-button-not-checked-when-the-corresponding-label-is-clicked
+    */
+    position: absolute;
+    top: -500px;
+    left: -500px; 
+    vertical-align: top;
+  }
+}
+ 
+.search-facets.advanced { 
+  .panel-body { 
+    INPUT[type=radio], INPUT[type=checkbox] { 
+      // "opposite" of style declared above 
+      top: auto;
+      left: auto;  
+      position: static;
+    }
+  }
+}
+
+.search-facets .checked LABEL{ background-color: @highlight; }
+
+.search-members {
+  .alert {
+    margin-top: 0;
+  }
+}

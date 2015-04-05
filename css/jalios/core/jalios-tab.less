@@ -1,0 +1,223 @@
+/* ----------------------------------------------- */
+/*  TABDROP for Bootstrap3                         */
+/* ----------------------------------------------- */
+
+.nav-tabs,
+.nav-pills {
+  position: relative;
+  clear: left;
+}
+
+/* ----------------------------------------------- */
+/*  STACKED TAB for Bootstrap3                     */
+/* ----------------------------------------------- */
+// http://stackoverflow.com/questions/18432577/stacked-tabs-in-bootstrap-3
+
+.tabs-below, .tabs-right, .tabs-left {
+  .nav-tabs {
+    border-bottom: 0;
+  }
+}
+ 
+.tab-content > .tab-pane,
+.pill-content > .pill-pane {
+  display: none;
+}
+ 
+.tab-content > .active,
+.pill-content > .active {
+  display: block;
+}
+ 
+.tabs-below {
+  > .nav-tabs {
+    border-top: 1px solid #ddd;
+ 
+    > li {
+      margin-top: -1px;
+      margin-bottom: 0;
+ 
+      > a {
+        border-radius: 0 0 @border-radius-base @border-radius-base;
+ 
+        &:hover, &:focus {
+          border-top-color: #ddd;
+          border-bottom-color: transparent;
+        }
+      }
+    }
+    > .active a {
+      &, &:hover, &:focus {
+        border-color: transparent #ddd #ddd #ddd;
+      }
+    }
+  }
+}
+ 
+.tabs-left, .tabs-right {
+  > .nav-tabs > li {
+    float: none;
+ 
+    > a {
+      min-width: 74px;
+      margin-right: 0;
+      margin-bottom: 3px;
+    }
+  }
+}
+ 
+.tabs-left > .nav-tabs {
+  float: left;
+  margin-right: 19px;
+  border-right: 1px solid #ddd;
+ 
+  > li > a {
+    margin-right: -1px;
+    border-radius: @border-radius-base 0 0 @border-radius-base;
+ 
+    &:hover, &:focus {
+      border-color: #eee #ddd #eee #eee;
+    }
+  }
+ 
+  > .active a {
+    &, &:hover, &:focus {
+      border-color: #ddd transparent #ddd #ddd;
+      *border-right-color: #fff;
+    }
+  }
+}
+ 
+.tabs-right > .nav-tabs {
+  float: right;
+  margin-left: 19px;
+  border-left: 1px solid #ddd;
+ 
+  > li > a {
+    margin-left: -1px;
+    border-radius: 0 @border-radius-base @border-radius-base 0;
+ 
+    &:hover, &:focus {
+      border-color: #eee #eee #eee #ddd;
+    }
+  }
+ 
+  > .active a {
+    &, &:hover, &:focus {
+      border-color: #ddd #ddd #ddd transparent;
+      *border-left-color: #fff;
+    }
+  }
+}
+
+// -----------
+// Stype to look like http://www.slidetabs.com/
+
+.tabs-left.tabs-gray > .nav-tabs {
+  background-color: #F5F5F5;
+  position: absolute;
+  
+  border-top:    1px solid #E1E1E1;
+  border-left:   1px solid #E1E1E1;
+  border-bottom: 1px solid #FFFFFF;
+  border-radius: 4px 0 0 4px;
+  
+  > LI {
+    margin-bottom: 0;
+    &.active {
+      background: url("../../../images/lib/bootstrap/arrow_right.png") no-repeat right -4px #ffffff;
+      margin-right: -1px;
+    }
+	  > A {  
+	    color: #777777;
+	    border-radius: 0;  
+	    border-top:    1px solid #FFFFFF; 
+	    border-bottom: 1px solid #E1E1E1;
+	    margin-bottom: 0;
+	    margin-right:  0;
+	  }
+	  > A:hover, > A:active { color: @black; }
+	  &.active {
+	    > A, > A:hover, > A:active { 
+	      color: @black;
+	      border-top-color: #FFFFFF;
+	      border-left: 0px none;
+	      background: transparent;
+	    }
+	  }
+  }
+}
+.tabs-left.tabs-gray > .tab-content {
+  position: static;
+  padding-left: 200px;
+}
+
+/* Default margin bottom for all nav. Add a .nobr to reset it */
+.nav.nav-tabs,
+.nav.nav-pills,
+.nav.nav-steps {
+	margin-bottom: @baseline;
+}
+
+/* ----------------------------------------------- */
+/*  TABPANE : Anchor                               */
+/* ----------------------------------------------- */
+
+// Define custom L&F for tabpane in the tab-pane-anchor
+#tab-pane-anchor {
+  padding: 0 @baseline;
+  margin-top: -20px;
+  
+  .nav-tabs {
+    height: 36px;
+    border-bottom-color: #73ACDD;
+    background: none;
+    
+    A { 
+      zoom:1; // for IE7
+      padding-top: 5px;
+			padding-bottom: 10px;
+      &:hover { border-bottom-color: #73ACDD; padding-bottom: 9px; background-color: #FFFFFF; } 
+    }
+    
+    .active > A,
+    .active > A:hover { 
+      margin-top:   -1px; padding-bottom: 10px;
+      border-color:  #73ACDD #73ACDD #FFFFFF;
+    }
+  }
+}
+
+// Form (All backoffice forms)
+.form-tabbed {
+  .title { /* inner widget */ 
+    display: none;
+  }
+}
+
+// Sticky line for nav-tabs on a panel
+.panel .panel-body .nav-tabs {
+	margin-left:  -15px;
+	margin-right: -15px;
+	padding-left:  15px;
+}
+
+.nav-steps {
+  width: 100%;
+	margin-bottom: @baseline;
+	
+    > li {
+      display: table-cell;
+      width: 1%;
+	    float: none;
+      > a {
+        margin-bottom: 0;
+	      text-align: center;
+        cursor: default;
+        &:hover {
+          background-color: transparent;
+          color: @brand-primary;
+        }
+      }
+    }
+}

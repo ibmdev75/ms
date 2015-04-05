@@ -1,0 +1,94 @@
+<% if (!isSQLResult) { %>
+<fieldset class="col-xs-12">
+  <legend><%= glp("ui.adm.type-edit.lbl.prop1") %></legend>
+
+  <%-- MULTIVALUED ------------------------------------------------------- --%> 
+  <% if (showMultivalued) { %>     
+  <%
+    String tooltip = "ui.adm.type-edit.lbl.mv.h";      
+    String warning = "";
+    if (isDatabase) {
+      tooltip = "ui.adm.type-edit.lbl.mv.db.h";
+      warning = "ui.adm.type-edit.lbl.mv.warn-db";
+    } else if (!fieldEditor.equals("category")) {
+      if (isFieldMV) {
+        warning = "ui.adm.type-edit.lbl.mv.warn-jstore1";
+      } else {
+        warning = "ui.adm.type-edit.lbl.mv.warn-jstore2";
+      }
+    }
+  %>
+  <jalios:field name="quantity" label="ui.adm.type-edit.lbl.mv" tooltip="<%= tooltip %>" value='<%= formHandler.isFieldMV() ? "array"  : "scalar" %>'>
+    <% if (isDatabase) { %>
+    <select class="form-control" name="quantity">
+      <option value=""><%= glp("ui.adm.type-edit.lbl.mv.no") %></option>
+      <option value="list"<%=  formHandler.isFieldTypeList() ? " selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.mv.list") %></option>
+      <option value="set"<%=  formHandler.isFieldTypeSet() ? " selected='selected'" : "" %>><%= glp("ui.adm.type-edit.lbl.mv.set") %></option>
+    </select>
+    <% } else { %>
+    <jalios:control settings='<%= new EnumerateSettings().inline().enumValues("array", "scalar").enumLabels("ui.com.lbl.yes", "ui.com.lbl.no") %>' />
+    <% }  %>
+    <% if (Util.notEmpty(warning)) { %>
+    <jalios:tooltip property="<%= warning %>" icon="warning" />
+    <% } %>
+  </jalios:field>
+  <% } %>
+  
+  <%-- REQUIRED ------------------------------------------------------- --%> 
+  <% if (showRequired) { %>
+  <jalios:field name="required" label="ui.adm.type-edit.lbl.required" tooltip="ui.adm.type-edit.lbl.required.h" value="<%= formHandler.isFieldRequired() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+  <% } %>
+
+  <%-- MULTILINGUAL ------------------------------------------------------- --%> 
+  <% if (showMultilingual) { %>
+  <jalios:field name="ml" label="ui.adm.type-edit.lbl.ml" tooltip="ui.adm.type-edit.lbl.ml.h" value="<%= formHandler.isFieldML() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>      
+  <% } %>
+
+  <%-- SEARCHABLE ------------------------------------------------------- --%> 
+  <% if (showSearchable) { %>
+  <jalios:field name="searchable" label="ui.adm.type-edit.lbl.searchable" tooltip="ui.adm.type-edit.lbl.searchable.h" value="<%= formHandler.isFieldSearchable() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>    
+  <% } %>
+  
+  <%-- PARENT TREE NODE ------------------------------------------------------- --%> 
+  <% if (showParentLink) { %>
+  <jalios:field name="parent" label="ui.adm.type-edit.lbl.parent" tooltip="ui.adm.type-edit.lbl.parent.h" value="<%= formHandler.isFieldParent() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>    
+  <% } %>
+
+  <%-- ABSTRACT ------------------------------------------------------- --%> 
+  <% if (showAbstract) { %>
+  <jalios:field name="abstract" label="ui.adm.type-edit.lbl.abstract" tooltip="ui.adm.type-edit.lbl.abstract.h" >
+    <label class="radio-inline" dir="ltr"><input type="radio" name="abstract" value="true" <%= formHandler.isFieldAbstract() ? "checked" : "" %>   onclick='toggleEltVisibility("truncate", true)' />  <%= glp("ui.com.lbl.yes") %></label>
+    <label class="radio-inline" dir="ltr"><input type="radio" name="abstract" value="false" <%= !formHandler.isFieldAbstract() ? "checked" : "" %> onclick='toggleEltVisibility("truncate", false)' /> <%= glp("ui.com.lbl.no") %></label>
+    <div id='truncate' style='<%= formHandler.isFieldAbstract() ? "" : "display: none;" %>'>
+      <div class="input-group">
+      <input class="form-control text-right" type='text' name='truncate' value='<%= Util.getString(fieldElt.getAttributeValue("truncate"), "400") %>' size='4' />
+      <span class="input-group-addon"><%= glp("ui.adm.type-edit.lbl.chars") %></span>
+      <span class="input-group-addon"><jalios:tooltip property="ui.adm.type-edit.lbl.chars.h" /></span>
+      </div>
+    </div>
+  </jalios:field>    
+  <% } %>
+
+  <%-- DATA IMAGE ------------------------------------------------------- --%> 
+  <% if (showDataImage) { %>
+  <jalios:field name="dataImage" label="ui.adm.type-edit.lbl.image" tooltip="ui.adm.type-edit.lbl.image.h" value="<%= formHandler.isFieldDataImage() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+  <% } %>
+
+  <%-- HIDDEN ------------------------------------------------------- --%> 
+  <% if (showHidden) { %>
+  <jalios:field name="hidden" label="ui.adm.type-edit.lbl.hidden" tooltip="ui.adm.type-edit.lbl.hidden.h" value="<%= formHandler.isFieldHidden() %>">
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>      
+  <% } %>
+</fieldset>
+<% } %>

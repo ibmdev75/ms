@@ -1,0 +1,114 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <title>CodeMirror: TWiki mode</title>
+    
+    <link rel="stylesheet" href="../lib/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../lib/codemirror/addon/hint/show-hint.css">
+    <link rel="stylesheet" href="../css/jalios-codemirror-twiki.css">
+    <link rel="stylesheet" href="../lib/codemirror/doc/docs.css">
+    
+    <script src="../lib/codemirror/lib/codemirror.js"></script>
+    <script src="../lib/codemirror/addon/hint/show-hint.js"></script>
+    <script src="jalios-codemirror-twiki.js"></script>
+    <script src="jalios-codemirror-hint.js"></script>
+    
+    <style type="text/css">.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
+  </head>
+  <body style="padding: 20px;">
+    <h1>CodeMirror: TWiki mode</h1>
+
+<div><textarea id="code" name="code">
+---++ TWiki Formatting
+
+§ Option             § Syntax             § 
+| bold font          | *bold*             |
+| italic type        | _italic_           |
+| bold italic text   | __bold italic__    |
+| pre text           | =a pre=            |
+| pre bold text      | ==a pre bold==     |
+
+Separator:
+----
+
+---++ Titre 1
+
+Mon paragraphe 1
+
+---+++ Titre 1-1
+
+Mon paragraphe 2
+
+---++++ Titre 1-1-1
+
+Mon paragraphe 3
+
+---++ Lists
+
+   # ordered list, level 1
+      # ordered list, level 2
+         # unordered list, level 3
+
+   * unordered list, level 1
+      * unordered list, level 2
+         * unordered list, level 3
+         
+   1 ordered list, level 1
+      1 ordered list, level 2
+         1 unordered list, level 3
+
+   def1: test1
+   def2: test2
+
+---++ Links
+
+[[An article]]
+
+[[c_1234][This article]]
+
+Some text images/powered-by-jcms.gif du texte
+
+[[upload/docs/image/jpeg/2009-01/image.jpg][320x240]]
+
+con-ta.ct@jalios.com
+
+---++ Blocks
+
+[flv path="upload/video.flv" 
+     width="320" height="240" 
+     image="upload/intro.gif" /]
+
+[mp3 path="upload/music.mp3" /]
+
+[quote]
+  Que penses-tu de cela?
+  [mp3 path="upload/music.mp3" /]
+  et de cela ?
+  [[An article]]
+  et de ça ?
+[/quote]
+
+it's working fine after block !
+
+</textarea></div>
+
+<a href="#">Link 1</a>
+
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: 'twiki', 
+        extraKeys: {"Ctrl-Space": "autocomplete"},
+        tabSize : 2, 
+        lineNumbers: true,
+        lineWrapping: true 
+      });
+      CodeMirror.commands.autocomplete = function(cm) {
+	      CodeMirror.showHint(cm, CodeMirror.twikiHint);
+	    }
+    </script>
+
+    <p>TWiki mode supports a single configuration.</p>
+
+    <p><strong>MIME types defined:</strong> <code>text/x-twiki</code>.</p>
+  </body>
+</html>

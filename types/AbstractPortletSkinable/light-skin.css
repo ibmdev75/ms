@@ -1,0 +1,14 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+.light-skin.panel-default > .panel-heading {
+  background: none;
+  border-bottom: 0;
+  text-align: left;
+}
+.light-skin.panel-default > .panel-body:not(:first-child) {
+  padding-top: 0;
+}
+.light-skin .skinTitle {
+  font-weight: bold;
+}

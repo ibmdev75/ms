@@ -1,0 +1,29 @@
+<% if (!data.isDBData()) { %>
+<%   Map<String,String> extraDataMap = data.getExtraDataMap(); %>
+<%   if (Util.notEmpty(extraDataMap)) { %>
+<h4>ExtraData (<%= Util.getSize(extraDataMap) %>)</h4>
+<table class="<%= tableCSS %>">
+  <tr>
+    <th>#</th>    
+    <th><%= glp("ui.com.lbl.name") %></th>
+    <th><%= glp("ui.adm.data-inspector.lbl.value") %></th>
+  </tr>
+  <jalios:pager name="pagerHandlerExtraData" declare="true" action="init" size="<%= Util.getSize(extraDataMap) %>" paramPrefix="inspector_ExtraData_" />  
+  <jalios:foreach collection="<%= extraDataMap.entrySet() %>" 
+                  name="itEntry" 
+                  type="Map.Entry<String,String>"
+                  max="<%= pagerHandlerExtraData.getPageSize() %>"
+                  skip="<%= pagerHandlerExtraData.getStart() %>">
+  <tr>
+    <td class="fit numeric"><%= itCounter %></td>
+    <td class="fit norwrap"><%= itEntry.getKey() %></td>
+    <td><%= encodeForXML(Util.truncate(itEntry.getValue(), 60, "..."))  %></td>
+  </tr>
+  </jalios:foreach>
+  
+</table>
+<jalios:pager name="pagerHandlerExtraData" />
+<%   } %>
+<% } %>
+       
+ 

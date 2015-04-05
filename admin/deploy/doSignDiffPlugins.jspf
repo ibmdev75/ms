@@ -1,0 +1,10 @@
+<jalios:foreach collection="<%= PluginManager.getPluginManager().performDiffPlugins().entrySet() %>" name="itEntry" type="Map.Entry" counter='diffPluginCounter'>
+  <% 
+    Plugin itPlugin  = (Plugin) itEntry.getKey(); 
+    Set    itDiffSet = (Set) itEntry.getValue(); 
+    request.setAttribute("diffSet", itDiffSet);
+    request.setAttribute("tableId",itPlugin.getName());
+  %>
+  <h2><%= itPlugin.getLabel(userLang) %></h2>
+  <%@ include file='/admin/deploy/doSignDiff.jspf' %>
+</jalios:foreach>

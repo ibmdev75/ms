@@ -1,0 +1,24 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+/* ----------------------------------------------- */
+/*  Jalios crop member photo modal                 */
+/* ----------------------------------------------- */
+.photo-crop-modal .cropper {
+  border-right: 1px solid #777777;
+  max-height: 360px;
+}
+.photo-crop-modal .cropper-result {
+  text-align: center;
+}
+.photo-crop-modal .photo-preview-container {
+  display: inline-block;
+  margin: 0 auto;
+}
+.photo-crop-modal .photo-preview-container .photo-preview-wrapper {
+  overflow: hidden;
+  border-radius: 50%;
+}
+.photo-crop-modal .jcrop-keymgr {
+  display: none !important;
+}

@@ -1,0 +1,75 @@
+<% if (formHandler.CRITERIA_STEP == step) { %>
+<%-- Period ------------------------------------------------------------ --%>
+<jalios:field label="ui.work.notification.period">
+<select name='periodType' class='form-control'>
+    <% int periodType = formHandler.getAvailablePeriodType(); %>
+    <% int[] availablePeriods = channel.getNotificationManager().getAvailablePeriods(); %>
+    <% for (int period: availablePeriods) {
+        out.println("<option value='" + period + "' ");
+        if (periodType == period) {
+          out.println("selected='selected'");
+        }
+        out.println(">"+glp(channel.getNotificationManager().getPeriodLabel(period))+"</option>");
+      }
+     %>
+</select>
+</jalios:field>
+
+	<jalios:field label="ui.work.notification.mutation-type">
+      <% int mutationType = formHandler.getAvailableMutationType(); %>
+      <select name='mutationType' class='form-control'>
+        <option value='<%= NotificationManager.MUTATION_ALL %>' <%= mutationType==NotificationManager.MUTATION_ALL ? "selected=\"selected\"" : ""%>><%=glp("ui.work.notification.mutation-all")%></option>
+        <option value='<%= NotificationManager.MUTATION_MAJOR %>' <%= mutationType==NotificationManager.MUTATION_MAJOR ? "selected=\"selected\"" : ""%>><%=glp("ui.work.notification.mutation-major")%></option>
+        <option value='<%= NotificationManager.MUTATION_CREATE %>' <%= mutationType==NotificationManager.MUTATION_CREATE ? "selected=\"selected\"" : ""%>><% /* %> Creation <% */ %><%=glp("ui.work.notification.mutation-create")%></option>
+      </select>
+	</jalios:field>
+		  <%-- Category ------------------------------------------------------------ --%>
+      <jalios:field label="ui.work.search.tab.cat" name="cids" value="<%= formHandler.getAvailableCategorySet() %>" keyword="true">
+      	<jalios:control type="<%= ControlType.CATEGORY %>"/>
+      </jalios:field>
+      <jalios:field>
+      <%-- Category / Cat Mode ------------------------------------------------------------ --%>
+      <a href="#" onclick="return false;" data-jalios-action="toggle:hide" data-jalios-target="DIV.editNotificationCriteria_catOptions"><%= glp("ui.com.lbl.options") %></a>
+			<div class="editNotificationCriteria_catOptions  <%= formHandler.showCategoryOptions() ? "" : "hide" %>">
+        <% boolean catModeAnd = formHandler.isCatModeAnd(); %>
+          <ul class="list-unstyled">
+            <li>
+              <% String catModeAndInputId = "editNotificationCriteria_catMode_and"; %>
+              <input id="<%= catModeAndInputId %>" type="radio" name="catMode" value="and" <% if (catModeAnd) { %>checked="checked" <%}%>/>
+              <label for="<%= catModeAndInputId %>"><%= glp("ui.work.search.cat.mode.and") %></label>
+            </li>
+            <li>
+              <% String catModeOrInputId = "editNotificationCriteria_catMode_or"; %>
+              <input id="<%= catModeOrInputId %>" type="radio" name="catMode" value="or" <% if (!catModeAnd) { %>checked="checked" <%}%>/>
+              <label for="<%= catModeOrInputId %>"><%= glp("ui.work.search.cat.mode.or") %></label>
+            </li>
+          </ul>
+        </div>      
+      </jalios:field>
+      
+      <jalios:buffer name="textOptionLink">
+      </jalios:buffer>    
+      <jalios:field name='<%= "text" %>' label="ui.work.search.tab.text" value='<%= formHandler.getAvailableText() %>'>
+      	<jalios:control type="<%= ControlType.TEXTFIELD %>" />
+      </jalios:field>     
+      <jalios:field>
+      <%-- Text / Search Mode ------------------------------------------------------------ --%>
+	    <a href="#" onclick="return false;" data-jalios-action="toggle:hide" data-jalios-target="DIV.editNotificationCriteria_textOptions"><%= glp("ui.com.lbl.options") %></a>
+      <div class="editNotificationCriteria_textOptions <%= formHandler.showTextOptions() ? "" : "hide" %>">
+        <% String textMode = formHandler.getAvailableTextMode(); %>
+        <ul class="list-unstyled">
+          <li><input id="editNotificationCriteria_textMode_all"      type="radio" name="textMode" value="<%= QueryHandler.TEXT_MODE_ALL_WORDS %>" <%= QueryHandler.TEXT_MODE_ALL_WORDS.equals(textMode) ? "checked=\"checked\"" : "" %> />&nbsp;<label for="editNotificationCriteria_textMode_all"><%= glp("ui.work.search.text.mode.all") %></label></li>
+          <li><input id="editNotificationCriteria_textMode_any"      type="radio" name="textMode" value="<%= QueryHandler.TEXT_MODE_ANY_WORD %>"  <%= QueryHandler.TEXT_MODE_ANY_WORD.equals(textMode)  ? "checked=\"checked\"" : "" %> />&nbsp;<label for="editNotificationCriteria_textMode_any"><%= glp("ui.work.search.text.mode.any") %></label></li>
+          <li><input id="editNotificationCriteria_textMode_exact"    type="radio" name="textMode" value="<%= QueryHandler.TEXT_MODE_EXACT %>"     <%= QueryHandler.TEXT_MODE_EXACT.equals(textMode)     ? "checked=\"checked\"" : "" %> />&nbsp;<label for="editNotificationCriteria_textMode_exact"><%= glp("ui.work.search.text.mode.exact") %></label></li>
+          <li><input id="editNotificationCriteria_textMode_advanced" type="radio" name="textMode" value="<%= QueryHandler.TEXT_MODE_ADVANCED %>"  <%= QueryHandler.TEXT_MODE_ADVANCED.equals(textMode)  ? "checked=\"checked\"" : "" %> />&nbsp;<label for="editNotificationCriteria_textMode_advanced"><%= glp("ui.work.search.text.mode.adv") %></label><jalios:tooltip property="ui.work.search.text.mode.adv.h" /></li>
+        </ul>
+      </div>
+      </jalios:field> 
+      
+      
+
+		  <%-- Workspace ------------------------------------------------------------ --%>
+    	<jalios:field label="ui.com.lbl.workspace" name="refineWS" value="<%= formHandler.getAvailableRefineWS() %>">
+      		<jalios:control type="<%= ControlType.WORKSPACE %>" />
+      	</jalios:field>
+<% } %>

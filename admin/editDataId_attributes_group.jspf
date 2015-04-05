@@ -1,0 +1,63 @@
+<% if (data instanceof Group) { %>
+<% Group grp = (Group)data; %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.name") %></td>
+   <td><%= grp.getName() %></td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.grp-list.lbl.order") %></td>
+   <td><%= grp.getOrder() %></td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.grp-list.lbl.max-age") %></td>
+   <td><%= DateUtil.formatDuration(grp.getCookieMaxAge() * 1000L, userLocale) %></td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.grp-list.lbl.visibility") %></td>
+   <td><%= grp.getVisibility() %></td>           
+ </tr>
+ 
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.webdav-access") %></td>
+   <td><%= grp.getWebdavAccess() %></td>           
+ </tr>
+ 
+ <% if (grp.getWorkspace() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.workspace") %></td>
+   <td><%= grp.getWorkspace() %></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (grp.getParentSet() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.parent-grp") %></td>
+   <td><%= Util.join(grp.getParentSet(), ", ") %></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (grp.getAccessControlList() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.adm.mbr-edit.lbl.acl") %></td>
+   <td><%= grp.getAccessControlList() %></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (grp.getLdapDN() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.ldap-dn") %></td>
+   <td><%= grp.getLdapDN() %></td>           
+ </tr>
+ <% } %>
+ 
+ <% if (grp.getLastLdapSynchro() != null) { %>
+ <tr>
+   <td class="fit nowrap"><%= glp("ui.com.lbl.ldap-sync") %></td>
+   <td><%= grp.getLastLdapSynchro() %></td>           
+ </tr>
+ <% } %>
+ 
+<% } %>

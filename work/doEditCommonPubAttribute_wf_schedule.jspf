@@ -1,0 +1,22 @@
+<fieldset>
+  <legend><%= glp("ui.work.form.lbl.wf.sched") %></legend>                
+  <% if (wf.isPublishWorkflow()) { %>
+  <%-- WF / PDATE ------------------------------------------------------------ --%> 
+  <jalios:field name="pdate" label="ui.work.form.lbl.pdate" value='<%= formHandler.getAvailablePdate() %>'>
+    <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+  </jalios:field>
+
+  <%-- WF / EDATE ------------------------------------------------------------ --%> 
+  <jalios:field name="edate" label="ui.work.form.lbl.edate" value='<%= formHandler.getAvailableEdate() %>'>
+    <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+  </jalios:field>
+
+  <% } %>
+  <%-- WF / ADATE ------------------------------------------------------------ --%>
+  <% if (!isPortlet) { %> 
+    <% boolean disabled = !((pub == null || pub.canBeArchived(loggedMember)) && loggedMember.canArchive(pub)); %>
+    <jalios:field name='<%= "adate" %>' label='<%= glp("ui.work.form.lbl.adate") %>' value='<%= formHandler.getAvailableAdate() %>' disabled='<%= disabled %>'>
+      <jalios:control settings='<%= new DateSettings().displayTime() %>' />
+    </jalios:field>
+  <% } %>
+</fieldset>

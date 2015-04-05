@@ -1,0 +1,78 @@
+<%@page import="com.jalios.jcms.PhotoSize"%><%
+PhotoSize mbrPhotoSize        = (PhotoSize) request.getAttribute("front-member-list-photoSize");
+boolean displayOrganization   = Util.toBoolean(request.getAttribute("front-member-list-display-organization"), true);
+boolean displayDepartment     = Util.toBoolean(request.getAttribute("front-member-list-display-department"), false);
+boolean displayJob            = Util.toBoolean(request.getAttribute("front-member-list-display-job"), true);
+boolean displayPhone          = Util.toBoolean(request.getAttribute("front-member-list-display-phone"), true);
+boolean displayEmail          = Util.toBoolean(request.getAttribute("front-member-list-display-email"), true);
+
+if (mbrPhotoSize == null) {
+  mbrPhotoSize = PhotoSize.TINY;
+}
+%>
+<table class="table-data table-condensed">
+  <jalios:pager name='memberListPagerHandler' 
+                declare='true' 
+                action='init' 
+                pageSize='<%= memberPageSize %>' 
+                size='<%= memberSet.size() %>'/>  
+  <thead><tr>
+    <th class="fit"></th>
+    <th class="fit"><jalios:include target="FRONT_MEMBER_LIST_TH" /></th>
+    <th><%= glp("ui.com.lbl.name") %></th>
+    <% if (displayOrganization) { %>
+    <th><%= glp("ui.adm.mbr-edit.lbl.organization") %></th>
+    <% } %>
+    <% if (displayDepartment) { %>
+    <th><%= glp("ui.adm.mbr-edit.lbl.department") %></th>
+    <% } %>
+    <% if (displayJob) { %>
+    <th><%= glp("ui.adm.mbr-edit.lbl.job") %></th>
+    <% } %>
+    <% if (displayPhone) { %>
+    <th><%= glp("ui.adm.mbr-edit.lbl.phone") %></th>
+    <% } %>
+    <% if (displayEmail) { %>
+    <th><%= glp("ui.adm.mbr-edit.lbl.mail") %></th>
+    <% } %>
+    <jalios:include target="FRONT_MEMBER_LIST_HEADER" targetContext="th" />
+  </tr></thead>
+  <tbody>
+  <jalios:foreach collection="<%= memberSet %>" 
+      type="Member" 
+      name="itMember"
+      max="<%= memberListPagerHandler.getPageSize() %>"
+      skip="<%= memberListPagerHandler.getStart() %>">
+  <% if (itMember.isContact() || !itMember.isDisabled()) { %>
+  <tr>
+    <td class="numeric"><%= memberListPagerHandler.getStart() + itCounter.intValue() %>.</td>
+    <td class="text-overflow">
+      <jalios:include target="FRONT_MEMBER_LIST_TD" />
+      <jalios:memberphoto member="<%= itMember %>" size="<%= mbrPhotoSize %>" />
+    </td>    
+    <td class="name text-overflow"><jalios:link data="<%= itMember %>" /></td>
+    <% if (displayOrganization) { %>
+    <td><%= Util.getString(itMember.getOrganization(), "") %></td>
+    <% } %>
+    <% if (displayDepartment) { %>
+    <td><%= Util.getString(itMember.getDepartment(), "") %></td>
+    <% } %>
+    <% if (displayJob) { %>
+    <td><%= Util.getString(itMember.getJobTitle(), "") %></td>
+    <% } %>
+    <% if (displayPhone) { %>
+    <td class="nowrap">
+      <jalios:phone number="<%= itMember.getPhone() %>" region="<%= itMember.getCountry() %>"/><br/>
+      <jalios:phone number="<%= itMember.getMobile() %>" region="<%= itMember.getCountry() %>"/>
+    </td>
+    <% } %>
+    <% if (displayEmail) { %>
+    <td><a href="mailto:<%= itMember.getEmail() %>"><%= Util.getString(itMember.getEmail(), "") %></a></td>
+    <% } %>
+    <jalios:include target="FRONT_MEMBER_LIST_BODY" targetContext="td" />
+  </tr>
+  <% } %>
+</jalios:foreach>
+</tbody>
+</table>
+<jalios:pager name='memberListPagerHandler' />

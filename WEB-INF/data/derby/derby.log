@@ -1,0 +1,7 @@
+2015-04-04 12:23:15.227 GMT : Apache Derby Serveur r√©seau - 10.5.3.0 - (802917) d√©marr√© et pr√™t √† accepter les connexions sur le port 49409
+----------------------------------------------------------------
+2015-04-04 12:23:15.615 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance a816c00e-014c-8462-9407-0000411af29f
+on database directory D:\programmation\workspaces\smabtp\minisite\ms\WEB-INF\data\derby\jcmsdb  
+
+Database Class Loader started - derby.database.classpath=''

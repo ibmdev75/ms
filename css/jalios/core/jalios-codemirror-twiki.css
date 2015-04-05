@@ -1,0 +1,74 @@
+.CodeMirror-toolbar {
+  border-bottom: 1px solid #CCC;
+  padding: 5px;
+}
+
+.CodeMirror-lines {
+  padding-bottom: 42px;
+}
+
+/* ------------------------------------------ */
+/*  STYLE                                     */
+/* ------------------------------------------ */
+
+span.cm-emstrong {
+  font-weight: bold;
+  font-style: italic;
+}
+
+span.cm-fix {
+  color: #888888;
+}
+span.cm-fixstrong {
+  color: #888888;
+  font-weight: bold;
+}
+span.cm-block-inline {
+  color: #008800;
+}
+span.cm-block {
+  color: #BB3300;
+}
+
+span.cm-cell{
+  color: #9428FF;
+}
+span.cm-cell-header {
+  color: #AE008B;
+}
+
+span.cm-list{
+  color: #666666;
+}
+
+/* ------------------------------------------ */
+/*  TWIKIWYG                                  */
+/* ------------------------------------------ */
+
+.twikiwyg {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 15px;
+}
+
+/* Tokens */
+.twikiwyg span.cm-token-start,
+.twikiwyg span.cm-token-end { /*display: none;*/ font-size: 0px; }
+
+/* Links */
+span.cm-link-trigger   { color: #7979FC; } 
+.twikiwyg span.cm-link-trigger   { /*display: none;*/ font-size: 0px; }
+
+/* Header */
+.twikiwyg span.cm-header-trigger { /*display: none;*/ font-size: 0px; }
+
+.twikiwyg span.cm-header-1 { font-size: 38px; }
+.twikiwyg span.cm-header-2 { font-size: 32px; }
+.twikiwyg span.cm-header-3 { font-size: 24px; }
+
+.twikiwyg span.cm-header-1,
+.twikiwyg span.cm-header-2,
+.twikiwyg span.cm-header-3 {
+  line-height: 40px;
+  font-weight: bold;
+  color: black;
+}

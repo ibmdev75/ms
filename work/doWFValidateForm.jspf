@@ -1,0 +1,79 @@
+<%
+boolean stateChanged = getBooleanParameter("stateChanged", false);
+if (stateChanged) { 
+  request.getSession().setAttribute("stateChanged", Boolean.TRUE);
+  String redirect = ServletUtil.getUrlWithRemovedParams(request, new String[] {"stateChanged"}, false);
+  sendRedirect(redirect, request, response);
+  // NOTE:OD: do not return since this jsp is used in displayWork.jsp
+} else {
+  stateChanged = Util.toBoolean(request.getSession().getAttribute("stateChanged"), false);
+  String redirectParams = (hasParameter("preview") ? "preview=true" : "") + "&stateChanged=true";
+  String redirect = JcmsUtil.getDisplayUrl(publication, userLocale, redirectParams, false); 
+%>
+<jalios:javascript>
+'JCMS.jsp.doWFValidateForm'._namespace({  
+  
+  changePstatus: function (select, currPstatus) {
+
+    // Check the selected pstatus
+    pstatus = select.options[select.selectedIndex].value;
+    if (pstatus == currPstatus) { 
+      return;
+    }
+    
+    var callback = function(confirm) {
+      if (!confirm) {
+        // restore the previous value
+        select.selectedIndex = select.originalSelectedIndex;
+        }
+    };
+    
+    // Prompt for confirmation/comment
+    var jsp = "work/validateStateChange.jsp";
+    jsp += "?id=" + "<%= publication.getId() %>" + "&pstatus=" + pstatus +  "&redirect=" + "<%= ServletUtil.encodeURL(redirect) %>";
+    jQuery.jalios.ui.Modal.openFromUrl(jsp , { 'callback' : callback});
+  }
+});
+</jalios:javascript>
+<jalios:message title="ui.work.dpl.wf-validation">
+
+  <%-- STATE SELECTION --%>
+    <form name="wfForm" action="edit.jsp">
+      <div class="row">
+      <div class="col-xs-6">
+      <select class="form-control" name="pstatus" onchange='JCMS.jsp.doWFValidateForm.changePstatus(this, <%= publication.getPstatus() %>)' <%= channel.isDataWriteEnabled() ? "" : "disabled='disabled'" %>>
+      <% 
+      Set stateSet = publication.getNextWFStateSet(loggedMember);
+      if (stateSet == null) {
+        stateSet = new HashSet();
+      }
+      WFState pubWFState = publication.getWFState();
+      if (pubWFState != null) {
+        stateSet.add(pubWFState);
+      }
+      %>
+      <jalios:foreach collection="<%= stateSet %>" name="itTarget" type="WFState">
+      <% int itPstatus = itTarget.getPstatus(); %>
+      <% boolean isSelected = itPstatus == publication.getPstatus(); %>
+      <% boolean isDisabled = itPstatus == WorkflowManager.ARCHIVED_PSTATUS && ((publication != null && !publication.canBeArchived(loggedMember)) || !loggedMember.canArchive(pub)); %>
+      <option value="<%= itPstatus %>" 
+              <%= isDisabled ? "disabled='disabled'" : "" %> 
+              <%= isSelected ? "selected='selected'" : "" %> 
+              >
+        <%= itTarget.getLabel(userLang) %><%= isSelected ? " (" + glp("ui.work.dpl.foot.lbl.cstatus") + ")" : "" %>
+      </option>
+      </jalios:foreach>
+      </select>
+      </div>
+      </div>
+      <script language='JavaScript' type='text/javascript'>
+      document.wfForm.pstatus.originalSelectedIndex = document.wfForm.pstatus.selectedIndex;
+      </script>
+      <input type='hidden' name='id' value='<%= publication.getId() %>' />
+      <input type='hidden' name='wfNote' value='' />
+      <input type='hidden' name='opUpdate' value='true' />
+      <input type='hidden' name='redirect' value="<%= encodeForHTMLAttribute(redirect) %>" />
+    </form>
+
+</jalios:message>  
+<% } %>

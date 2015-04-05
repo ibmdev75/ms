@@ -1,0 +1,218 @@
+@import "jalios/core/init.less";
+
+// Common full display template
+// ----------------------
+
+.fullDisplay,
+.full-display {
+  P.title, H1.title {
+    font-size: 24px; // see H2 type.less
+    color: @grayDark;
+  }
+
+  .fields {
+    width: 100%;
+
+    .field {
+      TD  {
+        border-top: 1px solid #F3F3F3;
+        vertical-align: top;
+        padding: 3px @baseline/2;
+
+        &.field-label {
+          width: 150px;
+          background-color: #F3F3F3;
+          text-align: right;
+          padding-right: 0px;
+          white-space: nowrap;
+          border-top: 1px solid #FFFFFF;
+        }
+      }
+
+      .edit-area {
+        margin-left: 2px;
+        visibility: hidden;
+      }
+      &:hover .editArea {  visibility: visible; }
+    }
+
+    &.commonFields {
+      TD.label { width: 150 - @baseline; padding-right: @baseline; }
+    }
+  }
+
+  .field-label { font-weight: bold; }
+  .empty { display: none; }
+
+  // for IE
+  &.unitFieldEdition .empty { display: block; }
+  &.unitFieldEdition .empty { display: table-row; }
+
+  .field-data { }
+}
+
+
+// For CSS-2 browser (eg Firefox)
+html>body .unitFieldEdition .empty { display: table-row; }
+
+
+
+// Reviews full display
+// ----------------------
+
+.Review {
+  P  { font-size: @font-size-base - 1; }
+  .title {
+    font-size: @font-size-base;
+    margin-bottom: 0;
+    EM { font-weight: normal; }
+  }
+}
+
+// Article full display
+// ----------------------
+.Article.fulldisplay {
+  .article-body {
+    .article-title:first-child {
+      margin-top: 0;
+    }
+  }
+  .article-intro {
+    margin-bottom: @baseline / 2;
+  }
+  .article-content {
+    #JCMS > .br();
+  }
+  .article-picture {
+    #JCMS > .br();
+    margin-bottom: @baseline;
+    float: none;
+
+    IMG.img-thumbnail {
+      max-height: 400px;
+    }
+    max-width: 100%;
+
+    // xs+ screen
+    @media (min-width: @screen-xs-min) {
+      &.orientation-portrait,
+      &.orientation-default {
+        max-width: 50%;
+        float: right;
+        margin-left: @baseline;
+      }
+    }
+    // sm+ screen
+    @media (min-width: @screen-sm-min) {
+      &.orientation-portrait,
+      &.orientation-default {
+        max-width: 40%;
+      }
+    }
+    // md+ screen
+    @media (min-width: @screen-md-min) {
+      &.orientation-portrait,
+      &.orientation-default {
+        max-width: 30%;
+      }
+    }
+  }
+  .article-related-content {
+    margin-bottom: @baseline;
+    .field-label {
+      font-size: @font-size-h3;
+    }
+  }
+}
+
+// FileDocument full display
+// ----------------------
+.FileDocument {
+
+  .links {
+    LI { white-space: nowrap; }
+    A  { font-weight: bold; color: @link-color; }
+    UL.item-list {
+      margin-bottom: 0;
+    }
+  }
+  .preview {
+    margin-top: 9px;
+  }
+  .main-column{
+    padding-right: @baseline*16;
+  }
+  .right-column {
+    margin-top:@baseline;
+  }
+}
+
+// New full-display
+// ----------------------
+.full-display {
+
+  .header-div {
+    badding-bottom: @baseline/2;
+    .title {
+      display: inline;
+      padding-left: @baseline/4;
+    }
+  }
+
+  &.main-div {
+    padding: @baseline @baseline/2;
+    .border-radius(5px);
+    background-color: @white;
+    border: 1px solid transparent;
+  }
+
+  .data-title, .label { font-weight: bold; }
+  .data-title {
+    background-color: #F0F0F0;
+    padding: @baseline/2;
+    margin-bottom: @baseline/2;
+    .border-radius(4px);
+  }
+
+  .data-div {
+    width: 100%;
+    margin-top: @baseline/2;
+
+    TABLE {
+      border: 0px solid transparent;
+      border-collapse: collapse;
+      border-spacing: 0px;
+    }
+    TR {
+      margin: 0px;
+      padding: @baseline/2 @baseline/4;
+      vertical-align: top;
+      &.last-line TD { border-bottom: 1px solid transparent; }
+    }
+    TD {
+      margin:  @baseline/2 0px;
+      padding: @baseline/2 @baseline/4;
+      border-bottom: 1px solid #D9D9D9;
+    }
+  }
+}
+
+BODY.browser-IE7 .full-display.main-div {
+  border: 0px solid transparent;
+}
+
+
+.browser-css3 .full-display .field .edit-area,
+.browser-css3 .full-display .field .editArea {
+  visibility: hidden;
+}
+
+.full-display .field  A.ctxPubMenu,
+.full-display .field  A.ctxPubMenu {
+  margin-left: -5px;
+}
+
+.browser-css3 .full-display .field:hover .edit-area,
+.browser-css3 .full-display .field:hover .editArea {
+  visibility: visible;
+}

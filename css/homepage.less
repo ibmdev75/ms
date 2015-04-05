@@ -1,0 +1,55 @@
+// Include variables and mixins
+@import "jalios/core/init.less";
+
+
+.homepage {
+
+	.homepage-header {
+    background-image: url("../images/jalios/layout/bg/jaliosHeader.png");
+    height: 110px;
+    margin-bottom: @baseline;
+    border-bottom: 4px solid @gray-lighter;
+  }
+    
+  .homepage-news-box {
+    margin-bottom: 2 * @baseline;
+  }
+  
+  .homepage-big-icon {
+    height: 80px;
+    width: 80px;
+    margin: 0 auto;
+    padding: 10px 20px;
+	  background-color: @gray-light;
+    border-radius: 50%;
+    color: #FFF;
+    font-size: 40px;
+    
+    &.homepage-big-icon-blue {
+      background-color: @brand-info;
+    }
+    
+    &.homepage-big-icon-green {
+      background-color: @brand-success;
+    }
+    
+    &.homepage-big-icon-orange {
+      background-color: @brand-warning;
+    }
+    
+  }
+  
+  
+  .homepage-footer {
+    border-top: 1px solid @gray-lighter;
+    padding: @baseline;
+    color: @gray-light;
+    text-align: center;
+    
+    A {
+      color: @gray-light;
+    }
+  }
+
+}
+

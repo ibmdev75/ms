@@ -1,0 +1,71 @@
+<% 
+com.jalios.jstore.SyncManager syncMgr = channel.getStore().getSyncManager(); 
+Map dataMap = syncMgr.getDataMap(); 
+%>
+
+<% if (dataMap == null) { %>
+<jalios:message dismissable="true" msg="ui.adm.um.store-ch.txt1" />
+<% } else { %>
+
+<jalios:message dismissable="true">
+  <p><%= glp("ui.adm.um.store-ch.txt2") %></p>
+  <ul>
+    <li><%= glp("ui.adm.um.last-sync") %> <jalios:date date='<%= syncMgr.getLastSyncDate() %>' format='<%= "full" %>'/> <jalios:time date='<%= syncMgr.getLastSyncDate() %>' format='<%= "short" %>'/> (stamp: <%= syncMgr.getLastSync().getStamp() %>)
+    <li><%= glp("ui.adm.um.nb-op") %> <%= syncMgr.getOpCount() %>
+    <li><%= glp("ui.adm.um.gcs") %> <%= syncMgr.getGreatestCommonStamp() %>
+  </ul>
+</jalios:message>
+
+
+<table class="table-data">
+  <tr>
+    <th class="fit"></th>
+    <th class="fit">ID</th>
+    <th class="fit">Class</th>
+    <th class="fit">State</th>
+    <th>Value</th>
+  </tr>
+<jalios:foreach collection='<%=  dataMap.keySet() %>' type='String' name='itID' counter='idCounter'>
+<% 
+List opList = (List)dataMap.get(itID);
+StorableLogEntry firstOp = (StorableLogEntry)opList.get(0);
+StorableLogEntry lastOp = (StorableLogEntry)opList.get(opList.size() - 1);
+String typeName = Util.getClassShortName(firstOp.getName());
+boolean isCreate = false;
+boolean isUpdate = false;
+boolean isDelete = false;
+if (lastOp.isDelete()) {
+  isDelete = true;
+} else if (firstOp.isUpdate()) {
+  isUpdate = true;
+} else {
+  isCreate = true;
+}
+%>
+  <tr>
+    <td class="numeric fit"><%= idCounter %></td>
+    <td class="fit"><code><%= itID %></code></td>
+    <td class="fit"><%= typeName %></td>
+    <td class="fit">
+      <% if (isCreate) { %>
+        <span class='label label-success'><%= glp("ui.adm.um.diff.create") %></span>
+      <% } else if (isUpdate) { %>
+        <span class='label label-warning'><%= glp("ui.adm.um.diff.update") %></span>
+      <% } else { %>
+        <span class='label label-danger'><%= glp("ui.adm.um.diff.delete") %></span>
+      <% } %>
+    </td>
+    <td>
+      <% if (!isDelete) { %>
+        <% Data data = channel.getData(itID); %>
+        <% if (data == null) { %>
+          <jalios:icon src='warning'  /> <strong><%= glp("ui.adm.um.store-ch.no-data", itID) %></strong>
+        <% } else { %>
+          <%= Util.truncate(data.toString(), 40, "...") %>
+        <% } %>
+      <% } %>
+    </td>
+  </tr>
+</jalios:foreach>
+</table>
+<% } %>

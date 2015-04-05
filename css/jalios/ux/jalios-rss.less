@@ -1,0 +1,95 @@
+// Include variables and mixins
+@import "../core/init-mixins.less";
+
+.portlet-rss {
+  .RssLogo { 
+    display: block; 
+    max-width: 100%; 
+  }
+	.RssTitle { 
+    font-weight: bold;
+    font-size:   120%; 
+    color:       #333333; 
+  }
+  .RssInfo {
+    text-align: center;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: @baseline /2;
+    margin-bottom: @baseline /2;
+  }
+  
+  .RssItems {
+    padding: 0px 0.2em;
+    list-style-position: inside;
+    list-style-type: circle;
+  }
+  
+  .RssItemDescription { 
+		padding-left: @baseline /2;
+    margin-left: @baseline;
+		margin-bottom:@baseline;
+    margin-top: @baseline;
+		border-left: 2px solid #A7C7F7;
+  }
+  
+  .readRssItem a:hover {
+	  color: inherit;
+  }
+  
+	.readRssItem A {
+		color: #888;
+	  text-decoration: none;  
+	  cursor:  pointer;   
+	}
+	
+  LI:hover .readRssItem A{
+	  color:inherit;
+  }
+	
+	.readArticleRssItem A {
+	  color: #CCC;
+	  text-decoration: none;  
+	  cursor:  pointer;    
+	}
+  
+	LI:hover .readArticleRssItem A{
+	  color:inherit;
+  }
+  
+  .RssItemLink {
+    cursor:  pointer;
+  }
+  .rssSidebar,
+  .rssContent {
+    vertical-align: top;
+  }
+  
+  .rssItemContentTitleDiv {
+    vertical-align: middle;
+    display: inline;
+  }
+  
+  .rssItemContentFavicon {
+    display: inline;
+    vertical-align: middle;
+  }
+  
+  .rssItemContentTitle {
+    vertical-align: middle;
+    display: inline;
+    font-weight: bold;
+    IMG {vertical-align:baseline;}
+  }
+  
+  .rssItemContentArticle {
+    padding: 5px;
+  }  
+  .rssMeta {
+    color:@gray;
+    font-size:@font-size-small;
+  }
+  .rss-sidebar {
+	  border-right: 3px solid #CCC;
+		padding-right: @baseline;
+  }
+}

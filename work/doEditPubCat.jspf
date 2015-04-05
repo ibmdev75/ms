@@ -1,0 +1,23 @@
+<%
+{
+Set typeRemovedCatSet = (Set) request.getAttribute(documentTypeShortName + ".removedCatSet");
+boolean showOtherCategories = true;
+Set<Category> wsCategorySet = formHandler.getAvailableWorkspace().getCatSet();
+if (wsCategorySet == null || Util.getFirst(wsCategorySet) == channel.getRootCategory()) {
+  wsCategorySet = channel.getRootCategory().getChildrenSet();
+  showOtherCategories = false;
+}
+Set catSet = formHandler.getAvailableCategorySet(); 
+%>
+<%   if (typeRemovedCatSet == null || !typeRemovedCatSet.contains(channel.getRootCategory())) { %>
+<jalios:field name='cids' label='<%= showOtherCategories ? "ui.work.form.lbl.ws-cat" : "" %>' value='<%= catSet %>' resource="field-vertical">
+  <jalios:control settings='<%= new CategoryTreeSettings().root(wsCategorySet).multiple().removed(typeRemovedCatSet) %>' />
+</jalios:field>
+
+<%     if (showOtherCategories) { %>
+<jalios:field name='cids' label="ui.work.form.lbl.other-cat" value='<%= catSet %>' resource="field-vertical">
+  <jalios:control settings='<%= new CategoryTreeSettings().root(channel.getRootCategory().getChildrenSet()).removed(Util.unionSet(wsCategorySet, typeRemovedCatSet)).multiple() %>' />
+</jalios:field>      
+<%     } %>
+<%   } %>
+<% } %>

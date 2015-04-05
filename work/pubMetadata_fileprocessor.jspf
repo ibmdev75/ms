@@ -1,0 +1,90 @@
+<% if (showFileProcessor) { %>
+<%
+FileDocument doc = (FileDocument)pub;
+
+FileProcessingInfo fileProcInfo = null;
+List<FileProcessingLog> fileProcLogList = null;
+Repository repository = RepositoryManager.getInstance().getRepository(RepositoryManager.JCMS_UPLOAD_REPOSITORY);
+String fileShortName = null;
+boolean processed = false;
+if (repository != null) {
+  fileShortName = doc.getFilename().substring("upload/".length());
+  fileProcInfo = repository.getFileProcessingInfo(fileShortName);
+  SortedSet<? extends FileProcessor>  processorsSet = repository.getFileProcessorSet(IOUtil.getExtension(doc.getFile()));
+  SortedSet<? extends FileParser>     parsersSet = repository.getFileParserSet(IOUtil.getExtension(doc.getFile()));
+  fileProcLogList = repository.getFileProcessingLogs(fileShortName);
+  processed = fileProcInfo != null && (Util.notEmpty(processorsSet) || Util.notEmpty(parsersSet));
+}
+%>
+<div class="tab-pane" id="fileprocessor">
+
+<% if (!processed) { %>
+<jalios:message msg="fileprocessor.ctxmenu.nocomponent" title="" />
+<% } else { %>
+<table class="table-data table-not-striped">
+  <tr>
+    <th><%= glp("ui.adm.data-inspector.lbl.attribute") %></th>
+    <th><%= glp("ui.adm.data-inspector.lbl.value") %></th>
+  </tr>       
+ 
+ 
+  <tr>
+    <td  class="fit nowrap"><%= glp("fileprocessor.adm.filestatus.processfileudate") %></td>
+    <td><jalios:date date="<%= fileProcInfo.getUdate() %>" format="full" /> <jalios:time date="<%= fileProcInfo.getUdate() %>" format="full" /></td>           
+  </tr>
+ 
+  <% ProcessingStatus indexingStatus = fileProcInfo.getIndexingStatusEnum(); %>
+  <% if (indexingStatus != null) { %>
+  <tr>   
+    <td class="fit nowrap"><%= glp("fileprocessor.adm.filestatus.label.indexingstatus") %></td>
+    <td><%= indexingStatus.getText(userLang) %></td>           
+  </tr> 
+  <% } %>
+  
+  <% ProcessingStatus processingStatus = fileProcInfo.getProcessingStatusEnum(); %>
+  <% if (processingStatus != null) { %>
+  <tr>   
+    <td class="fit nowrap"><%= glp("fileprocessor.adm.filestatus.label.processingstatus") %></td>
+    <td><%= processingStatus.getText(userLang) %></td>           
+  </tr> 
+  <% } %>
+
+<% if (Util.notEmpty(fileProcLogList)) { %>  
+<%   for (FileProcessingLog log : fileProcLogList) { %>
+<%
+Class componentClass = null;
+try { componentClass  = channel.getClass(log.getComponent()); } catch (Exception ex) {}
+if (componentClass == null) { continue; }
+FileActionComponent itActionComponent = repository.getActionComponent(componentClass);
+if (itActionComponent == null) {
+  continue;
+}
+ProcessingStatus status = log.getStatusEnum();
+String statusIcon = FileProcessorUIUtil.getStatusIconName(status);
+%>        
+  <tr>   
+    <td class="fit nowrap"><%= itActionComponent.getName() %></td>
+    <td>
+      <jalios:icon src="<%= statusIcon %>" /> <%= status.getText(userLang) %> - 
+      <jalios:date date="<%= log.getCdate() %>" format="full" /> <jalios:time date="<%= log.getCdate() %>" format="full" />
+      (<jalios:duration time="<%= log.getDuration() %>" />)
+    </td>           
+  </tr> 
+<%   } %>
+<% } %>
+</table>
+<% } %>
+
+<%-- Process Again button --%>
+<% if (checkAccess("admin/operation/file-processor")) { %>
+<div class="br">
+<%
+String url = "admin/fileprocessor/adminFileProcessor.jsp?opSubmitAgain=true&amp;fileShortName=" + fileShortName;
+url = HttpUtil.getUrlWithCSRFToken(url, channel.getCurrentServletRequest(),true);
+%>
+<a href="<%= url %>" class="btn btn-default"><%= glp("fileprocessor.ctxmenu.submit") %></a>
+</div>
+<% } %>
+
+</div>
+<% } %>

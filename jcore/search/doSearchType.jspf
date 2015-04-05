@@ -1,0 +1,100 @@
+<%--
+  @Summary: Types search panel
+  @Deprecated: False
+  @Customizable: False
+  @Requestable: False
+  @Category: Search / Query
+  @Since: jcms-4.0
+--%>
+<% { %>
+  <%
+  Set<Class<? extends Publication>> dstClassSet = (Set<Class<? extends Publication>>)request.getAttribute("dstClassSet");
+  Set dstRefineSet              = (Set)request.getAttribute("dstRefineSet");
+  Collection dstTypesOff        = (Collection) request.getAttribute("dstTypesOff");
+  
+  boolean dstCheckPstatus       = Util.getString((String)request.getAttribute("dstCheckPstatus"),       "true").equals("true");
+  boolean dstShowReplaceFileDoc = Util.getString((String)request.getAttribute("dstShowReplaceFileDoc"), "true").equals("true");
+  boolean dstShowEmptyType      = Util.getString((String)request.getAttribute("dstShowEmptyType"),      "true").equals("true");
+  boolean dstShowAbstractType   = Util.getString((String)request.getAttribute("dstShowAbstractType"),   "true").equals("true");
+  boolean dstReplaceFileDoc     = Util.getString((String)request.getAttribute("dstReplaceFileDoc"),     "false").equals("true");
+  boolean dstExactType          = Util.getString((String)request.getAttribute("dstExactType"),          "false").equals("true");
+  int cpt = 0;
+  
+  com.jalios.jcms.handler.QueryHandler fHandler = (com.jalios.jcms.handler.QueryHandler) request.getAttribute("formHandler");
+  %>
+  
+  <jalios:field name="exactType" label="ui.work.search.type.exact" description="ui.work.search.type.exact.h" value='<%= dstExactType %>'>
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+  
+  <% if (dstShowReplaceFileDoc) { %>
+  <jalios:field name="replaceFileDoc" label="ui.work.search.type.doc" description="ui.work.search.type.doc.h" value='<%= dstReplaceFileDoc %>'>
+    <jalios:control type="<%= ControlType.BOOLEAN %>" />
+  </jalios:field>
+  <% } else { %>
+    <input type='hidden' name='replaceFileDoc' value='<%= dstReplaceFileDoc %>' />
+  <% } %>
+  
+  <jalios:field name="types" label="ui.work.mn.types.content">
+    <% for (Class itSuperClass : new Class[] {Content.class, UserContent.class, Form.class}) { %>
+    <table class="auto shim br">
+      <tr>
+        <td class='formInfo' nowrap="nowrap" colspan='2'>
+          <% boolean checkedContent = dstClassSet != null && dstClassSet.contains(itSuperClass); %>
+          <input type="checkbox" name="types" id="doSearchTypeAll<%= Util.getClassShortName(itSuperClass) %>" value="<%= itSuperClass.getName() %>" <%= checkedContent ? "checked=\"checked\"" : ""%> />
+          <label for="doSearchTypeAll<%= Util.getClassShortName(itSuperClass) %>" class='<%= checkedContent ? "highlight" : "" %>'><strong><%= glp("ui.work.query-ch.lbl.any." + Util.getClassShortName(itSuperClass)) %></strong></label>&nbsp;&nbsp;
+        </td>
+      </tr>
+      <% if(checkedContent && dstClassSet != null) { dstClassSet.remove(itSuperClass); } %>
+      <% int subTypeListSize = channel.getSubTypeList(itSuperClass, userLang).size(); %>
+      <% cpt = 0; %> 
+      
+      <jalios:foreach name="itClass" counter="typeCounter" type="Class" collection="<%= channel.getSubTypeList(itSuperClass, userLang) %>">
+        <% 
+        boolean checkAbstractType = dstShowAbstractType || !((itClass.getModifiers() & java.lang.reflect.Modifier.ABSTRACT) > 0);
+        boolean checkTypeOff = dstTypesOff == null || !dstTypesOff.contains(itClass);
+        %>
+        <% if (checkAbstractType && checkTypeOff) { %>
+          <% boolean checked = dstClassSet != null && dstClassSet.contains(itClass); %>
+          <%
+          int typeCount = 0;
+          
+          // DBData type
+          if (DBData.class.isAssignableFrom(itClass)) {
+            typeCount = HibernateUtil.queryCount(itClass);
+          } 
+          // Storable type
+          else {
+            Set set = channel.getPublicationSet(itClass, loggedMember, dstCheckPstatus);
+            if (dstRefineSet != null) { 
+              set = Util.interSet(dstRefineSet, set); 
+            }
+            typeCount = set.size();
+          }
+
+          %>
+          <% if (dstShowEmptyType || typeCount > 0) { %>
+            <% if (cpt == 0) { %><tr><% } %>
+              <td class='formInfo text-overflow' width="30%" <% if (typeCounter.intValue() == subTypeListSize) { %>colspan="<%= 3 - cpt %>"<% } %>>
+                <% String inputId = ADVANCEDSEARCH_INPUT_ID_PREFIX + "types" + itClass.getName(); %>
+                <input id="<%= inputId %>" type="checkbox" name="types" value="<%= itClass.getName() %>" <%= checked ? "checked=\"checked\"" : ""%> />
+                <label for="<%= inputId %>" class='<%= checked ? "highlight" : "" %>'><jalios:dataicon class="<%= itClass %>" /> <%= channel.getTypeLabel(itClass, workspace, userLang) %> (<%= typeCount %>)</label>&nbsp;&nbsp;
+              </td>
+            <% if (cpt++ == 2) { %></tr><% cpt = 0; %><% } %>
+          <% } %>
+          <% if(checked && dstClassSet != null) { dstClassSet.remove(itClass); } %>
+        <% } %>
+       </jalios:foreach>
+       <% if (cpt != 0) { %></tr> <% } %>
+    </table>
+    <% } %>
+    <%
+    if(fHandler != null && Util.notEmpty(dstClassSet)) {
+      for(Class<? extends Publication> clazz : dstClassSet) {
+        fHandler.appendAdvanced("types", clazz.getName());
+      }
+    }
+    %>
+  </jalios:field>
+
+<% } %>

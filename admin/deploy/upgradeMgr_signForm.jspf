@@ -1,0 +1,81 @@
+<% if (!isDiff && !isDiff3) { %>
+<jalios:message msg="ui.adm.um.file-ch.txt" title="" />
+<% } %>
+<%-- --- DIFF FORM ------------------------------------------------ --%>
+<form action="admin/deploy/upgradeMgr.jsp" method="post" name="editForm" class="form-horizontal">
+
+  <%-- base --%>
+  <div class="form-group">
+    <label for="signature-base" class="col-sm-2 control-label"><%= glp("ui.adm.um.diff.base") %></label>
+    <div class="col-sm-10">
+      <select name='base' id="signature-base" class="form-control">
+        <% File releaseFile = new File(channel.getJaliosPath("signature.xml")); %>
+        <optgroup label="<%= glp("ui.adm.um.diff.base-sign") %>">
+        <jalios:foreach collection='<%= baseSignatureSet %>' name='itSignature' type='com.jalios.io.Signature'>
+        <% if (itSignature.getFile() != null) { %>
+        <option value='<%= itSignature.getFile() %>' <%= itSignature.getFile().equals(baseFile) ? "selected" : "" %>><%= itSignature %></option>
+        <% } %>
+        </jalios:foreach>
+        <option value='<%= releaseFile %>' <%= releaseFile.equals(baseFile) ? "selected" : "" %> ><%= channel.getJcmsInfo().getVersion() %></option>
+         </optgroup>
+         <optgroup label="Other signature files">
+         <jalios:foreach collection='<%= Util.subSet(allSignatureSet, baseSignatureSet) %>' name='itSignature' type='com.jalios.io.Signature'>
+         <% if (itSignature.getFile() != null) { %>
+         <option value='<%= itSignature.getFile() %>' <%= itSignature.getFile().equals(baseFile) ? "selected" : "" %>><%= itSignature %></option>
+         <% } %>
+         </jalios:foreach>
+         </optgroup>
+      </select>        
+    </div>
+  </div>  
+  
+  <%-- source --%>
+  <div class="form-group">
+    <label for="signature-src" class="col-sm-2 control-label"><%= glp("ui.adm.um.diff.src") %></label>
+    <div class="col-sm-10">
+      <div class="input-group">
+        <select name='source' id="signature-src" class="form-control">
+          <jalios:foreach collection='<%= sourceSignatureSet %>' name='itSignature' type='com.jalios.io.Signature' counter='sig1Counter'>
+          <option value='<%= itSignature.getFile() %>' <%= itSignature.getFile().equals(sourceFile) ? "selected" : "" %>><%= itSignature %></option>
+          </jalios:foreach>
+        </select>
+        <% if (isDiffEnabled) { %>
+        <% String confirmDelete = glp("msg.js.confirm-delete", glp("ui.adm.um.diff.del.src")); %>
+        <span class="input-group-addon">
+        <a href='<%= deleteActionURL %>' onclick='confirmAction("<%= encodeForJavaScript(confirmDelete) %>", this.href + document.editForm.source.options[document.editForm.source.selectedIndex].value); return false;' title="<%= glp("ui.com.alt.remove") %>"><jalios:icon src="trash-empty" alt='<%= glp("ui.com.alt.remove") %>' /></a>
+        </span>
+        <% } %>          
+      </div>
+    </div>
+  </div>  
+  
+  <%-- target --%>
+  <div class="form-group">
+    <label for="signature-tgt" class="col-sm-2 control-label"><%= glp("ui.adm.um.diff.tgt") %></label>
+    <div class="col-sm-10">
+      <div class="input-group">
+        <select name='target' id="signature-tgt" class="form-control">
+          <option value=''></option>
+          <jalios:foreach collection='<%= targetSignatureSet %>' name='itSignature' type='com.jalios.io.Signature' counter='sig2Counter'>
+          <option value='<%= itSignature.getFile() %>' <%= itSignature.getFile().equals(targetFile) ? "selected" : "" %>><%= itSignature %></option>
+          </jalios:foreach>
+        </select>
+        <% if (Util.notEmpty(targetSignatureSet)) { %>
+        <% String confirmDelete = glp("msg.js.confirm-delete", glp("ui.adm.um.diff.del.tgt")); %>
+        <span class="input-group-addon">
+        <a href='<%= deleteActionURL %>' onclick='confirmAction("<%= encodeForJavaScript(confirmDelete) %>", this.href + document.editForm.target.options[document.editForm.target.selectedIndex].value); return false;' title="<%= glp("ui.com.alt.remove") %>"><jalios:icon src="trash-empty" alt='<%= glp("ui.com.alt.remove") %>' /></a>
+        </span>
+        <% } %>
+      </div>
+    </div>
+  </div>          
+  
+  <%-- buttons --%>      
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" name="opDiff" value="true" class='btn btn-default <%= isDiffEnabled && !isZipEnabled ?"btn-primary" : "" %>' <%= !isDiffEnabled ? "disabled='disabled'" : "" %>><%= glp("ui.adm.um.diff.show") %></button>
+      <button type="submit" name="opSign" value="true" class='modal confirm btn <%= !isDiffEnabled ? "btn-primary" : "btn-default" %>'><%= glp("ui.adm.um.diff.sign") %></button>
+      <button type="button" name="opUpload" value="true" class="btn btn-default"  onclick='popupUpload();'><%= glp("ui.adm.um.diff.upload") %></button>
+    </div>
+  </div>        
+</form>

@@ -1,0 +1,47 @@
+<jalios:pager name='readerTrackingPagerHandler' sort="accessCount" paramPrefix='readerTracking_' action='init' declare='true' pageSize='5'/>
+<% 
+  int totalAccess = 0;
+  String orderBy = readerTrackingPagerHandler.getSort();
+  boolean reverse = readerTrackingPagerHandler.isReverse();
+	Set readerTrackerSet = readerMgr.getMergedReaderTrackerSet(readerMgr.getReaderTrackerList(trackedPub, orderBy, reverse, accessType),ReaderTrackerEntry.Sort.getFromKey(orderBy),reverse); 	
+	String titleProp = isReaderTab ?  "ui.work.rdr.title2" : "ui.work.rdr.title3";
+%>
+<p>
+    <%= glp(titleProp,isReaderTab ? readerCount : downloadCount, JcmsUtil.getDisplayUrl(trackedPub, userLocale), trackedPub.getTitle(userLang)) %></h2>
+</p>
+<jalios:pager name='readerTrackingPagerHandler' size='<%= Util.getSize(readerTrackerSet) %>' action='compute' />        
+<%-- -- List --------------------------- --%>
+<div class="table-responsive">
+<table class="table-data nobr">
+  <thead>
+  <tr> 
+    <th><%= glp("ui.work.rdr.reader") %></th>
+    <th><% if (readerCount > 1) {%><jalios:pager name='readerTrackingPagerHandler' action='showSort' sort='cdate' sortTitle='<%= isReaderTab ? "ui.work.rdr.fdate" : "ui.work.rdr.fdate-download" %>'/><% } else { %><%= isReaderTab ? glp("ui.work.rdr.fdate") : glp("ui.work.rdr.fdate-download") %><% } %></th>
+    <th><% if (readerCount > 1) {%><jalios:pager name='readerTrackingPagerHandler' action='showSort' sort='mdate' sortTitle='<%= isReaderTab ? "ui.work.rdr.ldate" : "ui.work.rdr.ldate-download" %>'/><% } else { %><%= isReaderTab ? glp("ui.work.rdr.ldate") : glp("ui.work.rdr.ldate-download") %><% } %></th>
+    <th><% if (readerCount > 1) {%><jalios:pager name='readerTrackingPagerHandler' action='showSort' sort='accessCount' sortTitle='<%= isReaderTab ? "ui.work.rdr.access" : "ui.work.rdr.download" %>'/><% } else { %><%= isReaderTab ? glp("ui.work.rdr.access") : glp("ui.work.rdr.download") %><% } %></th>
+  </tr>  
+  </thead> 
+  <tbody>
+<jalios:foreach collection='<%= readerTrackerSet %>' name='itEntry' type='ReaderTrackerEntry' max="<%= readerTrackingPagerHandler.getPageSize() %>" skip='<%= readerTrackingPagerHandler.getStart() %>'>
+  <tr> 
+    <td>
+      <% 
+      int accessCount = itEntry.accessCount;
+      totalAccess += accessCount;
+      %>
+      <% if (itEntry.member == null) { %>
+      <%= glp("ui.work.rdr.lbl.anonymous") %>
+      <% } else { %>
+      <jalios:memberphoto member="<%= itEntry.member %>" size="<%= PhotoSize.ICON %>"/>&nbsp;
+      <jalios:link data='<%= itEntry.member %>' />
+      <% } %>
+    </td>
+    <td class="date-time"><jalios:date date='<%= itEntry.firstAccessDate %>' format='<%= "short" %>'/> <jalios:time date='<%= itEntry.firstAccessDate %>' format='<%= "short" %>'/> </td>
+    <td class="date-time"><jalios:date date='<%= itEntry.lastAccessDate %>' format='<%= "short" %>'/> <jalios:time date='<%= itEntry.lastAccessDate %>' format='<%= "short" %>'/> </td>
+    <td class="numeric"><%= accessCount %></td>
+  </tr>
+</jalios:foreach>
+  </tbody>
+</table>
+</div>
+<jalios:pager name='readerTrackingPagerHandler'/>

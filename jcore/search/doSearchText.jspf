@@ -1,0 +1,108 @@
+<%--
+  @Summary: Text search panel
+  @Deprecated: False
+  @Customizable: False
+  @Requestable: False
+  @Category: Search / Query
+  @Since: jcms-4.0
+--%><%@page import="com.jalios.jcms.taglib.ControlTag"%>
+<%
+%><%@ page import="com.jalios.jcms.handler.QueryHandler" %>
+
+<% String sSearchText = getUntrustedStringParameter("text", ""); %>
+<jalios:field name="text" label="ui.work.search.text.text" value='<%= sSearchText %>'>
+  <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+  <div class="input-group-btn">
+      <a href="work/textSearchHelp.jsp" class="btn btn-default" onclick="popupWindow(this.href, 'JaliosTextSearchHowTo', 750, 550, false, true, true, false); return false;" title='<%= glp("ui.com.lbl.hlp") %>'>
+        <jalios:icon src="life-buoy" alt='<%= glp("ui.com.lbl.hlp") %>'  />
+      </a>
+  </div>
+</jalios:field>
+
+<% 
+Map<String, String> searchModeSelectMap = new LinkedHashMap<String, String>();
+searchModeSelectMap.put(QueryHandler.TEXT_MODE_ALL_WORDS, glp("ui.work.search.text.mode.all"));
+searchModeSelectMap.put(QueryHandler.TEXT_MODE_ANY_WORD, glp("ui.work.search.text.mode.any"));
+searchModeSelectMap.put(QueryHandler.TEXT_MODE_EXACT, glp("ui.work.search.text.mode.exact"));
+searchModeSelectMap.put(QueryHandler.TEXT_MODE_ADVANCED, glp("ui.work.search.text.mode.adv"));
+String sSearchMode = Util.getString(request.getAttribute("searchMode"), getAlphaNumParameter("mode", "all"));
+%>
+<jalios:field name="mode" label="ui.work.search.text.s-with" value='<%= sSearchMode %>'>
+  <jalios:control settings='<%= new EnumerateSettings().enumValues(searchModeSelectMap.keySet()).enumValues(searchModeSelectMap.values()) %>' />
+</jalios:field>
+
+<jalios:field label="ui.work.search.text.s-in">
+  <% String searchedAllFieldsInputId = ADVANCEDSEARCH_INPUT_ID_PREFIX + "searchedAllFields"; %>
+
+  <%
+    // There is a copy/paste/edit in doPortletLigthSearchFullDisplay.jsp, keep consitent.
+    boolean bCatName = Util.toBoolean(request.getAttribute("catName"), true);
+    boolean bSearchInFiles = Util.toBoolean(request.getAttribute("searchInFiles"), false);
+  %>
+  <script type="text/javascript" language="Javascript">
+  <!--
+    function updateSearchedFieldsValue() {
+      for (i = 0; i < document.queryForm.searchedFields.length; i++) {
+        document.queryForm.searchedFields[i].checked = !document.queryForm.searchedAllFields.checked;
+      }
+    }
+    function updateSearchedAllFieldsValue() {
+      document.queryForm.searchedAllFields.checked = false;
+    }
+  // -->
+  </script>
+  
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="searchedAllFields" value="true" checked="checked"
+             onclick='javascript:updateSearchedFieldsValue();'/>
+      <%= glp("ui.work.search.text.all-fields") %>
+    </label>
+  </div>
+  
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="searchedFields" value="<%= com.jalios.jcms.search.LucenePublicationSearchEngine.TITLE_FIELD %>"
+             onclick='javascript:updateSearchedAllFieldsValue();'/>
+      <%= glp("ui.work.search.text.title") %>
+    </label>
+  </div>
+  
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="searchedFields" value="<%= com.jalios.jcms.search.LucenePublicationSearchEngine.ABSTRACT_FIELD %>"
+             onclick='javascript:updateSearchedAllFieldsValue();'/>
+      <%= glp("ui.work.search.text.abstract") %>
+    </label>
+  </div>
+          
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="catName" value="true" <%= bCatName ? "checked=\"checked\"" : "" %> />
+      <%= glp("ui.work.search.text.cat") %>
+    </label>
+  </div>
+  
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="searchInFiles" value="true" <%= bSearchInFiles ? "checked=\"checked\"" : "" %> />
+      <%= glp("ui.work.search.text.file") %>
+    </label>
+  </div>
+
+  <jalios:foreach collection='<%= channel.getQueryManager().getQueryFilterSet() %>' name='itQF' type='QueryFilter'>
+   <% if (Util.notEmpty(itQF.getSearchParam())) { %>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="<%= itQF.getSearchParam() %>" value="true" <%= itQF.getSearchDefault() ? "checked=\"checked\"" : "" %> />
+        <%= itQF.getSearchLabel(userLang) %>
+        <%   if (Util.notEmpty(itQF.getSearchDescription(userLang))) { %>
+          <jalios:tooltip><%= itQF.getSearchDescription(userLang) %></jalios:tooltip>
+        <%   } %>
+      </label>
+    </div>
+    <% } %>
+  </jalios:foreach>
+
+</jalios:field>
+    

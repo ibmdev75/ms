@@ -1,0 +1,45 @@
+<h4><%= glp("ui.adm.data-inspector.lbl.attributes") %></h4>
+<table class="<%= tableCSS %>">
+ <tr>
+   <th><%= glp("ui.adm.data-inspector.lbl.attribute") %></th>
+   <th><%= glp("ui.adm.data-inspector.lbl.value") %></th>
+ </tr>       
+ 
+ 
+  <%@ include file='/admin/editDataId_attributes_publication.jspf' %>
+  <%@ include file='/admin/editDataId_attributes_group.jspf' %>
+  <%@ include file='/admin/editDataId_attributes_member.jspf' %>
+  <%@ include file='/admin/editDataId_attributes_category.jspf' %>
+  <%@ include file='/admin/editDataId_attributes_workspace.jspf' %>
+ 
+ 
+ 
+  <%-- DATA --%>
+  <tr>
+    <td class="fit nowrap"><%= glp("ui.com.lbl.cdate-long") %></td>
+   <td><jalios:date date="<%= data.getCdate() %>" format="full" /> <jalios:time date="<%= data.getCdate() %>" format="full" /></td>           
+  </tr>
+  <tr>
+    <td class="fit nowrap"><%= glp("ui.com.lbl.mdate-long") %></td>
+   <td><jalios:date date="<%= data.getMdate() %>" format="full" /> <jalios:time date="<%= data.getMdate() %>" format="full" /></td>           
+  </tr>
+  <tr>
+    <td class="fit nowrap"><%= glp("ui.com.lbl.author") %></td>
+    <td><jalios:edit data="<%= data.getAuthor() %>" /> <jalios:link data="<%= data.getAuthor() %>" /></td>           
+  </tr>
+  
+  <% if (data.getOpAuthor() != null) { %>  
+  <tr>
+    <td class="fit nowrap"><%= glp("ui.com.lbl.op-author-long") %></td>
+    <td><jalios:edit data="<%= data.getOpAuthor() %>" /> <jalios:link data="<%= data.getOpAuthor() %>" /></td>           
+  </tr>
+  <% } %>
+  
+  <% if (data.getOpDelegate() != null) { %>  
+  <tr>
+    <td class="fit nowrap"><%= glp("ui.com.lbl.op-delegate-long") %></td>
+    <td><jalios:edit data="<%= data.getOpDelegate() %>" /> <jalios:link data="<%= data.getOpDelegate() %>" /></td>           
+  </tr> 
+  <% } %>
+ 
+</table>

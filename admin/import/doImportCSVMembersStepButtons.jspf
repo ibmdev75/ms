@@ -1,0 +1,42 @@
+<%--
+  @Summary: Member CSV import : Modal FORM Buttons
+  @since: jcms-8
+  @author Sylvain Devaux <sylvain.devaux@jalios.com>
+--%><%
+
+// ----------------------------------------------------------------------
+// cancel
+// ---------------------------------------------------------------------- 
+%>
+<button type="submit" 
+        class="btn btn-default" 
+        name="opCancel"
+        onclick="return JCMS.window.Modal.close(false);" 
+        value="true" ><%= glp("ui.com.btn.cancel") %></button>
+
+<% if (formHandler.showPreviousButton()) { %>
+<button type="submit" 
+        class="btn btn-default ajax-refresh" 
+        name="opPrevious" value="true" >&lt; <%= glp("ui.com.btn.previous") %></button>
+<% } %>
+
+<% if (formHandler.showNextButton()) { %>
+<button type="submit"
+        id='member-import-next' 
+        class="btn btn-primary ajax-refresh <%= step == 0 ? "plupload-submit" : "" %>" 
+        name="<%= step == 0 ? "opUpload" : "opNext" %>"
+        value="true" ><%= glp("ui.com.btn.next") %> &gt;</button>
+<% } %>
+
+<% if (formHandler.showFinishButton()) { %>
+<button type='submit'
+        id='member-import-finish'
+        class='btn <%= !formHandler.showNextButton() ?"btn-primary" : "btn-default" %> ajax-refresh' 
+        name='opFinish'
+        value='true' ><%= glp("ui.member.csv-import.mainButton") %></button>
+<% } %>        
+
+<input type="hidden" name="formStep" class="step" value="<%= formHandler.getFormStep() %>" />
+
+
+

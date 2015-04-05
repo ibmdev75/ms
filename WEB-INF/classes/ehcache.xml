@@ -1,0 +1,138 @@
+<ehcache>
+
+    <!-- Sets the path to the directory where cache .data files are created.
+
+         If the path is a Java System Property it is replaced by
+         its value in the running VM.
+
+         The following properties are translated:
+         user.home - User's home directory
+         user.dir - User's current working directory
+         java.io.tmpdir - Default temp file path -->
+    <diskStore path="java.io.tmpdir"/>
+
+
+    <!--Default Cache configuration. These will applied to caches programmatically created through
+        the CacheManager.
+
+        The following attributes are required for defaultCache:
+
+        maxInMemory       - Sets the maximum number of objects that will be created in memory
+        eternal           - Sets whether elements are eternal. If eternal,  timeouts are ignored and the element
+                            is never expired.
+        timeToIdleSeconds - Sets the time to idle for an element before it expires. Is only used
+                            if the element is not eternal. Idle time is now - last accessed time
+        timeToLiveSeconds - Sets the time to live for an element before it expires. Is only used
+                            if the element is not eternal. TTL is now - creation time
+        overflowToDisk    - Sets whether elements can overflow to disk when the in-memory cache
+                            has reached the maxInMemory limit.
+
+        -->
+    <defaultCache
+        maxElementsInMemory="10000"
+        eternal="false"
+        timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        overflowToDisk="true"
+        />
+
+    <cache name="org.hibernate.cache.StandardQueryCache"
+           maxElementsInMemory="10000"
+           eternal="true"
+           overflowToDisk="false"/>
+    
+    <cache name="org.hibernate.cache.UpdateTimestampsCache"
+           maxElementsInMemory="5000"
+           eternal="true"
+           overflowToDisk="true"/>
+    
+    
+    <!--  Alert -->
+    <cache name="com.jalios.jcms.alert.Alert" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+    <!--  ExtraDBData -->
+    <cache name="com.jalios.jcms.extradbdata.ExtraDBData" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+    <!--  ArchivedPublication -->
+    <cache name="com.jalios.jcms.archive.ArchivedPublication" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+
+    <!--  DBMember -->
+    <cache name="com.jalios.jcms.dbmember.DBMember" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+
+    <!--  StrongLock -->
+    <cache name="com.jalios.jcms.StrongLock" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+
+    <!--  WFNote -->
+    <cache name="com.jalios.jcms.WFNote" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+    <!--  RssTracker -->
+    <cache name="com.jalios.jcms.rss.RssTracker" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+
+    <!--  PublicationFollower -->
+    <cache name="com.jalios.jcms.publicationfollower.PublicationFollower" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+
+    <!--  DBFileDocument -->
+    <cache name="com.jalios.jcms.DBFileDocument" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.DBFileDocumentRevision" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />           
+    <cache name="com.jalios.jcms.DBFileDocument.catIdSet" maxElementsInMemory="10000"  eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />       
+    <cache name="com.jalios.jcms.DBFileDocument.allCatIdSet" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />                             
+    <cache name="com.jalios.jcms.DBFileDocument.authGrpIdSet" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />    
+    <cache name="com.jalios.jcms.DBFileDocument.authMbrIdSet" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+
+    <!--  DBMailMessage -->
+    <cache name="generated.DBMailMessage" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.bccMemberId" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.bcc" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.to" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.references" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.toMemberId" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.ccMemberId" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.attachementsId" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.cc" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="generated.DBMailMessage.catIdSet" maxElementsInMemory="1000"  eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />  
+    <cache name="generated.DBMailMessage.allCatIdSet" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />                            
+    <cache name="generated.DBMailMessage.authGrpIdSet" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />      
+    <cache name="generated.DBMailMessage.authMbrIdSet" maxElementsInMemory="1000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+          
+    <!--  Recommendation -->
+    <cache name="com.jalios.jcms.recommendation.Recommendation" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.recommendation.Recommendation.recipientIdSet" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.recommendation.Recommendation.groupIdSet" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+    <!--  FileProcessor -->
+    <cache name="com.jalios.jcms.fileprocessor.processingmanagement.FileProcessingLog" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.fileprocessor.processingmanagement.FileProcessingInfo" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+    <!--  Vote -->
+    <cache name="com.jalios.jcms.vote.Vote" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+
+    <!--  Analytics -->
+    <cache name="com.jalios.jcms.analytics.metric.AccessReportMetric" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.AccessReportMetric.anonymousPageTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.AccessReportMetric.contentTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.AccessReportMetric.memberTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.AccessReportMetric.workspaceTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.AccountReportMetric" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.AdminReportMetric" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.SearchReportMetric" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.SearchReportMetric.textTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.TechnicalReportMetric" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.TechnicalReportMetric.botTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.TechnicalReportMetric.browserTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.TechnicalReportMetric.ipTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.TechnicalReportMetric.osTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.TechnicalReportMetric.referrerTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.TechnicalReportMetric.slowRequestTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.TechnicalReportMetric.zoneTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.WriteReportMetric" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.WriteReportMetric.memberTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+    <cache name="com.jalios.jcms.analytics.metric.WriteReportMetric.publicationTypeTop" maxElementsInMemory="10000" eternal="true" overflowToDisk="false" timeToIdleSeconds="0" timeToLiveSeconds="0" />
+
+</ehcache>

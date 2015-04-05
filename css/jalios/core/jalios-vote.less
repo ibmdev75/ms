@@ -1,0 +1,31 @@
+/* ----------------------------------------------- */
+/*  VOTE                                           */
+/* ----------------------------------------------- */
+
+.vote-tag {
+    &.vote-form {
+        display:block;
+    }
+    display: inline;   
+    .badge.badge-vote-count {
+			border-radius: 4px 4px 4px 4px;
+			cursor: help;
+			display: inline-block;
+			font-size: 100%;
+			padding: 2px 5px 1px 5px;
+			white-space: nowrap;
+    }
+}
+
+.vote-footer {  
+  border-top: 1px dotted #CCCCCC;
+  font-weight: bold;
+  margin-top: @baseline;
+  padding: @baseline / 4;
+	
+	.vote-tag {
+	  .activity-vote {
+	    display:inline;
+	  }
+	}
+}

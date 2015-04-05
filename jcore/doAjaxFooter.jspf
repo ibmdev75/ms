@@ -1,0 +1,71 @@
+<%--
+  @Summary: Footer to be included by any jsp that might be invoked through ajax.
+            Allows dynamically loading of javascript and css files (through jcmsContext.add(JavaScript|Css) ),
+            as well as code inserted using <jalios:javascript> (or jcmsContext.addJavaScriptCode)
+--%><%
+
+if (jcmsContext.isAjaxRequest()) {
+
+  Set<Map.Entry<String,String>> afCssEntrySet = jcmsContext.getCSSHeaders().entrySet();
+  Set<String> afJsSet = jcmsContext.getJavaScriptSet();
+  Set<String> afJsCodeSet = jcmsContext.getJavaScriptCodeSet();
+  if (Util.notEmpty(afCssEntrySet) || Util.notEmpty(afJsCodeSet) || Util.notEmpty(afJsSet)) {
+  
+  String cssAndJsFileVersion = Util.getString(jcmsContext.getPackVersion(), ""); %>
+  
+<script type="text/javascript" language="JavaScript">
+/*  <![CDATA[ */ <%
+
+  // ------------------------------------------
+  //  CSS FILES
+  // ------------------------------------------
+  
+  
+  if (Util.notEmpty(afCssEntrySet)) { 
+    if (logger.isDebugEnabled()) {
+      logger.debug("AjaxFooter, CSS Files : ['" + Util.join(afCssEntrySet, "', '") + "']");
+    }
+    
+	  for (Map.Entry<String,String> afCssEntry : afCssEntrySet) { 
+		  String afCssPath = afCssEntry.getKey(); 
+	    String afCssMedia = Util.getString(afCssEntry.getValue(), ""); %>
+  jQuery.jalios.DOM.loadStyleSheet('<%= afCssPath %>', '<%= afCssMedia %>', '<%= cssAndJsFileVersion %>');<%
+		} 
+     
+    jcmsContext.getCSSHeaders().clear();
+  }
+  
+  // ------------------------------------------
+  //  JS CODE
+  // ------------------------------------------
+  
+  if (Util.notEmpty(afJsCodeSet)) { 
+    logger.debug("AjaxFooter, JS Code"); %>
+
+  var ajaxFooterJsCode = function() { try {<%
+    for (String afJsCode : afJsCodeSet) { %>
+      <%= afJsCode %><%
+    }  %> } catch (ex){ jQuery.console.warn('ajaxFooterJsCode', ex, ex.message); }
+  }
+  <%-- Because <jalios:javascript> could relies on loaded js files --%>
+  <% if (Util.notEmpty(afJsSet)) { %>jQuery.jalios.DOM._loadRegister(ajaxFooterJsCode);<% } else {%>ajaxFooterJsCode.defer();<% } 
+   jcmsContext.getJavaScriptCodeSet().clear();
+  }
+  
+  // ------------------------------------------
+  //  JS FILES
+  // ------------------------------------------
+  
+  if (Util.notEmpty(afJsSet)) { 
+    if (logger.isDebugEnabled()) {
+      logger.debug("AjaxFooter, JS Files : ['" + Util.join(afJsSet, "', '") + "']");
+    }
+    
+    for (String afJsPath : afJsSet) { %>
+  jQuery.jalios.DOM.loadJavaScript('<%= afJsPath %>', '<%= cssAndJsFileVersion %>');<%
+    }
+    
+    jcmsContext.getJavaScriptSet().clear();
+  } %>
+/* ]]> */
+</script><% }} %>

@@ -1,0 +1,74 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+/*  Default Wysiwyg Styles   */
+.classic CODE,
+.pourcent CODE,
+.red CODE,
+.gray CODE {
+  background: #F7F7F7;
+}
+.classic PRE,
+.pourcent PRE,
+.red PRE,
+.gray PRE {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+.classic UL LI,
+.pourcent UL LI,
+.red UL LI,
+.gray UL LI {
+  list-style: square inside;
+}
+.classic OL LI,
+.pourcent OL LI,
+.red OL LI,
+.gray OL LI {
+  list-style-position: inside;
+}
+.classic THEAD TD,
+.pourcent THEAD TD,
+.red THEAD TD,
+.gray THEAD TD,
+.classic TFOOT TD,
+.pourcent TFOOT TD,
+.red TFOOT TD,
+.gray TFOOT TD {
+  background: #E0E0E0;
+}
+.classic .special,
+.pourcent .special,
+.red .special,
+.gray .special {
+  font-size: 12px;
+}
+.classic .legend,
+.pourcent .legend,
+.red .legend,
+.gray .legend {
+  font-style: oblique;
+}
+.classic .quotation,
+.pourcent .quotation,
+.red .quotation,
+.gray .quotation {
+  border-left: 4px solid #D2D2D2;
+  float: left;
+  background: #efefef url(../images/jalios/layout/bg_quote_right.gif) no-repeat right bottom;
+  text-align: justify;
+  padding: 10px 40px 10px 10px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.classic TABLE.tablelayout,
+.pourcent TABLE.tablelayout,
+.red TABLE.tablelayout,
+.gray TABLE.tablelayout {
+  border-collapse: collapse;
+}
+.classic TD .tablelayout,
+.pourcent TD .tablelayout,
+.red TD .tablelayout,
+.gray TD .tablelayout {
+  border: 0px;
+}

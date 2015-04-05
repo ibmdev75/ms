@@ -1,0 +1,45 @@
+<% {
+  Data data = (Data)request.getAttribute("data");
+  if (data != null) { %>
+	  <strong><% /* %>Link Referrers<% */ %><%= glp("ui.work.form.lbl.link-ref") %></strong><br />
+	        <% 
+	      Map index = channel.getLinkIndexManager().getIndex();
+	      Map referrerMap = (Map)index.get(data);
+	      %>
+	     <ul>
+	     <jalios:foreach name="itClass" type="Class" collection="<%= referrerMap.keySet() %>">
+		     <% Set referrerSet = data.getLinkIndexedDataSet(itClass); 
+		        if (Util.notEmpty(referrerSet)) {
+              Class displayedClass = itClass;
+              if (DataExtension.isDataExtension(itClass)) {
+                displayedClass = DataExtension.getExtendedClass(itClass);
+              }
+		     %> 
+		       <li><%= channel.getTypeLabel(displayedClass, userLang) %>
+		         <jalios:if predicate='<%= Publication.class.isAssignableFrom(itClass) %>'>
+		         <jalios:caddy collection="<%= referrerSet %>"/>
+		         </jalios:if>
+		         <ol class='formInfo'>
+			         <jalios:foreach name="itReferrer" type="Data" collection="<%= referrerSet %>" counter="itCounter2"> 
+				         <% if (itReferrer instanceof Publication) { %>
+				           <li>
+                     <jalios:edit id='<%= itReferrer.getId() %>' redirect='<%= ServletUtil.getUrl(request) %>'/>
+                     <jalios:link data='<%= itReferrer %>'/> 
+                   </li>
+				         <% } else if (itReferrer instanceof DataExtension && ((DataExtension)itReferrer).getExtendedData() != null) { %>
+				           <li>
+                     <jalios:edit id='<%= ((DataExtension)itReferrer).getExtendedData().getId() %>'/>
+                     <%= ((DataExtension)itReferrer).getExtendedData() %> 
+                   </li>
+				         <% }  %>
+		           </jalios:foreach>
+		         </ol>
+		        </li>
+		     <% } /* refererSet is not empty */ %>
+	     </jalios:foreach>
+	     </ul>
+<%
+  } 
+}
+%>
+		         

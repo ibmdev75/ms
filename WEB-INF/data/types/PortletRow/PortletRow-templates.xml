@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates type="PortletRow" version="5.0">
+  <template name="default" file="doPortletRowFullDisplay.jsp" usage="box" />
+  <template name="tab" file="doPortletRowTabDisplay.jsp" usage="box" />
+  <template name="responsive" file="doPortletRowResponsiveDisplay.jsp" usage="box" />
+</templates>
+

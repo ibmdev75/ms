@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates version="5.0">
+  <template name="default" file="doPortletNavigateFullDisplay.jsp" usage="box" />
+  <template name="tree" file="doPortletNavigateTreeFullDisplay.jsp" usage="box" />
+  <template name="dropdown" file="doPortletNavigateDropDownFullDisplay.jsp" usage="box" />
+  <template name="location" file="doPortletNavigateLocation.jsp" usage="box" />
+  <template name="vertical" file="doPortletNavigateVertical.jsp" usage="box" />
+</templates>
+

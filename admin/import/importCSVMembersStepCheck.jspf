@@ -1,0 +1,82 @@
+<%--
+  @Summary: Member CSV import
+  @since: jcms-8
+  @author Sylvain Devaux <sylvain.devaux@jalios.com>
+--%>
+
+<% if (step == 1) { %>
+  <%
+  int createCount = formHandler.getCreateCount();
+  int updateCount = formHandler.getUpdateCount();
+  int invalidCount = formHandler.getInvalidCount();
+  int maxErrorToShow = channel.getIntegerProperty(MemberImportManager.MAX_ERROR_PER_IMPORT_PROP, 100);
+  List<MemberImport> memberInfoList = formHandler.getMemberInfoList();
+  String intro = glp("ui.member.csv-import.steps-intro.1");
+  %>
+  <% if (Util.notEmpty(intro)) { %>
+		<p class="intro"><%= intro %></p>
+  <% } %>
+
+		<h4><%= glp("ui.member.csv-import.steps.2.abstract.header.lbl") %></h4>
+		
+		<ul>
+			<li>
+				<span class='label <%= invalidCount > 0 ? "error label-danger" : "label-success no-error" %>'><%= glp("ui.member.csv-import.steps.2.abstract.lines-error.lbl", invalidCount) %></span>
+			</li>
+			<li>
+				<span><%= glp("ui.member.csv-import.steps.2.abstract.creation.lbl", createCount) %></span>
+			</li>
+			<li>
+				<span><%= glp("ui.member.csv-import.steps.2.abstract.update.lbl", updateCount) %></span>
+			</li>
+		</ul>
+		
+		<% if (formHandler.isAnyError()) { %>
+			<h4><%= glp("ui.member.csv-import.steps.2.errors.header.lbl") %></h4>
+			<% if (invalidCount > maxErrorToShow) {	%>
+				<%= glp("ui.member.csv-import.error.too-much-errors", maxErrorToShow) %>
+			<% } %>
+			
+			<table class="horizontalFormLayout preview preview-detail data-list br table-data table-condensed" width="100%">
+				<thead>
+					<tr>
+						<th><%= glp("ui.member.csv-import.steps.2.errors.line-nbr.thead") %></th>
+						<th><%= glp("ui.member.csv-import.steps.2.errors.detail.thead") %></th>
+					</tr>
+				</thead>
+				<tbody>
+				<%
+			  int i = 0;
+				for (MemberImport itMemberInfos : memberInfoList) {
+				  
+				  if (i >= maxErrorToShow) {
+				    break;
+				  }
+				  int itLineNumber = itMemberInfos.getLine();
+				  if (itMemberInfos != null && itMemberInfos.isError()) {
+
+				    String error = itMemberInfos.getMessage();
+			
+				    if (Util.notEmpty(error)) {
+						  i++;	// inc error count
+						  
+					    boolean isCreateMode = itMemberInfos.isCreate();
+					    Integer count = itMemberInfos.getLine();
+				      String rawLine = itMemberInfos.getSourceLine();
+				      %>
+							<tr class=''>
+								<td><%= count %></td>
+								<td class=''>
+						      <%= error %>
+						      <jalios:tooltip><%= HttpUtil.encodeForHTML(rawLine) %></jalios:tooltip>
+								</td>
+							</tr>	  
+				    <%
+					  }
+				  }
+				}
+			%>
+			</tbody>
+		</table>
+	<% } %>
+<% } %>

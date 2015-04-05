@@ -1,0 +1,14 @@
+<div class="sidebar-menu list-group">
+  <jalios:include target="SIDEBAR_MENU_TOP" />
+  
+  <%-- RECOMMENDATION --%>
+  <a class="modal sidebar-menu-item list-group-item" href="front/recommendation/recommendationMemberModal.jsp?recommendationTab=receivedRecommendationTab">
+    <jalios:icon src="recommendation" /> <%= glp("ui.recommendation.modal.title-all") %>
+  </a>
+      
+  <%-- RECENT HISTORY --%>
+  <jalios:include jsp="jcore/sidebar/doSidebarRecentHistory.jsp" />   
+  
+   
+  <jalios:include target="SIDEBAR_MENU_BOTTOM" />
+</div>

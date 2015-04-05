@@ -1,0 +1,11 @@
+<%
+  boolean refreshAndClose = getBooleanParameter("refreshAndClose",false);
+  String  targetInput     = getChooserParameter("targetInput");
+  String  targetLabel     = getChooserParameter("targetLabel");
+  String  targetParam     = getChooserParameter("targetParam");
+  String  targetValue     = getChooserParameter("targetValue");
+  String  targetUrl       = getValidHttpUrl("targetUrl");
+  String  targetLang      = getAlphaNumParameter("lang", userLang);
+  Locale  targetLocale    = com.jalios.jcms.i18n.I18nUtil.getLocale(targetLang);
+  String  jsFunc          = getChooserParameter("jsFunc");
+%>

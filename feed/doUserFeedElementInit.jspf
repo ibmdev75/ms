@@ -1,0 +1,9 @@
+<%--
+  @Summary: Init block for doUserFeedElementHeader.jsp and doUserFeedElementFooter.jsp
+  @Customizable: FALSE
+  @Since: jcms-4.1
+--%><%
+	// hash map for class<=>jsp file association for current feed format
+	// in doUserFeedElement(Footer|Header)
+	HashMap jspMap = new HashMap();
+%>

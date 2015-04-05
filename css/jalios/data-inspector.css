@@ -1,0 +1,10 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+.data-inspector .data-info TABLE.table TD {
+  white-space: nowrap;
+}
+.data-inspector .data-info TABLE.table TD.value {
+  width: 100%;
+  white-space: normal;
+}

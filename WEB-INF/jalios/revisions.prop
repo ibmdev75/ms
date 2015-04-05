@@ -1,0 +1,1085 @@
+# Automatically generated - Wed Jan 28 18:46:57 CET 2015
+com.jalios.jcms.AbstractDBTestType: 
+com.jalios.jcms.AbstractFileIndexListener: 21413
+com.jalios.jcms.AbstractIndexManager: 
+com.jalios.jcms.AbstractLinkIndexListener: 27753
+com.jalios.jcms.AbstractWebPage: 
+com.jalios.jcms.AdminNotes: 32250
+com.jalios.jcms.AlertAdminsWFAction: 
+com.jalios.jcms.AlertAuthorWFAction: 
+com.jalios.jcms.AlertWorkersWFAction: 
+com.jalios.jcms.AndDataSelector: 39327
+com.jalios.jcms.AppServerInfo: 65450
+com.jalios.jcms.AssociatedFileEvent: 
+com.jalios.jcms.AssociatedFilesEventListener: 
+com.jalios.jcms.AssociatedFilesManager: 
+com.jalios.jcms.AudienceRights: 27753
+com.jalios.jcms.AudiencedPublication: 15552
+com.jalios.jcms.AudioMetaDataExtractor: 72474
+com.jalios.jcms.BasicDataController: 31864
+com.jalios.jcms.BasicJSyncListener: 61968
+com.jalios.jcms.BasicMemberQueryFilter: 20161
+com.jalios.jcms.BasicStoreListener: 55228
+com.jalios.jcms.CacheManager: 72181
+com.jalios.jcms.Category: 78601
+com.jalios.jcms.CategoryCycleException: 14756
+com.jalios.jcms.CategoryIndexManager: 
+com.jalios.jcms.CategoryListener: 27753
+com.jalios.jcms.CategoryRight: 34232
+com.jalios.jcms.CategoryRight_HANDLER: 
+com.jalios.jcms.Category_HANDLER: 
+com.jalios.jcms.Channel: 78743
+com.jalios.jcms.ChannelInitServlet: 76270
+com.jalios.jcms.ChannelListener: 28011
+com.jalios.jcms.ClassDataSelector: 14756
+com.jalios.jcms.Content: 74864
+com.jalios.jcms.ControllerStatus: 76356
+com.jalios.jcms.CustomCleanFilter: 19809
+com.jalios.jcms.DBFileDocument: 70696
+com.jalios.jcms.DBFileDocumentRevision: 69876
+com.jalios.jcms.DBPublicationCategoryUpdateThread: 
+com.jalios.jcms.Data: 77746
+com.jalios.jcms.DataController: 54092
+com.jalios.jcms.DataExtension: 22111
+com.jalios.jcms.DataIndexManager: 75708
+com.jalios.jcms.DataListener: 27753
+com.jalios.jcms.DataRight: 34232
+com.jalios.jcms.DataRight_HANDLER: 
+com.jalios.jcms.DataSelector: 14756
+com.jalios.jcms.DeleteMemberUGCThread: 
+com.jalios.jcms.DeployDownloadMonitor: 27753
+com.jalios.jcms.DeployManager: 17384
+com.jalios.jcms.DeployManagerConstants: 14756
+com.jalios.jcms.DescriptiveURLs: 
+com.jalios.jcms.EditableData: 14756
+com.jalios.jcms.EnumerateFormReport: 14756
+com.jalios.jcms.FaviconManager: 78651
+com.jalios.jcms.FieldStatus: 
+com.jalios.jcms.FileDocument: 77557
+com.jalios.jcms.FileDocumentListener: 38329
+com.jalios.jcms.FileDocumentVersionListener: 
+com.jalios.jcms.FileDocument_HANDLER: 
+com.jalios.jcms.FileIndexManager: 26167
+com.jalios.jcms.FileSize: 
+com.jalios.jcms.Form: 78783
+com.jalios.jcms.Group: 78768
+com.jalios.jcms.GroupIndexManager: 
+com.jalios.jcms.GroupListener: 66895
+com.jalios.jcms.Group_HANDLER: 
+com.jalios.jcms.HttpUtil: 78617
+com.jalios.jcms.ImageMetaDataExtractor: 72474
+com.jalios.jcms.IntegerFormReport: 14756
+com.jalios.jcms.JSPtoFile: 16272
+com.jalios.jcms.JSyncDataListener: 72474
+com.jalios.jcms.JcmsCleanFilter: 77577
+com.jalios.jcms.JcmsConstants: 75573
+com.jalios.jcms.JcmsInfo: 79507
+com.jalios.jcms.JcmsJSyncListener: 
+com.jalios.jcms.JcmsSessionTracker: 75843
+com.jalios.jcms.JcmsSessionTrackerListener: 33267
+com.jalios.jcms.JcmsUtil: 78392
+com.jalios.jcms.LimitController: 65456
+com.jalios.jcms.LimitControllerListener: 
+com.jalios.jcms.LinkIndexManager: 72736
+com.jalios.jcms.MailSender: 70800
+com.jalios.jcms.Member: 79297
+com.jalios.jcms.MemberImport: 52710
+com.jalios.jcms.MemberImportManager: 78443
+com.jalios.jcms.MemberIndexManager: 
+com.jalios.jcms.MemberListener: 29853
+com.jalios.jcms.MemberQueryFilter: 
+com.jalios.jcms.MemberSearchEngineListener: 
+com.jalios.jcms.Member_HANDLER: 
+com.jalios.jcms.MetaDataExtractor: 21841
+com.jalios.jcms.Notification: 47632
+com.jalios.jcms.NotificationCriteria: 47632
+com.jalios.jcms.NotificationCriteria_HANDLER: 
+com.jalios.jcms.NotificationManager: 47787
+com.jalios.jcms.NotificationQuery: 70631
+com.jalios.jcms.NotificationThread: 76149
+com.jalios.jcms.Notification_HANDLER: 
+com.jalios.jcms.OrDataSelector: 39327
+com.jalios.jcms.PstatusAlarmListener: 72309
+com.jalios.jcms.Publication: 78537
+com.jalios.jcms.PublicationIndexManager: 
+com.jalios.jcms.PublicationListener: 27753
+com.jalios.jcms.QueryFilter: 72250
+com.jalios.jcms.QueryManager: 77430
+com.jalios.jcms.QueryResultSet: 48645
+com.jalios.jcms.QuotaDataController: 
+com.jalios.jcms.QuotaElement: 
+com.jalios.jcms.QuotaManager: 
+com.jalios.jcms.ResourceHelper: 
+com.jalios.jcms.ReverseDataSelector: 14756
+com.jalios.jcms.RightInfo: 79061
+com.jalios.jcms.Size: 
+com.jalios.jcms.StrongLock: 60379
+com.jalios.jcms.StrongLockable: 
+com.jalios.jcms.TestJcms: 
+com.jalios.jcms.TitleTypeFieldEntry: 
+com.jalios.jcms.TypeConstants: 
+com.jalios.jcms.TypeEntry: 72830
+com.jalios.jcms.TypeFieldEntry: 79607
+com.jalios.jcms.TypeProcessor: 72250
+com.jalios.jcms.TypeTemplateEntry: 56516
+com.jalios.jcms.TypeUtil: 72296
+com.jalios.jcms.UpgradeManager: 72474
+com.jalios.jcms.UserContent: 70223
+com.jalios.jcms.WFAction: 78880
+com.jalios.jcms.WFExpressAlarmListener: 72309
+com.jalios.jcms.WFExpressPublicationListener: 21564
+com.jalios.jcms.WFNote: 72309
+com.jalios.jcms.WFPublicationListener: 76737
+com.jalios.jcms.WFReminderAlarmListener: 72309
+com.jalios.jcms.WFRole: 72542
+com.jalios.jcms.WFRule: 34194
+com.jalios.jcms.WFState: 79080
+com.jalios.jcms.WFTransition: 72474
+com.jalios.jcms.WKRoleListener: 
+com.jalios.jcms.WeakLinkManager: 27753
+com.jalios.jcms.WeakLockEntry: 75708
+com.jalios.jcms.WebAppInfo: 27753
+com.jalios.jcms.WebAppManager: 72474
+com.jalios.jcms.WikiRenderingHints: 20409
+com.jalios.jcms.Workflow: 78075
+com.jalios.jcms.WorkflowConstants: 
+com.jalios.jcms.WorkflowManager: 79014
+com.jalios.jcms.WysiwygRenderer: 58447
+com.jalios.jcms.accesscontrol.AccessControlConstants: 
+com.jalios.jcms.accesscontrol.AccessControlList: 37030
+com.jalios.jcms.accesscontrol.AccessControlListIndexManager: 28391
+com.jalios.jcms.accesscontrol.AccessControlList_HANDLER: 
+com.jalios.jcms.accesscontrol.AccessControlManager: 51105
+com.jalios.jcms.accesscontrol.AccessControlUtil: 28494
+com.jalios.jcms.accessibility.AccessibilityContext: 
+com.jalios.jcms.accessibility.AccessibilityContextManager: 
+com.jalios.jcms.ajax.AbstractCtxMenu: 
+com.jalios.jcms.ajax.AjaxFilter: 67511
+com.jalios.jcms.ajax.AjaxManager: 
+com.jalios.jcms.ajax.AjaxRequestWrapper: 78797
+com.jalios.jcms.ajax.CategoryCtxMenu: 71516
+com.jalios.jcms.ajax.CtxMenuConstants: 
+com.jalios.jcms.ajax.CtxMenuManager: 
+com.jalios.jcms.ajax.CtxMenuUtil: 
+com.jalios.jcms.ajax.JcmsJSONUtil: 37437
+com.jalios.jcms.ajax.JcmsJspAjaxContext: 
+com.jalios.jcms.ajax.MemberCtxMenu: 79212
+com.jalios.jcms.ajax.PortletCtxMenu: 74962
+com.jalios.jcms.ajax.PublicationCtxMenu: 78939
+com.jalios.jcms.ajax.WidgetCtxMenu: 
+com.jalios.jcms.alert.Alert: 
+com.jalios.jcms.alert.AlertBuilder: 
+com.jalios.jcms.alert.AlertChannel: 
+com.jalios.jcms.alert.AlertConstants: 
+com.jalios.jcms.alert.AlertController: 
+com.jalios.jcms.alert.AlertExpirationListener: 
+com.jalios.jcms.alert.AlertListHandler: 
+com.jalios.jcms.alert.AlertListener: 
+com.jalios.jcms.alert.AlertPolicyFilter: 
+com.jalios.jcms.alert.AlertPurgeAlarmListener: 
+com.jalios.jcms.alert.AlertRule: 
+com.jalios.jcms.alert.AlertUtil: 
+com.jalios.jcms.alert.BasicAlertChannel: 
+com.jalios.jcms.alert.BasicAlertPolicyFilter: 
+com.jalios.jcms.alert.MailAlertChannel: 
+com.jalios.jcms.alert.SendAlertHandler: 79601
+com.jalios.jcms.alert.WebAlertChannel: 
+com.jalios.jcms.analytics.AbstractAnalyzeJob: 
+com.jalios.jcms.analytics.AbstractFlotChart: 
+com.jalios.jcms.analytics.AbstractStatisticAgent: 
+com.jalios.jcms.analytics.AnalyticsManager: 
+com.jalios.jcms.analytics.AnalyzeJob: 
+com.jalios.jcms.analytics.AnalyzeListener: 
+com.jalios.jcms.analytics.ContentTopValue: 
+com.jalios.jcms.analytics.CustomStatHandler: 27753
+com.jalios.jcms.analytics.DataDeserializer: 
+com.jalios.jcms.analytics.EventData: 
+com.jalios.jcms.analytics.FlotChart: 
+com.jalios.jcms.analytics.FlotChartData: 
+com.jalios.jcms.analytics.FlotPieChart: 
+com.jalios.jcms.analytics.MemberDeserializer: 
+com.jalios.jcms.analytics.MigrationTools: 
+com.jalios.jcms.analytics.PeriodAnalyzeJob: 
+com.jalios.jcms.analytics.ProgressListener: 
+com.jalios.jcms.analytics.StatisticContext: 
+com.jalios.jcms.analytics.agent.AccountReportAgent: 
+com.jalios.jcms.analytics.agent.AdminReportAgent: 
+com.jalios.jcms.analytics.agent.DayAccessAgent: 
+com.jalios.jcms.analytics.agent.TechnicalReportAgent: 
+com.jalios.jcms.analytics.agent.WriteReportAgent: 
+com.jalios.jcms.analytics.metric.AbstractReportMetric: 
+com.jalios.jcms.analytics.metric.AccessReportMetric: 
+com.jalios.jcms.analytics.metric.AccountReportMetric: 
+com.jalios.jcms.analytics.metric.AdminReportMetric: 
+com.jalios.jcms.analytics.metric.SearchReportMetric: 
+com.jalios.jcms.analytics.metric.TechnicalReportMetric: 
+com.jalios.jcms.analytics.metric.WriteReportMetric: 
+com.jalios.jcms.analytics.period.AbstractPeriod: 
+com.jalios.jcms.analytics.period.Day: 
+com.jalios.jcms.analytics.period.FixedDurationPeriod: 
+com.jalios.jcms.analytics.period.FortNight: 
+com.jalios.jcms.analytics.period.Month: 
+com.jalios.jcms.analytics.period.Quarter: 
+com.jalios.jcms.analytics.period.Week: 
+com.jalios.jcms.analytics.period.Year: 
+com.jalios.jcms.analytics.ui.AdminHandler: 
+com.jalios.jcms.analytics.ui.ReportHandler: 
+com.jalios.jcms.archive.ArchiveBrowserHandler: 33267
+com.jalios.jcms.archive.ArchiveEngine: 22098
+com.jalios.jcms.archive.ArchiveManager: 72474
+com.jalios.jcms.archive.ArchiveQueryHandler: 54911
+com.jalios.jcms.archive.ArchivedPublication: 54912
+com.jalios.jcms.archive.LuceneArchiveEngine: 27753
+com.jalios.jcms.authentication.AuthenticationContext: 52696
+com.jalios.jcms.authentication.AuthenticationHandler: 28011
+com.jalios.jcms.authentication.AuthenticationManager: 72474
+com.jalios.jcms.authentication.AuthenticationResponseWrapper: 
+com.jalios.jcms.authentication.LoginResult: 20966
+com.jalios.jcms.authentication.handlers.AuthKeyAuthenticationHandler: 68082
+com.jalios.jcms.authentication.handlers.AuthKeyHints: 
+com.jalios.jcms.authentication.handlers.CookieAuthenticationHandler: 46271
+com.jalios.jcms.authentication.handlers.DelegationAuthenticationHandler: 
+com.jalios.jcms.authentication.handlers.HttpBasicAuthenticationHandler: 51307
+com.jalios.jcms.authentication.handlers.HttpDigestAuthenticationHandler: 72250
+com.jalios.jcms.authentication.handlers.LoggingAuthenticationHandler: 37672
+com.jalios.jcms.authentication.handlers.SessionAuthenticationHandler: 37782
+com.jalios.jcms.authentication.handlers.SilentParamsAuthenticationHandler: 37782
+com.jalios.jcms.authentication.handlers.SimpleAuthenticationHandler: 37782
+com.jalios.jcms.caddy.AbstractCaddyManagerHandler: 64446
+com.jalios.jcms.caddy.Caddy: 62649
+com.jalios.jcms.caddy.CaddyComparator: 
+com.jalios.jcms.caddy.CaddyPopinHandler: 46679
+com.jalios.jcms.caddy.CategoryCaddyManagerHandler: 64446
+com.jalios.jcms.caddy.DBMemberCaddyManagerHandler: 64446
+com.jalios.jcms.caddy.GroupCaddyManagerHandler: 64446
+com.jalios.jcms.caddy.MemberCaddyManagerHandler: 77737
+com.jalios.jcms.caddy.PublicationCaddyManagerHandler: 72474
+com.jalios.jcms.caddy.WorkspaceCaddyManagerHandler: 64446
+com.jalios.jcms.calendar.AbstractCalendarEvent: 78808
+com.jalios.jcms.calendar.AbstractEventResource: 
+com.jalios.jcms.calendar.CalendarEventInterface: 
+com.jalios.jcms.calendar.CalendarManager: 
+com.jalios.jcms.calendar.LessThanOneDayCalendarEventSelector: 
+com.jalios.jcms.calendar.MoreThanOneDayCalendarEventSelector: 
+com.jalios.jcms.comparator.BasicComparator: 
+com.jalios.jcms.context.AbstractJcmsAjaxContext: 
+com.jalios.jcms.context.GroupListContext: 
+com.jalios.jcms.context.JcmsContext: 71401
+com.jalios.jcms.context.JcmsJspContext: 78762
+com.jalios.jcms.context.JcmsMessage: 
+com.jalios.jcms.context.JcmsMessageSelector: 
+com.jalios.jcms.context.LevelSelector: 
+com.jalios.jcms.context.MessageLevel: 
+com.jalios.jcms.db.BasicDBListener: 57221
+com.jalios.jcms.db.BasicDBListenerStoreListener: 24480
+com.jalios.jcms.db.CacheDBListener: 
+com.jalios.jcms.db.CacheUtil: 
+com.jalios.jcms.db.CategorizedDBData: 25883
+com.jalios.jcms.db.CollectionMappingInfo: 
+com.jalios.jcms.db.DBConstants: 61521
+com.jalios.jcms.db.DBData: 
+com.jalios.jcms.db.DBDataRevision: 36847
+com.jalios.jcms.db.DBDataRevisionManager: 25885
+com.jalios.jcms.db.DBEventLog: 42168
+com.jalios.jcms.db.DBEventLogManager: 56748
+com.jalios.jcms.db.DBListener: 
+com.jalios.jcms.db.DerbyManager: 61442
+com.jalios.jcms.db.DummyScrollableResult: 
+com.jalios.jcms.db.FakeCriteria: 
+com.jalios.jcms.db.GenericEnumUserType: 
+com.jalios.jcms.db.HibernateManager: 78284
+com.jalios.jcms.db.HibernateSessionFilter: 78527
+com.jalios.jcms.db.HibernateUtil: 77706
+com.jalios.jcms.db.HistorizedDBData: 
+com.jalios.jcms.db.JaliosDerbyDialect: 
+com.jalios.jcms.db.JcmsHibernateEventListener: 31360
+com.jalios.jcms.db.JcmsHibernateNamingStrategy: 63347
+com.jalios.jcms.db.OpenRoleDBData: 
+com.jalios.jcms.db.PageResult: 28333
+com.jalios.jcms.db.TrackedDBData: 75708
+com.jalios.jcms.db.TransactionalAlarmListener: 34837
+com.jalios.jcms.dbmember.DBMember: 70455
+com.jalios.jcms.dbmember.WorkspaceDBMemberListener: 
+com.jalios.jcms.docs.ExampleExtractor: 
+com.jalios.jcms.extradbdata.ExtraDBData: 22169
+com.jalios.jcms.extradbdata.ExtraDBDataManager: 30553
+com.jalios.jcms.fileprocessor.DirectoryScanner: 27882
+com.jalios.jcms.fileprocessor.FPUtil: 72481
+com.jalios.jcms.fileprocessor.FileActionComponent: 48239
+com.jalios.jcms.fileprocessor.FileParser: 
+com.jalios.jcms.fileprocessor.FileProcessor: 
+com.jalios.jcms.fileprocessor.FileProcessorAlarmListener: 27882
+com.jalios.jcms.fileprocessor.FileProcessorDBListenerStoreListener: 49040
+com.jalios.jcms.fileprocessor.LegacyWitnessFileImportHandler: 
+com.jalios.jcms.fileprocessor.ProcessingEvent: 29009
+com.jalios.jcms.fileprocessor.ProcessingException: 26564
+com.jalios.jcms.fileprocessor.processingmanagement.FileProcessingInfo: 
+com.jalios.jcms.fileprocessor.processingmanagement.FileProcessingLog: 
+com.jalios.jcms.fileprocessor.processingmanagement.FileProcessorManager: 31337
+com.jalios.jcms.fileprocessor.processingmanagement.ProcessingData: 36551
+com.jalios.jcms.fileprocessor.processingmanagement.ProcessingStatus: 
+com.jalios.jcms.fileprocessor.processingmanagement.ProcessingThread: 77430
+com.jalios.jcms.fileprocessor.processingmanagement.ProcessingType: 
+com.jalios.jcms.fileprocessor.repository.Repository: 77534
+com.jalios.jcms.fileprocessor.repository.RepositoryIndexer: 
+com.jalios.jcms.fileprocessor.repository.RepositoryManager: 47973
+com.jalios.jcms.fileprocessor.repository.jcmsupload.JCMSUploadIndexer: 77532
+com.jalios.jcms.fileprocessor.test.SampleProcessor: 
+com.jalios.jcms.fileprocessor.ui.FileProcessorAdminHandler: 77433
+com.jalios.jcms.fileprocessor.ui.FileProcessorUIUtil: 
+com.jalios.jcms.handler.AbstractQueryHandler: 46506
+com.jalios.jcms.handler.AllMemberQueryHandler: 78402
+com.jalios.jcms.handler.AssociatedPDFUploadHandler: 78940
+com.jalios.jcms.handler.AttachPublicationHandler: 
+com.jalios.jcms.handler.AuthKeyGeneratorHandler: 33267
+com.jalios.jcms.handler.CacheManagerHandler: 72474
+com.jalios.jcms.handler.CheckRightsHandler: 75708
+com.jalios.jcms.handler.DBMemberQueryHandler: 79093
+com.jalios.jcms.handler.DeployManagerDownloadHandler: 72474
+com.jalios.jcms.handler.DeployManagerUpgradeHandler: 72474
+com.jalios.jcms.handler.DeployManagerUpgradeUploadHandler: 72474
+com.jalios.jcms.handler.EditAclHandler: 75055
+com.jalios.jcms.handler.EditCatHandler: 36615
+com.jalios.jcms.handler.EditDBFileDocumentHandler: 25883
+com.jalios.jcms.handler.EditDataHandler: 79111
+com.jalios.jcms.handler.EditDataIdHandler: 
+com.jalios.jcms.handler.EditExtraDataHandler: 
+com.jalios.jcms.handler.EditFileDocumentHandler: 74864
+com.jalios.jcms.handler.EditFormHandler: 54009
+com.jalios.jcms.handler.EditGroupHandler: 78768
+com.jalios.jcms.handler.EditMemberHandler: 70455
+com.jalios.jcms.handler.EditMemberPhotoHandler: 
+com.jalios.jcms.handler.EditNotificationCriteriaHandler: 
+com.jalios.jcms.handler.EditNotificationHandler: 47860
+com.jalios.jcms.handler.EditPublicationHandler: 79445
+com.jalios.jcms.handler.EditTypeExtensionHandler: 72474
+com.jalios.jcms.handler.ExportRawStatDataHandler: 72474
+com.jalios.jcms.handler.FriendlyURLsHandler: 33267
+com.jalios.jcms.handler.GroupQueryHandler: 34062
+com.jalios.jcms.handler.ImportCatListHandler: 24385
+com.jalios.jcms.handler.JSyncManagerHandler: 74256
+com.jalios.jcms.handler.JcmsFormHandler: 79086
+com.jalios.jcms.handler.MailEditHandler: 74431
+com.jalios.jcms.handler.MailPasswordHandler: 76475
+com.jalios.jcms.handler.MemberListHandler: 47895
+com.jalios.jcms.handler.MemberQueryHandler: 39952
+com.jalios.jcms.handler.MembersCsvImportHandler: 76340
+com.jalios.jcms.handler.MergeCategoryHandler: 75708
+com.jalios.jcms.handler.PagerHandler: 77415
+com.jalios.jcms.handler.PortletWorkflowHandler: 
+com.jalios.jcms.handler.PropertiesHandler: 78890
+com.jalios.jcms.handler.PubBrowserHandler: 73544
+com.jalios.jcms.handler.QueryHandler: 79009
+com.jalios.jcms.handler.ResetPasswordHandler: 
+com.jalios.jcms.handler.StoreCleanerHandler: 73087
+com.jalios.jcms.handler.TypeEditorHandler: 78691
+com.jalios.jcms.handler.TypeListEditorHandler: 69437
+com.jalios.jcms.handler.UpgradeManagerHandler: 72474
+com.jalios.jcms.handler.ValidateStateChangePublicationHandler: 
+com.jalios.jcms.handler.WFEditorHandler: 79080
+com.jalios.jcms.handler.WorkReportHandler: 72309
+com.jalios.jcms.handler.WorkspaceQueryHandler: 27753
+com.jalios.jcms.handler.ZipFilesHandler: 36348
+com.jalios.jcms.i18n.I18nConstants: 
+com.jalios.jcms.i18n.I18nUtil: 
+com.jalios.jcms.i18n.PhoneNumber: 61478
+com.jalios.jcms.ldap.LdapManager: 
+com.jalios.jcms.ldap.SyncLdapHandler: 77941
+com.jalios.jcms.lessCompiler.LessCompileTask: 
+com.jalios.jcms.lessCompiler.LessCompilerResult: 
+com.jalios.jcms.lessCompiler.LoggingMessage: 
+com.jalios.jcms.logging.ChannelNamePatternConverter: 
+com.jalios.jcms.logging.ChannelUridPatternConverter: 
+com.jalios.jcms.logging.JcmsPatternLayout: 
+com.jalios.jcms.logging.JcmsPatternParser: 
+com.jalios.jcms.mail.AbstractMailListener: 24128
+com.jalios.jcms.mail.MailAccount: 33598
+com.jalios.jcms.mail.MailAppender: 
+com.jalios.jcms.mail.MailFetcher: 68472
+com.jalios.jcms.mail.MailFetcherAlarmEntry: 26594
+com.jalios.jcms.mail.MailListener: 72474
+com.jalios.jcms.mail.MailManager: 76448
+com.jalios.jcms.mail.MailMessage: 76043
+com.jalios.jcms.mail.MailMessageDataController: 76332
+com.jalios.jcms.mail.MailThreadQueryFilter: 
+com.jalios.jcms.mail.PersonalizedMailMessage: 
+com.jalios.jcms.mail.listener.AttachementsMailListener: 68228
+com.jalios.jcms.mail.listener.IncomingMailFetching: 68551
+com.jalios.jcms.mail.listener.IncomingMailListener: 75232
+com.jalios.jcms.mail.listener.IncomingMailPatternComparator: 68483
+com.jalios.jcms.mail.listener.MemberMailListener: 76323
+com.jalios.jcms.mail.listener.ThreadMailListener: 24265
+com.jalios.jcms.mail.listener.criteria.AbstractIncomingMailFetchCriteria: 68537
+com.jalios.jcms.mail.listener.criteria.AuthkeyIncomingMailFetchCriteria: 74694
+com.jalios.jcms.mail.listener.criteria.FetchCriteria: 
+com.jalios.jcms.mail.listener.criteria.MemberIncomingMailFetchCriteria: 68483
+com.jalios.jcms.mail.listener.criteria.NoCheckIncomingMailFetchCriteria: 68483
+com.jalios.jcms.mail.listener.criteria.SingleMemberIncomingMailFetchCriteria: 68483
+com.jalios.jcms.mail.listener.criteria.ThreadIncomingMailFetchCriteria: 68537
+com.jalios.jcms.mashup.ExportConstants: 20745
+com.jalios.jcms.mashup.ExportManager: 71441
+com.jalios.jcms.mashup.ExportUtil: 75087
+com.jalios.jcms.mashup.ImportAlarmListener: 
+com.jalios.jcms.mashup.ImportConflictHandler: 33267
+com.jalios.jcms.mashup.ImportConstants: 
+com.jalios.jcms.mashup.ImportDataListener: 27753
+com.jalios.jcms.mashup.ImportManager: 27753
+com.jalios.jcms.mashup.ImportManagerHandler: 33267
+com.jalios.jcms.mashup.ImportOptions: 73021
+com.jalios.jcms.mashup.ImportSource: 72474
+com.jalios.jcms.mashup.ImportStatus: 37622
+com.jalios.jcms.mashup.ImportUtil: 72970
+com.jalios.jcms.mashup.MashupConstants: 23874
+com.jalios.jcms.mashup.MashupUtil: 20745
+com.jalios.jcms.mashup.WikiLinkSubstitution: 
+com.jalios.jcms.mashup.WysiwygLinkSubstitution: 
+com.jalios.jcms.media.EditImageHandler: 
+com.jalios.jcms.media.MediaBrowserHandler: 74925
+com.jalios.jcms.mention.MentionConstants: 
+com.jalios.jcms.mention.MentionController: 
+com.jalios.jcms.monitoring.Event: 
+com.jalios.jcms.monitoring.Measure: 36384
+com.jalios.jcms.monitoring.MonitoringChart: 52696
+com.jalios.jcms.monitoring.MonitoringManager: 22248
+com.jalios.jcms.monitoring.RestartEvent: 21958
+com.jalios.jcms.plugin.DisplayPluginHandler: 51960
+com.jalios.jcms.plugin.EditPluginHandler: 76471
+com.jalios.jcms.plugin.Plugin: 78745
+com.jalios.jcms.plugin.PluginAppender: 27753
+com.jalios.jcms.plugin.PluginComponent: 25270
+com.jalios.jcms.plugin.PluginException: 18011
+com.jalios.jcms.plugin.PluginManager: 78329
+com.jalios.jcms.policy.AbstractDataMailPolicyFilter: 
+com.jalios.jcms.policy.AbstractPolicyFilter: 
+com.jalios.jcms.policy.BasicChannelPolicyFilter: 72474
+com.jalios.jcms.policy.BasicCtxMenuPolicyFilter: 71516
+com.jalios.jcms.policy.BasicDataIconPolicyFilter: 
+com.jalios.jcms.policy.BasicExportPolicyFilter: 74117
+com.jalios.jcms.policy.BasicImportPolicyFilter: 20745
+com.jalios.jcms.policy.BasicLuceneSearchEnginePolicyFilter: 77430
+com.jalios.jcms.policy.BasicMailPolicyFilter: 28207
+com.jalios.jcms.policy.BasicMemberPolicyFilter: 20745
+com.jalios.jcms.policy.BasicPluginPolicyFilter: 19809
+com.jalios.jcms.policy.BasicPortalPolicyFilter: 72474
+com.jalios.jcms.policy.BasicPublicationFollowerPolicyFilter: 64085
+com.jalios.jcms.policy.BasicRightPolicyFilter: 53732
+com.jalios.jcms.policy.BasicStatPolicyFilter: 19809
+com.jalios.jcms.policy.BasicTemplatePolicyFilter: 28817
+com.jalios.jcms.policy.BasicThumbnailPolicyFilter: 76057
+com.jalios.jcms.policy.BasicWebdavPolicyFilter: 
+com.jalios.jcms.policy.BasicWikiPolicyFilter: 24040
+com.jalios.jcms.policy.BasicWizardPolicyFilter: 21265
+com.jalios.jcms.policy.BasicWysiwygPolicyFilter: 72474
+com.jalios.jcms.policy.ChannelPolicyFilter: 40030
+com.jalios.jcms.policy.ConditionTemplatePolicyFilter: 
+com.jalios.jcms.policy.CtxMenuPolicyFilter: 71516
+com.jalios.jcms.policy.DataIconPolicyFilter: 
+com.jalios.jcms.policy.DefaultThumbnailPolicyFilter: 76463
+com.jalios.jcms.policy.ExportPolicyFilter: 74117
+com.jalios.jcms.policy.ImportPolicyFilter: 20745
+com.jalios.jcms.policy.LuceneSearchEnginePolicyFilter: 77430
+com.jalios.jcms.policy.MailPolicyFilter: 72474
+com.jalios.jcms.policy.MemberPolicyFilter: 20745
+com.jalios.jcms.policy.PluginPolicyFilter: 18923
+com.jalios.jcms.policy.PolicyFilter: 
+com.jalios.jcms.policy.PolicyManager: 77430
+com.jalios.jcms.policy.PortalPolicyFilter: 72474
+com.jalios.jcms.policy.PublicationFollowerPolicyFilter: 
+com.jalios.jcms.policy.RightPolicyFilter: 42750
+com.jalios.jcms.policy.StatPolicyFilter: 
+com.jalios.jcms.policy.TemplatePolicyFilter: 72474
+com.jalios.jcms.policy.ThumbnailPolicyFilter: 76057
+com.jalios.jcms.policy.WebdavPolicyFilter: 
+com.jalios.jcms.policy.WikiPolicyFilter: 24040
+com.jalios.jcms.policy.WizardPolicyFilter: 21265
+com.jalios.jcms.policy.WysiwygPolicyFilter: 63352
+com.jalios.jcms.portlet.AJAXPortalManager: 
+com.jalios.jcms.portlet.DisplayContext: 
+com.jalios.jcms.portlet.EditPortalElementHandler: 27753
+com.jalios.jcms.portlet.EditPortalHandler: 27753
+com.jalios.jcms.portlet.EditPortalRedirectHandler: 14756
+com.jalios.jcms.portlet.EditPortletCollectionHandler: 27753
+com.jalios.jcms.portlet.EditPortletHandler: 27753
+com.jalios.jcms.portlet.EditPortletLogHandler: 14756
+com.jalios.jcms.portlet.EditPortletParentHandler: 27753
+com.jalios.jcms.portlet.EditPortletSkinableHandler: 36508
+com.jalios.jcms.portlet.FullDisplay: 14756
+com.jalios.jcms.portlet.Parent: 14756
+com.jalios.jcms.portlet.PortalInterface: 18639
+com.jalios.jcms.portlet.PortalManager: 79395
+com.jalios.jcms.portlet.PortletQueryForeachDataController: 
+com.jalios.jcms.portlet.navigate.CategoryMenuInfo: 
+com.jalios.jcms.publicationfollower.PublicationFollower: 
+com.jalios.jcms.publicationfollower.PublicationFollowerController: 75708
+com.jalios.jcms.recenthistory.RecentHistoryDataController: 
+com.jalios.jcms.recenthistory.RecentHistoryEntry: 
+com.jalios.jcms.recenthistory.RecentHistoryManager: 
+com.jalios.jcms.recommendation.Recommendation: 54421
+com.jalios.jcms.recommendation.RecommendationConstants: 62746
+com.jalios.jcms.recommendation.RecommendationController: 43264
+com.jalios.jcms.recommendation.RecommendationHandler: 77883
+com.jalios.jcms.rest.DataCollectionRestResource: 
+com.jalios.jcms.rest.DataRestResource: 
+com.jalios.jcms.rest.HttpServletRequestRestWrapper: 
+com.jalios.jcms.rest.HttpServletResponseForwardableWrapper: 
+com.jalios.jcms.rest.JcmsRestResource: 
+com.jalios.jcms.rest.JcmsRestStatusService: 
+com.jalios.jcms.rest.JcmsRestletServlet: 
+com.jalios.jcms.rest.PagerData: 
+com.jalios.jcms.rest.RestConstants: 
+com.jalios.jcms.rest.RestManager: 
+com.jalios.jcms.rest.RestUtil: 
+com.jalios.jcms.rest.RestletApplication: 
+com.jalios.jcms.rest.resources.AdminResource: 
+com.jalios.jcms.rest.resources.DataChildrenResource: 
+com.jalios.jcms.rest.resources.DataResource: 
+com.jalios.jcms.rest.resources.DataResourceMultipartWrapperRequest: 
+com.jalios.jcms.rest.resources.DataTypeCollectionResource: 
+com.jalios.jcms.rest.resources.DataTypeItemResource: 
+com.jalios.jcms.rest.resources.DocRedirector: 
+com.jalios.jcms.rest.resources.JSyncResource: 
+com.jalios.jcms.rest.resources.LockResource: 
+com.jalios.jcms.rest.resources.MemberResource: 
+com.jalios.jcms.rest.resources.SearchResource: 
+com.jalios.jcms.rest.resources.UnlockResource: 
+com.jalios.jcms.rest.resources.WhoAmIResource: 
+com.jalios.jcms.rest.resources.WorkflowItemResource: 
+com.jalios.jcms.rest.resources.WorkflowsResource: 
+com.jalios.jcms.rss.RssManager: 
+com.jalios.jcms.rss.RssTracker: 
+com.jalios.jcms.rss.RssTrackerCleaningThread: 
+com.jalios.jcms.rss.RssTrackerListener: 
+com.jalios.jcms.rss.RssTrackerSet: 
+com.jalios.jcms.search.AdminSearchEnginesHandler: 77430
+com.jalios.jcms.search.CategorySearchEngine: 23763
+com.jalios.jcms.search.CategorySearchEngineListener: 27753
+com.jalios.jcms.search.DataIterator: 
+com.jalios.jcms.search.LuceneCategorySearchEngine: 49040
+com.jalios.jcms.search.LuceneDataSearchEngine: 77430
+com.jalios.jcms.search.LuceneMemberSearchEngine: $Revision: 24559 + fix JCMS-2120$
+com.jalios.jcms.search.LuceneUtils: 
+com.jalios.jcms.search.NGramCategorizer: 
+com.jalios.jcms.search.NGramEntryComparator: 
+com.jalios.jcms.search.NGramFingerPrint: 
+com.jalios.jcms.search.PublicationSearchEngine: 25672
+com.jalios.jcms.search.PublicationSearchEngineListener: 77430
+com.jalios.jcms.search.SpellSuggestEngine: 77430
+com.jalios.jcms.search.SpellSuggestQueryParser: 27753
+com.jalios.jcms.search.SuggestionManager: 
+com.jalios.jcms.search.spell.CollectionDictionary: 14756
+com.jalios.jcms.search.spell.Dictionary: 1.0 - 14756
+com.jalios.jcms.search.spell.LuceneDictionary: 1.0 - 72474
+com.jalios.jcms.search.spell.PlainTextDictionary: 1.0 - 72474
+com.jalios.jcms.search.spell.SpellChecker: 1.0 - 48516
+com.jalios.jcms.search.spell.SuggestWord: 
+com.jalios.jcms.search.spell.SuggestWordQueue: 
+com.jalios.jcms.search.spell.TRStringDistance: 
+com.jalios.jcms.servlet.BinaryFileServlet: 78616
+com.jalios.jcms.servlet.DisplayServlet: 75655
+com.jalios.jcms.servlet.ExpiresFilter: 72474
+com.jalios.jcms.servlet.FinallyFilter: 63145
+com.jalios.jcms.servlet.FriendlyURLFilter: 52696
+com.jalios.jcms.servlet.GZIPFilter: 72474
+com.jalios.jcms.servlet.InitFilter: 77671
+com.jalios.jcms.servlet.JSyncServlet: 72474
+com.jalios.jcms.servlet.JcmsServlet: 72474
+com.jalios.jcms.servlet.JcmsServletFilter: 
+com.jalios.jcms.servlet.RestrictedFileFilter: 78257
+com.jalios.jcms.servlet.SecurityFilter: 72250
+com.jalios.jcms.servlet.StatusExposingServletResponse: 
+com.jalios.jcms.spellchecker.SpellCheckResult: 21478
+com.jalios.jcms.spellchecker.SpellChecker: 21478
+com.jalios.jcms.spellchecker.SpellCheckerManager: 25831
+com.jalios.jcms.spellchecker.XMLmindSpellChecker: 26103
+com.jalios.jcms.stat.CSVExportRawDataHandler: 36556
+com.jalios.jcms.stat.CleaningAlarmListener: 26780
+com.jalios.jcms.stat.CleaningThread: 72474
+com.jalios.jcms.stat.ExportParameters: 27868
+com.jalios.jcms.stat.PortletStat: 14756
+com.jalios.jcms.stat.RawDataExportHandler: 36556
+com.jalios.jcms.stat.RawDataExportManager: 27868
+com.jalios.jcms.stat.RawExportStatListener: 36556
+com.jalios.jcms.stat.StatAlarmListener: 72474
+com.jalios.jcms.stat.StatAnalyser: 72474
+com.jalios.jcms.stat.StatEntry: 70696
+com.jalios.jcms.stat.StatExporter: 42174
+com.jalios.jcms.stat.StatHandler: 27753
+com.jalios.jcms.stat.StatListener: 28041
+com.jalios.jcms.stat.StatReport: 14756
+com.jalios.jcms.stat.StatReportListener: 27753
+com.jalios.jcms.stat.XmlRawDataExportHandler: 
+com.jalios.jcms.stat.beautifier.BeautifierBrowser: 27753
+com.jalios.jcms.stat.beautifier.BeautifierCountry: 27753
+com.jalios.jcms.stat.beautifier.BeautifierCrossingData: 27753
+com.jalios.jcms.stat.beautifier.BeautifierData: 52696
+com.jalios.jcms.stat.beautifier.BeautifierImage: 17934
+com.jalios.jcms.stat.beautifier.BeautifierLanguage: 27753
+com.jalios.jcms.stat.beautifier.BeautifierOS: 27753
+com.jalios.jcms.stat.listener.AbstractStatFieldListener: 27753
+com.jalios.jcms.stat.listener.AbstractStatListener: 72474
+com.jalios.jcms.stat.listener.AbstractStatMultiListener: 72474
+com.jalios.jcms.stat.listener.StatComparator: 
+com.jalios.jcms.stat.listener.StatCrossingListener: 
+com.jalios.jcms.stat.listener.StatDataListener: 27753
+com.jalios.jcms.stat.listener.StatDateTimeListener: 27753
+com.jalios.jcms.stat.listener.StatFieldListener: 27753
+com.jalios.jcms.stat.listener.StatMatchPatternListener: 27753
+com.jalios.jcms.stat.listener.StatPublicationListener: 27753
+com.jalios.jcms.stat.listener.StatRequestListener: 27753
+com.jalios.jcms.stat.listener.StatSessionListener: 27753
+com.jalios.jcms.taglib.AbstractFlotChartTag: 
+com.jalios.jcms.taglib.AccordionPanelBodyTag: 
+com.jalios.jcms.taglib.AccordionPanelFooterTag: 
+com.jalios.jcms.taglib.AccordionPanelHeadingTag: 
+com.jalios.jcms.taglib.AccordionPanelTag: 
+com.jalios.jcms.taglib.AccordionTag: 
+com.jalios.jcms.taglib.ArchiveTag: 71382
+com.jalios.jcms.taglib.CacheTag: 72474
+com.jalios.jcms.taglib.CaddyTag: 71382
+com.jalios.jcms.taglib.CategoriesTag: 27753
+com.jalios.jcms.taglib.CategoriesTagExtraInfo: 27753
+com.jalios.jcms.taglib.CategoryFilter: 
+com.jalios.jcms.taglib.CheckIntegrityTag: 73616
+com.jalios.jcms.taglib.ControlTag: 27753
+com.jalios.jcms.taglib.ControlType: 
+com.jalios.jcms.taglib.CountryTag: 71382
+com.jalios.jcms.taglib.DataIconTag: 67007
+com.jalios.jcms.taglib.DeleteTag: 71382
+com.jalios.jcms.taglib.EditTag: 79476
+com.jalios.jcms.taglib.FieldTag: 27753
+com.jalios.jcms.taglib.FieldTagExtraInfo: 27752
+com.jalios.jcms.taglib.FileIconTag: 70387
+com.jalios.jcms.taglib.FileSizeTag: 29003
+com.jalios.jcms.taglib.FileWebdavTag: 75288
+com.jalios.jcms.taglib.FlotChartDataTag: 
+com.jalios.jcms.taglib.FlotChartOptionTag: 
+com.jalios.jcms.taglib.FlotChartTag: 
+com.jalios.jcms.taglib.FlotPieChartTag: 
+com.jalios.jcms.taglib.IconTag: 75708
+com.jalios.jcms.taglib.ImportIconTag: 71383
+com.jalios.jcms.taglib.IncludeTag: 76282
+com.jalios.jcms.taglib.JavaScriptTag: 27753
+com.jalios.jcms.taglib.LangTag: 76264
+com.jalios.jcms.taglib.LinkTag: 38443
+com.jalios.jcms.taglib.LockTag: 70708
+com.jalios.jcms.taglib.LoginTag: 76091
+com.jalios.jcms.taglib.MediaTag: 38111
+com.jalios.jcms.taglib.MemberPhotoTag: 75168
+com.jalios.jcms.taglib.MessageTag: 
+com.jalios.jcms.taglib.ModalTag: 27753
+com.jalios.jcms.taglib.PagerTag: 72474
+com.jalios.jcms.taglib.PagerTagExtraInfo: 27753
+com.jalios.jcms.taglib.PanelBodyTag: 
+com.jalios.jcms.taglib.PanelContentTag: 
+com.jalios.jcms.taglib.PanelFooterTag: 
+com.jalios.jcms.taglib.PanelHeadingTag: 
+com.jalios.jcms.taglib.PanelTag: 27753
+com.jalios.jcms.taglib.PdfTag: 71382
+com.jalios.jcms.taglib.PhoneTag: 61478
+com.jalios.jcms.taglib.PubIconTag: 27753
+com.jalios.jcms.taglib.QueryTag: 53732
+com.jalios.jcms.taglib.QueryTagExtraInfo: 27753
+com.jalios.jcms.taglib.RecommendationTag: 75708
+com.jalios.jcms.taglib.SQLQueryTag: 27753
+com.jalios.jcms.taglib.SQLQueryTagExtraInfo: 27753
+com.jalios.jcms.taglib.ThumbnailTag: 78916
+com.jalios.jcms.taglib.TooltipTag: 70387
+com.jalios.jcms.taglib.TopMemberTag: 33552
+com.jalios.jcms.taglib.TopMemberTagExtraInfo: 27753
+com.jalios.jcms.taglib.TreeCatViewTag: 
+com.jalios.jcms.taglib.TreeViewTag: 35802
+com.jalios.jcms.taglib.UrlTag: 38443
+com.jalios.jcms.taglib.VoteTag: 75708
+com.jalios.jcms.taglib.WebHelpTag: 70387
+com.jalios.jcms.taglib.WikiTag: 37116
+com.jalios.jcms.taglib.WorkspaceTag: 75069
+com.jalios.jcms.taglib.WysiwygTag: 27753
+com.jalios.jcms.taglib.menu.MenuInfo: 
+com.jalios.jcms.taglib.menu.MenuInfoFilter: 
+com.jalios.jcms.taglib.menu.MenuItemTag: 
+com.jalios.jcms.taglib.menu.MenuTag: 
+com.jalios.jcms.taglib.menu.SubMenuTag: 
+com.jalios.jcms.taglib.settings.AbstractAreaSettings: 
+com.jalios.jcms.taglib.settings.AbstractCategorySettings: 
+com.jalios.jcms.taglib.settings.AbstractChooserSettings: 
+com.jalios.jcms.taglib.settings.AbstractDataSettings: 
+com.jalios.jcms.taglib.settings.AbstractTextChooserSettings: 
+com.jalios.jcms.taglib.settings.AbstractTextSettings: 
+com.jalios.jcms.taglib.settings.BasicSettings: 
+com.jalios.jcms.taglib.settings.ControlSettings: 
+com.jalios.jcms.taglib.settings.ControlUtils: 
+com.jalios.jcms.taglib.settings.SelectorSettings: 
+com.jalios.jcms.taglib.settings.impl.AclSettings: 
+com.jalios.jcms.taglib.settings.impl.BooleanSettings: 
+com.jalios.jcms.taglib.settings.impl.CategorySettings: 
+com.jalios.jcms.taglib.settings.impl.CategoryTreeSettings: 
+com.jalios.jcms.taglib.settings.impl.ColorSettings: 
+com.jalios.jcms.taglib.settings.impl.CountrySettings: 
+com.jalios.jcms.taglib.settings.impl.DateSettings: 
+com.jalios.jcms.taglib.settings.impl.DbRecordSettings: 
+com.jalios.jcms.taglib.settings.impl.DefaultSettings: 
+com.jalios.jcms.taglib.settings.impl.DurationSettings: 
+com.jalios.jcms.taglib.settings.impl.EmailSettings: 
+com.jalios.jcms.taglib.settings.impl.EnumerateSettings: 
+com.jalios.jcms.taglib.settings.impl.FileSettings: 
+com.jalios.jcms.taglib.settings.impl.GroupSettings: 
+com.jalios.jcms.taglib.settings.impl.ImagePathSettings: 
+com.jalios.jcms.taglib.settings.impl.LanguageSettings: 
+com.jalios.jcms.taglib.settings.impl.MediaPathSettings: 
+com.jalios.jcms.taglib.settings.impl.MemberSettings: 
+com.jalios.jcms.taglib.settings.impl.NumberSettings: 
+com.jalios.jcms.taglib.settings.impl.PasswordSettings: 
+com.jalios.jcms.taglib.settings.impl.PublicationSettings: 
+com.jalios.jcms.taglib.settings.impl.QuerySettings: 
+com.jalios.jcms.taglib.settings.impl.RichTextAreaSettings: 
+com.jalios.jcms.taglib.settings.impl.SqlQuerySettings: 
+com.jalios.jcms.taglib.settings.impl.TextAreaSettings: 
+com.jalios.jcms.taglib.settings.impl.TextFieldSettings: 
+com.jalios.jcms.taglib.settings.impl.UrlSettings: 
+com.jalios.jcms.taglib.settings.impl.WikiAreaSettings: 
+com.jalios.jcms.taglib.settings.impl.WorkspaceSettings: 
+com.jalios.jcms.test.AbstractTestType: 
+com.jalios.jcms.test.HeapDumper: 
+com.jalios.jcms.test.MockFilterConfig: 
+com.jalios.jcms.test.MockHttpServletRequest: 
+com.jalios.jcms.test.MockHttpServletResponse: 
+com.jalios.jcms.test.MockHttpSession: 
+com.jalios.jcms.test.MockServletContext: 
+com.jalios.jcms.test.NotImplementedException: 
+com.jalios.jcms.tools.AbstractChecker: 75800
+com.jalios.jcms.tools.AbstractFilePacker: 
+com.jalios.jcms.tools.CheckResult: 79444
+com.jalios.jcms.tools.CssPacker: 
+com.jalios.jcms.tools.FileDiff: 
+com.jalios.jcms.tools.FileSync: 
+com.jalios.jcms.tools.FormHandlerChecker: 
+com.jalios.jcms.tools.HbmChecker: 78509
+com.jalios.jcms.tools.JCMSAppender: 27753
+com.jalios.jcms.tools.JPropertiesChecker: 79599
+com.jalios.jcms.tools.JsChecker: 77558
+com.jalios.jcms.tools.JsPacker: 
+com.jalios.jcms.tools.JspChecker: 79474
+com.jalios.jcms.tools.LangPropertiesChecker: 76611
+com.jalios.jcms.tools.LogAppender: 27753
+com.jalios.jcms.tools.ProcessExecutor: 
+com.jalios.jcms.tools.Profiler: 
+com.jalios.jcms.tools.ProfilerHandler: 
+com.jalios.jcms.tools.ReleaseTools: 
+com.jalios.jcms.tools.RevisionGenerator: 17994
+com.jalios.jcms.tools.StoreConverter: 
+com.jalios.jcms.tools.StoreMerge: 
+com.jalios.jcms.tools.ThumbnailCleaner: 75708
+com.jalios.jcms.tools.TypeChecker: 75800
+com.jalios.jcms.tools.UTF8Converter: 
+com.jalios.jcms.tools.XmlToPropertiesConverter: 
+com.jalios.jcms.tools.ant.GeneratedFileSelector: 27753
+com.jalios.jcms.tools.patch.JumboPatchDeploy: 27502
+com.jalios.jcms.tools.patch.JumboPatchInfo: 33680
+com.jalios.jcms.tools.patch.JumboPatchMaker: 53814
+com.jalios.jcms.tools.patch.WarInfo: 25795
+com.jalios.jcms.tools.storemerge.ConflictManager: 
+com.jalios.jcms.tools.storemerge.ConflictResolver: 
+com.jalios.jcms.tools.storemerge.StoreMergeParameters: 
+com.jalios.jcms.tools.storemerge.StoreMergeUtil: 
+com.jalios.jcms.tools.storemerge.rule.ConflictResolutionRule: 
+com.jalios.jcms.tools.storemerge.rule.DeleteRule: 
+com.jalios.jcms.tools.storemerge.rule.IgnoreEmptyItemRule: 
+com.jalios.jcms.tools.storemerge.rule.IgnoreOrderRule: 
+com.jalios.jcms.tools.storemerge.rule.IgnoreRule: 
+com.jalios.jcms.tools.storemerge.rule.MergeRule: 
+com.jalios.jcms.tools.storemerge.rule.NewValueRule: 
+com.jalios.jcms.tools.storemerge.rule.PreferNotEmptyRule: 
+com.jalios.jcms.tools.storemerge.rule.Store1Rule: 
+com.jalios.jcms.tools.storemerge.rule.Store2Rule: 
+com.jalios.jcms.tools.storemerge.rule.UpdateRule: 
+com.jalios.jcms.tracking.ReaderTracker: 49225
+com.jalios.jcms.tracking.ReaderTrackerEntry: 
+com.jalios.jcms.uicomponent.TopbarUtil: 
+com.jalios.jcms.uicomponent.UIComponentsConstants: 
+com.jalios.jcms.upload.DocUploadHandler: 77483
+com.jalios.jcms.upload.DocUploadInfo: 72991
+com.jalios.jcms.upload.MultipartFilter: 74340
+com.jalios.jcms.upload.MultipartRequest: 67511
+com.jalios.jcms.upload.ProgressMonitorFileItem: 36667
+com.jalios.jcms.upload.ProgressMonitorFileItemFactory: 36667
+com.jalios.jcms.upload.ProgressMonitorStatus: 
+com.jalios.jcms.upload.ProgressObserver: 
+com.jalios.jcms.upload.QuotaPolicyFilter: 
+com.jalios.jcms.upload.UnzipDataController: 27753
+com.jalios.jcms.upload.UnzipRightPolicyFilter: 33681
+com.jalios.jcms.upload.UnzipUploadManager: 20707
+com.jalios.jcms.upload.UploadManager: 79156
+com.jalios.jcms.vote.Vote: 78482
+com.jalios.jcms.vote.VoteConstants: 48811
+com.jalios.jcms.vote.VoteDataController: $Revision$
+com.jalios.jcms.webdav.ByteBuffer: 23893
+com.jalios.jcms.webdav.IfHeaderParser: 
+com.jalios.jcms.webdav.WebdavFileSystem: 28806
+com.jalios.jcms.webdav.WebdavLock: 72474
+com.jalios.jcms.webdav.WebdavManager: 38095
+com.jalios.jcms.webdav.WebdavProperty: 
+com.jalios.jcms.webdav.WebdavPropertyManager: 
+com.jalios.jcms.webdav.WebdavResource: 28011
+com.jalios.jcms.webdav.WebdavServlet: 27753
+com.jalios.jcms.webdav.Win32Link: 27753
+com.jalios.jcms.webdav.Win32LinkServlet: 72474
+com.jalios.jcms.webdav.XMLWriter: 24535
+com.jalios.jcms.webdav.cat.CatWebdavFileSystem: 39289
+com.jalios.jcms.webdav.cat.CatWebdavLock: 67711
+com.jalios.jcms.webdav.cat.CatWebdavResource: 72474
+com.jalios.jcms.webdav.cat.CatWebdavUtil: 72949
+com.jalios.jcms.webdav.file.FileWebdavFileSystem: 27753
+com.jalios.jcms.webdav.file.FileWebdavLock: 23893
+com.jalios.jcms.webdav.file.FileWebdavResource: 27753
+com.jalios.jcms.widget.WidgetUtil: 74340
+com.jalios.jcms.widget.WikiToolbar: 
+com.jalios.jcms.workspace.AbstractEditWorkspaceHandler: 74178
+com.jalios.jcms.workspace.EditWSTypeEntryHandler: 77981
+com.jalios.jcms.workspace.EditWorkflowInstanceHandler: 
+com.jalios.jcms.workspace.EditWorkspaceCommonHandler: 78749
+com.jalios.jcms.workspace.EditWorkspaceHandler: 67447
+com.jalios.jcms.workspace.EditWorkspaceRoleHandler: 74157
+com.jalios.jcms.workspace.EditWorkspaceTypeHandler: 74179
+com.jalios.jcms.workspace.FileAnalyzerThread: 
+com.jalios.jcms.workspace.TreeHelper: 75069
+com.jalios.jcms.workspace.WKRole: 78714
+com.jalios.jcms.workspace.WKRole_HANDLER: 
+com.jalios.jcms.workspace.WSTypeEntry: 77981
+com.jalios.jcms.workspace.WSTypeEntryListener: 27753
+com.jalios.jcms.workspace.WSTypeEntry_HANDLER: 
+com.jalios.jcms.workspace.WizardContext: 
+com.jalios.jcms.workspace.Workspace: 79118
+com.jalios.jcms.workspace.WorkspaceFileAnalyzer: 
+com.jalios.jcms.workspace.WorkspaceListener: 68472
+com.jalios.jcms.workspace.WorkspaceManager: 68509
+com.jalios.jcms.workspace.WorkspaceWizardContext: 63165
+com.jalios.jcms.workspace.WorkspaceWizardHandler: 74813
+com.jalios.jcms.workspace.Workspace_HANDLER: 
+com.jalios.io.AndFileFilter: 20567
+com.jalios.io.BlankLineCleanerServletFilter: 33174
+com.jalios.io.ExtensionFilenameFilter: 
+com.jalios.io.FileDateComparator: 31503
+com.jalios.io.HttpClient: 16718
+com.jalios.io.HttpClientThread: 27751
+com.jalios.io.IOUtil: 70773
+com.jalios.io.ImageFormat: 27751
+com.jalios.io.ImageInfo: 27751
+com.jalios.io.ImageUtil: 76063
+com.jalios.io.LineDelimiterFilterInputStream: 28700
+com.jalios.io.ModifiedFileFilter: 14756
+com.jalios.io.MonitoredInputStream: 43452
+com.jalios.io.MultiInputStream: 27751
+com.jalios.io.NIOBufferInputStream: 27751
+com.jalios.io.NIOUtil: 27465
+com.jalios.io.NullOutputStream: 27751
+com.jalios.io.RegexpFileFilter: 45343
+com.jalios.io.ReverseFileFilter: 14756
+com.jalios.io.Signature: 58001
+com.jalios.io.SignatureDiff3Entry: 27751
+com.jalios.io.SignatureDiffEntry: 27751
+com.jalios.io.SignatureReader: 27751
+com.jalios.io.SizeLimitInputStream: 27751
+com.jalios.io.StreamGobbler: 
+com.jalios.io.mimetype.MagicMimeTypeIdentifier: 
+com.jalios.io.mimetype.MagicNumber: 
+com.jalios.io.mimetype.MagicString: 
+com.jalios.io.mimetype.MimeTypeDescription: 
+com.jalios.io.mimetype.UtfUtil: 
+com.jalios.io.ssl.NaiveTrustProvider: 
+com.jalios.ldap.LDAPConfiguration: 77941
+com.jalios.ldap.LDAPMapper: 77941
+com.jalios.ldap.LDAPUtil: 77941
+com.jalios.servlet.ByteArrayServletInputStreamWrapper: 
+com.jalios.servlet.CachedServletInputStream: 
+com.jalios.servlet.ServletInputStreamWrapper: 
+com.jalios.servlet.http.CachedServletRequest: 
+com.jalios.util.AbstractJProperties: 
+com.jalios.util.ActionListener: 20541
+com.jalios.util.AntPathMatcher: 
+com.jalios.util.AudioUtil: 
+com.jalios.util.BCrypt: 
+com.jalios.util.Beautifier: 16919
+com.jalios.util.BeautifierDate: 27751
+com.jalios.util.BeautifierMap: 27751
+com.jalios.util.BeautifierRegexp: 27751
+com.jalios.util.BeautifierUrl: 14756
+com.jalios.util.BinarySemaphore: 27751
+com.jalios.util.Browser: 78456
+com.jalios.util.CharsetDetector: 27508
+com.jalios.util.Chrono: 27751
+com.jalios.util.ColorUtil: 27751
+com.jalios.util.Crypt: 27751
+com.jalios.util.CssUtil: 14846
+com.jalios.util.CubeSigma: 
+com.jalios.util.DBUtil: 43401
+com.jalios.util.DateComparator: 23896
+com.jalios.util.DateDescendingComparator: 31346
+com.jalios.util.DateUtil: 72243
+com.jalios.util.Enclosure: 26630
+com.jalios.util.EnumUtils: 
+com.jalios.util.Enumerator: 14756
+com.jalios.util.HtmlUtil: 
+com.jalios.util.HttpClientUtils: 54607
+com.jalios.util.Interval: 
+com.jalios.util.JProperties: 61460
+com.jalios.util.JPropertiesListener: 37778
+com.jalios.util.JaliosConstants: 17379
+com.jalios.util.LangProperties: 56436
+com.jalios.util.LangProperty: 39293
+com.jalios.util.LangPropertyArgument: 
+com.jalios.util.MailSender: 27751
+com.jalios.util.MailUtil: 68140
+com.jalios.util.MockTreeNode: 
+com.jalios.util.MultiComparator: 17861
+com.jalios.util.NetUtil: 24720
+com.jalios.util.ObjectDoubleTreeMap: 14756
+com.jalios.util.ObjectFloatHashMap: 27751
+com.jalios.util.ObjectIntTreeMap: 27751
+com.jalios.util.ObjectLongHashMap: 27751
+com.jalios.util.ObjectLongTreeMap: 28041
+com.jalios.util.Orientation: 79194
+com.jalios.util.PasswordGenerator: 27751
+com.jalios.util.PasswordGeneratorTable: 
+com.jalios.util.ReadWriteAccessController: 14756
+com.jalios.util.ReflectUtil: 78691
+com.jalios.util.RegexpSubstitution: 
+com.jalios.util.RestletUtil: 
+com.jalios.util.ReverseComparator: 21407
+com.jalios.util.RssChannel: 77944
+com.jalios.util.RssEvent: 
+com.jalios.util.RssEventListener: 
+com.jalios.util.RssException: 
+com.jalios.util.RssItem: 27751
+com.jalios.util.SQLQueryResult: 19868
+com.jalios.util.Semaphore: 27751
+com.jalios.util.ServletUtil: 75012
+com.jalios.util.SortedList: 27751
+com.jalios.util.StringEncrypter: 33675
+com.jalios.util.TransientWrapper: 
+com.jalios.util.TreeNode: 61677
+com.jalios.util.URLUtils: 
+com.jalios.util.Util: 76368
+com.jalios.util.XmlUtil: 74852
+com.jalios.util.css.Css: 
+com.jalios.util.css.CssBuiltInFunction: 
+com.jalios.util.css.CssCharUtils: 
+com.jalios.util.css.CssDimension: 
+com.jalios.util.css.CssFloat: 
+com.jalios.util.css.CssInteger: 
+com.jalios.util.css.CssLexer: 
+com.jalios.util.css.CssOperator: 
+com.jalios.util.css.CssParseException: 
+com.jalios.util.css.CssParser: 
+com.jalios.util.css.CssString: 
+com.jalios.util.css.CssUserFunction: 
+com.jalios.util.css.CssValue: 
+com.jalios.util.css.InputSource: 
+com.jalios.util.css.handlers.CommentMatcherDocumentHandler: 
+com.jalios.util.css.handlers.Condition: 
+com.jalios.util.css.handlers.ConditionFactory: 
+com.jalios.util.css.handlers.DefaultConditionFactory: 
+com.jalios.util.css.handlers.DefaultDocumentHandler: 
+com.jalios.util.css.handlers.DefaultErrorHandler: 
+com.jalios.util.css.handlers.DefaultSelectorFactory: 
+com.jalios.util.css.handlers.DocumentHandler: 
+com.jalios.util.css.handlers.ErrorHandler: 
+com.jalios.util.css.handlers.Selector: 
+com.jalios.util.css.handlers.SelectorFactory: 
+com.jalios.util.diff.Diff: 
+com.jalios.util.diff.Edit: 
+com.jalios.util.diff.Hunk: 
+com.jalios.util.diff.HunkAdd: 
+com.jalios.util.diff.HunkChange: 
+com.jalios.util.diff.HunkDel: 
+com.jalios.util.lucene.ApostropheFilter: 
+com.jalios.util.lucene.DashFilter: 
+com.jalios.util.lucene.ISOLatin1AccentFilter: 27751
+com.jalios.util.lucene.UnderscoreFilter: 
+com.jalios.jstore.BasicStorable: 39635
+com.jalios.jstore.CleanFilter: 21412
+com.jalios.jstore.DecodeContext: 
+com.jalios.jstore.FTSearchEngine: 21412
+com.jalios.jstore.IllegalStoreAccessException: 14756
+com.jalios.jstore.IllegalStoreOperation: 14756
+com.jalios.jstore.InnerLogEntry: 21412
+com.jalios.jstore.LoadReport: 27753
+com.jalios.jstore.LogCleaner: 30425
+com.jalios.jstore.LogEntry: 28011
+com.jalios.jstore.LogException: 27753
+com.jalios.jstore.LogManager: 34118
+com.jalios.jstore.LogManagerDeltaHandler: 27753
+com.jalios.jstore.LogManagerHandler: 21412
+com.jalios.jstore.LogManagerLoadHandler: 27753
+com.jalios.jstore.LogManagerSyncHandler: 27753
+com.jalios.jstore.LogManagerVersionHandler: 39635
+com.jalios.jstore.LogicalStampManager: 27753
+com.jalios.jstore.NoUpdateException: 14756
+com.jalios.jstore.Searchable: 14756
+com.jalios.jstore.Stamp: 30425
+com.jalios.jstore.StampManager: 16792
+com.jalios.jstore.StampTable: 28011
+com.jalios.jstore.Storable: 39635
+com.jalios.jstore.StorableHandler: 39635
+com.jalios.jstore.StorableLogEntry: 27753
+com.jalios.jstore.Store: 39635
+com.jalios.jstore.StoreCleaner: 27753
+com.jalios.jstore.StoreConstants: 14756
+com.jalios.jstore.StoreListener: 21412
+com.jalios.jstore.StoreUtil: 71452
+com.jalios.jstore.Swizzler: 27753
+com.jalios.jstore.SyncManager: 27753
+com.jalios.jstore.TemporalStampManager: 27753
+com.jalios.jstore.Test: 27753
+com.jalios.jstore.UnknownStoreIDException: 14756
+com.jalios.jstore.jsync.AckMessage: 27753
+com.jalios.jstore.jsync.DisjoinJSyncEvent: 
+com.jalios.jstore.jsync.DisjoinMessage: 27753
+com.jalios.jstore.jsync.FileEntry: 27753
+com.jalios.jstore.jsync.FileFetcher: 21412
+com.jalios.jstore.jsync.JSyncConstants: 21123
+com.jalios.jstore.jsync.JSyncEvent: 
+com.jalios.jstore.jsync.JSyncListener: 61968
+com.jalios.jstore.jsync.JSyncLogger: 61968
+com.jalios.jstore.jsync.JSyncPreviousReplicaManager: 30683
+com.jalios.jstore.jsync.JSyncReplica: 74139
+com.jalios.jstore.jsync.JSyncUtil: 77069
+com.jalios.jstore.jsync.JoinJSyncEvent: 
+com.jalios.jstore.jsync.JoinMessage: 27753
+com.jalios.jstore.jsync.Message: 61968
+com.jalios.jstore.jsync.RemoveReplicaJSyncEvent: 
+com.jalios.jstore.jsync.ReplicaInfo: 27753
+com.jalios.jstore.jsync.SuggestJoinJSyncEvent: 
+com.jalios.jstore.jsync.SuggestJoinMessage: 27753
+com.jalios.jstore.jsync.UpdateJSyncEvent: 
+com.jalios.jstore.jsync.UpdateMessage: 27753
+com.jalios.jstore.tools.jsc: 39635
+com.jalios.jtaglib.BufferTag: 70384
+com.jalios.jtaglib.BufferTagExtraInfo: 27752
+com.jalios.jtaglib.ChartTag: 27752
+com.jalios.jtaglib.ChartTagBeautifier: 27752
+com.jalios.jtaglib.ChronoTag: 27752
+com.jalios.jtaglib.ChronoTagExtraInfo: 27752
+com.jalios.jtaglib.ConditionalTag: 27752
+com.jalios.jtaglib.DateTag: 28205
+com.jalios.jtaglib.DurationTag: 55257
+com.jalios.jtaglib.ForeachTag: 32210
+com.jalios.jtaglib.ForeachTagExtraInfo: 27752
+com.jalios.jtaglib.HighlightTag: 63201
+com.jalios.jtaglib.IfTag: 27752
+com.jalios.jtaglib.ImageTag: 27752
+com.jalios.jtaglib.RssCacheManager: 22221
+com.jalios.jtaglib.RssTag: 77944
+com.jalios.jtaglib.RssTagExtraInfo: 27752
+com.jalios.jtaglib.SelectTag: 27752
+com.jalios.jtaglib.SendmailTag: 27752
+com.jalios.jtaglib.TimeTag: 27752
+com.jalios.jtaglib.TreeTag: 27752
+com.jalios.jtaglib.TreeTagExtraInfo: 27752
+com.jalios.jtaglib.TruncateTag: 36580
+com.jalios.jdring.AlarmEntry: 33972
+com.jalios.jdring.AlarmListener: 14756
+com.jalios.jdring.AlarmManager: 61724
+com.jalios.jdring.AlarmWaiter: 27791
+com.jalios.jdring.PastDateException: 14756
+com.jalios.jdring.Schedule: 28011
+com.jalios.jdring.Test: 27753

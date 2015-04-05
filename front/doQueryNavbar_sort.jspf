@@ -1,0 +1,35 @@
+<% 
+    String currentSort = plPagerHandler.getSort();
+    Map<String,String>    sortOptions = new LinkedHashMap<String,String>();
+    sortOptions.put("relevance"  ,"ui.com.lbl.relevance");
+    sortOptions.put("mdate"      ,"ui.com.lbl.date");
+    sortOptions.put("title"      ,"ui.com.lbl.title");
+    sortOptions.put("author"     ,"ui.com.lbl.author");
+    sortOptions.put("reader"     ,"ui.fo.query.reader-cnt");
+    sortOptions.put("voteScore"  ,"comparator.pqf.voteScore");
+    
+    
+    // Workaround with backoffice configuration
+    Map<String,String>    sortOptions2 = new LinkedHashMap<String,String>();
+    sortOptions2.put("pstatus","ui.com.lbl.status");
+    sortOptions2.put("cdate","ui.com.lbl.cdate-long");
+    sortOptions2.put("udate","ui.com.lbl.udate-long");
+    sortOptions2.put("pdate","ui.com.lbl.pdate-long");
+    sortOptions2.put("edate","ui.com.lbl.edate-long");
+    sortOptions2.put("adate","ui.com.lbl.adate-long");
+    sortOptions2.put("sdate","ui.com.lbl.sdate-long");
+    
+    // FIXME: Should improve AjaxRefresh
+    String ctxId = "ctxQuerySortMenu_" + System.currentTimeMillis();
+%>
+
+
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><jalios:icon src="sorting" /> <%= glp("ui.fo.query.sort") %> <%= glp(Util.getString(sortOptions.get(currentSort),sortOptions2.get(currentSort))) %> <jalios:icon src="caret" /></a>
+  <ul class="dropdown-menu" role="menu">
+    <% for (Map.Entry<String,String> itEntry : sortOptions.entrySet()) { %>
+    <% String sortURL = plPagerHandler.getSortURL(itEntry.getKey()); %>
+    <li <%= currentSort.equals(itEntry.getKey()) ? "class='active'" : "" %>><a href="<%= sortURL %>" rel="nofollow" class='ajax-refresh' ><%= glp(itEntry.getValue()) %></a></li>
+    <% } %>
+  </ul>
+</li>

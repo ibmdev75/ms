@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin PUBLIC "-//JALIOS//DTD JCMS-PLUGIN 1.6//EN" "http://support.jalios.com/dtd/jcms-plugin-1.6.dtd">
+<plugin name="MiniSiteCMSPlugin" version="0.1" author="Karim ZOUBA" license="SMABTP" initialize="true" jcms="" order="0" url="" jsync="false" appserver="">
+  
+  <label xml:lang="fr">MiniSiteCMSPlugin</label>
+  <description xml:lang="fr">Module pour la redéfinition des gabarits des nouveaux contenus des mini sites</description>
+  
+  <types>
+	
+		<type name="Tag"></type>
+		
+		<templates type="Tag">
+	    	
+	    	<template name="tagBox" file="doTagBoxDisplay.jsp" usage='box'>
+	      		<label xml:lang="fr">Représentation du contenu tag box</label>
+	      	</template>
+	      	<template name="tagFull" file="doTagFullDisplay.jsp" usage='full'>
+	      		<label xml:lang="fr">Représentation du contenu tag full</label>
+	      	</template>
+	     
+	  	</templates>
+	  	
+	  	<templates type="PortletQueryForeach">
+	    	
+	    	<template name="tagArticleBox" file="doNuageTagsArticlesBox.jsp" usage='box'>
+	      		<label xml:lang="fr">Représentation des articles sous forme de nuage de tags box</label>
+	      	</template>
+	      	<template name="resultNuageTagsArticle" file="doResultNuageTagsArticle.jsp" usage='full'>
+	      		<label xml:lang="fr">Représentation de la liste des articles depuis un tag</label>
+	      	</template>
+	      	
+	      	
+	     
+	  	</templates>
+	  	
+	  	
+	  	
+</types>
+  
+  
+  
+  <private-files>
+    <directory path="properties" />
+  </private-files>
+  <public-files>
+    <directory path="js" />
+    <directory path="css" />
+    <directory path="docs" />
+    <directory path="jsp" />
+    <directory path="types" />
+    
+  </public-files>
+</plugin>
+

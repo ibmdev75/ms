@@ -1,0 +1,57 @@
+<%-- --- DIFF LIST ------------------------------------------------ --%>
+<% if (showDiff) { %>
+<% request.setAttribute("parentDir", new File(channel.getWebappPath())); %>
+<% request.setAttribute("checkCanRead", Boolean.TRUE); %>
+<form name="diffForm" action="jcore/zipFiles.jsp" method="post" class="noSingleSubmitButton">
+
+  <div class="navbar navbar-default navbar-table-header">
+    <div class="navbar-form">
+      <div class="navbar-left">
+        <input type="hidden" name="opCSV" value="" />
+        <button type="button" onclick="document.forms['diffForm'].opCSV.value='true';document.forms['diffForm'].submit()" class='btn btn-default' >
+          <jalios:icon src="csv"  /> <%= glp("ui.com.btn.csv") %>
+        </button>
+      </div>
+       
+      <div class="navbar-right">
+        <div class="btn-group">
+          <button type="submit"   name="opZip" value='true' class='btn btn-default'><%= glp("ui.adm.um.btn.zip") %></button>
+          <button type="button" class="btn  btn-default dropdown-toggle" data-toggle="dropdown">        
+            <jalios:icon src="caret" />
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>      
+          <ul class="dropdown-menu" role="menu" style="padding-left: 20px;">
+            <li class="checkbox"><label><input type="checkbox" name="addPlugins" id="addPlugins"  value='true' checked="checked"/> <%= glp("ui.adm.um.btn.plugins") %></label></li>
+            <% if (DerbyManager.getInstance().isServerStarted()) { %>
+            <li class="checkbox"><label><input type="checkbox" name="addDatabase" id="addDatabase"  value='true' /> <%= glp("ui.adm.um.btn.db") %></label></li>
+            <% } %>
+            <li class="checkbox"><label><input type="checkbox" name="addGenerated" id="addGenerated" value='true' /> <%= glp("ui.adm.um.btn.gen") %></label></li>
+            <li class="checkbox"><label><input type="checkbox" name="dirs" id="dirs1" value='<%= channel.getRealPath(JcmsConstants.ARCHIVES_DIR) %>' /> Archives</label></li>
+            <li class="checkbox"><label><input type="checkbox" name="dirs" id="dirs2" value='<%= channel.getUploadPath("/") %>' /> Upload</label></li>
+            <li class="checkbox"><label><input type="checkbox" name="dirs" id="dirs3" value='<%= channel.getLucenePath("/") %>' /> Lucene</label></li>
+            <li class="checkbox"><label><input type="checkbox" name="dirs" id="dirs4" value='<%= channel.getDataPath("stats") %>' /> Stats</label></li>
+            <li class="checkbox"><label><input type="checkbox" name="dirs" id="dirs5" value='<%= channel.getDataPath("logs") %>' /> Logs</label></li>
+          </ul>
+        </div>
+    
+        <input type="hidden"   name="files" value="<%= channel.getWebInfPath("deploy/signature_base.xml") %>" />
+        <input type="hidden"   name="files" value="<%= channel.getWebInfPath("deploy/workflow_base.xml") %>" />
+        <% SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss"); %>
+        <input type="hidden" name="saveAs" value="<%= Util.buildID(channel.getName()) + "_" + channel.getUrid() + "_delta_" + sdf.format(new Date()) + ".zip" %>" />
+        <input type="hidden" name="sign" value="true" />
+      </div>
+    </div>
+  </div>
+
+<% if (isDiff) { %>
+<% request.setAttribute("diffSet", upgradeInfo.get("diffSet")); %>
+<% request.setAttribute("canSelectDeleted", Boolean.TRUE); %>
+<%@ include file='/admin/deploy/doSignDiff.jspf' %>
+<%@ include file='/admin/deploy/doSignDiffPlugins.jspf' %>
+<% } else { %>
+<% request.setAttribute("diff3Set", upgradeInfo.get("diff3Set")); %>
+<% request.setAttribute("canSelectDeleted", Boolean.TRUE); %>
+<%@ include file='/admin/deploy/doSignDiff3.jspf' %>
+<% } %>
+</form>
+<% } %>

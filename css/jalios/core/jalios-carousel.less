@@ -1,0 +1,81 @@
+@import "init-mixins.less";
+
+@pqf-carousel-color: #555555;
+
+// Carousel template
+// -----------------
+.meta-data(@color: @pqf-carousel-color) {
+  color: @color;
+}
+.meta-data-link() {
+  .meta-data(#FFFFFF);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.pqf-carousel {
+  .carousel-thumb {
+    IMG {
+      width: 100%;
+    }
+  }
+  .carousel-caption {
+    color: black;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: 0;
+    padding-left: 15%;
+    padding-right: 15%;
+    #gradient > .vertical(@start-color: rgba(255, 255, 255, 0.3); @end-color: rgba(255,255,255, 0.8));
+  }
+  .carousel-control {
+    z-index: 11;  // For control to be upper than description
+  }
+  .carousel-inner {
+    text-align: center; // Prevent JCMS 'text-align: left' side effect
+  }
+  .carousel-meta-data {
+    .meta-data();
+  }
+  .carousel-meta-data A,
+  A.carousel-meta-data {
+    .meta-data-link();
+  }
+  .carousel-meta-data {
+    margin-right: 5px;
+    display: inline-block;
+    text-shadow: none;
+  }
+  .carousel-data-categories {
+    .carousel-meta-data(); // To not have white color on categories
+  }
+  .carousel-data-title { 
+    font-size: @font-size-h3;
+    .text-overflow();
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  .carousel-indicators {
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    margin-left: 0;
+    LI {
+      border-color: @pqf-carousel-color;
+      background-color: #FFFFFF;
+      &.active {
+        border-color: #000000;
+        background-color: @pqf-carousel-color;
+      }
+    }
+  }
+}
+
+// Hooks
+// -----------------
+
+// Prefix to hide the bullets
+.pqf-carousel-no-pager    .pqf-carousel .carousel-indicators    { display: none; }
+// Prefix to hide navigation arrows
+.pqf-carousel-no-controls .pqf-carousel .pqf-carousel-controls  { display: none; }

@@ -1,0 +1,1 @@
+!function(a){if(!a.jalios){a.jalios={}}a.jalios.mailmessage={resizeIframe:function(c){var b=a(c);var d=b.closest(".mail-message").find("IFRAME");if(!d||!d.exists()){return}jQuery.jalios.DOM.resizeIframeToViewport(d)}}}(window.jQuery);var DBMailResizeIframe=function(a){jQuery.jalios.mailmessage.resizeIframe(a)};

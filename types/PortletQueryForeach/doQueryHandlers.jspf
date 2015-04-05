@@ -1,0 +1,120 @@
+<%--
+  @Summary: Build a set of QueryHandler based on PortletQueryForeach options
+            and contextual information (workspace, member etc).
+            The resulting set (queryHandlerSet) is used among others by doQuery.jsp
+--%><%
+
+  final Set queryHandlerSet = new LinkedHashSet();
+
+  {
+    // If Search in DB is enabled, the following condition are guaranteed by PortletQueryForeachDataController : 
+    // -   portlet.getRefineQueries()  != "CurrentWSCat"
+    // -   portlet.getRefineWithContextualCategories() == false
+    // -   portlet.getSkipFirstResults() == 0
+    // -   portlet.getFirstPublications() is empty
+    // -   queries.length <= 1
+    // Settings depending on query Concent : 
+    // -   IF portlet.getRefineQueries()  != "CurrentWS"  --> queries.cids == null 
+
+    final boolean    searchInDB = box.getSearchInDB();
+    final String     queryMember   = (String) request.getAttribute("queryMember");
+    final Member     qMember       = queryMember == null ? loggedMember : channel.getMember(queryMember);
+    
+    String[]   queries       = (String[]) box.getFieldValue(jcmsContext, "queries"); // box.getQueries();
+
+    // Depending on the searchInDB configuration either proposedDataSet is used or else the refineCat
+    Set        proposedDataSet;
+    Category   refineCat;
+    boolean    exactCat;
+    
+    if ("Current".equals(box.getRefineQueries())) {
+      proposedDataSet = currentCategory.getAllPublicationSet();
+      refineCat = currentCategory;
+      exactCat = false;
+    } else if ("CurrentExact".equals(box.getRefineQueries())) {
+      proposedDataSet = currentCategory.getPublicationSet();
+      refineCat = currentCategory;
+      exactCat = true;
+    } else if ("Portal".equals(box.getRefineQueries())) {
+      proposedDataSet = portalCategory.getAllPublicationSet();
+      refineCat = portalCategory;
+      exactCat = false;
+    } else if ("PortalExact".equals(box.getRefineQueries())) {
+      proposedDataSet = portalCategory.getPublicationSet();
+      refineCat = portalCategory;
+      exactCat = true;
+    } else if ("CurrentWSCat".equals(box.getRefineQueries())) {
+      TreeSet wsCatPubSet = new TreeSet();
+      for(Iterator it = workspace.getCatSet().iterator() ; it.hasNext() ; ){
+        Category wsCat = (Category) it.next();
+        wsCatPubSet.addAll(wsCat.getAllPublicationSet());
+      }
+      proposedDataSet = wsCatPubSet;
+      refineCat = null;
+      exactCat = false;
+    } else {
+      proposedDataSet = null;
+      refineCat = null;
+      exactCat = false;
+    }
+    
+    
+    // Handle Dynamic query
+    if (Util.toBoolean(PortalManager.receiveAction(request, box, "DynamicQuery"),false)){
+       queries = new String[]{ ServletUtil.getQueryString(request, false) };
+    }
+    
+    // Works on queries
+    if (Util.notEmpty(queries)){
+      for (int i = 0 ; i < queries.length ; i++){
+        
+			  String queryString = queries[i];
+				if (Util.isEmpty(queryString))
+				  continue;
+				  
+				com.jalios.jcms.handler.QueryHandler handler = new com.jalios.jcms.handler.QueryHandler(queryString, request);
+				handler.setAttribute(QueryFilter.PORTLET_QUERY, Boolean.TRUE); 
+				handler.setSearchInDB(searchInDB); // Fix bug JCMS-3391
+				handler.setDataSet(proposedDataSet);
+				handler.setLoggedMember(qMember);
+				handler.setResponse(response);
+				handler.setReverse(Util.toBoolean(PortalManager.receiveAction(request , box , "reverse"),false));
+				handler.setStart(Util.toInt(PortalManager.receiveAction(request , box , "start"), box.getSkipFirstResults()));
+				handler.setPageSize(Util.toInt(PortalManager.receiveAction(request , box , "pageSize"), box.getMaxResults()));
+				handler.setSort(Util.getString(PortalManager.receiveAction(request , box , "sort"), box.getOrderBy()));
+				handler.setPagerAll(Util.toBoolean(PortalManager.receiveAction(request , box , "pagerAll"), false));
+
+        // If portlet must return restult from database and a refine category was specified
+        // Simply overwrite the categories of the QueryHandler as the query are guaranteed not to have any cids 
+				if (searchInDB && refineCat != null) {
+					handler.setCids(new String[] { refineCat.getId() });
+					handler.setExactCat(exactCat);
+				}
+    
+        if (box.getRefineWithContextualCategories() ){
+				  String[] cids1   = JcmsUtil.dataArrayToStringArray(ctxCategories);
+				  String[] cids2   = handler.getCids();
+				  List     cidList = new ArrayList();
+				  if (Util.notEmpty(cids1))
+				    cidList.addAll(Arrays.asList(cids1));
+				  if (Util.notEmpty(cids2))
+				    cidList.addAll(Arrays.asList(cids2));
+				  String[] cids3   = (String[])cidList.toArray(new String[0]);
+				  if (Util.notEmpty(cids3)){
+				    handler.setCids(cids3);
+				  }
+				}
+				    
+			  if ("CurrentWS".equals(box.getRefineQueries())) {
+			    handler.setWorkspace(workspace);
+			  }
+
+        if (handler.getSearchInSubWorkspaces()) {
+          request.setAttribute("query.result.showWs", Boolean.TRUE);
+        }
+
+			  queryHandlerSet.add(handler);
+      }
+    }
+  }
+%>

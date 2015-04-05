@@ -1,0 +1,16 @@
+<%@ page contentType="text/html; charset=UTF-8" %><%
+%><%-- This file has been automatically generated. --%><%
+%><%--
+  @Summary: FileDocumentExtension display page
+  @Category: Generated
+  @Author: JCMS Type Processor
+  @Customizable: True
+  @Requestable: True
+--%><%
+%><%
+ FileDocumentExtension extension = (FileDocumentExtension) obj.getExtension();
+ if (extension == null) {
+   extension = new FileDocumentExtension();
+ }
+%><%-- **********4A616C696F73204A434D53 *** SIGNATURE BOUNDARY * DO NOT EDIT ANYTHING BELOW THIS LINE *** --%><%
+%><%-- 9dM2NVqVncIJwQD1KeYrjQ== --%>

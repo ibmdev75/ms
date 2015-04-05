@@ -1,0 +1,59 @@
+        <jalios:include target="EDIT_MBR_ADVTAB_HEADER" />
+        
+	      <%-- LINK REFERRER ------------------------------------------------------------ --%> 
+	      <% if (member.getLinkCount() > 0) { %> 
+	        <div class="br">
+	          <% request.setAttribute("data", member); %>
+	          <%@ include file="/admin/doLinkReferrer.jspf" %>
+	        </div>
+	      <% } %>
+          
+		    <%-- ID / CDATE / MDATE / LDAPSYNC --------------------------------------------- --%> 
+		    
+        <table class="table-data auto">
+          <tr>
+            <th><% /* %>ID<% */ %><%= glp("ui.com.lbl.id") %></th>
+            <td><% /* %>c_123<% */ %><%= member.getId() %></td>
+          </tr>
+          <tr>
+            <th><% /* %>CDate<% */ %><%= glp("ui.com.lbl.cdate") %></th>
+            <td><jalios:time date='<%= member.getCdate() %>' format='<%= "short" %>' /> <jalios:date date='<%= member.getCdate() %>' format='<%= "short" %>' /></td>
+          </tr>
+          <tr>
+            <th><% /* %>MDate<% */ %><%= glp("ui.com.lbl.mdate") %></th>
+            <td><jalios:time date='<%= member.getMdate() %>' format='<%= "short" %>' /> <jalios:date date='<%= member.getMdate() %>' format='<%= "short" %>' /></td>
+          </tr>
+          
+          <jalios:if predicate='<%= isLdapAccount %>'>
+          <tr>
+            <th><% /* %>LDAP Sync<% */ %><%= glp("ui.com.lbl.ldap-sync") %></th>
+            <td><jalios:time date='<%= member.getLastLdapSynchro() %>' format='<%= "short" %>' /> <jalios:date date='<%= member.getLastLdapSynchro() %>' format='<%= "short" %>' /></td>
+          </tr>
+          </jalios:if>
+          
+          <% if (member.isAccount()) { %>
+          <tr>
+            <th><% /* %>Last login date<% */ %><%= glp("ui.adm.mbr-edit.last-login-date") %></th>
+            <td><%
+              Set<Date> lastLoginDateSet = member.getLastLoginDateSet();
+              if (Util.notEmpty(lastLoginDateSet)) { 
+                if (lastLoginDateSet.size() == 1) {
+                  Date lasLoginDate = Util.getFirst(lastLoginDateSet); %>
+                  <jalios:time date='<%= lasLoginDate %>' format='<%= "short" %>' /> <jalios:date date='<%= lasLoginDate %>' format='<%= "short" %>' /><%
+                } else { %>
+                  <ul><%
+                    for (Date itDate : lastLoginDateSet) { %>
+                      <li><jalios:time date='<%= itDate %>' format='<%= "short" %>' /> <jalios:date date='<%= itDate %>' format='<%= "short" %>' /></li><%
+                    } %>
+                  </ul><%
+                  }
+              } %>
+            </td>
+          </tr>
+      <% } %>
+    </table>
+        
+        <%-- TRACES ------------------------------------------------------- --%> 
+        <%@ include file='/admin/doMemberSessionTraces.jspf' %>
+        
+      <jalios:include target="EDIT_MBR_ADVTAB_FOOTER" />

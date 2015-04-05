@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<type name="PortletSearch" reviewable="false" debatable="false" categoryRequired="false" categoryTab="false" superclass="generated.AbstractPortletSkinable" readRightTab="true" updateRightTab="true" templateTab="true" workflowTab="true" advancedTab="true" unitFieldEdition="false" audienced="false" version="4.0">
+  <title ml="true" searchable="true" />
+  <fields>
+    <field name="titleText" editor="textfield" required="false" compactDisplay="true" type="String" searchable="false" size="80" ml="true" />
+    <field name="searchWith" editor="enumerate" required="false" compactDisplay="false" type="String" chooser="checkbox" valueList="all|any|exact|advanced" ml="false" descriptionType="tooltip" searchable="false" html="false" tab="text" />
+    <field name="searchIn" editor="enumerate" required="false" compactDisplay="false" type="String[]" chooser="checkbox" valueList="catName|searchInFiles|searchInMembers" ml="false" descriptionType="tooltip" searchable="false" html="false" tab="text" />
+    <field name="instantSearch" editor="boolean" required="false" descriptionType="text" compactDisplay="false" tab="advanced" type="boolean" default="on"/>
+    <field name="query" editor="query" required="false" compactDisplay="false" tab="advanced" type="String" descriptionType="text" />
+    <field name="refineQueries" editor="enumerate" required="false" compactDisplay="false" tab="advanced" type="String" valueList="None | Portal | Current | CurrentWS" ml="false" searchable="false" descriptionType="text" abstract="true" truncate="400" chooser="listbox" />
+    <field name="queryPortlet" editor="link" required="false" compactDisplay="false" tab="advanced" type="generated.PortletQueryForeach" parent="false" descriptionType="text" />
+    <field name="displayPortal" editor="link" required="false" compactDisplay="false" tab="advanced" type="generated.PortletPortal" parent="false" ml="false" descriptionType="text" searchable="false" />
+    <field name="advancedSearchPortlet" editor="link" required="false" compactDisplay="false" tab="advanced" type="generated.PortletSearch" parent="false" descriptionType="text" />
+    <field type="super" />
+  </fields>
+  <tabs>
+    <tab id="text" />
+    <tab id="advanced" />
+  </tabs>
+</type>
+

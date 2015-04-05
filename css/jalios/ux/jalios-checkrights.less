@@ -1,0 +1,40 @@
+@import "../core/init-mixins.less";
+
+/* ----------------------------------------------- */
+/*  CheckRights                                   */
+/* ----------------------------------------------- */
+
+.check-rights {
+	TABLE.layout {
+	  TH, TD {
+	    text-align: left;
+	    padding: 0 @baseline / 2 0 0;
+	    white-space: nowrap;
+	  }
+  }
+
+  .UI_EDITOR_PUBLICATIONCHOOSER .add-on.action { display: none; }
+
+  .result {
+    margin: 3px 0;
+    padding: @baseline / 2;
+    line-height:  @baseline;
+    background-color: #FCFCFC;
+    border: 1px solid #EEEEEE;
+    border-radius: 4px;
+    
+    .access {
+      margin-bottom: @baseline / 2;
+      font-weight: bold;
+      &.access-denied {
+         color: #FF0000;
+      }
+      &.access.access-granted {
+        color: #00BB00;
+      }
+    }
+    .explanation {
+      margin-top:   @baseline / 2;
+    }
+  }
+}

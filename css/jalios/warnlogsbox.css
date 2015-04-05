@@ -1,0 +1,83 @@
+
+#devTools .logsBlock, .logsBlock {
+  background-color: #FFF4EA;
+  border: 1px solid #FFCD9C;
+  padding: 0;
+  margin: 10px 20px 20px 20px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+
+#devTools .logsBlock h1, .logsBlock h1 {
+	background-color: #FF9F34;
+  background: -moz-linear-gradient(center top ,                     #FFB366,              #FF8000);  
+  background: -webkit-gradient(linear, left top, left bottom,  from(#FFB366),          to(#FF8000) );
+	
+	font-size: 16px;
+  color: #FFF;
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);  
+	
+  padding:2px 12px;
+  -moz-border-radius: 8px 8px 0 0;
+  border-radius: 8px 8px 0 0;
+}
+
+#devTools .logsBlock h1 a, .logsBlock h1 a {
+  color: #FFF;
+  border-bottom-width:0;
+  border-bottom-style: none;
+  text-decoration: none;
+}
+
+#devTools .logsBlock h1 a, .logsBlock h1 a:hover {
+	text-decoration: none;
+}
+
+#devTools .logsBlock ul.logList, .logsBlock ul.logList {
+  color: black;
+}
+
+#devTools .logsBlock ul.logList li, .logsBlock ul.logList li {
+	font-family: Arial, Helvetica,Sans-Serif;
+	font-size: small;
+	line-height: 16px;
+  height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  list-style: none;
+  list-style-position: outside;
+  list-style-type: none;  
+  width: 270px;
+}
+
+html>body #devTools .logsBlock ul.logList li, html>body .logsBlock ul.logList li {
+  white-space: normal;
+}
+
+html>body #devTools .logsBlock ul.logList li:HOVER, html>body .logsBlock ul.logList li:HOVER {
+  height: auto;
+  overflow: visible;
+}
+
+
+#devTools .logsBlock .noLogs, .logsBlock .noLogs {
+  color: black;
+}
+
+#devTools .logsBlock  .seealso a, .logsBlock  .seealso a {
+  background-image:  url('../../images/jalios/icons/log-icon.gif');
+  background-repeat: no-repeat;
+  padding-left: 21px;
+}
+
+.logsBlocks .secondaryBlock {
+  padding: 5px 5px 5px 5px;
+}
+
+.logsBlock .seealso {
+  height: 14px;
+  text-align: right;
+  margin: 4px;
+}
+

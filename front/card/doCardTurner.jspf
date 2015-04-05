@@ -1,0 +1,11 @@
+<%--
+  @Summary: Common toggle link for cards' front and back content 
+  @Category: UI Component
+  @Author: Sylvain DEVAUX
+  @Copyright: Jalios SA
+  @Customizable: False
+  @Requestable: False
+  @Deprecated: False
+  @Since: jcms-9.1
+--%>
+<a href="#" class="card-turner" onclick="return false;" data-jalios-action="toggle:hide" data-jalios-target=".<%= cardId %> .card-toggler"><jalios:icon src="card-info"/></a>

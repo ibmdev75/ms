@@ -1,0 +1,35 @@
+.gauge.tiny.relevance {
+  margin-top: 10px;
+}
+
+/* search results */
+
+.queryWorkHeader {
+  background-color: #EEEEEE;
+  padding: 5px;
+}
+.queryWorkHeader .queryShowResults {
+  text-align: left;
+}
+.searchResultsCategory div {
+  float: left;
+  width:49%;
+}
+.searchResultsCategory div.separation {
+  float: none;
+  clear: both;
+  width: 100%;
+  height: 5px;
+}
+.queryWorkHeader .bigFont {
+  font-size: 12px;  
+}
+.queryWorkHeader .smallFont {
+  font-size: 10px;  
+}
+.queryWorkHeader .fontA {
+  font-family: verdana,arial;
+}
+.queryWorkHeader .fontB {
+  font-family: arial,helvetica,sans-serif;
+}

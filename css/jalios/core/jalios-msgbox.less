@@ -1,0 +1,60 @@
+/* ----------------------------------------------- */
+/*  MSGBOX                                         */
+/* ----------------------------------------------- */
+
+.mbox {
+  width:   400px;
+  margin:  @baseline*2 auto;
+  padding: @baseline;
+  border: 1px solid @grayLight;
+  
+  .border-radius(7px);
+  .box-shadow(1px 3px 5px #BBB);
+   #gradient > .vertical(lighten(@tabBg, 5%), @tabBg);
+  
+  .mboxTitle {
+    line-height: @baseline*2;
+    font-size:  18px;
+  }
+  .mboxIcon {
+    float: left;
+    margin-right: @baseline/2;
+  }
+  .mboxMsg { 
+    padding-left: @baseline*2+4;
+    line-height: @baseline; // FIXME: Should be removed
+  }
+  &.mboxInfo    .mboxTitle { color: @link-color; }
+  &.mboxWarning .mboxTitle { color: @brand-warning;    }
+  &.mboxError   .mboxTitle { color: @brand-danger;       }
+}
+.modal .modal-body,
+.modalForm .content {
+  .mbox {
+    margin-top: @baseline;
+  }
+} // Message box in modal
+
+.warningArea,
+.infoArea {
+  font-size: @font-size-base - 1;
+  margin:  @baseline auto;
+  padding: @baseline @baseline @baseline @baseline+32;
+  border: 1px solid @grayLight;
+  
+  .border-radius(7px);
+  .box-shadow(1px 3px 5px #BBB);
+  
+  background-color: @highlightBackground;
+  background-repeat: no-repeat;
+  background-position: @baseline/2 @baseline;
+}
+.infoArea {
+  background-image: url("../../../images/jalios/icons/information.gif");
+}
+.warningArea {
+  background-image: url("../../../images/jalios/icons/warning.gif");
+}
+.formBox {
+  .warningArea, .infoArea { margin-top: 0; }
+}

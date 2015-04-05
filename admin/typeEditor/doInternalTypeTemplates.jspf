@@ -1,0 +1,98 @@
+
+<jalios:foreach collection="<%= tmplCollection %>" name="itTemplate" type="org.jdom.Element" counter="tmplCounter">
+  <% 
+    int    counter    = tmplCounter.intValue();
+    String templateId = tmplPrefix+"_"+Util.getString(itTemplate.getAttributeValue("name"),"new"+counter);
+    String tmplFile   = Util.getString(itTemplate.getAttributeValue("file"),"");  
+    String tmplName   = Util.getString(itTemplate.getAttributeValue("name"),"");
+    String tmplThumb  = ("types/"+formHandler.getTypeName()+ "/") + (tmplFile.length() > 3 ?  tmplFile.substring(0,tmplFile.length()-3) + "jpg" : "s.gif");
+   
+    tmplNames.remove(tmplName);
+  %>
+  <tr id='<%= templateId %>'><td>
+    <table class='layout'>
+  		
+      <tr>
+        <td class='vTop' rowspan="3">
+          <div class="tmplThumbnail"><img class="tmplThumbnail" src='s.gif' style='background-image: url(<%= tmplThumb %>)'/></div>
+        </td>
+        <td class='vTop' nowrap="nowrap">
+          <% String name = tmplPrefix+"TemplateNames"; %>
+          <jalios:field  name='<%= name %>' label='<%= glp("ui.com.lbl.name") %>' required='<%= true %>' ml='<%= false %>' value='<%= tmplName %>'>
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>
+        </td>
+        <td class='vTop' rowspan="3">
+          <jalios:field  name='<%= tmplPrefix+"TemplateDescriptions" %>' ml='<%= true && channel.isMultilingual() %>' value='<%= XmlUtil.getLangChildrenMap(itTemplate, "description") %>'>
+            <jalios:control settings='<%= new TextAreaSettings().rows(5) %>' />
+          </jalios:field>
+        </td>
+      </tr>
+      
+      <tr>
+        <td class='vTop'  nowrap="nowrap">
+          <jalios:field  name='<%= tmplPrefix+"TemplateFiles" %>' label='<%= glp("ui.com.lbl.file") %>' required='<%= true %>' ml='<%= false %>' value='<%= tmplFile %>' css='tmplFile'>
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>
+        </td>
+      </tr>
+      
+      <tr>
+        <td nowrap="nowrap">
+          <jalios:field  name='<%= tmplPrefix+"TemplateLabels" %>' ml='<%= true && channel.isMultilingual() %>' value='<%= XmlUtil.getLangChildrenMap(itTemplate, "label") %>'>
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>
+        </td>
+      </tr>
+  
+    </table>
+  </td></tr>
+</jalios:foreach>
+
+<% if (te != null && Util.notEmpty(tmplNames)) { 
+  boolean display = tmplPrefix.equals("display");
+%>
+<tr><th><%= glp("ui.adm.type-edit.tpl.plugin") %></th></tr>
+<jalios:foreach collection="<%= tmplNames %>" name="tmplName" type="java.lang.String" counter="tmplCounter">
+<%
+  int    counter          = tmplCounter.intValue();
+  String tmplFile         = display ? Util.getString(te.getDisplayTemplateFile(tmplName),"") : Util.getString(te.getQueryTemplateFile(tmplName),"");
+  Map    tmplLabel        = display ? te.getDisplayTemplateLabel(tmplName)       : te.getQueryTemplateLabel(tmplName);
+  Map    tmplDescription  = display ? te.getDisplayTemplateDescription(tmplName) : te.getQueryTemplateDescription(tmplName);
+  String tmplThumb        = ("types/"+formHandler.getTypeName()+ "/") + (tmplFile.length() > 3 ?  tmplFile.substring(0,tmplFile.length()-3) + "jpg" : "s.gif");
+%>
+  <tr><td>
+    <table class='layout'>
+      <tr>
+        <td class='vTop' rowspan="3" width="1%" style="padding-right: 2em;">
+          <div class="tmplThumbnail"><img class="tmplThumbnail" src='s.gif' style='background-image: url(<%= tmplThumb %>)'/></div>
+        </td>
+        <td class='vTop' nowrap="nowrap" width="40%">
+          <jalios:field  name='<%= "x" %>' label='<%= glp("ui.com.lbl.name") %>' required='<%= true %>' ml='<%= false %>' value='<%= tmplName %>' disabled='true'>
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>
+        </td>
+        <td class='vTop' rowspan="3">
+          <jalios:field  name='<%= "x" %>' ml='<%= true && channel.isMultilingual() %>' value='<%= tmplDescription %>' disabled='true'>
+            <jalios:control settings='<%= new TextAreaSettings().rows(5) %>' />
+          </jalios:field>
+        </td>
+      </tr>
+      <tr>
+        <td class='vTop'  nowrap="nowrap">
+          <jalios:field  name='<%= "x" %>' label='<%= glp("ui.com.lbl.file") %>' required='<%= true %>' ml='<%= false %>' value='<%= tmplFile %>' disabled='true' css='tmplFile'>
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>
+        </td>
+      </tr>
+      <tr>
+        <td nowrap="nowrap">
+          <jalios:field  name='<%= "x" %>' ml='<%= true && channel.isMultilingual() %>' value='<%= tmplLabel %>' disabled='true'>
+            <jalios:control type="<%= ControlType.TEXTFIELD %>" />
+          </jalios:field>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+</jalios:foreach>
+<% } %>

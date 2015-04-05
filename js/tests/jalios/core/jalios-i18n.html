@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xml:lang="en">
+<head>
+  <title>Jalios Plugin Test Suite</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  
+  <!-- jquery -->
+  <script src="../../vendor/jquery.js"></script>
+
+  <!-- qunit -->
+  <link   href="../../vendor/qunit.css" rel="stylesheet"  type="text/css" media="screen" />
+  <script  src="../../vendor/qunit.js"></script>
+
+  <!--  lib -->
+  <script src="../../../lib/json2.js"></script>
+  <script src="../../../lib/rsh.js"></script>
+  <script src="../../../lib/jquery.console.js"></script>
+  <script src="../../../lib/jquery.idle-timer.js"></script>
+  
+  <!--  sources -->
+  <script src="../../../jalios/core/jalios-common.js"></script>
+  <script src="../../../jalios/core/jalios-i18n.js"></script>
+
+  <!-- I18N : load a mock I18N variable, but attempt to override with server side JSP if available (run in appserver) -->
+  <script src="assets/jalios-i18n-mock.js"></script><!-- Emulate server side loading of jalios-i18n-js.jsp (JSP) -->
+  <script src="../../../jalios/core/jalios-i18n-js.jsp"></script>
+  
+  <!-- unit tests -->
+  <script src="unit/jalios-i18n.js"></script>
+
+</head>
+<body>
+  <div>
+    <h1  id="qunit-header">Jalios Plugin Test Suite</h1>
+    <h2  id="qunit-banner"></h2>
+    <h2  id="qunit-userAgent"></h2>
+    <ol  id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </div>
+  
+  <div style='display:none'></div>
+  
+</body>
+</html>

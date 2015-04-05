@@ -1,0 +1,367 @@
+//
+// Variables
+// --------------------------------------------------
+
+//Z-index : see bootstrap variables for other z-indexes
+@z-index-sidebar: 1060;
+@z-index-work-edit-header: 1025;
+
+
+// Z-index JCMS components
+@zindexAdminNotes:          500; 
+@zindexTopBarEdit:         1035; // Under modal backdrop
+@zindexTopBar:             1055; // Over Modal but under popover and menus
+@zindexPublicationActions: 1025; // Under topbar and under modal
+@zindex-bottombar:         1055; 
+@zindexAjaxWait:           1055; 
+@zindexPopin:              @zindexPopover;
+@zindexTopLevel:           1070; // Could be in modal in a Popover
+@zindexTypeAhead:          @zindexTopLevel;
+@zindexMenu:               1000;
+
+//== Badges
+@badge-color:             @label-color;
+@badge-primary-bg:        @label-primary-bg;
+@badge-info-bg:           @label-info-bg;
+@badge-warning-bg:        @label-warning-bg;
+@badge-danger-bg:         @label-danger-bg;
+@badge-success-bg:        @label-success-bg;
+
+//== Buttons text color
+//
+//##
+
+//== Buttons
+//
+//## For each of Bootstrap's buttons, define text, background and border color.
+
+@btn-text-color-info:     @brand-info;
+@btn-text-color-warning:  @brand-warning;
+@btn-text-color-danger:   @brand-danger;
+@btn-text-color-success:  @brand-success;
+
+
+//== Alert levels
+//
+//##
+
+@alert-action: @brand-warning;
+@alert-alert: @brand-danger;
+@alert-info: @brand-info;
+
+//== Card component 
+//
+//##
+
+@card-height: 						@baseline * 4;
+@card-padding-vertical:		@padding-base-vertical;
+@card-padding-horizontal:	@padding-base-horizontal;
+@card-padding-body:       @baseline / 4 @baseline / 2;
+
+@card-bg-color:						#f7f7f7;
+@card-border: 						1px solid darken(@card-bg-color, 7%);
+@card-color:							@text-color;
+@card-border-radius:			@border-radius-base;
+@card-shadow: 						0 0 0 #AAAAAA;
+@card-turner-color:       #999999;
+
+@card-border-color-hover:	darken(@card-bg-color, 7%);		
+@card-shadow-hover:				0 2px 5px #aaaaaa;			
+
+@card-title-font-size:    @font-size-base;			
+
+//== Modal component 
+//
+//##
+
+@modal-header-bg:					@gray-lighter;
+@modal-footer-bg:					@gray-lighter;
+
+//== Text components
+//
+//##
+
+@text-info-color: @gray-light;
+@text-info-font-size: @font-size-small;
+@text-info-font-style: inherit;
+
+//== Fonts
+//
+//##
+
+@icon-font-default-color: @text-color;
+
+@icon-font-path:          "../../../fonts/lib/";
+
+// Glyphicons
+@icon-font-glyphicons-regular-path:   "@{icon-font-path}/glyphicons/regular";
+@icon-font-glyphicons-regular-name:   "glyphicons-regular";
+@icon-glyphicons-fontsize: 14px;
+// Glyphicons halflings
+@icon-font-glyphicons-halflings-path: "@{icon-font-path}/glyphicons/halflings";
+@icon-font-glyphicons-halflings-name: "glyphicons-halflings-regular";
+@icon-glyphicons-halflings-fontsize: 12px;
+
+// Glyphicons social
+@icon-font-glyphicons-social-path: "@{icon-font-path}/glyphicons/social";
+@icon-font-glyphicons-social-name: "glyphicons-social-regular";
+@icon-glyphicons-social-fontsize: 12px;
+
+// Glyphicons filetypes
+@icon-font-glyphicons-filetypes-path: "@{icon-font-path}/glyphicons/filetypes";
+@icon-font-glyphicons-filetypes-name: "glyphicons-filetypes-regular";
+@icon-glyphicons-filetypes-fontsize: 12px;
+
+// Icomoon
+@icon-font-icomoon-path: "@{icon-font-path}/icomoon";
+@icon-font-icomoon-name: "icomoon";
+
+
+//== Autocomplete
+//
+//##
+
+@autocomplete-bg: #EFF8FE;
+
+
+//== Old less variables from custom.less
+//
+//##
+@whiteTxtShadow: -1px -1px 1px rgba( 120,  120,  120, 0.4);
+@emphasisColor:      #46A546;
+@emphasisColorHover: #238323;
+
+
+//== Form
+//
+//##
+
+@short-field-max-width: 250px;
+
+//== Keyword
+//
+//##
+@keyword-border: 1px dashed @gray-light;
+@keyword-btn-remove-color: @gray-light;
+
+//== Pstatus
+//
+//##
+
+@pstatus-not-visible: #FF8533;
+@pstatus-visible:     #5bc0de;
+@pstatus-scheduled:   #FFCC00;
+@pstatus-published:   #5CB800;
+@pstatus-expired:     #999;
+@pstatus-archived:    #555;
+
+
+//== tt-card & tooltips
+//
+//##
+
+@ttcard-padding: 10px;
+@ttcard-max-width: 500px;
+
+@tooltip-background-color: #FFF;
+@tooltip-text-color: @text-color;
+@tooltip-padding: 10px;
+
+//== Menus variables
+//
+//##
+@menu-slide-border-color: #CCC;
+@menu-slide-border: 1px solid @menu-slide-border-color;
+@menu-slide-background-color: #FFF;
+@menu-slide-hover-background-color: #f5f5f5;
+@menu-vertical-border: 1px solid #CCC;
+@menu-vertical-background-color: #FFF;
+
+//== Meta data
+//
+//##
+@meta-font-size: @font-size-small;
+@meta-text: @gray-light;
+
+@meta-cat-padding: 3px 7px;
+@meta-cat-line-height: 1;
+@meta-cat-bg: #FFF;
+@meta-cat-text: #B8B8B8;
+@meta-cat-border-radius: @border-radius-small;
+@meta-cat-border: 1px solid #B8B8B8;
+@meta-cat-hover-bg: #B8B8B8;
+@meta-cat-hover-color: white;
+
+
+//== Search results
+//
+//##
+
+@search-result-img-max-height: 400px;
+
+//== Topbar
+//
+//##
+
+@tb-bg-color : hsl(0,0,97%);
+@tb-color : hsl(0,0,10%);
+@tb-color-hover : hsl(218,18,60%);
+@tb-color-selected : hsl(0,0,100%);
+@tb-border-color : lighten(@tb-color,60%);
+@tb-space-icon : 10px;
+@tb-font-size : @font-size-base;
+@tb-height: 40px;
+@tb-line-height: floor((@font-size-base * @line-height-base));
+
+// Topbar Spaces vars
+@tb-spaces-focus-container-witdh: 300px;
+
+// Topbar Publish button vars
+@tb-publish-border-radius: 2px;
+@tb-publish-font-size: 1em;
+@tb-publish-padding-horizontal: 8px;
+@tb-publish-padding-vertical: 4px;
+@tb-publish-color-hover: hsl(0,0,100%);
+
+@tb-publish-menu-bg-color: hsl(0,0,100%);
+@tb-publish-menu-width: 300px;
+
+// Topbar Flag vars 
+@tb-flag-bg-color : @tb-bg-color;
+
+// Topbar Alerts vars
+@tb-alert-text-color: hsl(0,0,100%);
+@tb-alert-level0-color: #ccc;
+@tb-alert-level1-color: hsl(218,18,60%);
+@tb-alert-level2-color: hsl(24,100%,50%);
+@tb-alert-level3-color: hsl(0,100%,50%);
+
+@tb-alert-font-family: @font-family-sans-serif;
+
+@tb-alert-width: 60px;
+@tb-alert-width-color: hsl(0,0,100%);
+
+//== Topbar Search vars 
+//
+//##
+
+// Topbar search width for various screen sizes
+@tb-search-width: 40px; //Mobile first size
+@tb-search-width-sm: 200px;
+@tb-search-width-md: 200px;
+@tb-search-width-lg: 250px;
+@tb-search-width-focused: 100%; //Mobile first size
+@tb-search-width-xs-focused: 400px;
+@tb-search-width-md-focused: 500px;
+@tb-search-width-lg-focused: 500px;
+
+@tb-search-border-color: 1px solid lighten(@tb-color,80%);
+@tb-search-border-color-focused: 1px solid lighten(@tb-color,60%);
+
+@tb-search-icon-color : @tb-color;
+@tb-search-bg-color: hsl(0,0,100%);
+@tb-search-space-width: 240px;
+
+@tb-search-filter-menu-width: 300px;
+@tb-search-result-list-width: 375px;
+@tb-search-result-label-width: 200px;
+
+// Topbar Member Photo 
+@tb-deletation-bg-color: darken(@brand-warning, 10%);
+
+
+//== Message
+//
+//##
+@message-title-font-size: @font-size-h4;
+@message-title-font-family: @headings-font-family;
+@message-title-font-weight: @headings-font-weight;
+@message-title-line-height: @headings-line-height;
+@message-title-margin-bottom: (@line-height-computed / 2);
+
+//== Wiki toolbar
+//
+//##
+
+@wiki-tb-bg-color: #FAFAFA;
+@wiki-tb-icon-bg-color: transparent;
+@wiki-tb-icon-bg-color-hover: #EEEEEE;
+@wiki-tb-icon-bg-color-active: #CCE0EE;
+
+
+//== Wiki Mention
+//
+//##
+
+@wiki-mention-bg-color: rgba(195, 195, 195, 0.06);
+@wiki-mention-border: 1px solid #B0DBFF;
+@wiki-mention-padding: 0 4px;
+@wiki-mention-border-radius: 3px;
+@wiki-mention-hover-bg-color: #F8F8F8;
+
+//== Portlet Selection
+//
+//##
+
+@selection-side-width: 50px;
+@selection-side-margin-left: 10px;
+@side-opened-box-shadow: -2px 2px 5px #EEE;
+
+//== Sidebar
+//
+//##
+
+@sb-bg-color:              hsl(0,0,94%);
+
+@sb-color:                 hsl(0,0,20%);
+@sb-color-semi-light:      hsl(0,0,40%);
+@sb-color-light:           hsl(0,0,60%);
+@sb-color-ultra-light:     hsl(0,0,85%);
+@sb-color-hover:           hsl(218,18,60%);
+
+@sb-box-shadow:            3px 0px 10px 0px #cfcfcf;
+@sb-box-shadow-ie8:        progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=90, Strength=10);
+@sb-padding:               @baseline/2;
+@sb-width:                 360px;
+
+// Sidebar Avatar
+@sb-avatar-pos-left:       11px;
+@sb-avatar-pos-top:        11px;
+
+// Sidebar Header
+@sb-header-icon-space:     8px;
+
+// Sidebar Events
+@sb-events-icon-color:     hsl(0,80,50%);
+@sb-events-date-font-size: 10px;
+@sb-events-title-font-size:14px;
+
+// Sidebar Menus
+@sb-menu-label-bg-color:   transparent;
+
+
+//== Old jcms 8 variables
+//
+//##
+
+// Blue color of table's header
+@boTableHeaderColor: #2E7CCA;
+@boTableBgColorEven: #FAFAFA;
+@boTableBgColorOdd:  #F0F0F0;
+
+// Colors for highlight (pager,...)
+@highlight:           #FFFF70; // for text
+@highlightBorder:     #FFCC66;
+@highlightBackground: #FFFFCC;
+
+// Miscs
+@whiteTxtShadow: -1px -1px 1px rgba( 120,  120,  120, 0.4);
+@tabBg:           #EBEFF5;
+@tabBorderColor:  @grayLight;
+
+
+// BOX
+@boxPadding: @baseline / 2;
+@boxTxtLight:   0px  1px 1px rgba(255, 255, 255, 0.7);
+@boxTxtShadow: -1px -1px 1px rgba( 40,  40,  40, 0.7);
+

@@ -1,0 +1,199 @@
+/* ------------------------------------------ */
+/*  LESS AUTOMATICALLY GENERATED              */
+/* ------------------------------------------ */
+.jalios-menu-slide .main-menu-item.active {
+  color: #ffffff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.jalios-menu-slide .main-menu-item.active:hover,
+.jalios-menu-slide .main-menu-item.active:focus,
+.jalios-menu-slide .main-menu-item.active:active,
+.jalios-menu-slide .main-menu-item.active.active,
+.open > .dropdown-toggle.jalios-menu-slide .main-menu-item.active {
+  color: #ffffff;
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
+.jalios-menu-slide .main-menu-item.active:active,
+.jalios-menu-slide .main-menu-item.active.active,
+.open > .dropdown-toggle.jalios-menu-slide .main-menu-item.active {
+  background-image: none;
+}
+.jalios-menu-slide .main-menu-item.active.disabled,
+.jalios-menu-slide .main-menu-item.active[disabled],
+fieldset[disabled] .jalios-menu-slide .main-menu-item.active,
+.jalios-menu-slide .main-menu-item.active.disabled:hover,
+.jalios-menu-slide .main-menu-item.active[disabled]:hover,
+fieldset[disabled] .jalios-menu-slide .main-menu-item.active:hover,
+.jalios-menu-slide .main-menu-item.active.disabled:focus,
+.jalios-menu-slide .main-menu-item.active[disabled]:focus,
+fieldset[disabled] .jalios-menu-slide .main-menu-item.active:focus,
+.jalios-menu-slide .main-menu-item.active.disabled:active,
+.jalios-menu-slide .main-menu-item.active[disabled]:active,
+fieldset[disabled] .jalios-menu-slide .main-menu-item.active:active,
+.jalios-menu-slide .main-menu-item.active.disabled.active,
+.jalios-menu-slide .main-menu-item.active[disabled].active,
+fieldset[disabled] .jalios-menu-slide .main-menu-item.active.active {
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.jalios-menu-slide .main-menu-item.active .badge {
+  color: #5bc0de;
+  background-color: #ffffff;
+}
+.jalios-menu-slide .menu-slide {
+  position: absolute;
+  left: 0;
+  top: 34px;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper {
+  position: absolute;
+  overflow: hidden;
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  z-index: 1000;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .levelHolderClass {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  width: auto;
+  min-height: 100%;
+  zoom: 1;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .ltr {
+  margin-left: -100%;
+  left: 0;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .rtl {
+  margin-right: -100%;
+  right: 0;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .multilevelpushmenu_inactive {
+  background: transparent;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper H2,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper DIV.title {
+  font-weight: bold;
+  font-size: 24px;
+  /*padding: 10px;*/
+  margin: 0;
+  border-top: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  background-color: #ffffff;
+  white-space: nowrap;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper UL {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI {
+  cursor: pointer;
+  border-top: 1px solid #cccccc;
+  background-color: #ffffff;
+  /*&:last-child {
+          border-bottom: @menu-slide-border;
+        }*/
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI:hover {
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active {
+  color: #ffffff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active:hover,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active:focus,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active:active,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active.active,
+.open > .dropdown-toggle.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active {
+  color: #ffffff;
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active:active,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active.active,
+.open > .dropdown-toggle.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active {
+  background-image: none;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active.disabled,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active[disabled],
+fieldset[disabled] .jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active.disabled:hover,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active[disabled]:hover,
+fieldset[disabled] .jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active:hover,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active.disabled:focus,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active[disabled]:focus,
+fieldset[disabled] .jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active:focus,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active.disabled:active,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active[disabled]:active,
+fieldset[disabled] .jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active:active,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active.disabled.active,
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active[disabled].active,
+fieldset[disabled] .jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active.active {
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active .badge {
+  color: #5bc0de;
+  background-color: #ffffff;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper LI.active > A {
+  color: #ffffff;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper A {
+  display: block;
+  outline: none;
+  overflow: hidden;
+  text-decoration: none;
+  text-align: left;
+  padding: 10px 15px;
+  color: #555555;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .backItemClass {
+  display: block;
+  background: #eeeeee;
+  border-top: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .backItemClass I.iconSpacing_ltr {
+  padding: 10px 5px 10px 10px;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .backItemClass:hover {
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .floatRight {
+  float: right;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .floatLeft {
+  float: left;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .cursorPointer {
+  cursor: pointer;
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .iconSpacing_ltr {
+  width: 30px;
+  margin: -10px 0 -10px -15px;
+  padding: 10px 10px;
+  line-height: 1.428571429;
+  /*border-right: 1px solid #c8c8c8;*/
+}
+.jalios-menu-slide .menu-slide .multilevelpushmenu_wrapper .iconSpacing_rtl {
+  width: 30px;
+  margin: -10px -15px -10px 0;
+  padding: 10px 10px;
+  line-height: 1.428571429;
+  /*border-left: 1px solid #c8c8c8;*/
+}

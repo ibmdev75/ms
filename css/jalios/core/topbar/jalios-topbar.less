@@ -1,0 +1,186 @@
+.topbar {
+  background-color: @tb-bg-color;
+  border-bottom: 1px solid @tb-border-color;
+  font-size: @tb-font-size;
+  height: @tb-height + 1;
+  min-height: @tb-height;
+  line-height: @tb-height;
+  padding: 0;
+  margin: 0;
+  .container-fluid {
+    height: @tb-height;
+    padding: 0;
+  }
+
+  .right-group {
+    height: @tb-height;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  a {
+    transition: color 0.2s ease;
+  }
+
+  .topbar-item {
+    color: @tb-color;
+    cursor: pointer;
+    float: left;
+    height: @tb-height;
+    line-height: @tb-height;
+    .transition (color 0.1s ease);
+    .transition (background-color 0.3s ease);
+    &:hover > a {
+      background-color: darken(@tb-bg-color, 5%);
+      transition: color 0.1s ease;
+    }
+
+    & > a {
+      display: inline-block;
+      height: @tb-height;
+      line-height: @tb-height;
+      padding: 0 @tb-space-icon 0 @tb-space-icon;
+      transition: color 0.5s ease;
+      color: @gray;
+      &:hover {
+        color: @tb-color-hover;
+        transition: color 0.5s ease;
+      }
+    }
+
+    span.jalios-icon {
+      color: #666;
+      font-size: 18px;
+    }
+
+    .btn-primary span.jalios-icon {
+      color: #fff;
+    }
+  }
+
+  .topbar-item.dropdown.open {
+    background-color: @tb-color-hover;
+    color: @tb-color-selected;
+    a.dropdown-toggle {
+      background-color: @tb-color-hover;
+    }
+  }
+
+  .topbar-item.dropdown .dropdown-menu {
+    border-color: @tb-color-hover;
+    border-radius: 0;
+    box-shadow: none;
+    color: @tb-color;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    ul {
+      margin: 0;
+    }
+  }
+
+  .topbar-item.dropdown button {
+    background-color: transparent;
+    border-radius: 0;
+    height: @tb-height;
+    padding: 0;
+    position: relative;
+    top: -1px;
+    &:active {
+      background-color: @tb-bg-color;
+      outline: none;
+    }
+  }
+
+  .dropdown-menu {
+    .topbar-icon {
+      font-size: 10px;
+      position: relative;
+      top: 0px;
+    }
+  }
+
+  .member-photo-container {
+    cursor: pointer;
+    float: left;
+    height: @tb-height;
+    &.delegation {
+      background-color: @tb-deletation-bg-color;
+      .member-photo IMG {
+        border: 2px solid #F0F0F0;
+      }
+    }
+
+    .member-photo {
+      border-color: lighten(@tb-color, 40%);
+      display: inline-block;
+      height: @tb-height - 10;
+      margin: 5px @tb-space-icon 0 @tb-space-icon;
+      width: @tb-height - 10;
+      img {
+        height: @tb-height - 8;
+        line-height: @tb-height;
+        width: @tb-height - 8;
+        vertical-align: baseline;
+        border: 1px solid @tb-border-color;
+        border-radius: 50%;
+      }
+
+      &:hover {
+        border-color: @tb-color-hover;
+      }
+    }
+  }
+}
+
+.topbar-placeholder {
+  height: @tb-height;
+}
+
+.topbar-warning-wrapper {
+  .dropdown {
+    background-color: @btn-warning-bg;
+  }
+
+  .topbar-warning-opener {
+    padding: 4px 10px;
+    .jalios-icon.topbar-warning {
+      color: white;
+    }
+  }
+
+  .topbar-warning-menu {
+    top: 38px;
+    width: 410px;
+    border: 1px solid @btn-warning-bg;
+    line-height: @line-height-base;
+    .border-top-radius (0);
+    LI {
+      padding: 5px 10px;
+      &:first-child {
+        border-bottom: 1px solid #DDD;
+      }
+
+      &:last-child {
+        border-bottom: 0 none;
+      }
+    }
+  }
+}
+
+.topbar .list-group {
+  line-height: @line-height-base;
+  margin-bottom: 0;
+}
+
+.topbar-menu.dropdown-menu {
+  margin-top: 1px;
+  border: 1px solid #337eff;
+  border-radius: 0;
+  border-top: 0 none;
+  LI > A {
+    padding: 5px 10px;
+  }
+}
+

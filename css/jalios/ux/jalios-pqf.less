@@ -1,0 +1,18 @@
+// Include variables and mixins
+@import "../core/init-mixins.less";
+
+.pqf-thumbnail {
+  @media (max-width: @screen-xs-max) {
+    height: auto;
+  }
+  height: 300px;
+  overflow-y: auto;
+
+  A.thumbnail {
+    border: 0;
+
+    IMG {
+      width: 100%;
+    }
+  }
+}

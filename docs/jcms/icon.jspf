@@ -1,0 +1,9 @@
+<div class="doc-icon media">
+	<jalios:icon src="<%= itName %>" css="pull-left" />
+	<span class="icon-counter"><%= counter + 1 %></span>
+	<div class="media-body">
+		<div class="prop-name"><%= itName %></div>
+		<span class="doc-icon-tag"></span>
+		<span class="prop-value text-muted"><%= itProp %></span>
+	</div>
+</div>

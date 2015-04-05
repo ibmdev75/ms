@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates version="5.0">
+  <template name="default" usage="full" file="doPortletWorkflowFullDisplay.jsp" />
+  <template name="default" usage="query" file="doPortletWorkflowResultDisplay.jsp" />
+  <template name="default" usage="edit" file="editPortletWorkflow.jsp" />
+  <template name="default" usage="box" file="doPortletWorkflowFullDisplay.jsp" />
+</templates>
+

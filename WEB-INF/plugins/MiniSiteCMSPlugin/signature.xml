@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<signature name="MiniSiteCMSPlugin" urid="c" type="plugin" date="1428083465506">
+  <sign file="WEB-INF/data/types/Tag/Tag-templates.xml" signature="7pdxEZ7IoPmArcDNClK56w==" />
+  <sign file="WEB-INF/data/types/Tag/Tag.xml" signature="nnTMzeL5JYHCHHnxi5TAeQ==" />
+  <sign file="WEB-INF/plugins/MiniSiteCMSPlugin/plugin.xml" signature="vtiZ5YE4sICqC5W0g+UcnA==" />
+  <sign file="WEB-INF/plugins/MiniSiteCMSPlugin/properties/languages/en.prop" signature="1B2M2Y8AsgTpgAmY7PhCfg==" />
+  <sign file="WEB-INF/plugins/MiniSiteCMSPlugin/properties/languages/fr.prop" signature="1B2M2Y8AsgTpgAmY7PhCfg==" />
+  <sign file="WEB-INF/plugins/MiniSiteCMSPlugin/properties/plugin.prop" signature="lT/m+I/VCgML0RgD3gTKPg==" />
+  <sign file="plugins/MiniSiteCMSPlugin/css/plugin.less" signature="F/0qW60ZXRqaDXfp4DVvPw==" />
+  <sign file="plugins/MiniSiteCMSPlugin/js/plugin.js" signature="PWtlEBhSrhTYGa4lqwm+1g==" />
+  <sign file="plugins/MiniSiteCMSPlugin/jsp/plugin.jsp" signature="HhHXCuU58jmkb/WkRU9Duw==" />
+  <sign file="plugins/MiniSiteCMSPlugin/types/Tag/doTagBoxDisplay.jsp" signature="AaHg0R1u4GCdHkar1ARSgQ==" />
+</signature>
+
